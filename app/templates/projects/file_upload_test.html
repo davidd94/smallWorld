@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block bodycontent %}
+<form class="file-upload-box" action="{{ url_for('project.upload') }}" enctype="multipart/form-data" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <label for="InputFile">File input</label>
+    <input type=file name=file class="form-control-file" aria-describedby="fileHelp">
+    <small id="fileHelp" class="form-text text-muted">Upload a cover photo for your new project. Jpg or png only.</small>
+    <input type=submit value=Upload>
+</form>
+{% endblock bodycontent %}

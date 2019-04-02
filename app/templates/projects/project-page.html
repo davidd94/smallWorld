@@ -1,0 +1,768 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='project-profile.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='project-comments.css') }}">
+<!--
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+-->
+{% endblock css %}
+
+{% block bodycontent %}
+<div class="project-main-container">
+    <div class="project-social-box">
+        {% if current_user.is_authenticated %}
+            {% if current_user != user %}
+            <div class="project-avatar-box">
+                <a href="{{ url_for('main.profile', username=user.username) }}">
+                    <img class="project-image-box" src="{{ user.avatar(80) }}">
+                </a>
+            </div>
+            <div class="project-user-name">
+                <a class="project-username-link" href="{{ url_for('main.profile', username=user.username) }}"><p class="test321">{{ user.username }}</p></a>
+            </div>
+                {% if not current_user.is_following(user) %}
+                <div class="project-social-follow">
+                    <a href="{{ url_for('main.follow', username=user.username, next=request.path) }}">Follow</a>
+                </div>
+                {% else %}
+                <div class="project-social-unfollow">
+                    <a href="{{ url_for('main.unfollow', username=user.username, next=request.path) }}">Unfollow</a>
+                </div>
+                {% endif %}
+            <div class="project-social-message">
+                <a href="{{ url_for('main.message_inbox') }}">Message</a>
+            </div>
+            {% else %}
+            <div class="project-avatar-box" style="grid-column: 1 / span 3">
+                <a href="{{ url_for('main.profile', username=user.username) }}">
+                    <img class="project-image-box" src="{{ user.avatar(80) }}">
+                </a>
+            </div>
+            <div class="project-user-name" style="grid-column: 1 / span 3">
+                <a class="project-username-link" href="{{ url_for('main.profile', username=user.username) }}"><p class="test321">{{ user.username }}</p></a>
+            </div>
+            {% endif %}
+        {% else %}
+        <div class="project-avatar-box" style="grid-column: 1 / span 3;">
+            <a href="{{ url_for('main.profile', username=user.username) }}">
+                <img class="project-image-box" src="{{ user.avatar(80) }}">
+            </a>
+        </div>
+        <div class="project-user-name" style="grid-column: 1 / span 3;">
+            <a class="project-username-link" href="{{ url_for('main.profile', username=user.username) }}"><p class="test321">{{ user.username }}</p></a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="project-card-box">
+        <div class="project-descrip-box">
+            <i class="project-like-number project-like-number-{{ project.id }}">{{ project.likes }}</i>
+            <strong class="project-like-text">Likes</strong>
+            {% if current_user.is_authenticated %}
+            {% if current_user != user %}
+            <i id="{% if project_likes %}projectlike{% endif %}" class="fa fa-heart project-like projectlike-{{ project.id }}" data-project-id="{{ project.id }}"></i>
+            {% endif %}
+            {% endif %}
+            <p class="project-descrip-title">Description</p>
+            <p class="project-descrip">{{ project.description }}</p>
+        </div>
+        <div class="project-difficulty-box">
+            <div class="wrapper">
+                <div class="loader">
+                    <div class="inner inner{{ project.difficulty }}"></div>
+                </div>
+            </div>
+            <p>Difficulty: </p> 
+            {% if (0 < project.difficulty < 4) %}<span style="font-weight: 800; color: green;">Easy</span>
+            {% elif (3 < project.difficulty < 8) %}<span style="font-weight: 800; color: rgb(182, 182, 0);">Medium</span>
+            {% elif (7 < project.difficulty < 11) %}<span style="font-weight: 800; color: rgb(182, 0, 0);">Hard</span>
+            {% else %}<span style="font-weight: 800">N/A</span>
+            {% endif %}
+        </div>
+        <div class="project-cost-box">
+            <p class="project-cost-title">Cost</p>
+            <div class="project-cost-bar">
+                <span class="cost-bar-boxes">$</span>
+                {% if (project.cost > 100) %}
+                <span class="cost-bar-boxes">$</span>
+                {% else %}
+                <span class="cost-bar-boxes empty-box"></span>
+                {% endif %}
+                
+                {% if (project.cost > 300) %}
+                <span class="cost-bar-boxes">$</span>
+                {% else %}
+                <span class="cost-bar-boxes empty-box"></span>
+                {% endif %}
+
+                {% if (project.cost > 600) %}
+                <span class="cost-bar-boxes">$</span>
+                {% else %}
+                <span class="cost-bar-boxes empty-box"></span>
+                {% endif %}
+
+                {% if (project.cost > 1000) %}
+                <span class="cost-bar-boxes">$</span>
+                {% else %}
+                <span class="cost-bar-boxes empty-box"></span>
+                {% endif %}
+            </div>
+            <p class="project-cost-value-box">$ <span class="project-cost-value" type="number">{{ project.cost }}</span>.00</p>
+        </div>
+        <div class="project-duration-box">
+            <p class="project-duration-title">Start to Finish</p>
+            <i class="fas fa-calendar duration-img"></i><span class="project-duration-text">{{ project.duration }}</span><span class="project-duration-text2">Hours</span>
+            {% if current_user == user %}
+            <p class="project-bar-edit"><a href="{{ url_for('project.edit_bar', title=project.title) }}">Edit</a></p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="project-nav-list">
+        <div class="navlist-title-container">
+            <p class="navlist-title">{{ project.title }}</p>
+        </div>
+        <ul class="project-nav-ul">
+            <li><button class="navlist-home btn-animate">Home</button></li>
+            <li><button class="navlist-tutorial btn-animate">Tutorial</button></li>
+            <li><button class="navlist-maintenance btn-animate">Maintenance/Care</button></li>
+            <li><button class="navlist-items btn-animate">Item List</button></li>
+            <li><button class="navlist-photos btn-animate">Photos/Videos</button></li>
+            <li><button class="navlist-comments btn-animate">Comments</button></li>
+            <li><button class="navlist-faq btn-animate">FAQs</button></li>
+        </ul>
+        {% if project.private == True %}
+        <p class="project-privacy-label"><span>PRIVATE</span></p>
+        {% endif %}
+        <p class="project-last-update">Last updated: {{ moment(project.last_edit).format('L') }}</p>
+    </div>
+
+    <div class="project-viewer-box">
+        <div class="project-view-homepic">
+            {% if project_gallery.photoOne %}
+            <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoOne) }}">
+            {% elif project_gallery.photoTwo %}
+            <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTwo) }}">
+            {% elif project_gallery.photoThree %}
+            <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoThree) }}">
+            {% elif project_gallery.photoFour %}
+            <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFour) }}">
+            {% elif project_gallery.photoFive %}
+            <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFive) }}">
+            {% elif project_gallery.photoSix %}
+            <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSix) }}">
+            {% elif project_gallery.photoSeven %}
+            <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSeven) }}">
+            {% elif project_gallery.photoEight %}
+            <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoEight) }}">
+            {% elif project_gallery.photoNine %}
+            <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoNine) }}">
+            {% elif project_gallery.photoTen %}
+            <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTen) }}">
+            {% endif %}
+        </div>
+        <div class="project-photo-gallery">
+            {% if current_user == user %}
+            <p class="project-photo-edit"><a href="{{ url_for('project.edit_photos', title=project.title) }}">Edit</a></p>
+            {% endif %}
+            {% include '/projects/imported/photo_gallery.html' %}
+        </div>
+        <div class="project-comments">
+            {% include '/projects/_project-comments.html' %}
+        </div>
+        <div class="project-tutorial">
+            {% if current_user == user %}
+            <p class="project-tutorial-edit"><a href="{{ url_for('project.edit_tutorial', title=project.title) }}">Edit</a></p>
+            {% endif %}
+            <textarea class="project-tutorial-textarea">{{ project.tutorial }}</textarea>
+        </div>
+    </div>
+</div>
+{% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+/* COST COUNTER */
+$(function () {
+    $('.project-cost-value').each(function () {
+        $(this).prop('Counter',0).animate({
+            Counter: $(this).text()
+        }, {
+            duration: 1500,
+            easing: 'swing',
+            step: function (now) {
+                $(this).text(Math.ceil(now));
+            }
+        });
+    });
+});
+
+/* DURATION COUNTER */
+$(function () {
+    $('.project-duration-text').each(function () {
+        $('.project-duration-text').prop('Counter',0).animate({
+            Counter: $('.project-duration-text').text()
+        }, {
+            duration: 1500,
+            easing: 'swing',
+            step: function (now) {
+                $('.project-duration-text').text(Math.ceil(now));
+            }
+        });
+    });
+});
+
+</script>
+
+<script>
+/* PROJECT LIST BORDER EFFECTS */
+$(function () {
+    $('.btn-animate').on('click', (event) => {
+        let btn = event.currentTarget.classList[0];
+        $('.btn-animate').attr('style', 'color: #56CC9D; text-decoration: none;');
+        $('.' + btn).attr('style', 'color: #6477b9; text-decoration: underline;');
+    });
+});
+
+/* DYNAMICALLY LOADS DIFFERENT VIEWS */
+$(function () {
+    $('.navlist-home').on('click', (event) => {
+        $('.sub-view').remove();
+        $('.project-view-homepic').css('display', 'block');
+        $('.project-photo-gallery').attr('style', 'display: none');
+        $('.project-comments').css('display', 'none');
+        $('.project-tutorial').css('display', 'none');
+
+        /*
+        $('.project-viewer-box').append($('<div>')
+            .attr('class', 'project-view-homepic sub-view')
+            .append($('<img>')
+                .attr('src', '{{ url_for("static", filename="users/" + user.username + "/" + project.title + "/") }}')
+                .attr('class', 'project-homepic')
+            )
+        ); */
+    });
+
+    $('.navlist-tutorial').on('click', (event) => {
+        $('.sub-view').remove();
+        $('.project-view-homepic').css('display', 'none');
+        $('.project-photo-gallery').attr('style', 'display: none');
+        $('.project-comments').css('display', 'none');
+        $('.project-tutorial').css('display', 'block');
+
+        /*
+        $('.project-viewer-box')
+        .append($('<div>')
+            .attr('class', 'project-view-tutorial sub-view')
+            .append($('<div>')
+                .attr('class', 'tutorial-edit-btn project-edit-btn')
+                .append($('<a>')
+                    .attr('href', '{{ url_for("project.edit_tutorial", title=project.title) }}')
+                    .text('Edit')
+                )
+            )
+            .append($('<p>')
+                .attr('style', 'justify-self: center; color: black;')
+                .attr('class', 'tutorial-p')
+            )
+        );
+        $('.tutorial-p').text('{{ tutorial_text }}');
+        */
+    });
+
+    $('.navlist-maintenance').on('click', (event) => {
+        $('.sub-view').remove();
+        $('.project-photo-gallery').attr('style', 'display: none');
+        $('.project-view-homepic').css('display', 'none');
+        $('.project-comments').css('display', 'none');
+        $('.project-tutorial').css('display', 'none');
+
+        $('.project-viewer-box').append($('<div>')
+            .attr('class', 'project-view-maintenance sub-view')
+            .append($('<div>')
+                .attr('class', 'maintenance-edit-btn project-edit-btn')
+                .append($('<a>')
+                    .attr('href', '{{ url_for("project.edit_maintenance", title=project.title) }}')
+                    .text('Edit')
+                )
+            )
+            .append($('<p>')
+                .attr('class', 'maintenance-p')
+            )
+        );
+        $('.maintenance-p').text('Maintenance/Care info here...');
+    });
+
+    $('.navlist-items').on('click', (event) => {
+        $('.sub-view').remove();
+        $('.project-photo-gallery').attr('style', 'display: none');
+        $('.project-view-homepic').css('display', 'none');
+        $('.project-comments').css('display', 'none');
+        $('.project-tutorial').css('display', 'none');
+
+        $('.project-viewer-box').append($('<div>')
+            .attr('class', 'project-view-items sub-view')
+            .append($('<p>')
+                .attr('class', 'items-p')
+            )
+        );
+        $('.items-p').text('Item list goes here...');
+    });
+
+    $('.navlist-photos').on('click', (event) => {
+        $('.sub-view').remove();
+        $('.project-photo-gallery').attr('style', 'display: block');
+        $('.project-view-homepic').css('display', 'none');
+        $('.project-comments').css('display', 'none');
+        $('.project-tutorial').css('display', 'none');
+    });
+
+    $('.navlist-comments').on('click', (event) => {
+        $('.sub-view').remove();
+        $('.project-photo-gallery').attr('style', 'display: none');
+        $('.project-view-homepic').css('display', 'none');
+        $('.project-comments').css('display', 'block');
+        $('.project-tutorial').css('display', 'none');
+        {% if current_user == user %}
+        $.ajax({
+            url: '/project/update_notifications/' + '{{ user.username }}' + '/' + '{{ project.id }}',
+            type: 'GET',
+            success: function(response) {
+                console.log('updated comments and replies notifications...');
+            }
+        });
+        {% endif %}
+    });
+});
+
+</script>
+
+<script>
+/* COMMENT SUBMISSION */
+$(function () {
+    $('.main-comment-btn').on('click', () => {
+        let comment = $('.main-comment-text')[0].value;
+        let comment_length = (comment).length;
+        var csrf_token = "{{ csrf_token() }}";
+        /* ERROR WITH HAVING JINJA2 STRING WITH APOSTROPHE WHICH REQ TO HAVE |SAFE */
+        let convert_subject = "{{ project.title|safe }}";
+
+        if (comment_length > 0) {
+            // Inject imported CSRF token into our AJAX request.
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                    }
+                }
+            });
+
+            $.ajax({
+                url: '/project/new_comment/' + '{{ user.username }}' + '/' + convert_subject,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(comment),
+                success: function(response) {
+                    let commentID = response['comment_id'];
+                    let username = '{{ current_user.username }}';
+                    let project_author = response['author'];
+                    let avatar = response['avatar'];
+                    let timestamp = response['timestamp'];
+                    let total_likes = response['likes'];
+                    $('.main-comment-text').css('display', 'none');
+                    $('.comment-btn-centering').css('display', 'none');
+                    $('.comment-alert-msg').css('display', 'inline-block');
+                    $('.main-comment-text').val('');
+
+                    $('#comments-list').prepend($('<li>')
+                    .attr('class', 'comment-root comment-root-' + commentID)
+                    .attr('data-comment-id', commentID)
+                    .append($('<div>').attr('class', 'comment-main-level')
+                        .append($('<div>').attr('class', 'comment-avatar')
+                            .append($('<img>').attr('src', avatar)))
+                        .append($('<div>').attr('class', 'comment-box')
+                            .append($('<div>').attr('class', 'comment-head').attr('data-comment-id', commentID)
+                                .append($('<h6>').attr('class', 'comment-name').attr('id', 'newly-added-comment')
+                                    .append($('<a>').attr('href', '/profile/' + username).text(username)))
+                            .append($('<span>').css('display','block').text(timestamp))
+                            .append($('<i>').attr('class', 'fa fa-reply commentreply-' + commentID))
+                            .append($('<i>').attr('class', 'fa fa-heart commentlike-' + commentID))
+                            .append($('<i>').attr('class', 'comment-like-number comment-like-number-' + commentID).text(total_likes)))
+                        .append($('<div>').attr('class', 'comment-content').text(comment))))
+                    )
+                    
+                    if (project_author == username) {
+                        $('#newly-added-comment').addClass('by-author');
+                    }
+                },
+                error: function(response) {
+                    console.log(response);
+                    console.log('something went wrong...');
+                }
+            });
+        }
+    });
+});
+
+/* REOPENING COMMENT BOX */
+$(function () {
+    $('.comment-reopen-box').on('click', () => {
+        $('.main-comment-text').css('display', 'inline-block');
+        $('.comment-btn-centering').css('display', 'inline-block');
+        $('.comment-alert-msg').css('display', 'none');
+    });
+});
+
+/* OPENING/CLOSING REPLY BOX */
+$(function () {
+    $('#comments-list').on('click', '.fa-reply', (event) => {
+        let replyTarget = event.currentTarget.classList[2];
+        let commentID = event.currentTarget.parentElement.dataset.commentId;
+        
+        if ($('.shadow-textarea' + commentID).length == 0) {
+            $('.' + replyTarget).css('color', '#03658c');
+            $('.comment-root-' + commentID).append($('<div>')
+                .attr('class', 'form-group shadow-textarea' + commentID)
+                .css('position', 'relative')
+                .append($('<textarea>')
+                    .attr('class', 'form-control z-depth-1 reply-text' + commentID)
+                    .attr('id', 'exampleFormControlTextarea6')
+                    .attr('rows', '3')
+                    .attr('placeholder', 'Reply here...')
+                    .css('resize', 'none')
+                    .css('width', '70%')
+                    .css('margin', '0.5em auto 0 auto')
+                    .css('padding', '0.5em'))
+                .append($('<button>')
+                    .attr('class', 'btn-info reply-btn reply-btn' + commentID)
+                    .text('Reply')
+                    .css('font-size', '0.7em')
+                    .css('border-radius', '0.7em')
+                    .css('width', '6em')
+                    .css('height', '2em')
+                    .css('position', 'absolute')
+                    .css('top', '40%')
+                    .css('right', '7%')
+                    .css('outline', 'none')
+                    .css('box-shadow', 'none')
+                )
+            );
+
+            let ReplyBox = event.currentTarget.parentElement.parentElement.parentElement.parentElement.lastElementChild.classList[1];
+            if (ReplyBox) {
+                $('.' + ReplyBox)[0].scrollIntoView({
+                    behavior: "smooth", // "smooth" or "auto" or "instant"
+                    block: "end" // "start" or "end"
+                });
+            }
+        } else if ($('.shadow-textarea' + commentID).length != 0) {
+            $('.' + replyTarget).css('color', '#A6A6A6');
+            $('.shadow-textarea' + commentID).remove();
+        };
+    });
+});
+
+/* REPLY SUBMISSION */
+$(function () {
+    $('#comments-list').on('click', '.reply-btn', (event) => {
+        let currentReplyText = event.currentTarget.previousSibling.value;
+        let commentID = event.currentTarget.parentElement.parentElement.dataset.commentId;
+
+        if ((currentReplyText).length > 0 && $('.shadow-textarea' + commentID).length != 0) {
+            event.preventDefault();
+            var csrf_token = "{{ csrf_token() }}";
+            /* ERROR WITH HAVING JINJA2 STRING WITH APOSTROPHE WHICH REQ TO HAVE |SAFE */
+            let convert_subject = "{{ project.title|safe }}";
+
+            // Inject imported CSRF token into our AJAX request.
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                    }
+                }
+            });
+            
+            $.ajax({
+                url: '/project/new_reply/' + '{{ user.username }}' + '/' + convert_subject + '/' + commentID,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(currentReplyText),
+                success: function(response) {
+                    let replyID = response['reply_id'];
+                    let projectAuthor = response['author'];
+                    let username = '{{ current_user.username }}';
+                    let replyAvatar = response['avatar'];
+                    let timestamp = response['timestamp'];
+                    let total_likes = response['likes'];
+                    $('.shadow-textarea' + commentID).remove();
+                    $('.commentreply-' + commentID).css('color', '#A6A6A6');
+
+                    if ($('.reply-list-' + commentID).length == 0) {
+                        $('.comment-root-' + commentID).append($('<ul>')
+                            .attr('class', 'comments-list reply-list reply-list-' + commentID)
+                            .append($('<li>')
+                                .attr('class', 'reply-root reply-root-' + replyID)
+                                .attr('data-reply-id', replyID)
+                                .append($('<div>').attr('class', 'comment-avatar')
+                                    .append($('<img>').attr('src', replyAvatar)))
+                                .append($('<div>').attr('class', 'reply-comment-box')
+                                    .append($('<div>').attr('class', 'comment-head').attr('data-reply-id', replyID)
+                                        .append($('<h6>').attr('class', 'comment-name').attr('id', 'newly-added-reply' + replyID)
+                                            .append($('<a>').attr('href', '/profile/' + username).text(username)))
+                                        .append($('<span>')
+                                            .text(timestamp))
+                                        .append($('<i>').attr('class', 'fa fa-heart replylike-' + replyID))
+                                        .append($('<i>').attr('class', 'reply-like-number reply-like-number-' + replyID).css('top', '-0.2em').text(total_likes)))
+                                    .append($('<div>').attr('class', 'comment-content').text(currentReplyText))
+                                )
+                            )
+                        )
+                    } else if ($('.reply-list-' + commentID).length != 0) {
+                        $('.reply-list-' + commentID).append($('<li>')
+                            .attr('class', 'reply-root reply-root-' + replyID)
+                            .attr('data-reply-id', replyID)
+                            .append($('<div>').attr('class', 'comment-avatar')
+                                .append($('<img>').attr('src', replyAvatar)))
+                            .append($('<div>').attr('class', 'reply-comment-box')
+                                .append($('<div>').attr('class', 'comment-head').attr('data-reply-id', replyID)
+                                    .append($('<h6>').attr('class', 'comment-name').attr('id', 'newly-added-reply' + replyID)
+                                        .append($('<a>').attr('href', '/profile/' + username).text(username)))
+                                    .append($('<span>')
+                                        .text(timestamp))
+                                    .append($('<i>').attr('class', 'fa fa-heart replylike-' + replyID))
+                                    .append($('<i>').attr('class', 'like-number reply-like-number-' + replyID).text(total_likes).css('top', '-0.2em')))
+                                .append($('<div>').attr('class', 'comment-content').text(currentReplyText))
+                            )
+                        )
+                    };
+
+                    if (projectAuthor == username) {
+                        $('#newly-added-reply' + replyID).addClass('by-author');
+                    };
+                },
+                error: function(response) {
+                    console.log(response);
+                }
+            })
+        }
+    });
+});
+
+/* PROJECT LIKES&UNLIKES */
+$(function () {
+    $('.project-like').on('click', (event) => {
+        let project_id = event.currentTarget.dataset.projectId;
+        let currentLike = event.currentTarget.id;
+
+        if (project_id && (currentLike == '')) {
+            $.ajax({
+                url: '/project/project_like/' + project_id,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    if (response == 'Project liked!') {
+                        $('.projectlike-' + project_id).css('color', 'red');
+                        $('.projectlike-' + project_id).attr('id', 'projectlike');
+
+                        /* LIKE COUNTER UPDATE FOR BETTER USER EXPERIENCE */
+                        let existingCount = Number($('.project-like-number-' + project_id).text());
+                        $('.project-like-number-' + project_id).text(existingCount + 1);
+                    }
+                },
+                error: function(response) {
+                    console.log(response);
+                }
+            });
+        } else if (project_id && (currentLike != '')) {
+            $.ajax({
+                url: '/project/project_unlike/' + project_id,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    if (response == 'Project unliked!') {
+                        $('.projectlike-' + project_id).css('color', '#A6A6A6');
+                        $('.projectlike-' + project_id).removeAttr('id');
+
+                        /* LIKE COUNTER UPDATE FOR BETTER USER EXPERIENCE */
+                        let existingCount = Number($('.project-like-number-' + project_id).text());
+                        $('.project-like-number-' + project_id).text(existingCount - 1);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+    });
+});
+
+/* COMMENT&REPLY LIKE SYSTEM */
+$(function () {
+    $('#comments-list').on('click', '.fa-heart', (event) => {
+        let commentID = event.currentTarget.parentElement.dataset.commentId;
+        let replyID = event.currentTarget.parentElement.dataset.replyId;
+        let currentLike = event.currentTarget.id;
+        
+        if (commentID && (currentLike == '')) {
+            $.ajax({
+                url: '/project/comment_like/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + commentID,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    if (response == 'Comment liked!') {
+                        $('.commentlike-' + commentID).css('color', 'red');
+                        $('.commentlike-' + commentID).attr('id', 'commentlike');
+
+                        /* LIKE COUNTER UPDATE FOR BETTER USER EXPERIENCE */
+                        let existingCount = Number($('.comment-like-number-' + commentID).text());
+                        $('.comment-like-number-' + commentID).text(existingCount + 1);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        } else if (commentID && (currentLike != '')) {
+            $.ajax({
+                url: '/project/comment_unlike/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + commentID,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    if (response == 'Comment unliked!') {
+                        $('.commentlike-' + commentID).css('color', '#A6A6A6');
+                        $('.commentlike-' + commentID).removeAttr('id');
+
+                        /* LIKE COUNTER UPDATE FOR BETTER USER EXPERIENCE */
+                        let existingCount = Number($('.comment-like-number-' + commentID).text());
+                        $('.comment-like-number-' + commentID).text(existingCount - 1);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+
+        if (replyID && (currentLike == '')) {
+            $.ajax({
+                url: '/project/reply_like/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + replyID,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    if (response == 'Reply liked!') {
+                        $('.replylike-' + replyID).css('color', 'red');
+                        $('.replylike-' + replyID).attr('id', 'replylike');
+
+                        /* LIKE COUNTER UPDATE FOR BETTER USER EXPERIENCE */
+                        let existingCount = Number($('.reply-like-number-' + replyID).text());
+                        $('.reply-like-number-' + replyID).text(existingCount + 1);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        } else if (replyID && (currentLike != '')) {
+            $.ajax({
+                url: '/project/reply_unlike/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + replyID,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    if (response == 'Reply unliked!') {
+                        $('.replylike-' + replyID).css('color', '#A6A6A6');
+                        $('.replylike-' + replyID).removeAttr('id');
+
+                        /* LIKE COUNTER UPDATE FOR BETTER USER EXPERIENCE */
+                        let existingCount = Number($('.reply-like-number-' + replyID).text());
+                        $('.reply-like-number-' + replyID).text(existingCount - 1);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+    });
+});
+
+/* SHOW ALL USERS LIKED WHO LIKED COMMENT */
+$(function () {
+    $('#comments-list').on('click', '.comment-like-number', (event) => {
+        let currentUserLikes = event.currentTarget.classList[1];
+        let commentID = event.currentTarget.parentElement.dataset.commentId;
+        console.log(currentUserLikes);
+        console.log(commentID);
+        $.ajax({
+            url: '/project/show_user_commentlikes/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + commentID,
+            type: 'GET',
+            success: function(response) {
+                let users = response;
+                if (users) {
+                    for (i = 0; i < (users).length; i++) {
+                        $('.userlikes-modal-' + commentID)
+                        .append($('<li>')
+                            .attr('class', 'modal-likes-list')
+                            .append($('<a>')
+                                .attr('href', '/profile/' + users[i])
+                                .css('text-decoration', 'none')
+                                .text(users[i])
+                            )
+                        )
+                    };
+                };
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+
+        /* REMOVES DYNAMICALLY ADDED USERS IN 'LIKES' MODAL */
+        $('.modal-btn').on('click', () => {
+            $('.modal-likes-list').remove();
+        });
+    });
+});
+/* SHOW ALL USERS LIKED WHO LIKED REPLY */
+$(function () {
+    $('.comment-root').on('click', '.reply-like-number', (event) => {
+        let currentUserLikes = event.currentTarget.classList[1];
+        let replyID = event.currentTarget.parentElement.dataset.replyId;
+        console.log(currentUserLikes);
+        console.log(replyID);
+        $.ajax({
+            url: '/project/show_user_replylikes/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + replyID,
+            type: 'GET',
+            success: function(response) {
+                let users = response;
+                if (users) {
+                    for (i = 0; i < (users).length; i++) {
+                        $('.userlikes-modal-' + replyID)
+                        .append($('<li>')
+                            .attr('class', 'modal-likes-list')
+                            .append($('<a>')
+                                .attr('href', '/profile/' + users[i])
+                                .css('text-decoration', 'none')
+                                .text(users[i])
+                            )
+                        )
+                    };
+                };
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    });
+
+    /* REMOVES DYNAMICALLY ADDED USERS IN 'LIKES' MODAL */
+    $('.modal-btn').on('click', () => {
+        $('.modal-likes-list').remove();
+    });
+});
+
+</script>
+{% endblock scripts %}

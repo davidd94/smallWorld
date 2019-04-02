@@ -1,0 +1,13 @@
+<div class="form-popup" id="myForm">
+  <div class="form-container">
+    <h1 class="message-popup-heading">New Message</h1>
+
+    {{ form.recipient(placeholder="Enter User Name", class="new-msg-recip", autocomplete="off") }}
+    {{ form.subject(placeholder="Subject", class="new-msg-subject", type="text2", autocomplete="off", maxlength="48") }}<br>
+    
+    {{ form.body(class="message-popup-msg", placeholder="Enter your message here..", autocomplete="off", maxlength="499") }}<br>
+
+    {{ form.submit(id="send-new-msg-btn", class="btn send") }}
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+  </div>
+</div>

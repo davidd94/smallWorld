@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link href="{{ url_for('static', filename='auth-templates.css') }}" rel="stylesheet">
+{% endblock css %}
+
+{% block bodycontent %}
+<div id="register-container" class="container">
+    <div id="signupform-container-override" class="row centered-form">
+    <div id="signupform-override" class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 id="reset-pw-req-header" class="panel-title">Request New Account Confirmation Link</h3>
+            </div>
+            {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+            {% if message %}
+                <div class="alert alert-dismissible alert-success">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ message }}</strong> <a href="{{ url_for('auth.homepage') }}">Log in here</a>.
+                </div>
+            {% endif %}
+            {% endfor %}
+            {% endwith %}
+            <div class="panel-body">
+                <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                
+                <div id="reset-pw-req-input" class="form-group">
+                    {{ form.email(class="form-control input-sm", placeholder="Email", autocomplete="off") }}
+                    {% for error in form.email.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div> 
+                {{ form.submit(class="btn btn-info btn-block") }}
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock bodycontent %}

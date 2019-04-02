@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block bodycontent %}
+<div class="row" style="justify-content: center; padding-top: 8em;">
+    <div class="card" style="width: 30%;">
+    <article class="card-body">
+        <a href="{{ url_for('auth.register') }}" class="float-right btn btn-outline-primary">Sign up</a>
+        <h4 class="card-title mb-4 mt-1">Sign in</h4>
+        <hr>
+        <form action="{{ url_for('auth.login') }}" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                </div>
+                {{ form.username(class="form-control", placeholder="Username Login", type="text") }}
+            </div> <!-- input-group.// -->
+            </div> <!-- form-group// -->
+            <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                </div>
+                {{ form.password(class="form-control", placeholder="******", type="password") }}
+            </div> <!-- input-group.// -->
+            </div> <!-- form-group// -->
+            <div class="form-group" style="text-align: center;">
+                {{ form.submit(class="btn btn-primary", style="background-color: #007bff; width: 40%;", value="Login", type="submit") }}
+            </div> <!-- form-group// -->
+            <p class="text-center"><a href="{{ url_for('auth.reset_password_request') }}" class="btn" style="color: #007bff;">Forgot password?</a></p>
+        </form>
+    </article>
+    </div>
+</div>
+{% endblock bodycontent %}

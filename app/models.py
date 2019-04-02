@@ -1,0 +1,468 @@
+from flask import current_app, url_for
+from flask_login import UserMixin, current_user
+from sqlalchemy import update
+from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
+from hashlib import md5
+from datetime import datetime, timedelta
+from time import time
+from app import db, login
+from app.search import add_to_index, remove_from_index, query_index
+import jwt, base64, json
+
+
+followers = db.Table('followers',
+db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
+)
+
+project_likers = db.Table('project_likers',
+db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+db.Column('project_id', db.Integer, db.ForeignKey('projects.id'), primary_key=True)
+)
+
+comment_likers = db.Table('comment_likers',
+db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+db.Column('comment_id', db.Integer, db.ForeignKey('project_comments.id'), primary_key=True)
+)
+
+reply_likers = db.Table('reply_likers',
+db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+db.Column('reply_id', db.Integer, db.ForeignKey('comment_replies.id'), primary_key=True)
+)
+
+project_visitors = db.Table('project_visitors',
+db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+db.Column('project_id', db.Integer, db.ForeignKey('projects.id'), primary_key=True),
+db.Column('last_visit_date', db.DateTime, default=datetime.utcnow),
+db.Column('initial_visit_date', db.DateTime, default=datetime.utcnow)
+)
+
+
+class SearchableMixin(object):
+    @classmethod
+    def search(cls, expression, page, per_page):
+        ids, total = query_index(cls.__tablename__, expression, page, per_page)
+        if total == 0:
+            return cls.query.filter_by(id=0), 0
+        when = []
+        for i in range(len(ids)):
+            when.append((ids[i], i))
+        return cls.query.filter(cls.id.in_(ids)).order_by(
+            db.case(when, value=cls.id)), total
+    
+    @classmethod
+    def before_commit(cls, session):
+        session._changes = {
+            'add': list(session.new),
+            'update': list(session.dirty),
+            'delete': list(session.deleted)
+        }
+    
+    @classmethod
+    def after_commit(cls, session):
+        for obj in session._changes['add']:
+            if isinstance(obj, SearchableMixin):
+                add_to_index(obj.__tablename__, obj)
+        for obj in session._changes['update']:
+            if isinstance(obj, SearchableMixin):
+                add_to_index(obj.__tablename__, obj)
+        for obj in session._changes['delete']:
+            if isinstance(obj, SearchableMixin):
+                remove_from_index(obj.__tablename__, obj)
+        session._changes = None
+
+    @classmethod
+    def reindex(cls):
+        for obj in cls.query:
+            add_to_index(cls.__tablename__, obj)
+
+
+# LISTENS TO SQLALCHEMY CHANGES TO INVOKE ELASTICSEARCH INDEX CHANGES ACCORDINGLY
+db.event.listen(db.session, 'before_commit', SearchableMixin.before_commit)
+db.event.listen(db.session, 'after_commit', SearchableMixin.after_commit)
+
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'user'
+    __searchable__ = ['bio']
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True, unique=True)
+    firstname = db.Column(db.String(30))
+    lastname = db.Column(db.String(30))
+    email = db.Column(db.String(120), index=True, unique=True)
+    password_hash = db.Column(db.String(130))
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    bio = db.Column(db.Text(400))
+    picture = db.Column(db.Text(500), default=None)
+    verified = db.Column(db.Boolean, default=False)
+    max_failed_login = db.Column(db.Integer)
+    # TOKEN VARIABLES FOR APIs ONLY
+    token = db.Column(db.String(50), index=True, unique=True)
+    token_expiration = db.Column(db.DateTime)
+
+    # ASSOCIATION TABLES
+    followed = db.relationship('User', secondary=followers,
+                                        primaryjoin=(followers.c.follower_id == id),
+                                        secondaryjoin=(followers.c.followed_id == id),
+                                        backref=db.backref('followers', lazy='dynamic'),
+                                        lazy='dynamic')
+    projects_liked = db.relationship('Projects', secondary=project_likers,
+                                            primaryjoin=(project_likers.c.user_id == id),
+                                            backref=db.backref('likers', lazy='dynamic'),
+                                            lazy='dynamic')
+    comments_liked = db.relationship('ProjectComments', secondary=comment_likers,
+                                            primaryjoin=(comment_likers.c.user_id == id),
+                                            backref=db.backref('likers', lazy='dynamic'),
+                                            lazy='dynamic')
+    replies_liked = db.relationship('CommentReplies', secondary=reply_likers,
+                                            primaryjoin=(reply_likers.c.user_id == id),
+                                            backref=db.backref('likers', lazy='dynamic'),
+                                            lazy='dynamic')
+    project_visited = db.relationship('Projects', secondary=project_visitors,
+                                            primaryjoin=(project_visitors.c.user_id == id),
+                                            backref=db.backref('visitor', lazy='dynamic'),
+                                            lazy='dynamic')
+    # RELATIONSHIPS TABLES
+    message_sent = db.relationship('Messages',
+                                    foreign_keys='Messages.sender_id',
+                                    backref='author',
+                                    lazy='dynamic')
+    message_received = db.relationship('Messages',
+                                        foreign_keys='Messages.recipient_id',
+                                        backref='recipient', lazy='dynamic')
+    all_projects = db.relationship('Projects',
+                                    foreign_keys='Projects.user_id',
+                                    backref='author', lazy='dynamic')
+    all_comments = db.relationship('ProjectComments',
+                                    foreign_keys='ProjectComments.user_id',
+                                    backref='author', lazy='dynamic')
+    all_replies = db.relationship('CommentReplies',
+                                    foreign_keys='CommentReplies.user_id',
+                                    backref='author', lazy='dynamic')
+    notifications = db.relationship('Notifications', backref='user',
+                                    lazy='dynamic')
+
+    # USER METHODS
+    def create_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def verify_acct(self):
+        self.verified = True
+
+    def failed_login_counter(self):
+        if self.max_failed_login is None:
+            self.max_failed_login = 0
+        self.max_failed_login += 1
+        db.session.commit()
+
+    def avatar(self, size):
+        if (self.picture == None):
+            digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+            return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
+        return self.picture.format(size)
+
+    def get_confirmation_token(self, expires_in=1209600):
+        return jwt.encode({'secret_token': self.id, 'exp': time() + expires_in},
+        current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+    
+    def get_reset_password_token(self, expires_in=10800):
+        return jwt.encode({'secret_token': self.id, 'exp': time() + expires_in},
+        current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+    
+    #RETRIEVES TOKEN IF VALID OTHERWISE RENEWS TOKEN - APIs ONLY
+    """
+    def get_token(self, expires_in=3600):
+        now = datetime.utcnow()
+        if self.token and self.token_expiration > now + timedelta(seconds=60):
+            return self.token
+        self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
+        db.session.add(self)
+        return self.token
+    """
+
+    def revoke_token(self):
+        self.token_expiration = datetime.utcnow() - timedelta(seconds=1)
+
+    def is_following(self, user):
+        return self.followed.filter(followers.c.followed_id == user.id).count() > 0
+
+    def follow(self, user):
+        if not self.is_following(user):
+            self.followed.append(user)
+    
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+    
+    def followed_projects(self):
+        # NEED TO ADD MORE TO THIS IN THE FUTURE
+        return
+
+
+    def is_liking_project(self, project):
+        return Projects.query.join(project_likers).join(User).filter(project_likers.c.user_id == self.id).filter(project_likers.c.project_id == project.id).count() > 0
+
+    def like_project(self, project):
+        if not self.is_liking_project(project):
+            self.projects_liked.append(project)
+    
+    def unlike_project(self, project):
+        if self.is_liking_project(project):
+            self.projects_liked.remove(project)
+
+    def is_liking_comment(self, project_comment):
+        return ProjectComments.query.join(comment_likers).join(User).filter(comment_likers.c.user_id == self.id).filter(comment_likers.c.comment_id == project_comment.id).count() > 0
+
+    def like_comment(self, project_comment):
+        if not self.is_liking_comment(project_comment):
+            self.comments_liked.append(project_comment)
+    
+    def unlike_comment(self, project_comment):
+        if self.is_liking_comment(project_comment):
+            self.comments_liked.remove(project_comment)
+
+    def is_liking_reply(self, project_reply):
+        return CommentReplies.query.join(reply_likers).join(User).filter(reply_likers.c.user_id == self.id).filter(reply_likers.c.reply_id == project_reply.id).count() > 0
+
+    def like_reply(self, project_reply):
+        if not self.is_liking_reply(project_reply):
+            self.replies_liked.append(project_reply)
+    
+    def unlike_reply(self, project_reply):
+        if self.is_liking_reply(project_reply):
+            self.replies_liked.remove(project_reply)
+
+    def project_visits(self, project):
+        if not (Projects.query.join(project_visitors).join(User).filter(project_visitors.c.user_id == self.id).filter(project_visitors.c.project_id == project.id).count() > 0):
+            self.project_visited.append(project)
+            db.session.commit()
+            return
+        update_last_visit = update(project_visitors, project_visitors.c.project_id == project.id)
+        # DO NOT NEED TO MANUALLY CREATE ENGINE AND CONNECT TO DB WHEN 'db' HAS BEEN INITIALIZED ALREADY
+        # connection = db.engine.connect()
+        # connection.execute(u, {'last_visit_date': now1})
+
+        now = datetime.utcnow()
+        db.session.execute(update_last_visit, {
+            'last_visit_date': now
+            })
+        db.session.commit()
+
+    def add_notification(self, notification_type, data):
+        self.notifications.filter_by(notification_type=notification_type).delete()
+        n = Notifications(notification_type=notification_type,
+                            payload_json=json.dumps(data),
+                            user=self)
+        db.session.add(n)
+        return n
+
+
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
+
+    @classmethod
+    def single_user(cls, username):
+        return cls.query \
+                    .filter_by(username=username) \
+                    .first_or_404()
+
+    @staticmethod
+    #EXTRACTING THE UNIQUE USER'S ID FROM THE EMAIL TOKEN'S PAYLOAD
+    def verify_email_token(token):
+        try:
+            id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])['secret_token']
+        except:
+            return
+        return User.query.get(id)
+    
+    @staticmethod
+    #CHECK IF TOKEN STORED IN DB IS STILL VALID
+    def check_token(token):
+        user = User.query.filter_by(token=token).first()
+        if user is None or user.token_expiration < datetime.utcnow():
+            return None
+        return user
+
+
+class Messages(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    subject = db.Column(db.String(50), index=True)
+    body = db.Column(db.String(500))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    message_read = db.Column(db.Boolean, index=True, default=False)
+
+    def __repr__(self):
+        return '<Message {}>'.format(self.body)
+
+
+class Projects(SearchableMixin, db.Model):
+    __searchable__ = ['title', 'description', 'tutorial']
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True)
+    title = db.Column(db.String(40), index=True, default='Untitled World')
+    description = db.Column(db.String(300), index=True)
+    difficulty = db.Column(db.Integer)
+    cost = db.Column(db.Integer)
+    duration = db.Column(db.Integer)
+    tutorial = db.Column(db.String(10000))
+    video = db.Column(db.String(220))
+    item_list = db.Column(db.String(10000))
+    created_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    last_edit = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    likes = db.Column(db.Integer, default=0)
+    private = db.Column(db.Boolean, index=True, default=False)
+    # NOTIFICATION PURPOSES ONLY
+    commentsAndReplies_last_read = db.Column(db.DateTime, index=True, default=(datetime(1900, 1, 1)))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    # TABLE RELATIONSHIPS
+    photo_gallery = db.relationship('PhotoGallery',
+                                    foreign_keys='PhotoGallery.project_id',
+                                    backref='projects',
+                                    lazy='dynamic')
+    project_comments = db.relationship('ProjectComments',
+                                    foreign_keys='ProjectComments.project_id',
+                                    backref='projects',
+                                    lazy='dynamic')
+    comment_replies = db.relationship('CommentReplies',
+                                    foreign_keys='CommentReplies.project_id',
+                                    backref='projects',
+                                    lazy='dynamic')
+    # ASSOCIATION RELATIONSHIPS
+    users_liked = db.relationship('User', secondary=project_likers,
+                                        primaryjoin=(project_likers.c.project_id == id),
+                                        backref=db.backref('projects', lazy='dynamic'),
+                                        lazy='dynamic')
+    users_visited = db.relationship('User', secondary=project_visitors,
+                                        primaryjoin=(project_visitors.c.project_id == id),
+                                        backref=db.backref('projectvisited', lazy='dynamic'),
+                                        lazy='dynamic')
+
+    def __repr__(self):
+        return '<Project {}>'.format(self.title)
+
+    # QUERY METHODS
+    @classmethod
+    def single_project(cls, user_id, title):
+        return cls.query \
+                    .filter_by(user_id= user_id) \
+                    .filter_by(title=title) \
+                    .first()
+
+
+class PhotoGallery(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, index=True)
+    photoOne = db.Column(db.String(500))
+    photoTwo = db.Column(db.String(500))
+    photoThree = db.Column(db.String(500))
+    photoFour = db.Column(db.String(500))
+    photoFive = db.Column(db.String(500))
+    photoSix = db.Column(db.String(500))
+    photoSeven = db.Column(db.String(500))
+    photoEight = db.Column(db.String(500))
+    photoNine = db.Column(db.String(500))
+    photoTen = db.Column(db.String(500))
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+
+    def __repr__(self):
+        return '<Photo Gallery for {}>'.format(self.title)
+
+    @classmethod
+    def single_gallery(cls, project_id):
+        return cls.query \
+                    .filter_by(project_id=project_id) \
+                    .first()
+
+
+class ProjectComments(db.Model):
+    __tablename__ = 'project_comments'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, index=True)
+    username = db.Column(db.String(64), index=True)
+    comment = db.Column(db.String(400))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    likes = db.Column(db.Integer, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+
+    # RELATIONSHIP TABLE
+    comment_replies = db.relationship('CommentReplies',
+                                    foreign_keys='CommentReplies.project_comment_id',
+                                    backref='projectcomments',
+                                    lazy='dynamic')
+    # ASSOCIATION TABLE
+    users_liked = db.relationship('User', secondary=comment_likers,
+                                        primaryjoin=(comment_likers.c.comment_id == id),
+                                        backref=db.backref('projectcomments', lazy='dynamic'),
+                                        lazy='dynamic')
+
+    def __repr__(self):
+        return '<Project Comment for {}>'.format(self.title)
+
+    @classmethod
+    def singleProj_allCommentsDesc(cls, project_id):
+        return cls.query \
+                    .filter_by(project_id=project_id) \
+                    .order_by(cls.timestamp.desc()) \
+                    .all()
+
+
+class CommentReplies(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, index=True)
+    username = db.Column(db.String(64), index=True)
+    reply = db.Column(db.String(400))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    likes = db.Column(db.Integer, default=0)
+    # WHEN CREATING FOREIGN KEYS, YOU MUST USE '_' BETWEEN EACH CAPITALIZED LETTER FOR MULTIWORD TABLES
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+    project_comment_id = db.Column(db.Integer, db.ForeignKey('project_comments.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    # ASSOCIATION TABLE
+    users_liked = db.relationship('User', secondary=reply_likers,
+                                        primaryjoin=(reply_likers.c.reply_id == id),
+                                        backref=db.backref('projectreplies', lazy='dynamic'),
+                                        lazy='dynamic')
+
+    def __repr__(self):
+        return '<Comment Reply for {}>'.format(self.title)
+
+    @classmethod
+    def allRepliesAsc(cls, title=title, project_id=project_id):
+        return cls.query \
+                    .filter_by(project_id=project_id) \
+                    .filter_by(title=title) \
+                    .order_by(cls.timestamp.asc()) \
+                    .all()
+
+
+class Notifications(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    notification_type = db.Column(db.String(128), index=True)
+    username = db.Column(db.String(64), index=True)
+    title = db.Column(db.String(100), index=True)
+    data = db.Column(db.String(150))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return '<Notification type: {} from {}>'.format(self.notification_type, self.username)
+    
+    @classmethod
+    def get_notification_number(cls):
+        return cls.query.filter_by(user=current_user).count()
+
+
+
+#FLASK-LOGIN LOADS EACH USER INTO ITS SESSION
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))

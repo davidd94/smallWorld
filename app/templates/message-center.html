@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='message-center.css') }}">
+{% endblock css %}
+
+{% block bodycontent %}
+<div class="message-center-container">
+    {% include "_message-list.html" %}
+    {% include "_message-preview.html" %}
+    {% include "_message-popup.html" %}
+</div>
+{% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+};
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+  document.getElementsByClassName("new-msg-recip")[0].value = "";
+  document.getElementsByClassName("new-msg-subject")[0].value = "";
+  document.getElementsByClassName("message-popup-msg")[0].value = "";
+};
+
+function openReplyForm() {
+  document.getElementById("message-reply-box").style.display = "block";
+  document.getElementById("message-reply-box").style.bottom = "2em";
+};
+function closeReplyForm() {
+  document.getElementById("message-reply-box").style.display = "visible";
+  document.getElementById("message-reply-box").style.bottom = "-10em";
+};
+</script>
+
+<script>
+/* LOAD EACH MSG DYNAMICALLY */
+$(function() {
+    $('.list-group-item').on('click', (event) => {
+        let current_msg_dataid = event.currentTarget.dataset.msgId;
+        let current_msg_name = event.currentTarget.children[0].classList[0];
+        let current_msg_sub = event.currentTarget.children[1].classList[0];
+        let current_msg_icon = event.currentTarget.children[2].id;
+        let current_msg_subj_name = event.currentTarget.children[1].textContent;
+        let sender_username = $('.message-msg-username-' + current_msg_dataid)[0].textContent;
+        let current_msg_id = event.currentTarget.id;
+        /* REMOVES PREVIOUSLY READ MSG BACKGROUND COLOR */
+        $('.message-list li').removeClass('current-msg');
+
+        $.ajax({
+            url: "/view_message/" + sender_username + "/" + current_msg_dataid,
+            type: 'GET',
+            contentType: 'application/json',
+            success: function(response) {
+                /* REMOVES ANY EXISTING DYNAMICALLY LOADED MSGS */
+                $('.received_msg').remove();
+                $('.outgoing_msg').remove();
+
+                /* DYNAMICALLY UPDATES UNREAD MSG UPON CLICK */
+                $('.' + current_msg_name).attr('style','font-weight: 400;');
+                $('.' + current_msg_sub).attr('style', 'font-weight: 400; font-style: italic;')
+                $('#' + current_msg_icon).attr('class', 'fas fa-envelope-open message-msg-icon');
+
+                /* SHOWS WHICH MSG IS BEING CURRENTLY READ */
+                $('#' + current_msg_id).addClass('current-msg');
+
+                /* SHOWS REPLY/DEL BUTTONS */
+                $('.message-reply-msg').attr('style', 'display: block;');
+                $('.message-del-msg').attr('style', 'display: block;');
+
+                /* REMOVES EXISTING REPLY TEXT AND BOX BETWEEN MSG CHANGE */
+                document.getElementById("message-reply-box").style.bottom = "-10em";
+                $("#reply_msg")[0].value = "";
+
+                /* LOOPS TO ADD EACH INDIVIDUAL MSGS PER SUBJECT */
+                for (i = 0; i < response.length; i ++) {
+                    let each_msg = response[i];
+                    let sender_avatar = each_msg.other_avatar;
+                    let sender_username = each_msg.username;
+                    let each_msg_text = each_msg.body;
+                    let each_msg_timestamp = each_msg.time;
+
+                    if (sender_username != "{{ current_user.username }}") {
+                        $('.message-other-username').text(sender_username);
+                        $('.message-other-username').attr('href', "/profile/" + sender_username);
+                        $('.message-user-avatar').attr('src', sender_avatar);
+
+                        $('.msg_history')
+                            .append($('<div>').attr('class', 'received_msg')
+                            .append($('<div>').attr('class', 'received_withd_msg')
+                                .append($('<p>')
+                                    .attr('class', 'message-msg-received-body')
+                                    .text(each_msg_text))
+                                .append($('<span>')
+                                    .attr('class', 'time_date')
+                                    .attr('id', 'message-inc-timestamp')
+                                    .text(each_msg_timestamp))
+                            )
+                        );
+                    } else {
+                        $('.msg_history')
+                            .append($('<div>').attr('class', 'outgoing_msg')
+                            .append($('<div>').attr('class', 'sent_msg')
+                                .append($('<p>')
+                                    .attr('class', 'message-msg-sent-body')
+                                    .text(each_msg_text))
+                                .append($('<span>')
+                                    .attr('class', 'time_date')
+                                    .attr('id', 'message-outgoing-timestamp')
+                                    .text(each_msg_timestamp))
+                            )
+                        );
+                    };
+                }
+            },
+        });
+    });
+});
+
+/* SEND MSG DYNAMICALLY */
+$(function () {
+    $('#send-new-msg-btn').on('click', (event) => {
+        new_msg_recip = $('.new-msg-recip')[0].value;
+        new_msg_subject = $('.new-msg-subject')[0].value;
+        new_msg_body = $('.message-popup-msg')[0].value;
+        newmsg = {'recipient': new_msg_recip, 'subject': new_msg_subject, 'body': new_msg_body};
+        var csrf_token = "{{ csrf_token() }}";
+
+
+        // Inject our CSRF token into our AJAX request.
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                }
+            }
+        });
+        event.preventDefault();
+        $.ajax({
+            url: "{{ url_for('main.send_message') }}",
+            type: 'POST',
+            data: JSON.stringify(newmsg),
+            contentType: 'application/json',
+            success: function(response) {
+                console.log(response);
+                if (response == 'Message successfully sent!') {
+                    $('.form-popup').attr('style','display: none;');
+                    $(".new-msg-recip")[0].value = "";
+                    $(".new-msg-subject")[0].value = "";
+                    $(".message-popup-msg")[0].value = "";
+                    $('.message-success-msg')[0].textContent = response;
+
+                    $('.alert-success').attr('style','right: 3em;');
+                    setTimeout(function () {
+                        $('.alert-success').attr('style','right: -70em;');
+                    }, 4000);
+                } else if (response == "That user does not exist" || response == "You cannot message yourself!") {
+                    $(".new-msg-recip")[0].value = "";
+                    $('.message-fail-msg')[0].textContent = response;
+                    $('.alert-secondary').attr('style','right: 3em;');
+                    setTimeout(function () {
+                        $('.alert-secondary').attr('style','right: -70em;');
+                    }, 4000);
+                } else if (response == 'Subject must be 5-50 characters long' || 
+                            response == 'Message: max of 500 characters long' || 
+                            response == 'User name must be a minimum of 5 characters long') {
+                    $('.message-fail-msg')[0].textContent = response;
+                    $('.alert-secondary').attr('style','right: 3em;');
+                    setTimeout(function () {
+                        $('.alert-secondary').attr('style','right: -70em;');
+                    }, 4000);
+                }
+            },
+            error: function(response) {
+                console.log(response);
+                console.log('Something went wrong with sending messages...');
+            }
+        });
+    });
+});
+
+/* MSG REPLY FEATURE */
+$(function() {
+    /* NEED TO FIGURE OUT HOW TO SEND REPLY MSGS DYNAMICALLY. MAYBE REMOVE THE REPLY BOX AND ADD NEW ONE UPON CLICK ? */
+    $('#reply_msg').keypress(function (event) {
+        let replylen = ($('#reply_msg')[0].value).length;
+        if (event.which == 13 && replylen > 0) {
+            let csrf_token = "{{ csrf_token() }}";
+            let recipient_name = $('.message-other-username')[0].textContent;
+            let msg_subj = $('.current-msg').data('msgSub');
+            let replymsg = $('#reply_msg')[0].value;
+            event.preventDefault();
+            
+            // Inject our CSRF token into our AJAX request.
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "/reply_message/" + msg_subj + "/" + recipient_name,
+                data: JSON.stringify(replymsg),
+                type: 'POST',
+                contentType: 'application/json',
+                success: function(response) {
+                    document.getElementById("message-reply-box").style.bottom = "-10em";
+                    $("#reply_msg")[0].value = "";
+
+                    $('.message-success-msg')[0].textContent = response;
+                    $('.alert-success').attr('style','right: 3em;');
+                    setTimeout(function () {
+                        $('.alert-success').attr('style','right: -70em;');
+                    }, 4000);
+                },
+                error: function(response) {
+                    console.log(response);
+                }
+            });
+        };
+    });
+});
+</script>
+{% endblock scripts %}

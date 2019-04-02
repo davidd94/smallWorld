@@ -1,0 +1,42 @@
+/* REGISTRATION STYLES */
+#register-container {
+    height: 37.5em;
+}
+
+#signupform-container-override {
+    width: 100%;
+    height: 100%;
+    margin: auto auto;
+}
+
+#signupform-override {
+    width: 100%;
+    margin: auto auto;
+}
+
+/* ACCT CONFIRMATION STYLES */
+.jumbotron-wrapper {
+    width: 100%;
+}
+
+#acct-confirm-jumbotron {
+    width: 40em;
+    margin: 5em auto 15em auto;
+    text-align: center;
+}
+
+/* PASSWORD RESET REQUEST STYLES */
+#reset-pw-req-header {
+    font-size: 1.5em;
+    width: 14em;
+    text-align: center;
+    padding-bottom: 2em;
+}
+
+#reset-pw-req-input {
+    padding-bottom: 1em;
+}
+
+#reset-pw-link {
+    text-decoration: underline;
+}

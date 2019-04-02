@@ -1,0 +1,59 @@
+from flask import Flask, current_app, request
+from flask_wtf.csrf import CSRFProtect
+from config import Config
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_login import LoginManager
+from flask_bootstrap import Bootstrap
+from flask_babel import Babel, lazy_gettext as _l
+from flask_mail import Mail
+from flask_moment import Moment
+from elasticsearch import Elasticsearch
+
+
+db = SQLAlchemy()
+migrate = Migrate()
+login = LoginManager()
+login.login_view = 'auth.login'
+login.login_message = ('Please log in to access this page.')
+bootstrap = Bootstrap()
+babel = Babel()
+mail = Mail()
+csrf = CSRFProtect()
+moment = Moment()
+
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login.init_app(app)
+    bootstrap.init_app(app)
+    babel.init_app(app)
+    mail.init_app(app)
+    csrf.init_app(app)
+    moment.init_app(app)
+
+    from app.main import bp as main_bp
+    app.register_blueprint(main_bp)
+
+    from app.auth import bp as auth_bp
+    app.register_blueprint(auth_bp)
+
+    from app.project import bp as proj_bp
+    app.register_blueprint(proj_bp)
+
+    from app.errors import bp as error_bp
+    app.register_blueprint(error_bp)
+
+    app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
+        if app.config['ELASTICSEARCH_URL'] else None
+
+    return app
+
+@babel.localeselector
+def get_locale():
+    return request.accept_languages.best_match(current_app.config['LANGUAGES'])
+
+from app import models

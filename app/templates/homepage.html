@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link href="{{ url_for('static', filename='homepage.css') }}" rel="stylesheet">
+{% endblock css %}
+
+{% block coverphoto %}
+{% if current_user.is_anonymous %}
+<div class="front-banner">
+    <img class="cover-photo" src="{{ url_for('static', filename='homepage-aquarium-trees.jpg') }}">
+</div>
+{% endif %}
+{% endblock coverphoto %}
+
+{% block bodycontent %}
+{% if current_user.is_anonymous %}
+<div class="homepage-container">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item-zen carousel-item active">
+                <img class="d-block w-100" src="{{ url_for('static', filename='homepage-aquarium-zen.jpg') }}" alt="First slide">
+                <span class="zen-text">Welcome to smallWorld! Feeling the urge to get started and unleash your creativity maddness? Sign up below!</span>
+                <a class="signup-btn-link" href="{{ url_for('auth.register') }}"><button class="btn btn-info" type='button'>Sign up</button></a>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" height="500px" width="200px" src="{{ url_for('static', filename='homepage-terrarium-waterfall.jpg') }}" alt="Second slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='homepage-terrarium-desert.jpg') }}" alt="Third slide">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    <div class="homepage-login-container">
+        {% include '_login.html' %}
+    </div>
+</div>
+{% elif current_user.is_authenticated %}
+<div class="dashboard-container">
+    <div class="followed-feed-container">
+        <h3 class="followed-feed-title">Followed Users' Latest Updates</h3>
+        <hr>
+        {% if public_projects %}
+        <ul class="followed-update-list">
+            {% for project in public_projects %}
+            <li class="projectfeed-container projectfeed-container-{{ project.id }}">
+                <img class="projectfeed-avatar" src="{{ project.author.avatar(50) }}">
+                <p class="projectfeed-username">{{ project.username }}</p>
+                <div class="title-border"><p class="projectfeed-title"><a class="projectfeed-title-link projectfeed-title-link-{{ project.id }}" href="{{ url_for('project.project', username=project.username, title=project.title) }}">{{ project.title }}</a></p></div>
+                <ul class="projectfeed-options">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">. . .</a>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 42px, 0px);">
+                        <a class="dropdown-item" href="#">Message</a>
+                        <a class="dropdown-item" href="#">Hide Feed</a>
+                        <a class="dropdown-item" href="#">Unfollow</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Report Feed</a>
+                        <a class="dropdown-item" href="#">Block & Unfollow</a>
+                        </div>
+                    </li>
+                </ul>
+                <div class="update-border"><span class="projectfeed-update">Insert type of updates here..</span></div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <div class="notification-feed-container">
+        <h3 class="followed-note-title">Notifications</h3>
+        <hr>
+        <ul class="followed-note-list">
+            <li>
+                <!-- DYNAMICALLY INSERT EACH NOTIFICATIONS HERE-->
+            </li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+{% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+/* ADDS 'ACTIVE' CLASS TO NAV BAR ITEM */
+$(function() {
+    $('#nav-item-home').addClass('active');
+
+});
+
+</script>
+{% endblock scripts %}

@@ -1,0 +1,399 @@
+.message-center-container {
+    width: 100%;
+    height: 92vh;
+    display: grid;
+    grid-template: 1fr / 20em 1fr;
+    position: relative;
+    z-index: 10;
+}
+
+/* MESSAGE LIST BOX */
+.message-list-box {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    display: grid;
+    grid-template: 4em 1fr / 1fr;
+    border: 0.0625em solid rgb(49, 49, 49);
+    border-top: 0;
+}
+
+.message-list-dropdown {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    align-self: center;
+    justify-self: flex-start;
+    margin-left: 0.4em;
+}
+
+.message-list-new-msg {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    align-self: center;
+    justify-self: flex-end;
+    margin-right: 0.4em;
+}
+
+.message-list {
+    grid-row: 2 / span 1;
+    grid-column: 1 / span 1;
+    border-top: 0.0625em solid rgb(218, 218, 218);
+}
+
+#message-list-override li {
+    border-bottom: 0.0625em solid rgb(218, 218, 218);
+    border-top: 0.0625em solid rgb(218, 218, 218);
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+.current-msg {
+    background: rgba(122, 122, 122, 0.233);
+}
+
+#message-list-override li .message-msg-username {
+    font-size: 1em;
+}
+
+#message-msg-subj {
+    font-size: 0.8em;
+    color: grey;
+    width: 12em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* MESSAGE PREVIEW BOX */
+.message-viewer-box {
+    grid-row: 1 / span 1;
+    grid-column: 2 / span 1;
+    display: grid;
+    grid-template: 2em 1fr / 1fr;
+    border-bottom: 0.0625em solid rgb(49, 49, 49);
+    overflow: hidden;
+}
+
+.message-reply-msg {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    margin: auto 0 auto 6em;
+    justify-self: left;
+    display: none;
+}
+
+.message-del-msg {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    margin: auto 0 auto 14em;
+    justify-self: left;
+    display: none;
+}
+
+.message-info-bar {
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+.message-user-avatar {
+    border-radius: 50%;
+}
+
+.message-display-msg {
+    grid-row: 2 / span 1;
+    grid-column: 1 / span 1;
+    border-top: 0.0625em solid rgb(207, 207, 207);
+}
+
+.alert-box-wrapper {
+    position: relative;
+    height: 1%;
+}
+
+#message-alert-box {
+    grid-row: 2 / span 1;
+    grid-column: 1 / span 1;
+    width: 25%;
+    max-height: 6em;
+    margin-top: 1em;
+    padding: 1em 0.7em;
+    justify-self: flex-end;
+    align-self: center;
+    text-align: center;
+    transition: all 900ms ease;
+    right: -70em;
+    position: absolute;
+}
+
+/* NEW MESSAGE POPUP BOX */
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+/* Button used to open the contact form - fixed at the bottom of the page --- NOT USED!!!
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+*/
+
+.message-popup-heading {
+    font-size: 1.4em;
+    text-align: center;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  z-index: 500;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+}
+
+/* Add styles to the form container */
+.form-container {
+    width: 37.5em;
+    height: 100%;
+    max-width: 37.5em;
+    padding: 10px;
+    background-color: white;
+    position: relative;
+    z-index: 600;
+    opacity: 1;
+}
+
+/* Full-width input fields */
+.form-container input[type=text] {
+    width: 30%;
+    padding: 15px;
+    margin: 1.2em 0;
+    border: none;
+    background: #f1f1f1;
+    font-size: 0.75em;
+    float: left;
+}
+
+.form-container input[type=text2] {
+    width: 60%;
+    padding: 15px;
+    margin: 1.2em 0;
+    border: none;
+    background: #f1f1f1;
+    font-size: 0.75em;
+    float: right;
+}
+
+/* When the inputs get focus, do something */
+.form-container input:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+.message-popup-msg {
+    width: 100%;
+    height: 17em;
+    margin: 1.2em 0 2em 0;
+    resize: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 15%;
+  height: 3em;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+.form-container .send {
+  margin-left: 1.5em;
+  float: left;
+}
+
+.form-container .cancel {
+  background-color: red;
+  margin-right: 1.5em;
+  float: right;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+
+
+
+/* MESSAGE PREVIEW BOX STYLES */
+.container{max-width:1170px; margin:auto;}
+img{ max-width:100%;}
+.inbox_people {
+  background: #f8f8f8 none repeat scroll 0 0;
+  float: left;
+  overflow: hidden;
+  width: 40%; border-right:1px solid #c4c4c4;
+}
+.inbox_msg {
+  border: 1px solid #c4c4c4;
+  clear: both;
+  overflow: hidden;
+}
+.top_spac{ margin: 20px 0 0;}
+
+
+.recent_heading {float: left; width:40%;}
+.srch_bar {
+  display: inline-block;
+  text-align: right;
+  width: 60%; padding:
+}
+.headind_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1px solid #c4c4c4;}
+
+.recent_heading h4 {
+  color: #05728f;
+  font-size: 21px;
+  margin: auto;
+}
+.srch_bar input{ border:1px solid #cdcdcd; border-width:0 0 1px 0; width:80%; padding:2px 0 4px 6px; background:none;}
+.srch_bar .input-group-addon button {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: medium none;
+  padding: 0;
+  color: #707070;
+  font-size: 18px;
+}
+.srch_bar .input-group-addon { margin: 0 0 0 -27px;}
+
+.chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
+.chat_ib h5 span{ font-size:13px; float:right;}
+.chat_ib p{ font-size:14px; color:#989898; margin:auto}
+.chat_img {
+  float: left;
+  width: 11%;
+}
+.chat_ib {
+  float: left;
+  padding: 0 0 0 15px;
+  width: 88%;
+}
+
+.chat_people{ overflow:hidden; clear:both;}
+.chat_list {
+  border-bottom: 1px solid #c4c4c4;
+  margin: 0;
+  padding: 18px 16px 10px;
+}
+.inbox_chat { height: 550px; overflow-y: scroll;}
+
+.active_chat{ background:#ebebeb;}
+
+.incoming_msg_img {
+  display: inline-block;
+  width: 6%;
+}
+.received_msg {
+  display: inline-block;
+  padding: 0 0 5px 10px;
+  vertical-align: top;
+  width: 92%;
+ }
+ .received_withd_msg p {
+  background: #ebebeb none repeat scroll 0 0;
+  border-radius: 3px;
+  color: #646464;
+  font-size: 14px;
+  margin: 0;
+  padding: 5px 10px 5px 12px;
+  width: 100%;
+}
+.time_date {
+  color: #747474;
+  display: block;
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+.received_withd_msg {
+    width: 70%;
+    margin-bottom: 1em;
+}
+.mesgs {
+  float: left;
+  padding: 0.2em 15px 0 25px;
+  width: 100%;
+}
+
+ .sent_msg p {
+  background: #05728f none repeat scroll 0 0;
+  border-radius: 3px;
+  font-size: 14px;
+  margin: 0; color:#fff;
+  padding: 5px 10px 5px 12px;
+  width:100%;
+  float: right;
+}
+.outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
+.sent_msg {
+  float: right;
+  width: 60%;
+}
+#message-outgoing-timestamp {
+    float: right;
+}
+.input_msg_write {
+    background: white;
+    opacity: 1;
+}
+.input_msg_write input {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: medium none;
+  color: #4c4c4c;
+  font-size: 1em;
+  min-height: 3em;
+  width: 100%;
+}
+#message-reply-box {
+    display: visible;
+    position: relative;
+    transition: all 300ms ease;
+    bottom: -10em;
+}
+
+.type_msg {border-top: 1px solid #c4c4c4;position: relative;}
+.msg_send_btn {
+  background: #05728f none repeat scroll 0 0;
+  border: medium none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  font-size: 17px;
+  height: 33px;
+  position: absolute;
+  right: 0;
+  top: 11px;
+  width: 33px;
+}
+.messaging { 
+    padding: 0 0 0 0;
+    overflow: hidden;
+}
+.msg_history {
+  height: 78vh;
+  padding: 0;
+  overflow-y: auto;
+}
+#message-reply-close-box {
+    margin-top: -1.6em;
+}

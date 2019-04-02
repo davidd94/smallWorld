@@ -1,0 +1,127 @@
+/* FILE BOX */
+.box__dragndrop,
+.box__uploading,
+.box__success,
+.box__error {
+  display: none;
+}
+.box__button {
+    visibility: hidden;
+}
+.box__uploading {
+    font-style: italic;
+    font-size: 1.5em;
+}
+
+.box.has-advanced-upload {
+  background-color: #c8dadf;
+  outline: 2px dashed black;
+  outline-offset: -10px;
+  transition: outline-offset .15s ease-in-out, background-color .15s linear;
+}
+.box.has-advanced-upload .box__dragndrop {
+  display: inline;
+}
+.box__file {
+    visibility: hidden;
+}
+#file_input label strong {
+    cursor: pointer;
+}
+
+.box.is-dragover {
+  background-color: white;
+  outline-offset: -1.5em;
+}
+
+.box.is-uploading .box__input {
+  visibility: visible;
+}
+.box.is-uploading .box__uploading {
+  display: block;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.box.is-success .box__success {
+    display: block;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.box.is-error .box__error {
+    display: block;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+svg {
+	fill: currentColor;
+	pointer-events: none;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h2 {
+    text-align: center;
+    margin-top: 0.7em;
+}
+
+.edit-photo-back-btn {
+    position: absolute;
+    right: 2em;
+    top: 6em;
+}
+
+#file_box_input {
+    width: 50%;
+    height: 100%;
+    height: 23em;
+    margin: 2em auto 3em auto;
+    position: relative;
+}
+
+#file_input {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.file-input-child {
+    position: relative;
+    display: inline-block;
+}
+
+
+/* PHOTO GALLERY */
+#image-box {
+    position: relative;
+}
+.image-thumb {
+    width: 100%;
+    height: auto;
+}
+.picture-remove-btn {
+    position: absolute;
+    right: 0.3em;
+    top: 0.3em;
+    width: 1em;
+    height: auto;
+    opacity: 0.5;
+}
+#image-box:hover .picture-remove-btn {
+    opacity: 1;
+}

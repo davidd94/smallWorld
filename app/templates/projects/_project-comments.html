@@ -1,0 +1,113 @@
+<div id="main-comment-container" class="container">
+    <div class="row">
+        <div class="comments-container">
+            <h1>Leave a Comment</h1>
+            <div class="submit-comment-box">
+                <textarea class="main-comment-text" type="text" placeholder="Write something here..." rows="4" maxlength="390"></textarea>
+                <div class="comment-btn-centering">
+                    <button class="main-comment-btn btn btn-info">Comment</button>
+                </div>
+                <div class="alert alert-dismissible alert-info comment-alert-msg">
+                    <p>Thank you for your comment! Leave another <span class="comment-reopen-box">comment</span> ?</p>
+                </div>
+            </div>
+            <ul id="comments-list" class="comments-list">
+                {% if project_comments %}
+                {% for project_comment in project_comments %}
+                <li class="comment-root comment-root-{{ project_comment.id }}" data-comment-id="{{ project_comment.id }}">
+                    <div class="comment-main-level">
+                        <div class="comment-avatar"><img src="{{ project_comment.author.avatar(60) }}" alt=""></div>
+                        <div class="comment-box">
+                            <div class="comment-head" data-comment-id="{{ project_comment.id }}">
+                                {% if project_comment.username == project.author.username %}
+                                <h6 class="comment-name by-author"><a href="{{ url_for('main.profile', username=project_comment.username) }}">{{ project_comment.username }}</a></h6>
+                                {% else %}
+                                <h6 class="comment-name"><a href="{{ url_for('main.profile', username=project_comment.username) }}">{{ project_comment.username }}</a></h6>
+                                {% endif %}
+                                <span>{{ moment(project_comment.timestamp).fromNow() }}</span>
+                                <i class="fa fa-reply commentreply-{{ project_comment.id }}"></i>
+                                <i id="{% for eachlike in project_comment_likes %}{% if eachlike.id == project_comment.id %}commentlike{% endif %}{% endfor %}" class="fa fa-heart commentlike-{{ project_comment.id }}"></i>
+                                <i class="comment-like-number comment-like-number-{{ project_comment.id }}" data-toggle="modal" data-target="#exampleModal{{ project_comment.id }}">{{ project_comment.likes }}</i>
+                            </div>
+                            <div class="comment-content">
+                                {{ project_comment.comment }}
+                            </div>
+                        </div>
+                    </div>
+                    {% if project_replies %}
+                    <ul class="comments-list reply-list reply-list-{{ project_comment.id }}">
+                        {% for reply in project_replies %}
+                        {% if reply.projectcomments.id == project_comment.id %}
+                        <li class="reply-root reply-root-{{ reply.id }}" data-reply-id="{{ reply.id }}">
+                            <div class="comment-avatar"><img src="{{ reply.author.avatar(60) }}" alt=""></div>
+                            <div class="comment-box">
+                                <div class="comment-head" data-reply-id="{{ reply.id }}">
+                                    {% if project.author.username == reply.username %}
+                                    <h6 class="comment-name by-author"><a href="{{ url_for('main.profile', username=reply.username) }}">{{ reply.username }}</a></h6>
+                                    {% else %}
+                                    <h6 class="comment-name"><a href="{{ url_for('main.profile', username=reply.username) }}">{{ reply.username }}</a></h6>
+                                    {% endif %}
+                                    <span>{{ moment(reply.timestamp).fromNow() }}</span>
+                                    <i id="{% for eachlike in project_reply_likes %}{% if eachlike.id == reply.id %}replylike{% endif %}{% endfor %}" class="fa fa-heart replylike-{{ reply.id }}"></i>
+                                    <i class="reply-like-number reply-like-number-{{ reply.id }}" data-toggle="modal" data-target="#exampleModal{{ reply.id }}">{{ reply.likes }}</i>
+                                </div>
+                                <div class="comment-content">
+                                    {{ reply.reply }}
+                                </div>
+                            </div>
+
+                            <!-- REPLY POPUP MODAL -->
+                            <div class="modal fade comment-modal-{{ reply.id }}" id="exampleModal{{ reply.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">All Comment Likes</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <ul class="userlikes-modal userlikes-modal-{{ reply.id }}">
+                                            <!-- DYNAMICALLY ADDING USER NAMES HERE -->    
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+					    </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    <!-- COMMENT POPUP MODAL -->
+                    <div class="modal fade comment-modal-{{ project_comment.id }}" id="exampleModal{{ project_comment.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">All Comment Likes</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <ul class="userlikes-modal userlikes-modal-{{ project_comment.id }}">
+                                    <!-- DYNAMICALLY ADDING USER NAMES HERE -->    
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>

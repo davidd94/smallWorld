@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+{% block css %}
+<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/minty/bootstrap.min.css" rel="stylesheet" integrity="sha384-9NlqO4dP5KfioUGS568UFwM3lbWf3Uj3Qb7FBHuIuhLoDp3ZgAqPE1/MYLEBPZYM" crossorigin="anonymous">
+<link href="{{ url_for('static', filename='base.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+{{ moment.include_jquery() }}
+{{ moment.include_moment() }}
+{% endblock css %}
+<html>
+    <head>
+        {% block title %}
+            {% if title %}
+            <title>smallWorld - {{ title }}</title>
+            {% else %}
+            <title>It's a smallWorld</title>
+            {% endif %}
+        {% endblock title %}
+    </head>
+    {% block coverphoto %}{% endblock coverphoto %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="{{ url_for('auth.clear_flash_msgs') }}">smallWorld<img class="homepage-logo" width="50px;" margin="0 0 0 10px;" src="{{ url_for('static', filename='logo.jpg') }}"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li id="nav-item-home" class="nav-item">
+                    <a id="nav-link-home" class="nav-link" href="{{ url_for('auth.homepage') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li id="nav-item-profile" class="nav-item">
+                    <a id="nav-link-profile" class="nav-link" href="{{ url_for('main.profile', username=current_user.username) }}">Profile</a>
+                </li>
+                {% endif %}
+                <li id="nav-item-explore" class="nav-item">
+                    <a id="nav-link-explore" class="nav-link" href="{{ url_for('main.explore') }}">Explore</a>
+                </li>
+                <li id="nav-item-about" class="nav-item">
+                    <a id="nav-link-about" class="nav-link" href="{{ url_for('main.about') }}">About</a>
+                </li>
+            </ul>
+            
+            <ul class="nav nav-pills">
+                {% if current_user.is_authenticated %}
+                <li class="nav-notification nav-item">
+                    <a class="notification-nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <div class="notification-icon-wrapper">
+                            <img class="notification-bell-icon" src="{{ url_for('static', filename='notification-bell.svg') }}">
+                            <span class="notification-number badge badge-warning"></span>
+                        </div>
+                    </a>
+                    <ul class="notification-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: -10em; transform: translate3d(0px, 42px, 0px);">
+                        <div class="clear-wrapper">
+                            <!-- DYNAMIC NOTIFICATIONS INSERTED HERE -->
+                        </div>
+                        <a class="dropdown-clear dropdown-item" href="#">Clear Notifications</a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="dropdown-toggle-override" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
+                        <a class="dropdown-item" href="{{ url_for('main.edit_profile', username=current_user.username) }}">Edit</a>
+                        <a class="dropdown-item" href="{{ url_for('main.privacy') }}">Privacy Settings</a>
+                        <a class="dropdown-item" href="{{ url_for('main.message_inbox') }}">Messages</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-item dropdown">
+                    <a id="dropdown-togglelogin-override" class="btn btn-primary">Log in</a>
+                </li>
+                {% endif %}
+            </ul>
+            {% if g.search_form %}
+            <form class="form-inline my-2 my-lg-0" action="{{ url_for('main.search') }}" method='GET'>
+                {{ g.search_form.q(class="form-control mr-sm-2", placeholder="Search projects", maxlength="40", autocomplete="off") }}
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            {% endif %}
+        </div>
+    </nav>
+    <body>
+        {% block bodycontent  %}{% endblock bodycontent %}
+    </body>
+</html>
+
+{% block scripts %}
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+<script>
+/* AUTO SCROLLS DOWN TO LOGIN BOX */
+$(function() {
+    $('#dropdown-togglelogin-override').on('click', () => {
+        if (window.location.href == 'http://localhost:5000/') {
+            $('html, body').animate({
+            scrollTop: $("#dropdown-togglelogin-override").offset().top
+        }, 500);
+        } else {
+            window.location.href = "{{ url_for('auth.login') }}";
+        };
+    });
+});
+</script>
+
+<script>
+/* REMOVES 'ACTIVE' CLASS TO NAV BAR ITEM */
+$(function() {
+    $('#nav-item').removeClass('active');
+});
+
+/* STOPS BOOTSTRAP AUTO CLOSING DROPDOWN ON CLICK */
+$('.notification-dropdown').on('click', function(event){
+    event.stopPropagation();
+});
+</script>
+
+<script>
+/* NOTIFICATION UPDATES EVERY 10 SECONDS */
+$(function () {
+    {% if current_user.is_authenticated %}
+    var since = 0;
+    /* DYNAMICALLY UPDATES THE BADGE NUMBER */
+    function set_message_count(n) {
+        $('.notification-number').text(n);
+        $('.notification-number').css('visibility', n > 0 ? 'visible' : 'hidden');
+    };
+    setInterval(function() {
+        $.ajax("{{ url_for('main.get_notifications') }}")
+        .done(function(notifications) {
+                /* IF SERVER RETURNS NEW NOTIFICATIONS (IN AN 'OBJECT'), THEY WILL BE ADDED TO EXISTING ONES */
+                if ((typeof notifications) == "object") {
+                    /* REMOVES ANY OLD EXISTING NOTIFICATIONS */
+                    $('.notif-dropdown-item').remove();
+                    let total_notification_number = (notifications).length;
+                    set_message_count(total_notification_number);
+                    /* LOOPS THROUGH EACH NEW NOTIFICATIONS TO PREAPPEND TO USER FEED */
+                    for (i = 0 ; i < total_notification_number ; i++) {
+                        let type = notifications[i].Type;
+                        let username = notifications[i].User;
+                        let title = notifications[i].Title;
+                        let data = notifications[i].Data;
+                        let timestamp = moment(notifications[i].Timestamp).startOf('hour').fromNow();
+
+                        $('.clear-wrapper').prepend($('<li>')
+                        .attr('class', 'notif-dropdown-item')
+                        .append($('<p>')
+                            .attr('class', 'dropdown-type')
+                            .text('New ')
+                            .append($('<a>')
+                                .attr('class', 'dropdown-type-value')
+                                .attr('href', type == 'message' ? '{{ url_for("main.message_inbox") }}' : '/project/' + username + '/' + title)
+                                .text(type))
+                            .append($('<span>')
+                                .text(' from ')
+                                .css('font-weight', '400')
+                                .css('font-size', '0.5em')
+                                .css('margin', '0 0.5em'))
+                            .append($('<a>')
+                                .attr('class', 'dropdown-user-link')
+                                .attr('href', '/profile/' + username)
+                                .text(username)))
+                        .append($('<p>')
+                            .attr('class', 'dropdown-title')
+                            .text('Title: ')
+                            .append($('<span>')
+                                .attr('class', 'dropdown-title-value')
+                                .text(title)))
+                        .append($('<p>')
+                            .attr('class', 'dropdown-data')
+                            .text(data))
+                        .append($('<span>')
+                            .attr('class', 'dropdown-timestamp')
+                            .text(timestamp))
+                        )
+                    }
+                /* IF SERVER RETURNS THE SAME EXISTING NOTIFICATIONS (IN TERM OF INTEGER) COUNTER */
+                } else if ((typeof notifications) == "number") {
+                    $('.notif-dropdown-item').remove();
+                    set_message_count(notifications);
+                }
+                
+        })
+    }, 10000);
+    {% endif %}
+});
+
+/* DELETES ALL EXISTING NOTIFICATIONS */
+$(function () {
+    {% if current_user.is_authenticated %}
+    /* DYNAMICALLY UPDATES THE BADGE NUMBER */
+    function set_message_count(n) {
+        $('.notification-number').text(n);
+        $('.notification-number').css('visibility', n > 0 ? 'visible' : 'hidden');
+    };
+
+    $('.dropdown-clear').on('click', () => {
+        $.ajax({
+            url: "{{ url_for('main.delete_notifications') }}",
+            type: 'GET',
+            success: function(response) {
+                $('.notif-dropdown-item').remove();
+                set_message_count(0);
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    })
+    {% endif %}
+});
+
+</script>
+{% endblock scripts %}

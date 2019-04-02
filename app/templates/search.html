@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+{% endblock css %}
+
+{% block bodycontent %}
+<div class="search-container">
+    <div class="card">
+        <div class="card-content">
+            <div class="card-header card-header-search">
+                <h1 class="card-heading">Search Results</h1>
+            </div>
+            <div class="card-body">
+                <div class="card-p">
+                    {% if projects %}
+                    <ul class="card-ul">
+                        {% for project in projects %}
+                        {% if project.private != True %}
+                        <li>
+                            <p class="project-title"><a class="project-title-link project-title-link-{{ project.id }}" href="{{ url_for('project.project', username=project.username, title=project.title) }}" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container popover-container-{{ project.id }}'><img class='popover-avatar' src='{{ project.author.avatar(40) }}'><a class='popover-userlink' href='{{ url_for('main.profile', username=project.username) }}' target='blank'>{{ project.username }}</a><p class='popover-description'>{{ project.description }}</p></div>">{{ project.title }}</a></p>
+                            <span class="project-likes">{{ project.likes }} Likes</span>
+                            <p class="project-description">{{ project.description }}</p>
+                            <p class="project-tags">Tags: Aquarium, Vivarium, $$$, Difficulty: Hard</p>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+/* POPOVER EFFECTS */
+$(function() {
+    $("[data-toggle=popover]").each(function(i, obj) {
+        $(this)
+            .popover({
+                html: true,
+                container: 'body',
+                viewport: {selector: '.search-container'},
+                selector: '[data-popover]',
+                trigger: 'hover',
+                placement: 'top',
+            })
+            .on("mouseenter", function() {
+                var _this = this;
+                setTimeout(function() {
+                    $(_this).popover("show");
+                }, 600);
+                $(".popover").on("mouseleave", function() {
+                    $(_this).popover("hide");
+                });
+            })
+            .on("mouseleave", function() {
+                var _this = this;
+                setTimeout(function() {
+                    if (!$(".popover:hover").length) {
+                    $(_this).popover("hide");
+                    }
+                }, 400);
+            });
+        });
+});
+
+/* UNIVERSALLY CLOSES ANY STUCK POPOVERS */
+$(function() {
+    $('.card-body, .search-container').on('mouseenter', () => {
+        $('.project-title-link').popover('hide');
+    });
+});
+
+</script>
+{% endblock scripts %}

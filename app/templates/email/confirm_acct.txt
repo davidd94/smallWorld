@@ -1,0 +1,13 @@
+Dear {{ user.username }},
+
+Welcome to the smallWorld! Where you can proudly and easily share your great creative designs to others.
+
+To get started, please verify your account by clicking the link below.
+
+{{ url_for('auth.confirm_acct', token=token, _external=True) }}
+
+If you have not created this account, please simply ignore this email.
+
+Sincerely,
+
+smallWorld

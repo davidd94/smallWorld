@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='edit-project-bar.css') }}">
+{% endblock %}
+
+{% block bodycontent %}
+<form class="project-container" action="{{ url_for('project.edit_bar', title=project.title) }}" method="POST">
+    {{ form.hidden_tag() }}
+    <legend>Edit Project Info Bar</legend><br>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if message == "You already have an existing project with that name. Please select a different title name." %}
+                <div class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ message }}</strong>
+                </div>
+                {% else %}
+                <div class="alert alert-dismissible alert-primary" style="width: 40%; margin: 0 auto 1em auto;">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ message }}</strong>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% for error in form.title.errors %}
+    {% if error %}
+    <div class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>{{ error }}</strong>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <div class="form-group row">
+
+        <label for="new-project-title" class="col-sm-2 col-form-label">{{ form.title.label }}</label>
+        <div class="col-sm-10 project-title">
+            {% if form.title.errors %}
+                {{ form.title(style="border: 1px solid red;", class="form-control", id="new-project-title", placeholder="Title of project", type="text", maxlength="40") }}
+            {% else %}
+                {{ form.title(class="form-control", id="new-project-title", placeholder="Title of project", type="text", maxlength="40") }}
+            {% endif %}
+        </div>
+
+        <label id="new-project-description-label" class="col-sm-2 col-form-label" for="new-project-descrip">{{ form.description.label }}</label>
+        <div class="col-sm-10 project-description">
+            {{ form.description(class="form-control", id="new-project-descrip", rows="3", maxlength="300") }}
+        </div>
+
+        <label id="new-project-difficulty-label" class="" for="new-project-difficulty">{{ form.difficulty.label }}</label>
+        <div class="project-difficulty">
+            <select class="form-control" id="new-project-difficulty" value="{{ form.difficulty }}">
+                <option value="">-</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        
+        <label id="new-project-cost-label" class="">{{ form.cost.label }}</label>
+        <span id="dollar-sign" class="input-group-text">$</span>
+        {% if form.cost.errors %}
+        {{ form.cost(id="cost-amt", class="form-control", placeholder="Amount", type="number", autocomplete="off", style="border: 1px solid red;") }}
+        {% else %}
+        {{ form.cost(id="cost-amt", class="form-control", placeholder="Amount", type="number", autocomplete="off") }}
+        {% endif %}
+        <span id="cost-decimal" class="input-group-text">.00</span>
+
+        <label id="new-project-duration-label">{{ form.duration.label }}</label>
+        {% if form.duration.errors %}
+        {{ form.duration(id="new-project-duration", class="form-control", placeholder="Total Hours", type="number", autocomplete="off", style="border: 1px solid red;") }}
+        {% else %}
+        {{ form.duration(id="new-project-duration", class="form-control", placeholder="Total Hours", type="number", autocomplete="off") }}
+        {% endif %}
+    </div>
+
+    <div class="custom-control custom-checkbox">
+        {{ form.privacy(type="checkbox", class="custom-control-input", id="customCheck1") }}
+        <label class="custom-control-label" for="customCheck1">{{ form.privacy.label }}?</label>
+    </div>
+
+    <div class="new-project-submit">
+        {{ form.submit(class="btn btn-primary") }}
+        <a class="project-bar-edit-cancel-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}"><button type="button" class="btn btn-primary">Back</button></a>
+    </div>
+</form>
+{% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+$(function () {
+    let difficulty = '{{ project.difficulty }}';
+    $('#new-project-difficulty').val(difficulty);
+});
+</script>
+{% endblock scripts %}

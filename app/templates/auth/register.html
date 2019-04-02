@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block css %}
+{{ super() }}
+<link href="{{ url_for('static', filename='auth-templates.css') }}" rel="stylesheet">
+{% endblock css %}
+
+{% block coverphoto %}
+<div class="front-banner">
+    <img class="cover-photo" src="{{ url_for('static', filename='homepage-aquarium-trees.jpg') }}">
+</div>
+{% endblock coverphoto %}
+
+{% block bodycontent %}
+<div id="register-container" class="container">
+    <div id="signupform-container-override" class="row centered-form">
+    <div id="signupform-override" class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Sign up to create your own smallWorld for free!</h3>
+            </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-dismissible alert-success">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ message }}</strong><a href="{{ url_for('auth.homepage') }}" class="alert-link"> Log in here</a>.
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div class="panel-body">
+                <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            {{ form.firstname(class="form-control", placeholder="First Name", autocomplete="off") }}
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            {{ form.lastname(class="form-control input-sm", placeholder="Last Name", autocomplete="off") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form.username(class="form-control input-sm", placeholder="User Name", autocomplete="off") }}
+                    {% for error in form.username.errors %}
+                    <div>
+                    <span style="color: red;">{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.email(class="form-control input-sm", placeholder="Email", autocomplete="off") }}
+                    {% for error in form.email.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            {{ form.password(class="form-control input-sm", placeholder="Password") }}
+                            {% for error in form.password.errors %}
+                            <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            {{ form.repassword(class="form-control input-sm", placeholder="Retype Password") }}
+                            {% for error in form.repassword.errors %}
+                            <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                        
+                {{ form.submit(class="btn btn-info btn-block") }}
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+$(function() {
+  // scroll all the way down
+  $('html, body').scrollTop($(document).height() - $(window).height());
+});
+</script>
+{% endblock scripts %}

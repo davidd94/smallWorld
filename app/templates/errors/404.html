@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link rel='stylesheet' href="{{ url_for('static', filename='404.css') }}">
+{% endblock css %}
+
+{% block bodycontent %}
+<div class="error-container">
+    <h3 style="margin: 1em; color: white;"><img src="{{ url_for('static', filename='error/404error.png') }}" style="width: 5em; height: auto; border-radius: 50%; margin: 0 1em;"><strong style="color: maroon">Oops!</strong> The page cannot be found!</h3>
+    <p style="margin-left: 4em; color: white;">Sorry for the inconvenience! Please send a message to our team regarding this.</p>
+    <br>
+    {% if current_user.is_authenticated %}
+    <p style="margin-left: 4em; color: white;">Back to your <a style="color: rgb(58, 58, 223);" href="{{ url_for('main.profile', username=current_user.username) }}">profile</a></p>
+    {% endif %}
+    <p style="margin-left: 4em; color: white;">Back to <a style="color: rgb(58, 58, 223);" href="{{ url_for('auth.homepage') }}">homepage</a></p>
+    <br>
+    <p style="margin-left: 4em; color: white;">Sincerely,</p>
+    <p style="margin-left: 4em; color: white;">The smallWorld team</p>
+</div>
+{% endblock bodycontent %}

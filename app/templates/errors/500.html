@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block bodycontent %}
+<div style="width: auto; height: 30em; background-color: rgb(182, 182, 182); padding: 1em; margin: 2em; border-radius: 1em;">
+    <h3 style="margin: 1em; color: white;"><img src="{{ url_for('static', filename='error/500error.jpg') }}" style="width: 5em; height: auto; border-radius: 1em; margin: 0 1em;"><strong style="color: maroon">Oops!</strong> There was an issue with the database!</h3>
+    <p style="margin-left: 4em; color: white;">Sorry for the inconvenience! Please send a message to our team regarding this.</p>
+    <br>
+    {% if current_user.is_authenticated %}
+    <p style="margin-left: 4em; color: white;">Back to your <a style="color: rgb(58, 58, 223);" href="{{ url_for('main.profile', username=current_user.username) }}">profile</a></p>
+    {% endif %}
+    <p style="margin-left: 4em; color: white;">Back to <a style="color: rgb(58, 58, 223);" href="{{ url_for('auth.homepage') }}">homepage</a></p>
+    <br>
+    <p style="margin-left: 4em; color: white;">Sincerely,</p>
+    <p style="margin-left: 4em; color: white;">The smallWorld team</p>
+</div>
+{% endblock bodycontent %}

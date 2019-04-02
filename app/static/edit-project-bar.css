@@ -1,0 +1,69 @@
+.project-container {
+    width: 70%;
+    height: 80vh;
+    justify-self: center;
+    margin: 3em auto 0 auto;
+    text-align: center;
+}
+
+.form-group {
+    justify-content: left;
+}
+
+#new-project-title {
+    width: 50%;
+}
+
+#new-project-description-label {
+    align-self: center;
+}
+#new-project-descrip {
+    width: 75%;
+    margin-top: 0.5em;
+}
+
+#new-project-difficulty-label {
+    align-self: center;
+    margin: 2em 1em 2em 1em;
+}
+#new-project-difficulty {
+    width: 100%;
+    align-self: center;
+    margin: 2em 1em 2em 1em;
+}
+
+#new-project-cost-label {
+    align-self: center;
+    margin: 2em 1em 2em 3em;
+}
+#dollar-sign {
+    width: 4%;
+    align-self: center;
+}
+#cost-amt {
+    width: 15%;
+    align-self: center;
+    margin: 2em 0 2em 0;
+}
+#cost-decimal {
+    align-self:center;
+    width: 5%;
+}
+
+#new-project-duration-label {
+    width: 10%;
+    align-self: center;
+    margin: 2em 1em 2em 1em;
+}
+#new-project-duration {
+    width: 12%;
+    align-self: center;
+}
+
+.new-project-submit {
+    margin: 3em auto 1em auto;
+}
+
+.project-bar-edit-cancel-btn {
+    margin-left: 10em;
+}

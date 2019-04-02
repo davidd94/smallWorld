@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">
+{% endblock css %}
+
+{% block bodycontent %}
+
+<link rel="stylesheet" href="https://unpkg.com/flickity@2.0/dist/flickity.min.css">
+<script src="https://unpkg.com/flickity@2.0/dist/flickity.pkgd.min.js"></script>
+
+<div class="carousel-wrapper">
+<div class="carousel" data-flickity>
+    <div class="carousel-cell carousel-cell-bio">
+        <h3>About me</h3>
+        <img class="bio-avatar" src="https://en.gravatar.com/userimage/147142567/705565aef2ca8563e22481bb0c1748ae.jpg?size=200" />
+        <a class="more" href="{{ url_for('main.profile', username='davie') }}">David Duong</a>
+        <div class="bio-box">
+            <p>Hello! First, I want to thank you for coming to my website. I am a passonionate and self-taught full stack web developer. 
+                My career has started off with a Bachelor of Science in Civil Engineer that focused on construction estimating and plan 
+                developement for custom luxurious hillside homes. After working in the Construction/Civil Engineer field for two years, I've 
+                come to realize that this is not the type of career I can and should pursue for the rest of my life. My passion was non-existent 
+                which led me to soul search for a little bit. Programming was one of the interesting options and thus has now opened a new path 
+                in my life of web development...
+                <br>
+                <br>
+                I've spent two months learning Python, CSS/HTML, JavaScript (w/ jQuery), and SQL through Codecademy. Within the first few weeks 
+                of learning python, I fell in love with object oriented programming. Deciding to expand my knowledge a little more before starting my 
+                first project, I've learned non-relational database (MongoDB) and python framework (Flask). All these combined formed a strong 
+                foundation to start my first web devlopment project... my own personal stock portfolio called InvestmenTracker.
+                </p>
+        </div>
+    </div>
+    <div class="carousel-cell carousel-cell-smallworld">
+        <h3>smallWorld Vision</h3>
+        <div class="smallworld-box">
+            <div class="smallworld-img-box">
+                <a href="#" data-toggle="modal" data-target="#exampleModal1"><img src="{{ url_for('static', filename='beardedgecko.jpg') }}"></a>
+                <a href="#" data-toggle="modal" data-target="#exampleModal2"><img src="{{ url_for('static', filename='beardietank.jpg') }}"></a>
+                <a href="#" data-toggle="modal" data-target="#exampleModal3"><img src="{{ url_for('static', filename='carnivorousplants.jpg') }}"></a>
+            </div>
+            <p>
+                My hobbies from childhood until today were to collect many varieties of carnivious and non-carnivorous plants, collect 
+                reptiles, and fresh water fishes. Creative desert setups were made for my bearded dragon and leopard gecko. Unique and inspiring
+                terrariums for my carnivious plants.
+                <br>
+                My vision for this website is to allow anyone with an imaginative mind to easily display their beautiful setup. 
+                The awe-inspiring, creative and passionate work of art. This social network website will provide users an 
+                interactive and easily navigable interface that will contain all the necessary information to duplicate the project
+                with minimal obstacles.
+            </p>
+        </div>
+    </div>
+    <div class="carousel-cell carousel-cell-others">
+        <h3>Other Projects</h3>
+        <a class="more" href="//investmentracker.info">InvestmenTracker</a>
+        <a class="more" href="//dogoodies.shop">DoGoodies</a>
+        <div class="others-box">
+            <h3>InvestmenTracker</h3>
+            <p>One of my hobbies is investing so I thought it would be a great idea to create my 
+                first project as my very own stock portfolio manager. This whole website is made 
+                scratch meaning no bootstrap or any other code was used to create it. I believed this 
+                would allow a deeper understanding of how each languages work. Although it is still incomplete, 
+                I look forward to refactor my code by implenting new techniques I've learned from this 
+                project. I've also learned how to host this project on my own Raspberry Pi server as you 
+                will notice it is quite slow with certain task-heavy features (web scraping stock data).
+            </p>
+            <h3>DoGoodies</h3>
+            <p>This website is purely made using WordPress and imported plugins such as Elementor and WooCommerce. 
+                A small time was spent learning how WordPress operated as it seems to be the most popular tool used 
+                around the world to create basic websites. It definitely isn't my cup of tea as everything is pre-set 
+                and imported thus very restricted on what I was able to do but still great to know about.
+            </p>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- PICTURE 1 POPUP MODAL -->
+<div class="modal fade pic-modal" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <span>Yoshi(Leopard Gecko-left) first meets Charmander(Bearded Dragon-right)</span>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <img src="{{ url_for('static', filename='beardedgecko.jpg') }}" alt="Image not found">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- PICTURE 2 POPUP MODAL -->
+<div class="modal fade pic-modal" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <span>Charmander's adult terrarium setup</span>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <img src="{{ url_for('static', filename='beardietank.jpg') }}" alt="Image not found">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- PICTURE 3 POPUP MODAL -->
+<div class="modal fade pic-modal" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <span>Venus Flytrap, sundews and lichens in a teardrop-shaped terrarium. </span>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <img src="{{ url_for('static', filename='carnivorousplants.jpg') }}" alt="Image not found">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+/* ADDS 'ACTIVE' CLASS TO NAV BAR ITEM */
+$(function() {
+    $('#nav-item-about').addClass('active');
+
+});
+
+</script>
+{% endblock scripts %}

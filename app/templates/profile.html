@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link href="{{ url_for('static', filename='profile.css') }}" rel="stylesheet">
+{% endblock css %}
+
+{% block bodycontent %}
+<div class="profile-main-container">
+    <div id="profile-filter-box">
+        <div class="filter-box-title">
+            <span>Filter</span>
+        </div>
+        <ul class="filter-main-ul" style="list-style: none; padding: 0.3em;">
+            <li>
+                <input type="checkbox" name="short" id="short">
+                <label class="main-li-label" for="short">Aquariums</label>
+                <ul style="list-style: none;">
+                    <li>
+                        <input type="checkbox" name="short-1" id="short-1">
+                        <label class="secondary-li-label" for="short-1">Saltwater</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="short-2" id="short-2">
+                        <label class="secondary-li-label" for="short-2">Freshwater</label>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <input type="checkbox" name="short" id="short">
+                <label class="main-li-label" for="short">Terrariums</label>
+                <ul style="list-style: none;">
+                    <li>
+                        <input type="checkbox" name="short-1" id="short-1">
+                        <label class="secondary-li-label" for="short-1">Enclosed/Tropical</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="short-2" id="short-2">
+                        <label class="secondary-li-label" for="short-2">Open/Tropical</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="short-2" id="short-2">
+                        <label class="secondary-li-label" for="short-2">Carnivorous</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="short-2" id="short-2">
+                        <label class="secondary-li-label" for="short-2">Desert</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="short-2" id="short-2">
+                        <label class="secondary-li-label" for="short-2">Reptiles/creatures</label>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <input type="checkbox" name="short" id="short">
+                <label class="main-li-label" for="short">Vivariums/Paludarium</label>
+                <ul style="list-style: none;">
+                    <li>
+                        <input type="checkbox" name="short-1" id="short-1">
+                        <label class="secondary-li-label" for="short-1">Water reptiles/creatures</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="short-2" id="short-2">
+                        <label class="secondary-li-label" for="short-2">Plants only</label>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="filter-btn-container">
+            <button type="submit" class="btn btn-primary filter-btn">Apply</button>
+        </div>
+    </div>
+    <div id="profile-project-list-box">
+        <div class="profile-project-list-create">
+            <span class="profile-project-list-title">Project list</span>
+            {% if (current_user.is_authenticated and current_user == user) %}
+            <a class="create-project-btn" href="{{ url_for('project.new_project') }}"><i class="fas fa-plus-circle"></i></a>
+            {% endif %}
+        </div>
+        {% if projects %}
+        <ul class="profile-project-list">
+        {% for project in projects %}
+            {% if project.private != True %}
+            <li class="project-list-{{ project.id }} project-list-item"><button class="project-btn-{{ project.id }} project-list-item btn-animate" data-value="{{ project.id }}">{{ project.title }}</button>
+                <div class="ext-line-{{ project.id }} ext-line"></div>
+                <a href="{{ url_for('project.project', username=user.username, title=project.title) }}"><span class="view-project-{{ project.id }} view-project">View</span></a>
+            </li>
+            {% elif (project.private == True) and (current_user == user) %}
+            <li class="project-list-{{ project.id }} project-list-item"><button class="project-btn-{{ project.id }} project-list-item btn-animate" data-value="{{ project.id }}">{{ project.title }}</button>
+                <div class="ext-line-{{ project.id }} ext-line"></div>
+                <a href="{{ url_for('project.project', username=user.username, title=project.title) }}"><span class="view-project-{{ project.id }} view-project">View</span></a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <div id="profile-social-box">
+        <div class="profile-avatar-box">
+            <a href="{{ url_for('main.profile', username=user.username) }}">
+                <img class="profile-image-box" src="{{ user.avatar(80) }}">
+            </a>
+        </div>
+        <div class="profile-user-name">
+            <a class="profile-username-link" href="{{ url_for('main.profile', username=user.username) }}"><p class="profile-user-name">{{ user.username }}</p></a>
+        </div>
+        <div class="profile-social-bio">
+            <p>{{ user.bio }}</p>
+        </div>
+        {% if current_user.is_authenticated %}
+            {% if current_user == user %}
+            <div class="profile-social-edit">
+                <a class="profile-edit-link" href="{{ url_for('main.edit_profile', username=current_user.username) }}">Edit</a>
+            </div>
+            {% endif %}
+            {% if current_user != user %}
+                {% if not current_user.is_following(user) %}
+                    <div class="profile-social-follow">
+                        <a href="{{ url_for('main.follow', username=user.username) }}">Follow</a>
+                    </div>
+                {% else %}
+                    <div class="profile-social-unfollow">
+                        <a href="{{ url_for('main.unfollow', username=user.username) }}">Unfollow</a>
+                    </div>
+                {% endif %}
+                <div class="profile-social-message">
+                    <a href="{{ url_for('main.message_inbox') }}">Message</a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="profile-card-box">
+        <div class="project-descrip-box">
+            <p class="project-descrip-title">Quick Description</p>
+            <p class="project-descrip"></p>
+        </div>
+        <div class="project-difficulty-box">
+            <div class="wrapper">
+                <div class="loader">
+                    <div id="project-difficulty-value" class="inner inner7"></div>
+                </div>
+            </div>
+            <p>Difficulty: </p> 
+            <span class="project-difficulty-text"></span>
+        </div>
+        <div class="project-cost-box">
+            <p class="project-cost-title">Cost</p>
+            <div class="project-cost-bar">
+                <span class="cost-bar-boxes cost-bar-boxes1">$</span>
+                <span class="cost-bar-boxes cost-bar-boxes2 empty-box"></span>
+                <span class="cost-bar-boxes cost-bar-boxes3 empty-box"></span>
+                <span class="cost-bar-boxes cost-bar-boxes4 empty-box"></span>
+                <span class="cost-bar-boxes cost-bar-boxes5 empty-box"></span>
+            </div>
+            <p class="project-cost-value-box">$ <span class="project-cost-value" type="number">3333</span>.00</p>
+        </div>
+        <div class="project-duration-box">
+            <p class="project-duration-title">Start to Finish</p>
+            <i class="fas fa-calendar duration-img"></i><span class="project-duration-text">24</span><span class="time-measurement">Hours</span>
+        </div>
+    </div>
+    <div id="profile-preview-box">
+        <!-- DYNAMICALLY INSERTS EACH PROJECT INTERACTIVE IMAGE HERE -->
+        <p style="margin-top: 12em;">Interactive Photo coming soon!</p>
+    </div>
+</div>
+{% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+
+<script>
+/* ADDS 'ACTIVE' CLASS TO NAV BAR ITEM */
+$(function() {
+    $('#nav-item-profile').addClass('active');
+
+});
+    
+</script>
+
+<script>
+/* COST COUNTER */
+$(function () {
+    $('.project-cost-value').each(function () {
+        $(this).prop('Counter',0).animate({
+            Counter: $(this).text()
+        }, {
+            duration: 1500,
+            easing: 'swing',
+            step: function (now) {
+                $(this).text(Math.ceil(now));
+            }
+        });
+    });
+});
+</script>
+
+<script>
+/* FILTER CHECKBOXES */
+$('input[type="checkbox"]').change(function(e) {
+
+  var checked = $(this).prop("checked"),
+      container = $(this).parent(),
+      siblings = container.siblings();
+
+  container.find('input[type="checkbox"]').prop({
+    indeterminate: false,
+    checked: checked
+  });
+
+  function checkSiblings(el) {
+
+    var parent = el.parent().parent(),
+        all = true;
+
+    el.siblings().each(function() {
+      return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
+    });
+
+    if (all && checked) {
+
+      parent.children('input[type="checkbox"]').prop({
+        indeterminate: false,
+        checked: checked
+      });
+
+      checkSiblings(parent);
+
+    } else if (all && !checked) {
+
+      parent.children('input[type="checkbox"]').prop("checked", checked);
+      parent.children('input[type="checkbox"]').prop("indeterminate", (parent.find('input[type="checkbox"]:checked').length > 0));
+      checkSiblings(parent);
+
+    } else {
+
+      el.parents("li").children('input[type="checkbox"]').prop({
+        indeterminate: true,
+        checked: false
+      });
+
+    }
+
+  }
+
+  checkSiblings(container);
+});
+</script>
+
+<script>
+/* BUTTON & EXT LINE ANIMATIONS */
+$(function () {
+    $('.btn-animate').on('click', (event) => {
+        let project_id = event.currentTarget.dataset.value;
+
+        $('.project-list-item').css('margin-left', '1em');
+        $('.btn-animate').attr('style', 'color: #56CC9D; text-decoration: none;');
+        $('.ext-line').css('width', '0.1em').css('visibility', 'hidden');
+        $('.view-project').css('visibility', 'hidden');
+        $('.project-btn-' + project_id).attr('style','color: #6477b9; text-decoration: underline; border: 2px solid #6477b9;');
+        $('.project-list-' + project_id).css('margin-left', '-1.5em');
+        $('.ext-line-' + project_id).css('visibility', 'visible').css('width', '2.5em');
+        $('.view-project-' + project_id).css('visibility', 'visible');
+    });
+});
+
+/* DYNAMICALLY LOADS PROJECT INFO */
+$(function () {
+    $('.project-list-item').on('click', (event) => {
+        let project_id = event.currentTarget.dataset.value;
+        
+        let username = "{{ user.username }}";
+        if (project_id) {
+            $.ajax({
+                url: "/project_preview/" + project_id,
+                type: 'GET',
+                contentType: 'application/json',
+                success: function(response) {
+                    let description = response['description'];
+                    let difficulty = response['difficulty'];
+                    let cost = response['cost'];
+                    let duration = response['duration'];
+
+                    /* ADDING INTERACTIVE PHOTO HERE IN FUTURE */
+
+                    $('.project-descrip').text(description);
+                    if (0 < difficulty && difficulty < 4) {
+                        $('.project-difficulty-text').text('Easy');
+                        $('.project-difficulty-text').css('font-weight', 800);
+                        $('.project-difficulty-text').css('color', 'green');
+                    } else if (3 < difficulty && difficulty < 8) {
+                        $('.project-difficulty-text').text('Medium');
+                        $('.project-difficulty-text').css('font-weight', 800);
+                        $('.project-difficulty-text').css('color', 'rgb(182, 182, 0)');
+                    } else if (difficulty > 7) {
+                        $('.project-difficulty-text').text('Hard');
+                        $('.project-difficulty-text').css('font-weight', 800);
+                        $('.project-difficulty-text').css('color', 'rgb(182, 0, 0)');
+                    } else {
+                        $('.project-difficulty-text').text('N/A');
+                        $('.project-difficulty-text').css('font-weight', 800);
+                        $('.project-difficulty-text').css('color', 'black');
+                    };
+
+                    if (cost > 100) {
+                        $('.cost-bar-boxes2').removeClass('empty-box');
+                        $('.cost-bar-boxes2').text('$');
+                        $('.cost-bar-boxes3').addClass('empty-box');
+                        $('.cost-bar-boxes3').text('');
+                        $('.cost-bar-boxes4').addClass('empty-box');
+                        $('.cost-bar-boxes4').text('');
+                        $('.cost-bar-boxes5').addClass('empty-box');
+                        $('.cost-bar-boxes5').text('');
+                    };
+                    if (cost > 300) {
+                        $('.cost-bar-boxes3').removeClass('empty-box');
+                        $('.cost-bar-boxes3').text('$');
+                        $('.cost-bar-boxes4').addClass('empty-box');
+                        $('.cost-bar-boxes4').text('');
+                        $('.cost-bar-boxes5').addClass('empty-box');
+                        $('.cost-bar-boxes5').text('');
+                    };
+                    if (cost > 600) {
+                        $('.cost-bar-boxes4').removeClass('empty-box');
+                        $('.cost-bar-boxes4').text('$');
+                        $('.cost-bar-boxes5').addClass('empty-box');
+                        $('.cost-bar-boxes5').text('');
+                    };
+                    if (cost > 1000) {
+                        $('.cost-bar-boxes5').removeClass('empty-box');
+                        $('.cost-bar-boxes5').text('$');
+                    };
+
+                    $('#project-difficulty-value').removeClass();
+                    $('#project-difficulty-value').addClass('inner ' + 'inner' + difficulty);
+                    $('.project-cost-value').text(cost);
+                    $('.project-duration-text').text(duration);
+
+                    /* COST COUNTER */
+                    $('.project-cost-value').each(function () {
+                        $('.project-cost-value').prop('Counter',0).animate({
+                            Counter: $('.project-cost-value').text()
+                        }, {
+                            duration: 1500,
+                            easing: 'swing',
+                            step: function (now) {
+                                $('.project-cost-value').text(Math.ceil(now));
+                            }
+                        });
+                    });
+                    /* DURATION COUNTER */
+                    $('.project-duration-text').each(function () {
+                        $('.project-duration-text').prop('Counter',0).animate({
+                            Counter: $('.project-duration-text').text()
+                        }, {
+                            duration: 1500,
+                            easing: 'swing',
+                            step: function (now) {
+                                $('.project-duration-text').text(Math.ceil(now));
+                            }
+                        });
+                    });
+                }
+            });
+        };
+    });
+});
+</script>
+{% endblock scripts %}

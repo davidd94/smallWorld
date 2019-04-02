@@ -1,0 +1,36 @@
+<div class="message-viewer-box">
+    <a class="message-reply-msg" href="#" onclick="openReplyForm()"><span class="badge badge-info">Reply</span></a>
+    <a class="message-del-msg" href="#"><span class="badge badge-pill badge-secondary">Delete</span></a>
+    
+        <div class="alert-box-wrapper">
+            <div id="message-alert-box" class="alert alert-dismissible alert-success">
+                <strong class="message-success-msg"></strong>
+            </div>
+        
+            <div id="message-alert-box" class="alert alert-dismissible alert-secondary">
+                <strong class="message-fail-msg"></strong>
+            </div>
+        </div>
+        
+    <div class="messaging">
+        <div class="mesgs">
+            <div class="msg_history">
+                <div class="message-info-bar">
+                    <img class="message-user-avatar" width="50"> <a class="message-other-username"></a>
+                </div>
+
+                <!-- DYNAMIC RECEIVED MSGS LOADED HERE -->
+                
+                <!-- DYNAMIC SENT MSGS LOADED HERE -->
+                
+            </div>
+            <div id="message-reply-box" class="type_msg">
+                <div class="input_msg_write">
+                    <input type="text" id="reply_msg" class="write_msg" name="replymsg" autocomplete="off" placeholder="Type a message" >
+                    <button id="message-reply-close-box" type="button" class="close" data-dismiss="alert" onclick="closeReplyForm()">&times;</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

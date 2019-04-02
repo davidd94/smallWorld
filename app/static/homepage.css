@@ -1,0 +1,265 @@
+/* NEW STYLES */
+.front-banner {
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+.cover-photo {
+    height: 400px;
+    width: 100%;
+}
+
+/* OVERRIDING BOOTSTRAP STYLES - ANONYMOUS USERS */
+.homepage-container {
+    display: grid;
+    grid-template: 1fr / 30em 1fr 40em;
+    height: 85vh;
+    width: 100%;
+    max-height: 85vh;
+    align-items: center;
+    padding: 2em;
+    grid-gap: 15px;
+}
+.homepage-login-container {
+    grid-row: 1 / span 1;
+    grid-column: 3 / span 1;
+    height: 31.25em;
+    width: 35em;
+    margin: auto auto;
+    overflow: visible;
+    border-radius: 0.6em;
+    background-color: #f7f7f9;
+    position: relative;
+}
+#carouselExampleIndicators {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 2;
+    width: auto;
+    height: 40em;
+    max-height: 40em;
+    margin: auto auto;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+.carousel-inner {
+    height: 100%;
+}
+.carousel-item {
+    height: 100%;
+    position: relative;
+}
+.carousel-item img {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+}
+.zen-text {
+    font-family: 'Comic Sans MS', Arial, Helvetica, sans-serif;
+    font-style: italic;
+    font-size: 2em;
+    color: rgb(0, 119, 0);
+    position: absolute;
+    z-index: 100;
+    top: 22%;
+    left: 22%;
+    width: 12em;
+    height: 10em;
+    text-align: center;
+    opacity: 0.75;
+    transition: all 1200ms ease;
+}
+.carousel-item-zen:hover .zen-text {
+    opacity: 1;
+    color: rgb(206, 139, 14);
+    background-color: rgba(78, 78, 78, 0.781);
+    border-radius: 0.8em;
+}
+.signup-btn-link {
+    position: absolute;
+    z-index: 100;
+    top: 80%;
+    left: 44%;
+    width: 7em;
+    height: 3em;
+    opacity: 0.75;
+}
+.signup-btn-link:hover {
+    opacity: 1;
+}
+
+
+#signupform-container-override {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+#signupform-override {
+    width: 100%;
+    margin: 1em auto 0 auto;
+}
+#login-widened {
+    width: 22em;
+}
+#homepage-login-user{
+    width: 12.5em;
+}
+#login-button-override {
+    width: 12.5em;
+}
+.panel-title {
+    padding-top: 1em;
+    padding-bottom: 2em;
+}
+
+#login-alert-container {
+    position: absolute;
+    width: 24em;
+    height: 5em;
+    top: -5.8em;
+    left: 7em;
+}
+#homepage-forgotpass-link {
+    text-decoration: underline;
+}
+
+/* OVERRIDING BOOTSTRAP STYLES - USERS */
+.dashboard-container {
+    display: grid;
+    grid-template: 1fr 1fr / 1fr 1fr;
+    padding: 1em;
+    height: 100vh;
+    max-height: 93vh;
+    width: 100%;
+    align-items: center;
+    grid-gap: 15px;
+}
+.followed-feed-container {
+    grid-row: 1 / span 2;
+    grid-column: 1 / span 1;
+    height: 100%;
+    padding: 1em;
+    overflow: hidden;
+    background-color: #f7f7f9;
+    border-radius: 0.6em;
+}
+.followed-feed-title {
+    text-align: center;
+    font-weight: 800;
+}
+.followed-update-list {
+    list-style: none;
+    margin: 0.5em 0;
+    padding: 0 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 92%;
+    width: 100%;
+}
+.projectfeed-container {
+    display: grid;
+    grid-template: 4em 2em / 4em 1fr 3em;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    background-color: white;
+    grid-gap: 0;
+    padding: 0.5em;
+    margin: 1em 0;
+}
+.projectfeed-avatar {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    margin: auto auto;
+    border-radius: 50%;
+}
+.projectfeed-username {
+    grid-row: 2 / span 1;
+    grid-column: 1 / span 1;
+    margin: auto auto;
+}
+.title-border {
+    grid-row: 1 / span 1;
+    grid-column: 2 / span 2;
+    display: grid;
+    grid-template: 1fr / 1fr;
+    width: 100%;
+    height: 100%;
+    border-left: 2px solid #78C2AD;
+    border-bottom: 2px solid #78C2AD;
+}
+.projectfeed-title {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    align-self: center;
+    margin: 0 0 0 0.5em;
+    text-align: left;
+    font-size: 1.3em;
+}
+.projectfeed-title-link {
+    color: rgb(29, 29, 29);
+    text-decoration: none;
+    transition: all 500ms ease;
+}
+.projectfeed-title-link:hover {
+    text-decoration: none;
+}
+/* PROJECT DROP DOWN */
+.projectfeed-options {
+    grid-row: 1 / span 1;
+    grid-column: 3 / span 1;
+    margin: 0 0;
+    padding: 0 0;
+    list-style: none;
+}
+.projectfeed-options li {
+    padding: 0 0;
+    margin: 0 0;
+}
+.projectfeed-options .nav-link {
+    padding: 0 0 0.5em 0.5em;
+    width: 2.5em;
+    height: 2em;
+    color: rgb(51, 51, 51);
+    font-weight: 800;
+    border: 0.5px solid rgba(168, 168, 168, 0.521);
+    border-radius: 0.7em;
+    background: rgba(238, 238, 238, 0.781);
+}
+.update-border {
+    grid-row: 2 / span 1;
+    grid-column: 2 / span 2;
+    display: grid;
+    grid-template: 1fr / 1fr;
+    width: 100%;
+    height: 100%;
+    border-left: 2px solid #78C2AD;
+}
+.projectfeed-update {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    align-self: center;
+    margin: 0 0 0 0.5em;
+    text-align: left;
+    font-size: 0.9em;
+    font-family: 'Comic Sans MS', helvetica, sans-serif;
+    color: rgb(67, 67, 197);
+}
+
+.notification-feed-container {
+    grid-row: 1 / span 1;
+    grid-column: 2 / span 1;
+    height: 100%;
+    padding: 1em;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: #f7f7f9;
+    border-radius: 0.6em;
+}
+.followed-note-title {
+    text-align: center;
+    font-weight: 800;
+}
+.followed-note-list {
+    list-style: none;
+    margin: 0.5em 0;
+    padding: 0 0;
+}
