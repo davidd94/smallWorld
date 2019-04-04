@@ -5,7 +5,6 @@ from app.models import User, Messages, Projects, PhotoGallery, ProjectComments, 
 app = create_app()
 cli.register(app)
 
-print('lflfl')
 
 # THIS IS USED TO AUTOMATICALLY IMPORT THE CLASS/MODULES WHEN RUNNING 'FLASK SHELL'
 @app.shell_context_processor

@@ -178,6 +178,13 @@ def edit_tutorial(title):
         return render_template('/projects/edit_tutorial.html', tutorial=project.tutorial)
     return redirect(url_for('auth.homepage'))
 
+@bp.route('/project/edit_tutorial/add_photo', methods=['POST'])
+@login_required
+def edit_tutorial_photo():
+    photos = request.form
+    print(photos)
+    return jsonify('PHOTOS WENT THROUGH!')
+
 @bp.route('/project/edit_maintenance/<title>')
 @login_required
 def edit_maintenance(title):

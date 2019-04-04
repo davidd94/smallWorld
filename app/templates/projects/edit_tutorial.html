@@ -1,5 +1,245 @@
 {% extends "base.html" %}
 
+{% block css %}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href="{{ url_for('static', filename='base.css') }}" rel="stylesheet">
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='edit-tutorial.css') }}">
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+{% endblock css %}
+
+<!--
+    BORDER EFFECTS FOR FUTURE IMPLEMENTATION
+<div class="svg-wrapper">
+    <svg class='svg' height="470" width="300" xmlns="http://www.w3.org/2000/svg">
+        <rect class="shape one" height="470" width="300" />
+        <rect class="shape two" height="470" width="300" />
+        <div class="text"></div>
+        <div class="subtext">
+        <div class="first">2014</div>
+        </div>
+    </svg>
+</div>
+-->
+
 {% block bodycontent %}
-<h1>Edit Tutorial here</h1>
+<h1 class="edit-tutorial-title" style="text-align: center;">Edit Tutorial</h1>
+<div class="tutorial-container">
+    <div class="tutorial-btn-wrapper">
+        <i class="tutorial-main-add-btn fas fa-plus-circle fa-2x nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
+        <div id="tutorial-dropdown-override" class="tutorial-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; transform: translate3d(0px, 42px, 0px);">
+            <a class="dropdown-item dropdown-add-paragraph" onclick="addParagraph();" data-toggle="tooltip" href="#">Add Paragraph</a>
+            <a class="dropdown-item dropdown-add-image" href="#">Add Image</a>
+            <a class="dropdown-item dropdown-add-imagecap" href="#">Add Image with Caption</a>
+        </div>
+    </div>
+    <div class="tutorial-container-text">
+        <form class="tutorial-form" method="POST">
+            <div id="summernote"></div>
+        </form>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['picture', ['picture']],
+                ['link', ['linkDialogShow', 'unlink']],
+                ['codeview', ['codeview']],
+                ['closebutton', ['close']],
+                ['savebutton', ['save']]
+            ],
+            buttons: {
+                close: CloseButton,
+                save: SaveButton
+            },
+            popover: {
+                image: [],
+                link: [],
+                air: [
+                    ['color', ['color']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['para', ['ul', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture']],
+                ]
+            },
+            maximumImageFileSize: 5*1024*1024,
+            onImageUpload: function(files, editor, welEditable) {
+                sendFile(files[0], editor, welEditable);
+            },
+            callbacks: {
+                onImageUploadError: function(msg) {
+                    alert(msg + ' (5 MB)');
+                },
+            },
+        });
+
+        function sendFile(file, editor, welEditable) {
+            data = new FormData();
+            data.append("file", file);
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "{{ url_for('project.edit_tutorial_photo') }}",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(url) {
+                    editor.insertImage(welEditable, url);
+                    console.log(url);
+                }
+            });
+        }
+    });
+    </script>
+    </div>
+</div>
 {% endblock bodycontent %}
+
+{% block scripts %}
+        <!-----  SUMMERNOTES 0.8.8 IS ONLY COMPATIABLE WITH JQUERY 3.2.1  ----->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+<!--
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+-->
+
+<script>
+/* CUSTOM PARAGRAPH BUTTONS */
+var CloseButton = function (context) {
+    var ui = $.summernote.ui;
+
+    // create button
+    var button = ui.button({
+        contents: '<i class="fas fa-times" /> Close',
+        style: 'float: right;',
+        click: function () {
+            // closes the paragraph box
+            $('#summernote').summernote('destroy');
+        }
+    });
+    return button.render();   // return button as jquery object
+};
+var SaveButton = function (context) {
+    var ui = $.summernote.ui;
+
+    // create button
+    var button = ui.button({
+        contents: 'Save',
+        style: 'float: right;',
+        click: function () {
+            // saves the paragraph content
+            $('#summernote').summernote('destroy');
+            console.log('data saved!');
+        }
+    });
+    return button.render();   // return button as jquery object
+};
+
+$(function () {
+    $('.dropdown-add-paragraph').on('click', () => {
+        $('.tutorial-list').prepend();
+    });
+});
+
+function addParagraph() {
+    $('#summernote').summernote({
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['picture', ['picture']],
+                ['link', ['linkDialogShow', 'unlink']],
+                ['codeview', ['codeview']],
+                ['closebutton', ['close']],
+                ['savebutton', ['save']]
+            ],
+            buttons: {
+                close: CloseButton,
+                save: SaveButton
+            },
+            popover: {
+                image: [],
+                link: [],
+                air: [
+                    ['color', ['color']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['para', ['ul', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture']]
+                ]
+            }
+        });
+};
+
+</script>
+
+<!--
+    BORDER EFFECTS FOR FUTURE IMPLEMENTATION
+<script>
+/* BORDER EFFECTS */
+var si = document.querySelectorAll(".one"),
+    to = document.querySelectorAll(".two"),
+    te = document.querySelectorAll(".text");
+
+for(var i = 0, j = si.length; i < j; i++) {
+  applyEverything(si[i], to[i], te[i]);
+}
+
+function applyEverything(sides, topbottom, text) {
+  var gparent = sides.parentNode.parentNode;
+  
+  gparent.onmouseenter = function() {
+    sides.style.fill = "rgb(20,20,20)";
+    text.style.color = "white";
+    console.log("over");
+    
+    // Originally these made sense... Then reality happened
+    TweenLite.to(topbottom, .8, {strokeDasharray:"-130 900 -130 900", strokeDashoffset:20, ease:Power2.linear});
+    TweenLite.to(topbottom, .6, {strokeDasharray:"470 300 470 300", strokeDashoffset:470, delay:.3, ease:Power2.linear});
+    
+    TweenLite.to(sides, .8, {strokeDasharray:"-200 1070 -200 1000", strokeDashoffset:640, ease:Power2.linear});
+    TweenLite.to(sides, .6, {strokeDasharray:"300 470 300 470", strokeDashoffset:770, delay:.3, ease:Power2.linear});
+    
+    setTimeout(function() { // Delay fade when leaving hover
+      sides.style.transition = "fill .6s .6s";
+      text.style.transition = "color .6s .6s";
+    }, 10);
+  }  
+  
+  gparent.onmouseleave = function() {
+    sides.style.fill = "transparent";
+    text.style.color = "rgb(20,20,20)";
+    console.log("out");
+    setTimeout(function() {
+      sides.style.transition = "fill .6s"; // Reset fade for next hover
+      text.style.transition = "color .6s";
+    }, 10);
+    
+    // Originally these made sense... Then reality happened
+    TweenLite.to(topbottom, .8, {strokeDasharray:"-130 1050 -130 900", strokeDashoffset:20, ease:Power2.linear});
+    TweenLite.to(topbottom, .6, {strokeDasharray:"300 470 300 470", strokeDashoffset:0, delay:.4, ease:Power2.linear});
+    
+    TweenLite.to(sides, .8, {strokeDasharray:"-200 1335 -200 1000", strokeDashoffset:640, ease:Power2.linear});
+    TweenLite.to(sides, .6, {strokeDasharray:"470 300 470 300", strokeDashoffset:470, delay:.4, ease:Power2.linear});
+  }
+}
+</script>
+-->
+{% endblock scripts %}
