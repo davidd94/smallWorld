@@ -78,6 +78,8 @@
 /* SUMMERNOTE'S TEXTBOX */
 .note-toolbar {
     background-color: rgb(230, 230, 230);
+    overflow: hidden;
+    max-height: 4em;
 }
 .note-editor {
     width: 100%;

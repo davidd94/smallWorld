@@ -310,7 +310,7 @@ class Projects(SearchableMixin, db.Model):
     difficulty = db.Column(db.Integer)
     cost = db.Column(db.Integer)
     duration = db.Column(db.Integer)
-    tutorial = db.Column(db.String(10000))
+    tutorial = db.Column(db.Text(10000))
     video = db.Column(db.String(220))
     item_list = db.Column(db.String(10000))
     created_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)

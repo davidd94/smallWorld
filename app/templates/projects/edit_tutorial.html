@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block css %}
-
+<!--  PLACED BOOTSTRAP CSS FIRST TO BE OVERRIDDEN BY OTHERS AFTER  -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link href="{{ url_for('static', filename='base.css') }}" rel="stylesheet">
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
@@ -29,80 +29,17 @@
 <h1 class="edit-tutorial-title" style="text-align: center;">Edit Tutorial</h1>
 <div class="tutorial-container">
     <div class="tutorial-btn-wrapper">
-        <i class="tutorial-main-add-btn fas fa-plus-circle fa-2x nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
+        <i class="tutorial-main-add-btn fas fa-edit fa-2x nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
         <div id="tutorial-dropdown-override" class="tutorial-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; transform: translate3d(0px, 42px, 0px);">
-            <a class="dropdown-item dropdown-add-paragraph" onclick="addParagraph();" data-toggle="tooltip" href="#">Add Paragraph</a>
-            <a class="dropdown-item dropdown-add-image" href="#">Add Image</a>
-            <a class="dropdown-item dropdown-add-imagecap" href="#">Add Image with Caption</a>
+            <a class="dropdown-item dropdown-add-paragraph" onclick="addParagraph();" data-toggle="tooltip" href="#">Edit</a>
+            <a class="dropdown-item dropdown-add-image" href="#">Export</a>
+            <a class="dropdown-item dropdown-add-imagecap" href="#">Share</a>
         </div>
     </div>
     <div class="tutorial-container-text">
         <form class="tutorial-form" method="POST">
             <div id="summernote"></div>
         </form>
-    </div>
-
-    <script>
-    $(document).ready(function() {
-        $('#summernote').summernote({
-            toolbar: [
-                // [groupName, [list of button]]
-                ['style', ['bold', 'italic', 'underline', 'clear']],
-                ['font', ['strikethrough', 'superscript', 'subscript']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['height', ['height']],
-                ['picture', ['picture']],
-                ['link', ['linkDialogShow', 'unlink']],
-                ['codeview', ['codeview']],
-                ['closebutton', ['close']],
-                ['savebutton', ['save']]
-            ],
-            buttons: {
-                close: CloseButton,
-                save: SaveButton
-            },
-            popover: {
-                image: [],
-                link: [],
-                air: [
-                    ['color', ['color']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['para', ['ul', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture']],
-                ]
-            },
-            maximumImageFileSize: 5*1024*1024,
-            onImageUpload: function(files, editor, welEditable) {
-                sendFile(files[0], editor, welEditable);
-            },
-            callbacks: {
-                onImageUploadError: function(msg) {
-                    alert(msg + ' (5 MB)');
-                },
-            },
-        });
-
-        function sendFile(file, editor, welEditable) {
-            data = new FormData();
-            data.append("file", file);
-            $.ajax({
-                data: data,
-                type: "POST",
-                url: "{{ url_for('project.edit_tutorial_photo') }}",
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function(url) {
-                    editor.insertImage(welEditable, url);
-                    console.log(url);
-                }
-            });
-        }
-    });
-    </script>
     </div>
 </div>
 {% endblock bodycontent %}
@@ -117,6 +54,64 @@
 -->
 
 <script>
+$(document).ready(function() {
+    $('#summernote').summernote({
+        toolbar: [
+            // [groupName, [list of button]]
+            ['undo', ['undo']],
+            ['redo', ['redo']],
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['picture', ['picture']],
+            ['link', ['linkDialogShow', 'unlink']],
+            ['codeview', ['codeview']],
+            ['closebutton', ['close']],
+            ['savebutton', ['save']]
+        ],
+        buttons: {
+            close: CloseButton,
+            save: SaveButton
+        },
+        popover: {
+            image: [],
+            link: [],
+            air: [
+                ['color', ['color']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['para', ['ul', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture']],
+            ]
+        },
+        maximumImageFileSize: 5*1024*1024,
+        callbacks: {
+            /* SENDS IMAGE URL TO SERVER TO PREPARE FOR COMMIT */
+            onImageUpload: function(files) {
+                var that = $(this);
+                var pictures = [];
+                for (i = 0; i < files.length; i++) {
+                    pictures.push(files[i]);
+                };
+                console.log(pictures)
+                // sends picture(s) to server to be stored tempoarily until users 'save'
+                sendFile(pictures, that);
+            },
+            onImageUploadError: function(msg) {
+                alert(msg + ' (5 MB)');
+            },
+        },
+    });
+
+    // LOADS DATABASE TUTORIAL CONTENT INTO EDITOR ON PAGE RENDERING
+    var contents = '{{ project.tutorial|safe }}';
+
+    $('#summernote').summernote('code', contents);
+});
+
 /* CUSTOM PARAGRAPH BUTTONS */
 var CloseButton = function (context) {
     var ui = $.summernote.ui;
@@ -126,9 +121,17 @@ var CloseButton = function (context) {
         contents: '<i class="fas fa-times" /> Close',
         style: 'float: right;',
         click: function () {
-            // closes the paragraph box
-            $('#summernote').summernote('destroy');
-        }
+            $.ajax({
+                url: '{{ url_for("project.load_tutorial", title=project.title) }}',
+                type: 'GET',
+                success: function(response) {
+                    // LOADS MOST RECENTLY SAVED TUTORIAL DYNAMICALLY BEFORE CLOSING
+                    $('#summernote').summernote('code', response);
+                    // CLOSES TEXT EDITOR BOX
+                    $('#summernote').summernote('destroy');
+                },
+            });
+        },
     });
     return button.render();   // return button as jquery object
 };
@@ -141,54 +144,147 @@ var SaveButton = function (context) {
         style: 'float: right;',
         click: function () {
             // saves the paragraph content
-            $('#summernote').summernote('destroy');
-            console.log('data saved!');
+            var html = $("#summernote").summernote("code");
+            console.log(html);
+            saveTutorial(html);
         }
     });
     return button.render();   // return button as jquery object
 };
 
-$(function () {
-    $('.dropdown-add-paragraph').on('click', () => {
-        $('.tutorial-list').prepend();
-    });
-});
-
-function addParagraph() {
-    $('#summernote').summernote({
-            toolbar: [
-                // [groupName, [list of button]]
-                ['style', ['bold', 'italic', 'underline', 'clear']],
-                ['font', ['strikethrough', 'superscript', 'subscript']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['height', ['height']],
-                ['picture', ['picture']],
-                ['link', ['linkDialogShow', 'unlink']],
-                ['codeview', ['codeview']],
-                ['closebutton', ['close']],
-                ['savebutton', ['save']]
-            ],
-            buttons: {
-                close: CloseButton,
-                save: SaveButton
-            },
-            popover: {
-                image: [],
-                link: [],
-                air: [
-                    ['color', ['color']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['para', ['ul', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture']]
-                ]
+// TEMPORARILY UPLOADS PICTURES TO DATABASE AND ADDS TO CLIENT'S EDITOR ON SUCCESS
+function sendFile(pictures, that) {
+    // ajax for modern browsers
+    var csrf_token = "{{ csrf_token() }}";
+    // Inject our CSRF token into our AJAX request.
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token)
             }
-        });
+        }
+    });
+    
+    data = new FormData();
+    for (i = 0; i < pictures.length; i++) {
+        data.append(i, pictures[i]);
+        console.log(data);
+    };
+
+    $.ajax({
+        data: data,
+        type: "POST",
+        url: "{{ url_for('project.edit_tutorial_photo', title=project.title) }}",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            console.log(response);
+            for (i = 0; i < response.length; i++) {
+                var filePath = 'users/' + '{{ project.username }}' + '/' + '{{ project.title }}' + '/tutorialpics/';
+                $(that).summernote('insertImage',
+                            '{{ url_for("static", filename="") }}' + filePath + response[i],
+                            ''
+                );
+            };
+        }
+    });
+
 };
 
+// DYNAMICALLY OPENS TEXT EDITOR BOX
+function addParagraph() {
+    $.ajax({
+        url: '{{ url_for("project.load_tutorial", title=project.title) }}',
+        type: 'GET',
+        success: function(response) {
+            $('#summernote').summernote({
+                toolbar: [
+                    // [groupName, [list of button]]
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['picture', ['picture']],
+                    ['link', ['linkDialogShow', 'unlink']],
+                    ['codeview', ['codeview']],
+                    ['closebutton', ['close']],
+                    ['savebutton', ['save']]
+                ],
+                buttons: {
+                    close: CloseButton,
+                    save: SaveButton
+                },
+                popover: {
+                    image: [],
+                    link: [],
+                    air: [
+                        ['color', ['color']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['para', ['ul', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture']]
+                    ]
+                },
+                maximumImageFileSize: 5*1024*1024,
+                callbacks: {
+                    /* SENDS IMAGE URL TO SERVER TO PREPARE FOR COMMIT */
+                    onImageUpload: function(files) {
+                        var that = $(this);
+                        var pictures = [];
+                        for (i = 0; i < files.length; i++) {
+                            pictures.push(files[i]);
+                        };
+                        console.log(pictures)
+                        // sends picture(s) to server to be stored tempoarily until users 'save'
+                        sendFile(pictures, that);
+                    },
+                    onImageUploadError: function(msg) {
+                        alert(msg + ' (5 MB)');
+                    },
+                },
+            });
+
+            // LOADS SAVED TUTORIAL DYNAMICALLY
+            $('#summernote').summernote('code', response);
+        },
+    });
+};
+
+function saveTutorial(html) {
+    // ajax for modern browsers
+    var csrf_token = "{{ csrf_token() }}";
+    // Inject our CSRF token into our AJAX request.
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token)
+            }
+        }
+    });
+
+
+    $.ajax({
+        data: html,
+        type: "POST",
+        url: "{{ url_for('project.edit_tutorial_save', title=project.title) }}",
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(response) {
+            console.log(response);
+            
+            // closes the text editor box. 'destroy' automatically uses most recent content
+            $('#summernote').summernote('destroy');
+        }
+    });
+    
+}
+
 </script>
+
 
 <!--
     BORDER EFFECTS FOR FUTURE IMPLEMENTATION

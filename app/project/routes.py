@@ -128,6 +128,7 @@ def edit_bar(title):
     existing_project = Projects.single_project(user_id=current_user.id, title=title)
     if existing_project:
         if form.validate_on_submit():
+            # THIS SECTION ONLY UPDATES EVERYTHING RELATED TO TITLE CHANGE
             if form.title.data != existing_project.title:
                 existing_title = Projects.single_project(user_id=current_user.id, title=form.title.data)
                 if existing_title:
@@ -135,6 +136,10 @@ def edit_bar(title):
                     return redirect(url_for('project.edit_bar', title=existing_project.title))
                 # UPDATES PROJECT TITLE
                 existing_project.title = form.title.data
+                # UPDATES PROJECT DIRECTORY FOLDER
+                existing_directory = current_app.config['PHOTO_UPLOAD_DIR'] + '/' + current_user.username + '/' + title
+                new_directory = current_app.config['PHOTO_UPLOAD_DIR'] + '/' + current_user.username + '/' + form.title.data
+                os.rename(existing_directory, new_directory)
                 # UPDATES PHOTO GALLERY TITLE
                 photogallery = PhotoGallery.single_gallery(project_id=existing_project.id)
                 photogallery.title = form.title.data
@@ -170,20 +175,65 @@ def edit_bar(title):
         return render_template('/projects/project-bar-edit.html', form=form, project=existing_project)
     return redirect(url_for('auth.homepage'))
 
+
 @bp.route('/project/edit_tutorial/<title>')
 @login_required
 def edit_tutorial(title):
     project = Projects.single_project(user_id=current_user.id, title=title)
     if project:
-        return render_template('/projects/edit_tutorial.html', tutorial=project.tutorial)
+        return render_template('/projects/edit_tutorial.html', project=project)
     return redirect(url_for('auth.homepage'))
 
-@bp.route('/project/edit_tutorial/add_photo', methods=['POST'])
+@bp.route('/project/edit_tutorial_photo/<title>', methods=['POST'])
 @login_required
-def edit_tutorial_photo():
-    photos = request.form
-    print(photos)
-    return jsonify('PHOTOS WENT THROUGH!')
+def edit_tutorial_photo(title):
+    pictures = request.files
+    print(pictures)
+    uploaded_photos = []
+    num_pics_uploading = len(request.files)
+    print(num_pics_uploading)
+
+    # IF TUTORIAL PICTURE DIRECTORY DOESN'T EXIST, CREATE ONE.
+    file_path = current_app.config['PHOTO_UPLOAD_DIR']
+    if not os.path.isdir(file_path + '/' + current_user.username + '/' + title + '/' + 'tutorialpics'):
+        os.mkdir(file_path + '/' + current_user.username + '/' + title + '/' + 'tutorialpics')
+
+    # TEMPORARILY CREATES EACH PHOTO IN DIRECTORY
+    for n in range(num_pics_uploading):
+        each_pic = pictures[str(n)]
+        if each_pic and allowed_file(each_pic.filename):
+            file_name = secure_filename(each_pic.filename)
+            full_file_path = file_path + '/' + current_user.username + '/' + title + '/' + 'tutorialpics'
+            print(file_name)
+
+            each_pic.save(os.path.join(full_file_path, file_name))
+
+            uploaded_photos.append(file_name)
+
+    
+    return jsonify(uploaded_photos)
+
+@bp.route('/project/edit_tutorial/<title>/save_tutorial', methods=['POST'])
+@login_required
+def edit_tutorial_save(title):
+    html_content = request.data.decode('utf-8')
+    print(html_content)
+    project = Projects.single_project(current_user.id, title)
+    if project:
+        project.tutorial = html_content
+        db.session.commit()
+        return jsonify(html_content)
+    return jsonify('tutorial did not save!')
+
+@bp.route('/project/edit_tutorial/<title>/load_tutorial', methods=['GET'])
+@login_required
+def load_tutorial(title):
+    project = Projects.single_project(current_user.id, title)
+    if project:
+        tutorial = project.tutorial
+        return jsonify(tutorial)
+    return jsonify('Failed to retrieve tutorial')
+
 
 @bp.route('/project/edit_maintenance/<title>')
 @login_required
@@ -477,6 +527,8 @@ def update_notifications(username, project_id):
 @bp.route('/project/privacy')
 def privacy():
     return render_template('/projects/privacy.html')
+
+
 
 def allowed_file(filename):
     return '.' in filename and \
