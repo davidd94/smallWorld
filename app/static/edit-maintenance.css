@@ -1,10 +1,10 @@
-.tutorial-container {
+.maintenance-container {
     width: 100%;
     height: 85vh;
     padding: 1em;
     overflow: hidden;
 }
-.tutorial-container-text {
+.maintenance-container-text {
     width: auto;
     height: auto;
     max-height: 90%;
@@ -16,23 +16,23 @@
 }
 
 /* ADD BUTTON WITH DROPDOWN FEATURES */
-.tutorial-btn-wrapper {
+.maintenance-btn-wrapper {
     text-align: center;
     width: 100%;
     height: 4em;
     position: relative;
 }
-.tutorial-main-add-btn {
+.maintenance-main-add-btn {
     max-width: 5em;
     height: auto;
     cursor: pointer;
     margin: 0 0 0 6.5em;
     transition: all 500ms ease;
 }
-.tutorial-main-add-btn:hover {
+.maintenance-main-add-btn:hover {
     color: #007cba;
 }
-.tutorial-btn-wrapper #tutorial-dropdown-override {
+.maintenance-btn-wrapper #maintenance-dropdown-override {
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
     position: absolute;
     margin: 0;
@@ -40,7 +40,7 @@
     top: 0.3em !important;
     z-index: 99999;
 }
-.tutorial-dropdown:before {
+.maintenance-dropdown:before {
     content:"";
     position: absolute;
     left: 100px;
@@ -52,7 +52,7 @@
     border-color: transparent transparent #007cbaa9 transparent;
     z-index:9999;
 }
-.tutorial-dropdown:after {
+.maintenance-dropdown:after {
     content:"";
     position: absolute;
     right: 93px;
@@ -69,7 +69,7 @@
 }
 
 /* MAIN BODY PAGE */
-.tutorial-form {
+.maintenance-form {
     width: 100%;
     height: 90%;
     overflow-y: scroll;
@@ -150,7 +150,7 @@
 
 
 /* BUTTON BORDER EFFECTS */
-.edit-tutorial-back-btn {
+.edit-maintenance-back-btn {
   display: inline-block;
   align-items: center;
   justify-content: center;
@@ -172,16 +172,16 @@
   cursor: pointer;
   text-decoration: none;
 }
-.edit-tutorial-back-btn:hover {
+.edit-maintenance-back-btn:hover {
     text-decoration: none;
     color: #17a2b8;
 }
 
-.edit-tutorial-back-btn:hover {
+.edit-maintenance-back-btn:hover {
   box-shadow: 0 5px 35px 0px rgba(0,0,0,.1);
 }
 
-.edit-tutorial-back-btn:hover:before, .edit-tutorial-back-btn:hover:after {
+.edit-maintenance-back-btn:hover:before, .edit-maintenance-back-btn:hover:after {
   display: block;
   content: '';
   position: absolute;
@@ -193,7 +193,7 @@
   animation: 1s clockwise infinite;
 }
 
-.edit-tutorial-back-btn:hover:after {
+.edit-maintenance-back-btn:hover:after {
   background: #F3CE5E;
   animation: 2s counterclockwise infinite;
 }

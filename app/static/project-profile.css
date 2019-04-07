@@ -279,11 +279,17 @@
 .project-bar-edit {
     grid-row: 2 / span 1;
     grid-column: 1 / span 2;
-    text-align: right;
     align-self: flex-end;
+    justify-self: flex-end;
     margin: 0.3em;
+    padding: 0.2em;
     font-size: 0.8em;
     display: none;
+    border: 0.5px solid rgb(201, 201, 201);
+    background: #e9e9e9;
+    width: 2.5em;
+    border-radius: 1em;
+    text-align: center;
 }
 
 .project-card-box:hover .project-bar-edit {
@@ -318,6 +324,7 @@
     width: 22em;
     height: 1em;
     text-align: left;
+    padding-left: 2.6em;
 }
 .project-nav-ul {
     list-style: none;
@@ -427,57 +434,73 @@
     width: 100%;
 }
 
-.project-photo-gallery {
+.project-tutorial,
+.project-maintenance,
+.project-photo-gallery,
+.project-comments,
+.project-itemslist,
+.project-faq {
     width: 100%;
     height: 100%;
-    padding: 0.5em;
+    padding: 0.5em 1em;
     display: none;
 }
-.project-photo-edit {
-    float: right;
-    margin: 0 1em 0 0;
-    padding: 0;
-    visibility: hidden;
-}
-.project-viewer-box:hover .project-photo-edit {
-    visibility: visible;
-}
-
-.project-comments {
-    display: none;
-}
-
-.project-tutorial {
-    display: none;
-    width: 100%;
-    height: 100%;
-}
-.project-tutorial-textarea {
+.project-tutorial-textarea,
+.project-maintenance-textarea {
     width: 100%;
     height: 100%;
     resize: none;
     border: none;
-    padding: 1em;
+    overflow-x: hidden;
 }
-.project-tutorial-edit {
+.project-tutorial-textarea p,
+.project-maintenance-textarea p {
+    word-wrap: break-word;
+}
+
+.project-tutorial-edit,
+.project-maintenance-edit,
+.project-photo-edit,
+.project-itemslist-edit,
+.project-faq-edit {
     float: right;
-    margin: 0 1em 0 0;
+    margin: 0.5em 1em 0 0;
     padding: 0;
     visibility: hidden;
+    border: 0.5px solid rgb(201, 201, 201);
+    background: #e9e9e9;
+    width: 3em;
+    border-radius: 1em;
+    text-align: center;
 }
-.project-viewer-box:hover .project-tutorial-edit {
+/* TO USE HOVER ON OTHER ELEMENTS --> .parent:hover .child OR .parent:hover ~ .otherparent/sibling */
+.project-tutorial:hover .project-tutorial-edit,
+.project-maintenance:hover .project-maintenance-edit,
+.project-itemslist:hover .project-itemslist-edit,
+.project-photo-gallery:hover .project-photo-edit,
+.project-faq:hover .project-faq-edit {
     visibility: visible;
 }
 
-/* TO USE HOVER ON OTHER ELEMENTS --> .parent:hover .child OR .parent:hover ~ .otherparent/sibling */
-.sub-view:hover .project-edit-btn {
-    display: block;
+.faq-title-disabled {
+    width: 100%;
+    height: 100%;
+    margin-top: 8em;
+    text-align: center;
+    font-family: 'Comic Sans MS', Helvetica, sans-serif;
 }
-.project-edit-btn {
-    position: absolute;
-    right: 1em;
-    margin-top: 0.5em;
-    display: none;
+.faq-question {
+    font-size: 1.2em;
+    font-weight: 600;
+    text-align: center;
+    font-family: 'Comic Sans MS', Helvetica, sans-serif;
+}
+.faq-answer {
+    font-size: 1em;
+    font-style: italic;
+    text-align: center;
+    font-family: 'Comic Sans MS', Helvetica, sans-serif;
+    margin-bottom: 4em;
 }
 
 /* DIFFICULTY THERMOMETER EFFECTS */

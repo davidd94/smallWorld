@@ -29,5 +29,5 @@ def send_confirmation_email(user):
 def send_password_reset_email(user):
     token = user.get_reset_password_token()
     send_email('smallWorld - Password Reset', sender=current_app.config['ADMIN'], recipients=[user.email],
-                html_body=render_template('email/reset_password.html', text_body=None, user=user, token=token),
+                html_body=render_template('email/reset_password.html', user=user, token=token),
                 text_body=None)

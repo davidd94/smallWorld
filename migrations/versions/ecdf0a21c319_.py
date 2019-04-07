@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 04acdf0deda6
+Revision ID: ecdf0a21c319
 Revises: 
-Create Date: 2019-03-26 17:20:44.369006
+Create Date: 2019-04-06 21:03:45.653051
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '04acdf0deda6'
+revision = 'ecdf0a21c319'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -48,7 +48,7 @@ def upgrade():
     sa.Column('sender_id', sa.Integer(), nullable=True),
     sa.Column('recipient_id', sa.Integer(), nullable=True),
     sa.Column('subject', sa.String(length=50), nullable=True),
-    sa.Column('body', sa.String(length=200), nullable=True),
+    sa.Column('body', sa.String(length=500), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('message_read', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['recipient_id'], ['user.id'], ),
@@ -58,6 +58,21 @@ def upgrade():
     op.create_index(op.f('ix_messages_message_read'), 'messages', ['message_read'], unique=False)
     op.create_index(op.f('ix_messages_subject'), 'messages', ['subject'], unique=False)
     op.create_index(op.f('ix_messages_timestamp'), 'messages', ['timestamp'], unique=False)
+    op.create_table('notifications',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('notification_type', sa.String(length=128), nullable=True),
+    sa.Column('username', sa.String(length=64), nullable=True),
+    sa.Column('title', sa.String(length=100), nullable=True),
+    sa.Column('data', sa.String(length=150), nullable=True),
+    sa.Column('timestamp', sa.DateTime(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_notifications_notification_type'), 'notifications', ['notification_type'], unique=False)
+    op.create_index(op.f('ix_notifications_timestamp'), 'notifications', ['timestamp'], unique=False)
+    op.create_index(op.f('ix_notifications_title'), 'notifications', ['title'], unique=False)
+    op.create_index(op.f('ix_notifications_username'), 'notifications', ['username'], unique=False)
     op.create_table('projects',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=64), nullable=True),
@@ -66,30 +81,88 @@ def upgrade():
     sa.Column('difficulty', sa.Integer(), nullable=True),
     sa.Column('cost', sa.Integer(), nullable=True),
     sa.Column('duration', sa.Integer(), nullable=True),
-    sa.Column('tutorial', sa.String(length=10000), nullable=True),
+    sa.Column('tutorial', sa.Text(length=100000), nullable=True),
+    sa.Column('maintenance', sa.Text(length=100000), nullable=True),
     sa.Column('video', sa.String(length=220), nullable=True),
     sa.Column('item_list', sa.String(length=10000), nullable=True),
     sa.Column('created_date', sa.DateTime(), nullable=True),
     sa.Column('last_edit', sa.DateTime(), nullable=True),
     sa.Column('likes', sa.Integer(), nullable=True),
+    sa.Column('private', sa.Boolean(), nullable=True),
+    sa.Column('commentsAndReplies_last_read', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_index(op.f('ix_projects_commentsAndReplies_last_read'), 'projects', ['commentsAndReplies_last_read'], unique=False)
     op.create_index(op.f('ix_projects_created_date'), 'projects', ['created_date'], unique=False)
     op.create_index(op.f('ix_projects_description'), 'projects', ['description'], unique=False)
     op.create_index(op.f('ix_projects_last_edit'), 'projects', ['last_edit'], unique=False)
+    op.create_index(op.f('ix_projects_private'), 'projects', ['private'], unique=False)
     op.create_index(op.f('ix_projects_title'), 'projects', ['title'], unique=False)
     op.create_index(op.f('ix_projects_username'), 'projects', ['username'], unique=False)
-    op.create_table('last_visit',
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('project_id', sa.Integer(), nullable=False),
-    sa.Column('last_visit_date', sa.DateTime(), nullable=True),
-    sa.Column('initial_visit_date', sa.DateTime(), nullable=True),
+    op.create_table('FAQs',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('username', sa.String(length=64), nullable=True),
+    sa.Column('title', sa.String(length=100), nullable=True),
+    sa.Column('faqenabled', sa.Boolean(), nullable=True),
+    sa.Column('question1', sa.String(length=200), nullable=True),
+    sa.Column('answer1', sa.String(length=500), nullable=True),
+    sa.Column('enabled1', sa.Boolean(), nullable=True),
+    sa.Column('question2', sa.String(length=200), nullable=True),
+    sa.Column('answer2', sa.String(length=500), nullable=True),
+    sa.Column('enabled2', sa.Boolean(), nullable=True),
+    sa.Column('question3', sa.String(length=200), nullable=True),
+    sa.Column('answer3', sa.String(length=500), nullable=True),
+    sa.Column('enabled3', sa.Boolean(), nullable=True),
+    sa.Column('question4', sa.String(length=200), nullable=True),
+    sa.Column('answer4', sa.String(length=500), nullable=True),
+    sa.Column('enabled4', sa.Boolean(), nullable=True),
+    sa.Column('question5', sa.String(length=200), nullable=True),
+    sa.Column('answer5', sa.String(length=500), nullable=True),
+    sa.Column('enabled5', sa.Boolean(), nullable=True),
+    sa.Column('question6', sa.String(length=200), nullable=True),
+    sa.Column('answer6', sa.String(length=500), nullable=True),
+    sa.Column('enabled6', sa.Boolean(), nullable=True),
+    sa.Column('question7', sa.String(length=200), nullable=True),
+    sa.Column('answer7', sa.String(length=500), nullable=True),
+    sa.Column('enabled7', sa.Boolean(), nullable=True),
+    sa.Column('question8', sa.String(length=200), nullable=True),
+    sa.Column('answer8', sa.String(length=500), nullable=True),
+    sa.Column('enabled8', sa.Boolean(), nullable=True),
+    sa.Column('question9', sa.String(length=200), nullable=True),
+    sa.Column('answer9', sa.String(length=500), nullable=True),
+    sa.Column('enabled9', sa.Boolean(), nullable=True),
+    sa.Column('question10', sa.String(length=200), nullable=True),
+    sa.Column('answer10', sa.String(length=500), nullable=True),
+    sa.Column('enabled10', sa.Boolean(), nullable=True),
+    sa.Column('project_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('user_id', 'project_id')
+    sa.PrimaryKeyConstraint('id')
     )
+    op.create_index(op.f('ix_FAQs_answer1'), 'FAQs', ['answer1'], unique=False)
+    op.create_index(op.f('ix_FAQs_answer10'), 'FAQs', ['answer10'], unique=False)
+    op.create_index(op.f('ix_FAQs_answer2'), 'FAQs', ['answer2'], unique=False)
+    op.create_index(op.f('ix_FAQs_answer3'), 'FAQs', ['answer3'], unique=False)
+    op.create_index(op.f('ix_FAQs_answer4'), 'FAQs', ['answer4'], unique=False)
+    op.create_index(op.f('ix_FAQs_answer5'), 'FAQs', ['answer5'], unique=False)
+    op.create_index(op.f('ix_FAQs_answer6'), 'FAQs', ['answer6'], unique=False)
+    op.create_index(op.f('ix_FAQs_answer7'), 'FAQs', ['answer7'], unique=False)
+    op.create_index(op.f('ix_FAQs_answer8'), 'FAQs', ['answer8'], unique=False)
+    op.create_index(op.f('ix_FAQs_answer9'), 'FAQs', ['answer9'], unique=False)
+    op.create_index(op.f('ix_FAQs_faqenabled'), 'FAQs', ['faqenabled'], unique=False)
+    op.create_index(op.f('ix_FAQs_question1'), 'FAQs', ['question1'], unique=False)
+    op.create_index(op.f('ix_FAQs_question10'), 'FAQs', ['question10'], unique=False)
+    op.create_index(op.f('ix_FAQs_question2'), 'FAQs', ['question2'], unique=False)
+    op.create_index(op.f('ix_FAQs_question3'), 'FAQs', ['question3'], unique=False)
+    op.create_index(op.f('ix_FAQs_question4'), 'FAQs', ['question4'], unique=False)
+    op.create_index(op.f('ix_FAQs_question5'), 'FAQs', ['question5'], unique=False)
+    op.create_index(op.f('ix_FAQs_question6'), 'FAQs', ['question6'], unique=False)
+    op.create_index(op.f('ix_FAQs_question7'), 'FAQs', ['question7'], unique=False)
+    op.create_index(op.f('ix_FAQs_question8'), 'FAQs', ['question8'], unique=False)
+    op.create_index(op.f('ix_FAQs_question9'), 'FAQs', ['question9'], unique=False)
+    op.create_index(op.f('ix_FAQs_title'), 'FAQs', ['title'], unique=False)
+    op.create_index(op.f('ix_FAQs_username'), 'FAQs', ['username'], unique=False)
     op.create_table('photo_gallery',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=True),
@@ -127,6 +200,15 @@ def upgrade():
     op.create_table('project_likers',
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('user_id', 'project_id')
+    )
+    op.create_table('project_visitors',
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('last_visit_date', sa.DateTime(), nullable=True),
+    sa.Column('initial_visit_date', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('user_id', 'project_id')
@@ -174,6 +256,7 @@ def downgrade():
     op.drop_index(op.f('ix_comment_replies_timestamp'), table_name='comment_replies')
     op.drop_table('comment_replies')
     op.drop_table('comment_likers')
+    op.drop_table('project_visitors')
     op.drop_table('project_likers')
     op.drop_index(op.f('ix_project_comments_username'), table_name='project_comments')
     op.drop_index(op.f('ix_project_comments_title'), table_name='project_comments')
@@ -181,13 +264,43 @@ def downgrade():
     op.drop_table('project_comments')
     op.drop_index(op.f('ix_photo_gallery_title'), table_name='photo_gallery')
     op.drop_table('photo_gallery')
-    op.drop_table('last_visit')
+    op.drop_index(op.f('ix_FAQs_username'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_title'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_question9'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_question8'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_question7'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_question6'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_question5'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_question4'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_question3'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_question2'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_question10'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_question1'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_faqenabled'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_answer9'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_answer8'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_answer7'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_answer6'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_answer5'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_answer4'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_answer3'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_answer2'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_answer10'), table_name='FAQs')
+    op.drop_index(op.f('ix_FAQs_answer1'), table_name='FAQs')
+    op.drop_table('FAQs')
     op.drop_index(op.f('ix_projects_username'), table_name='projects')
     op.drop_index(op.f('ix_projects_title'), table_name='projects')
+    op.drop_index(op.f('ix_projects_private'), table_name='projects')
     op.drop_index(op.f('ix_projects_last_edit'), table_name='projects')
     op.drop_index(op.f('ix_projects_description'), table_name='projects')
     op.drop_index(op.f('ix_projects_created_date'), table_name='projects')
+    op.drop_index(op.f('ix_projects_commentsAndReplies_last_read'), table_name='projects')
     op.drop_table('projects')
+    op.drop_index(op.f('ix_notifications_username'), table_name='notifications')
+    op.drop_index(op.f('ix_notifications_title'), table_name='notifications')
+    op.drop_index(op.f('ix_notifications_timestamp'), table_name='notifications')
+    op.drop_index(op.f('ix_notifications_notification_type'), table_name='notifications')
+    op.drop_table('notifications')
     op.drop_index(op.f('ix_messages_timestamp'), table_name='messages')
     op.drop_index(op.f('ix_messages_subject'), table_name='messages')
     op.drop_index(op.f('ix_messages_message_read'), table_name='messages')

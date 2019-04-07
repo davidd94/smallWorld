@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='edit_faq.css') }}">
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+{% endblock css %}
+
+{% block bodycontent %}
+<form class="faq-container" action="{{ url_for('project.edit_faq', title=project.title) }}" method="POST">
+    {{ form.hidden_tag() }}
+    <h1 class="faq-title">FAQs</h1>
+    {{ form.faqenabled(id="chkToggle", type="checkbox", data_toggle="toggle") }}
+    <div class="faq-alert alert alert-dismissible alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Questions Saved!</strong>
+    </div>
+    <!-- QUESTION 1 -->
+    <div class="question-container-1 question-container input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+            {{ form.enabled1(type="checkbox", class="question-checkbox question-checkbox-1", data_checkbox="1") }}
+            </div>
+        </div>
+        {{ form.question1(type="text", class="question-box question-box-1 form-control", placeholder="Question 1", maxlength="190", disabled="disabled") }}
+    </div>
+
+    {{ form.answer1(type="text", class="answer-box answer-box-1 form-control", placeholder="Answer 1", maxlength="490", disabled="disabled") }}
+
+    <!-- QUESTION 2 -->
+    <div class="question-container-2 question-container input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+            {{ form.enabled2(class="question-checkbox question-checkbox-2", type="checkbox", data_checkbox="2") }}
+            </div>
+        </div>
+        {{ form.question2(type="text", class="question-box question-box-2 form-control", placeholder="Question 2", maxlength="190", disabled="disabled") }}
+    </div>
+
+    {{ form.answer2(type="text", class="answer-box answer-box-2 form-control", placeholder="Answer 2", maxlength="490", disabled="disabled") }}
+
+    <!-- QUESTION 3 -->
+    <div class="question-container-3 question-container input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+            {{ form.enabled3(class="question-checkbox question-checkbox-3", type="checkbox", data_checkbox="3") }}
+            </div>
+        </div>
+        {{ form.question3(type="text", class="question-box question-box-3 form-control", placeholder="Question 3", maxlength="190", disabled="disabled") }}
+    </div>
+
+    {{ form.answer3(type="text", class="answer-box answer-box-3 form-control", placeholder="Answer 3", maxlength="490", disabled="disabled") }}
+
+    <!-- QUESTION 4 -->
+    <div class="question-container-4 question-container input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+            {{ form.enabled4(class="question-checkbox question-checkbox-4", type="checkbox", data_checkbox="4") }}
+            </div>
+        </div>
+        {{ form.question4(type="text", class="question-box question-box-4 form-control", placeholder="Question 4", maxlength="190", disabled="disabled") }}
+    </div>
+
+    {{ form.answer4(type="text", class="answer-box answer-box-4 form-control", placeholder="Answer 4", maxlength="490", disabled="disabled") }}
+
+    <!-- QUESTION 5 -->
+    <div class="question-container-5 question-container input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+            {{ form.enabled5(class="question-checkbox question-checkbox-5", type="checkbox", data_checkbox="5") }}
+            </div>
+        </div>
+        {{ form.question5(type="text", class="question-box question-box-5 form-control", placeholder="Question 5", maxlength="190", disabled="disabled") }}
+    </div>
+
+    {{ form.answer5(type="text", class="answer-box answer-box-5 form-control", placeholder="Answer 5", maxlength="490", disabled="disabled") }}
+
+    <!-- QUESTION 6 -->
+    <div class="question-container-6 question-container input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+            {{ form.enabled6(class="question-checkbox question-checkbox-6", type="checkbox", data_checkbox="6") }}
+            </div>
+        </div>
+        {{ form.question6(type="text", class="question-box question-box-6 form-control", placeholder="Question 6", maxlength="190", disabled="disabled") }}
+    </div>
+
+    {{ form.answer6(type="text", class="answer-box answer-box-6 form-control", placeholder="Answer 6", maxlength="490", disabled="disabled") }}
+
+    <!-- QUESTION 7 -->
+    <div class="question-container-7 question-container input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+            {{ form.enabled7(class="question-checkbox question-checkbox-7", type="checkbox", data_checkbox="7") }}
+            </div>
+        </div>
+        {{ form.question7(type="text", class="question-box question-box-7 form-control", placeholder="Question 7", maxlength="190", disabled="disabled") }}
+    </div>
+
+    {{ form.answer7(type="text", class="answer-box answer-box-7 form-control", placeholder="Answer 7", maxlength="490", disabled="disabled") }}
+
+    <!-- QUESTION 8 -->
+    <div class="question-container-8 question-container input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+            {{ form.enabled8(class="question-checkbox question-checkbox-8", type="checkbox", data_checkbox="8") }}
+            </div>
+        </div>
+        {{ form.question8(type="text", class="question-box question-box-8 form-control", placeholder="Question 8", maxlength="190", disabled="disabled") }}
+    </div>
+
+    {{ form.answer8(type="text", class="answer-box answer-box-8 form-control", placeholder="Answer 8", maxlength="490", disabled="disabled") }}
+
+    <!-- QUESTION 9 -->
+    <div class="question-container-9 question-container input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+            {{ form.enabled9(class="question-checkbox question-checkbox-9", type="checkbox", data_checkbox="9") }}
+            </div>
+        </div>
+        {{ form.question9(type="text", class="question-box question-box-9 form-control", placeholder="Question 9", maxlength="190", disabled="disabled") }}
+    </div>
+
+    {{ form.answer9(type="text", class="answer-box answer-box-9 form-control", placeholder="Answer 9", maxlength="490", disabled="disabled") }}
+
+    <!-- QUESTION 10 -->
+    <div class="question-container-10 question-container input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+            {{ form.enabled10(class="question-checkbox question-checkbox-10", type="checkbox", data_checkbox="10") }}
+            </div>
+        </div>
+        {{ form.question10(type="text", class="question-box question-box-10 form-control", placeholder="Question 10", maxlength="190", disabled="disabled") }}
+    </div>
+
+    {{ form.answer10(type="text", class="answer-box answer-box-10 form-control", placeholder="Answer 10", maxlength="490", disabled="disabled") }}
+
+    {{ form.submit(class="faq-save btn btn-primary") }}
+    <a class="faq-back-btn" href="{{ url_for('project.project', title=project.title, username=current_user.username) }}"><button type="button" class="btn btn-secondary">Back</button></a>
+
+</form>
+{% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+/* TRIGGERS DYNAMIC SAVED MESSAGE */
+$(function () {
+    {% if get_flashed_messages() %}
+    $('.faq-alert').css('right', '10em');
+    setTimeout(function () {
+        $('.faq-alert').css('right', '-70em');
+    }, 4000);
+    {% endif %}
+});
+
+/* MAIN CHECKMARK BOX TOGGLE */
+$(document).ready(function() {
+        // HIDES THE QUESTIONS & ANSWERS BY DEFAULT VALUE OF FAQ TOGGLE
+        {% if form.faqenabled.data == false %}
+        $('.question-container').css('visibility', 'hidden');
+        $('.answer-box').css('visibility', 'hidden');
+        $('.faq-save').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1');
+        $('.faq-back-btn').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1').css('justify-self', 'right').css('margin-right', '8em');
+        {% endif %}
+
+        /* MANUAL TOGGLING TO ENABLE OR DISABLE ALL FAQs */
+        $('.toggle-group').on('click', () => {
+            var checkstatus = $('#chkToggle').prop('checked');
+
+            if (checkstatus == true) {
+                $('.question-container').css('visibility', 'hidden');
+                $('.answer-box').css('visibility', 'hidden');
+                $('.faq-save').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1');
+                $('.faq-back-btn').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1').css('justify-self', 'right').css('margin-right', '8em');
+            } else if (checkstatus == false) {
+                $('.question-container').css('visibility', 'visible');
+                $('.answer-box').css('visibility', 'visible');
+                $('.faq-save').css('grid-row', '23 / span 1').css('grid-column', '1 / span 1');
+                $('.faq-back-btn').css('grid-row', '23 / span 1').css('grid-column', '2 / span 1').css('justify-self', 'center').css('margin-right', '0');
+            };
+        });
+    }
+);
+
+/* INDIVIDUAL QUESTION CHECKMARK BOXES */
+$(function () {
+    /* ENABLES-DISABLES QUESTION BOXES BASED ON USER'S SETTINGS */
+    {% if form.enabled1.data != True %}
+        $('.question-box-1').prop('disabled', true);
+        $('.answer-box-1').prop('disabled', true);
+    {% else %}
+        $('.question-box-1').prop('disabled', false);
+        $('.answer-box-1').prop('disabled', false);
+    {% endif %}
+    {% if form.enabled2.data != True %}
+        $('.question-box-2').prop('disabled', true);
+        $('.answer-box-2').prop('disabled', true);
+    {% else %}
+        $('.question-box-2').prop('disabled', false);
+        $('.answer-box-2').prop('disabled', false);
+    {% endif %}
+    {% if form.enabled3.data != True %}
+        $('.question-box-3').prop('disabled', true);
+        $('.answer-box-3').prop('disabled', true);
+    {% else %}
+        $('.question-box-3').prop('disabled', false);
+        $('.answer-box-3').prop('disabled', false);
+    {% endif %}
+    {% if form.enabled4.data != True %}
+        $('.question-box-4').prop('disabled', true);
+        $('.answer-box-4').prop('disabled', true);
+    {% else %}
+        $('.question-box-4').prop('disabled', false);
+        $('.answer-box-4').prop('disabled', false);
+    {% endif %}
+    {% if form.enabled5.data != True %}
+        $('.question-box-5').prop('disabled', true);
+        $('.answer-box-5').prop('disabled', true);
+    {% else %}
+        $('.question-box-5').prop('disabled', false);
+        $('.answer-box-5').prop('disabled', false);
+    {% endif %}
+    {% if form.enabled6.data != True %}
+        $('.question-box-6').prop('disabled', true);
+        $('.answer-box-6').prop('disabled', true);
+    {% else %}
+        $('.question-box-6').prop('disabled', false);
+        $('.answer-box-6').prop('disabled', false);
+    {% endif %}
+    {% if form.enabled7.data != True %}
+        $('.question-box-7').prop('disabled', true);
+        $('.answer-box-7').prop('disabled', true);
+    {% else %}
+        $('.question-box-7').prop('disabled', false);
+        $('.answer-box-7').prop('disabled', false);
+    {% endif %}
+    {% if form.enabled8.data != True %}
+        $('.question-box-8').prop('disabled', true);
+        $('.answer-box-8').prop('disabled', true);
+    {% else %}
+        $('.question-box-8').prop('disabled', false);
+        $('.answer-box-8').prop('disabled', false);
+    {% endif %}
+    {% if form.enabled9.data != True %}
+        $('.question-box-9').prop('disabled', true);
+        $('.answer-box-9').prop('disabled', true);
+    {% else %}
+        $('.question-box-9').prop('disabled', false);
+        $('.answer-box-9').prop('disabled', false);
+    {% endif %}
+    {% if form.enabled10.data != True %}
+        $('.question-box-10').prop('disabled', true);
+        $('.answer-box-10').prop('disabled', true);
+    {% else %}
+        $('.question-box-10').prop('disabled', false);
+        $('.answer-box-10').prop('disabled', false);
+    {% endif %}
+
+    /* MANUAL ENABLING-DISABLING EACH FAQ QUESTION BOXES */
+    $('.question-checkbox').on('click', (event) => {
+        var checkbox = event.currentTarget.dataset.checkbox;
+        var checkstatus = $('.question-checkbox-' + checkbox).prop('checked');
+        
+        if (checkstatus == true) {
+            $('.question-box-' + checkbox).prop('disabled', false);
+            $('.answer-box-' + checkbox).prop('disabled', false);
+        } else if (checkstatus == false) {
+            $('.question-box-' + checkbox).prop('disabled', true);
+            $('.answer-box-' + checkbox).prop('disabled', true);
+        };
+        
+    });
+});
+
+</script>
+
+{% endblock scripts %}

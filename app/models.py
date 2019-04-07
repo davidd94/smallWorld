@@ -310,7 +310,8 @@ class Projects(SearchableMixin, db.Model):
     difficulty = db.Column(db.Integer)
     cost = db.Column(db.Integer)
     duration = db.Column(db.Integer)
-    tutorial = db.Column(db.Text(10000))
+    tutorial = db.Column(db.Text(100000))
+    maintenance = db.Column(db.Text(100000))
     video = db.Column(db.String(220))
     item_list = db.Column(db.String(10000))
     created_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -334,6 +335,10 @@ class Projects(SearchableMixin, db.Model):
                                     foreign_keys='CommentReplies.project_id',
                                     backref='projects',
                                     lazy='dynamic')
+    faqs = db.relationship('FAQs',
+                            foreign_keys='FAQs.project_id',
+                            backref='projects',
+                            lazy='dynamic')
     # ASSOCIATION RELATIONSHIPS
     users_liked = db.relationship('User', secondary=project_likers,
                                         primaryjoin=(project_likers.c.project_id == id),
@@ -459,6 +464,60 @@ class Notifications(db.Model):
     @classmethod
     def get_notification_number(cls):
         return cls.query.filter_by(user=current_user).count()
+
+
+class FAQs(db.Model):
+    __tablename__ = 'FAQs'
+    __searchable__ = ['question1', 'answer1',
+                    'question2', 'answer2',
+                    'question3', 'answer3',
+                    'question4', 'answer4',
+                    'question5', 'answer5',
+                    'question6', 'answer6',
+                    'question7', 'answer7',
+                    'question8', 'answer8',
+                    'question9', 'answer9',
+                    'question10', 'answer10']
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True)
+    title = db.Column(db.String(100), index=True)
+    faqenabled = db.Column(db.Boolean, index=True, default=False)
+
+    question1 = db.Column(db.String(200), index=True, default=None)
+    answer1 = db.Column(db.String(500), index=True, default=None)
+    enabled1 = db.Column(db.Boolean, default=False)
+    question2 = db.Column(db.String(200), index=True, default=None)
+    answer2 = db.Column(db.String(500), index=True, default=None)
+    enabled2 = db.Column(db.Boolean, default=False)
+    question3 = db.Column(db.String(200), index=True, default=None)
+    answer3 = db.Column(db.String(500), index=True, default=None)
+    enabled3 = db.Column(db.Boolean, default=False)
+    question4 = db.Column(db.String(200), index=True, default=None)
+    answer4 = db.Column(db.String(500), index=True, default=None)
+    enabled4 = db.Column(db.Boolean, default=False)
+    question5 = db.Column(db.String(200), index=True, default=None)
+    answer5 = db.Column(db.String(500), index=True, default=None)
+    enabled5 = db.Column(db.Boolean, default=False)
+    question6 = db.Column(db.String(200), index=True, default=None)
+    answer6 = db.Column(db.String(500), index=True, default=None)
+    enabled6 = db.Column(db.Boolean, default=False)
+    question7 = db.Column(db.String(200), index=True, default=None)
+    answer7 = db.Column(db.String(500), index=True, default=None)
+    enabled7 = db.Column(db.Boolean, default=False)
+    question8 = db.Column(db.String(200), index=True, default=None)
+    answer8 = db.Column(db.String(500), index=True, default=None)
+    enabled8 = db.Column(db.Boolean, default=False)
+    question9 = db.Column(db.String(200), index=True, default=None)
+    answer9 = db.Column(db.String(500), index=True, default=None)
+    enabled9 = db.Column(db.Boolean, default=False)
+    question10 = db.Column(db.String(200), index=True, default=None)
+    answer10 = db.Column(db.String(500), index=True, default=None)
+    enabled10 = db.Column(db.Boolean, default=False)
+
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+
+    def __repr__(self):
+        return '<FAQ for {}'.format(self.title)
 
 
 

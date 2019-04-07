@@ -30,6 +30,7 @@
 <div class="tutorial-container">
     <div class="tutorial-btn-wrapper">
         <i class="tutorial-main-add-btn fas fa-edit fa-2x nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
+        <a class="edit-tutorial-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}">Back to project</a>
         <div id="tutorial-dropdown-override" class="tutorial-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; transform: translate3d(0px, 42px, 0px);">
             <a class="dropdown-item dropdown-add-paragraph" onclick="addParagraph();" data-toggle="tooltip" href="#">Edit</a>
             <a class="dropdown-item dropdown-add-image" href="#">Export</a>
@@ -55,6 +56,9 @@
 
 <script>
 $(document).ready(function() {
+    var maxcontentfunc = function(max) {
+        $('#maxContentPost').text(max);
+    };
     $('#summernote').summernote({
         toolbar: [
             // [groupName, [list of button]]
@@ -96,20 +100,52 @@ $(document).ready(function() {
                 for (i = 0; i < files.length; i++) {
                     pictures.push(files[i]);
                 };
-                console.log(pictures)
                 // sends picture(s) to server to be stored tempoarily until users 'save'
                 sendFile(pictures, that);
             },
             onImageUploadError: function(msg) {
                 alert(msg + ' (5 MB)');
             },
+            onKeydown: function(e) {
+                var t = e.currentTarget.innerText;
+                // MAX CHARACTER LENGTH IS SET AT 50,000
+                if (t.trim().length >= 50000) {
+                    //delete key
+                    if (e.keyCode != 8)
+                    e.preventDefault();
+                    // add other keys ...
+                }
+            },
+            onKeyup: function(e) {
+                var t = e.currentTarget.innerText;
+                if (typeof maxcontentfunc == 'function') {
+                    maxcontentfunc(50000 - t.trim().length);
+                }
+            },
+            onPaste: function(e) {
+                var t = e.currentTarget.innerText;
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                var all = t + bufferText;
+                // THIS LIMITS THE CHARACTER PASTE LENGTH TO 10,000
+                document.execCommand('insertText', false, all.trim().substring(0, 10000));
+                if (typeof maxcontentfunc == 'function') {
+                    maxcontentfunc(50000 - t.length);
+                }
+            },
         },
     });
 
-    // LOADS DATABASE TUTORIAL CONTENT INTO EDITOR ON PAGE RENDERING
-    var contents = '{{ project.tutorial|safe }}';
+    // MANUALLY INJECTING CSS VALUES FOR SUMMERNOTE TEXT EDITOR - MAX CHAR LENGTH FOR LINKS
+    $('.note-link-text').attr('maxlength', 150);
+    $('.note-link-url').attr('maxlength', 2000);
 
-    $('#summernote').summernote('code', contents);
+    // LOADS DATABASE MAINTENANCE CONTENT INTO EDITOR ON PAGE RENDERING - 'TOJSON' USED DUE TO SINGLE&DOUBLE QUOTE OVERLAPPING
+    var contents = '{{ project.tutorial|tojson }}';
+    // USING REPLACE AND REGEX TO REMOVE EXCESS QUOTES FROM 'TOJSON'
+    var contents2 = contents.replace(/^\"/g, '').replace(/\"$/g, '');
+
+    $('#summernote').summernote('code', contents2);
 });
 
 /* CUSTOM PARAGRAPH BUTTONS */
@@ -145,7 +181,6 @@ var SaveButton = function (context) {
         click: function () {
             // saves the paragraph content
             var html = $("#summernote").summernote("code");
-            console.log(html);
             saveTutorial(html);
         }
     });
@@ -168,7 +203,6 @@ function sendFile(pictures, that) {
     data = new FormData();
     for (i = 0; i < pictures.length; i++) {
         data.append(i, pictures[i]);
-        console.log(data);
     };
 
     $.ajax({
@@ -179,7 +213,6 @@ function sendFile(pictures, that) {
         contentType: false,
         processData: false,
         success: function(response) {
-            console.log(response);
             for (i = 0; i < response.length; i++) {
                 var filePath = 'users/' + '{{ project.username }}' + '/' + '{{ project.title }}' + '/tutorialpics/';
                 $(that).summernote('insertImage',
@@ -194,6 +227,9 @@ function sendFile(pictures, that) {
 
 // DYNAMICALLY OPENS TEXT EDITOR BOX
 function addParagraph() {
+    var maxcontentfunc = function(max) {
+        $('#maxContentPost').text(max);
+    };
     $.ajax({
         url: '{{ url_for("project.load_tutorial", title=project.title) }}',
         type: 'GET',
@@ -237,15 +273,45 @@ function addParagraph() {
                         for (i = 0; i < files.length; i++) {
                             pictures.push(files[i]);
                         };
-                        console.log(pictures)
                         // sends picture(s) to server to be stored tempoarily until users 'save'
                         sendFile(pictures, that);
                     },
                     onImageUploadError: function(msg) {
                         alert(msg + ' (5 MB)');
                     },
+                    onKeydown: function(e) {
+                        var t = e.currentTarget.innerText;
+                        // MAX CHARACTER LENGTH IS SET AT 50,000
+                        if (t.trim().length >= 50000) {
+                            //delete key
+                            if (e.keyCode != 8)
+                            e.preventDefault();
+                            // add other keys ...
+                        }
+                    },
+                    onKeyup: function(e) {
+                        var t = e.currentTarget.innerText;
+                        if (typeof maxcontentfunc == 'function') {
+                            maxcontentfunc(50000 - t.trim().length);
+                        }
+                    },
+                    onPaste: function(e) {
+                        var t = e.currentTarget.innerText;
+                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                        e.preventDefault();
+                        var all = t + bufferText;
+                        // THIS LIMITS THE CHARACTER PASTE LENGTH TO 10,000
+                        document.execCommand('insertText', false, all.trim().substring(0, 10000));
+                        if (typeof maxcontentfunc == 'function') {
+                            maxcontentfunc(50000 - t.length);
+                        }
+                    },
                 },
             });
+
+            // MANUALLY INJECTING CSS VALUES FOR SUMMERNOTE TEXT EDITOR - MAX CHAR LENGTH FOR LINKS
+            $('.note-link-text').attr('maxlength', 150);
+            $('.note-link-url').attr('maxlength', 2000);
 
             // LOADS SAVED TUTORIAL DYNAMICALLY
             $('#summernote').summernote('code', response);
@@ -274,8 +340,6 @@ function saveTutorial(html) {
         cache: false,
         processData: false,
         success: function(response) {
-            console.log(response);
-            
             // closes the text editor box. 'destroy' automatically uses most recent content
             $('#summernote').summernote('destroy');
         }

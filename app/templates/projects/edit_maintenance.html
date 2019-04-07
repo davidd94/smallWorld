@@ -1,5 +1,408 @@
 {% extends "base.html" %}
 
+{% block css %}
+<!--  PLACED BOOTSTRAP CSS FIRST TO BE OVERRIDDEN BY OTHERS AFTER  -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href="{{ url_for('static', filename='base.css') }}" rel="stylesheet">
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='edit-maintenance.css') }}">
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+{% endblock css %}
+
+<!--
+    BORDER EFFECTS FOR FUTURE IMPLEMENTATION
+<div class="svg-wrapper">
+    <svg class='svg' height="470" width="300" xmlns="http://www.w3.org/2000/svg">
+        <rect class="shape one" height="470" width="300" />
+        <rect class="shape two" height="470" width="300" />
+        <div class="text"></div>
+        <div class="subtext">
+        <div class="first">2014</div>
+        </div>
+    </svg>
+</div>
+-->
+
 {% block bodycontent %}
-<h1>Edit Maintenance here</h1>
+<h1 class="edit-maintenance-title" style="text-align: center;">Edit maintenance</h1>
+<p style="font-size: 0.8em; font-style: italic; color: lightgrey; opacity: 0.9; text-align: center; margin: 0; padding: 0;">You may drag and drop TEXT or IMAGES</p>
+<div class="maintenance-container">
+    <div class="maintenance-btn-wrapper">
+        <i class="maintenance-main-add-btn fas fa-edit fa-2x nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
+        <a class="edit-maintenance-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}">Back to project</a>
+        <div id="maintenance-dropdown-override" class="maintenance-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; transform: translate3d(0px, 42px, 0px);">
+            <a class="dropdown-item dropdown-add-paragraph" onclick="addParagraph();" data-toggle="tooltip" href="#">Edit</a>
+            <a class="dropdown-item dropdown-add-image" href="#">Export</a>
+            <a class="dropdown-item dropdown-add-imagecap" href="#">Share</a>
+        </div>
+    </div>
+    <div class="maintenance-container-text">
+        <form class="maintenance-form" method="POST">
+            <div id="summernote"></div>
+        </form>
+    </div>
+</div>
 {% endblock bodycontent %}
+
+{% block scripts %}
+        <!-----  SUMMERNOTES 0.8.8 IS ONLY COMPATIABLE WITH JQUERY 3.2.1  ----->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+<!--
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+-->
+
+<script>
+$(document).ready(function() {
+    var maxcontentfunc = function(max) {
+        $('#maxContentPost').text(max);
+    };
+    $('#summernote').summernote({
+        toolbar: [
+            // [groupName, [list of button]]
+            ['undo', ['undo']],
+            ['redo', ['redo']],
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['picture', ['picture']],
+            ['link', ['linkDialogShow', 'unlink']],
+            ['codeview', ['codeview']],
+            ['closebutton', ['close']],
+            ['savebutton', ['save']]
+        ],
+        buttons: {
+            close: CloseButton,
+            save: SaveButton
+        },
+        popover: {
+            image: [],
+            link: [],
+            air: [
+                ['color', ['color']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['para', ['ul', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture']],
+            ]
+        },
+        maximumImageFileSize: 5*1024*1024,
+        callbacks: {
+            /* SENDS IMAGE URL TO SERVER TO PREPARE FOR COMMIT */
+            onImageUpload: function(files) {
+                var that = $(this);
+                var pictures = [];
+                for (i = 0; i < files.length; i++) {
+                    pictures.push(files[i]);
+                };
+                // sends picture(s) to server to be stored tempoarily until users 'save'
+                sendFile(pictures, that);
+            },
+            onImageUploadError: function(msg) {
+                alert(msg + ' (5 MB)');
+            },
+            onKeydown: function(e) {
+                var t = e.currentTarget.innerText;
+                // MAX CHARACTER LENGTH IS SET AT 50,000
+                if (t.trim().length >= 50000) {
+                    //delete key
+                    if (e.keyCode != 8)
+                    e.preventDefault();
+                    // add other keys ...
+                }
+            },
+            onKeyup: function(e) {
+                var t = e.currentTarget.innerText;
+                if (typeof maxcontentfunc == 'function') {
+                    maxcontentfunc(50000 - t.trim().length);
+                }
+            },
+            onPaste: function(e) {
+                var t = e.currentTarget.innerText;
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                var all = t + bufferText;
+                // THIS LIMITS THE CHARACTER PASTE LENGTH TO 10,000
+                document.execCommand('insertText', false, all.trim().substring(0, 10000));
+                if (typeof maxcontentfunc == 'function') {
+                    maxcontentfunc(50000 - t.length);
+                }
+            },
+        },
+    });
+
+    // MANUALLY INJECTING CSS VALUES FOR SUMMERNOTE TEXT EDITOR - MAX CHAR LENGTH FOR LINKS
+    $('.note-link-text').attr('maxlength', 150);
+    $('.note-link-url').attr('maxlength', 2000);
+
+    // LOADS DATABASE MAINTENANCE CONTENT INTO EDITOR ON PAGE RENDERING - 'TOJSON' USED DUE TO SINGLE&DOUBLE QUOTE OVERLAPPING
+    var contents = '{{ project.maintenance|tojson }}';
+    // USING REPLACE AND REGEX TO REMOVE EXCESS QUOTES FROM 'TOJSON'
+    var contents2 = contents.replace(/^\"/g, '').replace(/\"$/g, '');
+
+    $('#summernote').summernote('code', contents2);
+});
+
+/* CUSTOM PARAGRAPH BUTTONS */
+var CloseButton = function (context) {
+    var ui = $.summernote.ui;
+
+    // create button
+    var button = ui.button({
+        contents: '<i class="fas fa-times" /> Close',
+        style: 'float: right;',
+        click: function () {
+            $.ajax({
+                url: '{{ url_for("project.load_maintenance", title=project.title) }}',
+                type: 'GET',
+                success: function(response) {
+                    // LOADS MOST RECENTLY SAVED maintenance DYNAMICALLY BEFORE CLOSING
+                    $('#summernote').summernote('code', response);
+                    // CLOSES TEXT EDITOR BOX
+                    $('#summernote').summernote('destroy');
+                },
+            });
+        },
+    });
+    return button.render();   // return button as jquery object
+};
+var SaveButton = function (context) {
+    var ui = $.summernote.ui;
+
+    // create button
+    var button = ui.button({
+        contents: 'Save',
+        style: 'float: right;',
+        click: function () {
+            // saves the paragraph content
+            var html = $("#summernote").summernote("code");
+            savemaintenance(html);
+        }
+    });
+    return button.render();   // return button as jquery object
+};
+
+// TEMPORARILY UPLOADS PICTURES TO DATABASE AND ADDS TO CLIENT'S EDITOR ON SUCCESS
+function sendFile(pictures, that) {
+    // ajax for modern browsers
+    var csrf_token = "{{ csrf_token() }}";
+    // Inject our CSRF token into our AJAX request.
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token)
+            }
+        }
+    });
+    
+    data = new FormData();
+    for (i = 0; i < pictures.length; i++) {
+        data.append(i, pictures[i]);
+    };
+
+    $.ajax({
+        data: data,
+        type: "POST",
+        url: "{{ url_for('project.edit_maintenance_photo', title=project.title) }}",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            for (i = 0; i < response.length; i++) {
+                var filePath = 'users/' + '{{ project.username }}' + '/' + '{{ project.title }}' + '/maintenancepics/';
+                $(that).summernote('insertImage',
+                            '{{ url_for("static", filename="") }}' + filePath + response[i],
+                            ''
+                );
+            };
+        }
+    });
+
+};
+
+// DYNAMICALLY OPENS TEXT EDITOR BOX
+function addParagraph() {
+    var maxcontentfunc = function(max) {
+        $('#maxContentPost').text(max);
+    };
+    $.ajax({
+        url: '{{ url_for("project.load_maintenance", title=project.title) }}',
+        type: 'GET',
+        success: function(response) {
+            $('#summernote').summernote({
+                toolbar: [
+                    // [groupName, [list of button]]
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['picture', ['picture']],
+                    ['link', ['linkDialogShow', 'unlink']],
+                    ['codeview', ['codeview']],
+                    ['closebutton', ['close']],
+                    ['savebutton', ['save']]
+                ],
+                buttons: {
+                    close: CloseButton,
+                    save: SaveButton
+                },
+                popover: {
+                    image: [],
+                    link: [],
+                    air: [
+                        ['color', ['color']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['para', ['ul', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture']]
+                    ]
+                },
+                maximumImageFileSize: 5*1024*1024,
+                callbacks: {
+                    /* SENDS IMAGE URL TO SERVER TO PREPARE FOR COMMIT */
+                    onImageUpload: function(files) {
+                        var that = $(this);
+                        var pictures = [];
+                        for (i = 0; i < files.length; i++) {
+                            pictures.push(files[i]);
+                        };
+                        // sends picture(s) to server to be stored tempoarily until users 'save'
+                        sendFile(pictures, that);
+                    },
+                    onImageUploadError: function(msg) {
+                        alert(msg + ' (5 MB)');
+                    },
+                    onKeydown: function(e) {
+                        var t = e.currentTarget.innerText;
+                        // MAX CHARACTER LENGTH IS SET AT 50,000
+                        if (t.trim().length >= 50000) {
+                            //delete key
+                            if (e.keyCode != 8)
+                            e.preventDefault();
+                            // add other keys ...
+                        }
+                    },
+                    onKeyup: function(e) {
+                        var t = e.currentTarget.innerText;
+                        if (typeof maxcontentfunc == 'function') {
+                            maxcontentfunc(50000 - t.trim().length);
+                        }
+                    },
+                    onPaste: function(e) {
+                        var t = e.currentTarget.innerText;
+                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                        e.preventDefault();
+                        var all = t + bufferText;
+                        // THIS LIMITS THE CHARACTER PASTE LENGTH TO 10,000
+                        document.execCommand('insertText', false, all.trim().substring(0, 10000));
+                        if (typeof maxcontentfunc == 'function') {
+                            maxcontentfunc(50000 - t.length);
+                        }
+                    },
+                },
+            });
+
+            // MANUALLY INJECTING CSS VALUES FOR SUMMERNOTE TEXT EDITOR - MAX CHAR LENGTH FOR LINKS
+            $('.note-link-text').attr('maxlength', 150);
+            $('.note-link-url').attr('maxlength', 2000);
+
+            // LOADS SAVED maintenance DYNAMICALLY
+            $('#summernote').summernote('code', response);
+        },
+    });
+};
+
+function savemaintenance(html) {
+    // ajax for modern browsers
+    var csrf_token = "{{ csrf_token() }}";
+    // Inject our CSRF token into our AJAX request.
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token)
+            }
+        }
+    });
+
+
+    $.ajax({
+        data: html,
+        type: "POST",
+        url: "{{ url_for('project.edit_maintenance_save', title=project.title) }}",
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(response) {
+            
+            // closes the text editor box. 'destroy' automatically uses most recent content
+            $('#summernote').summernote('destroy');
+        }
+    });
+    
+}
+
+
+</script>
+
+
+<!--
+    BORDER EFFECTS FOR FUTURE IMPLEMENTATION
+<script>
+/* BORDER EFFECTS */
+var si = document.querySelectorAll(".one"),
+    to = document.querySelectorAll(".two"),
+    te = document.querySelectorAll(".text");
+
+for(var i = 0, j = si.length; i < j; i++) {
+  applyEverything(si[i], to[i], te[i]);
+}
+
+function applyEverything(sides, topbottom, text) {
+  var gparent = sides.parentNode.parentNode;
+  
+  gparent.onmouseenter = function() {
+    sides.style.fill = "rgb(20,20,20)";
+    text.style.color = "white";
+    console.log("over");
+    
+    // Originally these made sense... Then reality happened
+    TweenLite.to(topbottom, .8, {strokeDasharray:"-130 900 -130 900", strokeDashoffset:20, ease:Power2.linear});
+    TweenLite.to(topbottom, .6, {strokeDasharray:"470 300 470 300", strokeDashoffset:470, delay:.3, ease:Power2.linear});
+    
+    TweenLite.to(sides, .8, {strokeDasharray:"-200 1070 -200 1000", strokeDashoffset:640, ease:Power2.linear});
+    TweenLite.to(sides, .6, {strokeDasharray:"300 470 300 470", strokeDashoffset:770, delay:.3, ease:Power2.linear});
+    
+    setTimeout(function() { // Delay fade when leaving hover
+      sides.style.transition = "fill .6s .6s";
+      text.style.transition = "color .6s .6s";
+    }, 10);
+  }  
+  
+  gparent.onmouseleave = function() {
+    sides.style.fill = "transparent";
+    text.style.color = "rgb(20,20,20)";
+    console.log("out");
+    setTimeout(function() {
+      sides.style.transition = "fill .6s"; // Reset fade for next hover
+      text.style.transition = "color .6s";
+    }, 10);
+    
+    // Originally these made sense... Then reality happened
+    TweenLite.to(topbottom, .8, {strokeDasharray:"-130 1050 -130 900", strokeDashoffset:20, ease:Power2.linear});
+    TweenLite.to(topbottom, .6, {strokeDasharray:"300 470 300 470", strokeDashoffset:0, delay:.4, ease:Power2.linear});
+    
+    TweenLite.to(sides, .8, {strokeDasharray:"-200 1335 -200 1000", strokeDashoffset:640, ease:Power2.linear});
+    TweenLite.to(sides, .6, {strokeDasharray:"470 300 470 300", strokeDashoffset:470, delay:.4, ease:Power2.linear});
+  }
+}
+</script>
+-->
+{% endblock scripts %}

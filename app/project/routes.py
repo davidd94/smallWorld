@@ -5,9 +5,9 @@ from flask_moment import Moment
 from datetime import datetime
 from sqlalchemy import update
 from app import db, moment
-from app.models import User, Projects, PhotoGallery, ProjectComments, CommentReplies, Notifications, comment_likers, reply_likers, project_likers
+from app.models import User, Projects, PhotoGallery, ProjectComments, CommentReplies, Notifications, FAQs, comment_likers, reply_likers, project_likers
 from app.project import bp
-from app.project.forms import ProjectForm, EditProjectForm
+from app.project.forms import ProjectForm, EditProjectForm, FAQForm
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 import os
@@ -51,6 +51,9 @@ def new_project():
         new_photo_gallery = PhotoGallery(title=form.title.data,
                                         photoOne=str(file_name),
                                         projects=new_project)
+        new_faqs = FAQs(username=current_user.username,
+                        title=form.title.data,
+                        projects=new_project)
         
         db.session.add(new_project)
         db.session.add(new_photo_gallery)
@@ -70,12 +73,9 @@ def project(username, title):
         project_gallery = project.photo_gallery \
                                     .filter_by(project_id=project.id) \
                                     .first()
-        # TEMP TUTORIAL INFORMATION
-        text_html = (project.tutorial)
-        new_tutorial_text = ""
-        for lines in text_html.splitlines():
-            new_tutorial_text += (lines + "\\n")
-        
+        project_faqs = FAQs.query.filter_by(project_id=project.id).first()
+
+        # LOADS CERTAIN FEATURES FOR LOGGED IN USERS, SPECIFICALLY COMMENT/REPLY SYSTEM
         if current_user.is_authenticated:
             project_likes = Projects.query \
                                     .join(project_likers) \
@@ -113,12 +113,16 @@ def project(username, title):
                                     project_comment_likes=project_comment_likes,
                                     project_replies=project_replies, 
                                     project_reply_likes=project_reply_likes,
-                                    tutorial_text=(new_tutorial_text))
+                                    tutorial_text=project.tutorial,
+                                    maintenance_text=project.maintenance,
+                                    project_faqs=project_faqs)
         return render_template('/projects/project-page.html',
                                 user=user,
                                 project=project,
                                 project_gallery=project_gallery,
-                                tutorial_text=(new_tutorial_text))
+                                tutorial_text=project.tutorial,
+                                maintenance_text=project.maintenance,
+                                project_faqs=project_faqs)
     return redirect(url_for('auth.homepage'))
 
 @bp.route('/project_bar/<title>', methods=['GET', 'POST'])
@@ -188,10 +192,8 @@ def edit_tutorial(title):
 @login_required
 def edit_tutorial_photo(title):
     pictures = request.files
-    print(pictures)
     uploaded_photos = []
     num_pics_uploading = len(request.files)
-    print(num_pics_uploading)
 
     # IF TUTORIAL PICTURE DIRECTORY DOESN'T EXIST, CREATE ONE.
     file_path = current_app.config['PHOTO_UPLOAD_DIR']
@@ -204,7 +206,6 @@ def edit_tutorial_photo(title):
         if each_pic and allowed_file(each_pic.filename):
             file_name = secure_filename(each_pic.filename)
             full_file_path = file_path + '/' + current_user.username + '/' + title + '/' + 'tutorialpics'
-            print(file_name)
 
             each_pic.save(os.path.join(full_file_path, file_name))
 
@@ -217,10 +218,10 @@ def edit_tutorial_photo(title):
 @login_required
 def edit_tutorial_save(title):
     html_content = request.data.decode('utf-8')
-    print(html_content)
     project = Projects.single_project(current_user.id, title)
     if project:
         project.tutorial = html_content
+        project.last_edit = datetime.utcnow()
         db.session.commit()
         return jsonify(html_content)
     return jsonify('tutorial did not save!')
@@ -240,8 +241,66 @@ def load_tutorial(title):
 def edit_maintenance(title):
     project = Projects.single_project(user_id=current_user.id, title=title)
     if project:
-        return render_template('/projects/edit_maintenance.html', maintenance=project.maintenance)
+        return render_template('/projects/edit_maintenance.html', project=project)
     return redirect(url_for('auth.homepage'))
+
+@bp.route('/project/edit_maintenance_photo/<title>', methods=['POST'])
+@login_required
+def edit_maintenance_photo(title):
+    pictures = request.files
+    uploaded_photos = []
+    num_pics_uploading = len(request.files)
+
+    # IF MAINTENANCE PICTURE DIRECTORY DOESN'T EXIST, CREATE ONE.
+    file_path = current_app.config['PHOTO_UPLOAD_DIR']
+    if not os.path.isdir(file_path + '/' + current_user.username + '/' + title + '/' + 'maintenancepics'):
+        os.mkdir(file_path + '/' + current_user.username + '/' + title + '/' + 'maintenancepics')
+
+    # TEMPORARILY CREATES EACH PHOTO IN DIRECTORY
+    for n in range(num_pics_uploading):
+        each_pic = pictures[str(n)]
+        if each_pic and allowed_file(each_pic.filename):
+            file_name = secure_filename(each_pic.filename)
+            full_file_path = file_path + '/' + current_user.username + '/' + title + '/' + 'maintenancepics'
+
+            each_pic.save(os.path.join(full_file_path, file_name))
+
+            uploaded_photos.append(file_name)
+
+    
+    return jsonify(uploaded_photos)
+
+@bp.route('/project/edit_maintenance/<title>/save_maintenance', methods=['POST'])
+@login_required
+def edit_maintenance_save(title):
+    html_content = request.data.decode('utf-8')
+    print(html_content)
+    project = Projects.single_project(current_user.id, title)
+    if project:
+        project.maintenance = html_content
+        project.last_edit = datetime.utcnow()
+        db.session.commit()
+        return jsonify(html_content)
+    return jsonify('maintenance did not save!')
+
+@bp.route('/project/edit_maintenance/<title>/load_maintenance', methods=['GET'])
+@login_required
+def load_maintenance(title):
+    project = Projects.single_project(current_user.id, title)
+    if project:
+        maintenance = project.maintenance
+        return jsonify(maintenance)
+    return jsonify('Failed to retrieve maintenance')
+
+
+@bp.route('/project/edit_itemslist/<title>')
+@login_required
+def edit_itemslist(title):
+    project = Projects.single_project(current_user.id, title)
+    if project:
+        return render_template('/projects/edit_itemslist.html')
+    return redirect(url_for('project.project', username=current_user.username, title=title))
+
 
 @bp.route('/project/edit_photos/<title>', methods=['GET', 'POST'])
 @login_required
@@ -522,7 +581,88 @@ def update_notifications(username, project_id):
                                     .delete()
         db.session.commit()
     return jsonify('Comments read updated!')
-    
+
+
+@bp.route('/project/edit_faq/<title>', methods=['GET', 'POST'])
+@login_required
+def edit_faq(title):
+    project = Projects.single_project(current_user.id, title)
+    form = FAQForm()
+    if project:
+        faqs = FAQs.query.filter_by(project_id=project.id).first()
+        if form.validate_on_submit():
+            faqs.faqenabled = form.faqenabled.data
+            faqs.question1 = form.question1.data
+            faqs.answer1 = form.answer1.data
+            faqs.enabled1 = form.enabled1.data
+            faqs.question2 = form.question2.data
+            faqs.answer2 = form.answer2.data
+            faqs.enabled2 = form.enabled2.data
+            faqs.question3 = form.question3.data
+            faqs.answer3 = form.answer3.data
+            faqs.enabled3 = form.enabled3.data
+            faqs.question4 = form.question4.data
+            faqs.answer4 = form.answer4.data
+            faqs.enabled4 = form.enabled4.data
+            faqs.question5 = form.question5.data
+            faqs.answer5 = form.answer5.data
+            faqs.enabled5 = form.enabled5.data
+            faqs.question6 = form.question6.data
+            faqs.answer6 = form.answer6.data
+            faqs.enabled6 = form.enabled6.data
+            faqs.question7 = form.question7.data
+            faqs.answer7 = form.answer7.data
+            faqs.enabled7 = form.enabled7.data
+            faqs.question8 = form.question8.data
+            faqs.answer8 = form.answer8.data
+            faqs.enabled8 = form.enabled8.data
+            faqs.question9 = form.question9.data
+            faqs.answer9 = form.answer9.data
+            faqs.enabled9 = form.enabled9.data
+            faqs.question10 = form.question10.data
+            faqs.answer10 = form.answer10.data
+            faqs.enabled10 = form.enabled10.data
+
+            flash('Questions Saved!')
+            db.session.commit()
+
+            return redirect(url_for('project.edit_faq', title=project.title))
+        if request.method == 'GET':
+            form.faqenabled.data = faqs.faqenabled
+            form.question1.data = faqs.question1
+            form.answer1.data = faqs.answer1
+            form.enabled1.data = faqs.enabled1
+            form.question2.data = faqs.question2
+            form.answer2.data = faqs.answer2
+            form.enabled2.data = faqs.enabled2
+            form.question3.data = faqs.question3
+            form.answer3.data = faqs.answer3
+            form.enabled3.data = faqs.enabled3
+            form.question4.data = faqs.question4
+            form.answer4.data = faqs.answer4
+            form.enabled4.data = faqs.enabled4
+            form.question5.data = faqs.question5
+            form.answer5.data = faqs.answer5
+            form.enabled5.data = faqs.enabled5
+            form.question6.data = faqs.question6
+            form.answer6.data = faqs.answer6
+            form.enabled6.data = faqs.enabled6
+            form.question7.data = faqs.question7
+            form.answer7.data = faqs.answer7
+            form.enabled7.data = faqs.enabled7
+            form.question8.data = faqs.question8
+            form.answer8.data = faqs.answer8
+            form.enabled8.data = faqs.enabled8
+            form.question9.data = faqs.question9
+            form.answer9.data = faqs.answer9
+            form.enabled9.data = faqs.enabled9
+            form.question10.data = faqs.question10
+            form.answer10.data = faqs.answer10
+            form.enabled10.data = faqs.enabled10
+        return render_template('/projects/edit_faq.html', project=project, form=form)
+    return redirect(url_for('project.project', username=current_user.username, title=title))
+
+
 
 @bp.route('/project/privacy')
 def privacy():
