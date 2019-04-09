@@ -30,8 +30,8 @@ def before_request():
 def profile(username):
     user = User.query.filter_by(username=username).first()
     if user:
-        project_list = user.all_projects.group_by(Projects.title).order_by(
-                Projects.last_edit.desc()).all()
+        project_list = user.all_projects \
+                        .order_by(Projects.last_edit.desc())
         return render_template('profile.html', user=user, projects=project_list)
     return redirect(url_for('auth.homepage'))
 

@@ -219,8 +219,13 @@
     margin-top: 1em;
     margin-right: 0.5em;
     font-size: 0.8em;
-    width: 10%;
+    width: 2.5em;
     visibility: hidden;
+    padding: 0.2em;
+    border: 0.5px solid rgb(201, 201, 201);
+    background: #e9e9e9;
+    border-radius: 1em;
+    text-align: center;
 }
 
 .profile-social-follow {

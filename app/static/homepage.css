@@ -5,28 +5,46 @@
     height: auto;
 }
 
-.cover-photo {
-    height: 400px;
-    width: 100%;
+.animated-plants-container {
+    width: 50em;
+    height: 35em;
+    position: absolute;
+    bottom: -10em;
+    right: 0;
+    transform: scale(0.4, 0.4);
+}
+.animated-plant-text {
+    position: absolute;
+    cursor: pointer;
+    font-size: 2em;
+    font-family: "Comic Sans MS", helvetica, sans-serif;
+    bottom: 0;
+    right: -20em;
+    width: 15em;
+    height: auto;
+    color: rgb(22, 160, 22);
+}
+.animated-plant-text:hover {
+    color: rgb(204, 153, 58);
 }
 
 /* OVERRIDING BOOTSTRAP STYLES - ANONYMOUS USERS */
 .homepage-container {
     display: grid;
     grid-template: 1fr / 30em 1fr 40em;
-    height: 85vh;
+    height: 92vh;
     width: 100%;
-    max-height: 85vh;
+    max-height: 92vh;
     align-items: center;
-    padding: 2em;
+    padding: 1em;
     grid-gap: 15px;
 }
 .homepage-login-container {
     grid-row: 1 / span 1;
     grid-column: 3 / span 1;
-    height: 31.25em;
+    height: 28em;
     width: 35em;
-    margin: auto auto;
+    margin: 1em 4em 3em 0.5em;
     overflow: visible;
     border-radius: 0.6em;
     background-color: #f7f7f9;
@@ -40,6 +58,8 @@
     max-height: 40em;
     margin: auto auto;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    display: block;
+    transition: all 500ms ease;
 }
 .carousel-inner {
     height: 100%;
@@ -88,7 +108,302 @@
     opacity: 1;
 }
 
+/* CREATE YOUR TERRARIUM */
+.create-terrarium-container {
+    top: 0;
+    left: -1em;
+    position: absolute;
+    width: auto;
+    height: 52em;
+    margin: auto auto;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    border: 2px solid rgb(187, 187, 187);
+    transform: scale(0.80, 0.80);
+    display: none;
+}
+.create-terrarium-text {
+    position: absolute;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: "Comic Sans MS", helvetica, sans-serif;
+    top: 4.4em;
+    left: 20em;
+    width: 23em;
+    height: auto;
+    color: rgb(22, 160, 22);
+    text-align: center;
+    border: 0.5px solid grey;
+    background: rgb(224, 224, 224);
+    border-radius: 0.5em;
+    transition: all 500ms ease;
+}
+.create-terrarium-text:hover {
+    color: rgb(204, 153, 58);
+}
+.create-terrarium-close {
+    color: rgb(173, 0, 0);
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    transition: all 500ms ease;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: 600;
+    z-index: 1000;
+}
+.create-terrarium-close:hover {
+    color: rgb(228, 0, 0);
+}
 
+.tut-wrap {
+  position: absolute;
+  z-index: 999;
+}
+.tutorial {
+  color: #fff;
+  background: rgba(0,0,0,0.7);
+  padding: 10px;
+  margin: 10px 0 0 10px;
+  text-decoration: none;
+  font-size: 16px;
+  border: 1px solid #fff;
+  display: inline-block;
+}
+.tutorial:hover {
+  background: rgba(0,0,0,0.96);
+}
+main {
+  display: flex;
+  width: 57.5em;
+  margin: 0 auto;
+}
+
+.plant-drawer {
+  padding: 20px 0;
+  width: 0%;
+  background: #DCEDC8;
+  margin-right: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  left: -100%;
+  transition: 2s all;
+}
+
+.plant-drawer.open {
+  left: 0;
+  width: 40%;
+  margin-right: 10px;
+}
+
+.plant-drawer div {
+  width: 50%;
+  text-align: center;
+  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/160607/circle.svg) no-repeat;
+  background-position: bottom;
+  min-height: 120px;
+  position: relative;
+}
+
+.plant-drawer div.tall {
+  height: 230px;
+}
+
+.plant-drawer div.small .succulent {
+  width: 50%;
+}
+
+.plant-drawer p {
+  position: absolute;
+  left: 105%;
+  width: 200px;
+  z-index: 10;
+}
+
+.succulent {
+  position: absolute; 
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 80%;
+  max-width: 90%;
+  opacity: 0.7;
+  z-index: 20;
+}
+
+.succulent:hover {
+  cursor: grab;
+  opacity: 1;
+}
+
+.terrarium-container {
+  width: 100%;
+  background: #fff;
+  position: relative;
+  min-height: 100vh;
+}
+
+.terrarium-container p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.terrarium-container.shrink {
+  width: 60%;
+}
+
+.terr-wrap {
+  position: absolute;
+  width: 30%;
+  transition: 1s all;
+}
+
+.terr-wrap .soil,
+.terr-wrap .frame {
+  width: 100%;
+  opacity: 0.8;
+}
+
+.terr-wrap .succulent {
+  opacity: 1;
+  z-index: 20;
+  transform: scale(0.8);
+}
+
+.terr-wrap .succulent.smaller {
+  transform: scale(0.6);
+}
+
+.frame {
+  position: absolute;
+  top: 0;
+  z-index: 300;
+  pointer-events: none;
+}
+
+.terr-wrap:hover {
+  width: 33%;
+  cursor: pointer;
+}
+
+.terr-wrap:hover img {
+  opacity: 1;
+}
+
+.terr-wrap:first-child {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.terr-wrap:nth-child(2),
+.terr-wrap:nth-child(3) {
+  top: 25%;
+}
+
+.terr-wrap:nth-child(3) {
+  right: 0%;
+}
+
+.terr-wrap:nth-child(4),
+.terr-wrap:nth-child(5) {
+  bottom: 0%;
+  left: 15%;
+}
+
+.terr-wrap:nth-child(5) {
+  left: initial;
+  right: 15%;
+}
+
+.context-menu {
+  position: absolute;
+  top: 10px; 
+  right: 10px;
+  display: none;
+}
+.thumb {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  right: 0;
+  opacity:0.4;
+}
+.fa {
+  font-size: 28px;
+  margin: 0 5px;
+  color: #ccc;
+  position: relative;
+}
+.fa:after {
+  font-size: 12px;
+  position: absolute;
+  bottom: -26px;
+  left: 0px;
+  opacity: 0;
+}
+.fa:hover {
+  color: rgba(0,0,0,1);
+  cursor: pointer;
+}
+.fa:hover:after {
+  opacity: 1;
+}
+.fa-arrow-up:after {
+  content: 'bring forward';
+}
+.fa-arrow-down:after {
+  content: 'send back';
+}
+.fa-minus:after {
+  content: 'shrink';
+}
+.fa-plus:after {
+  content: 'grow';
+}   
+.fa-trash:after {
+  content: 'delete';
+}
+.button-wrap {
+  position:absolute;
+  bottom: 20px;
+  left: 10px;
+  display:none;
+}
+.button {
+  text-decoration: none;
+  padding: 12px 22px;
+  border: 1px solid #333;
+  left: 10px;
+  font-size: 13px;
+  color: #333;
+}
+.button:hover {
+  cursor: pointer;
+  background: #333;
+  color: #FFF;
+}
+
+.shrink .terr-wrap {
+  width: 100%;
+  bottom: initial;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.shrink .terr-wrap .soil,
+.shrink .terr-wrap .frame {
+  opacity: 1;
+}
+
+.shrink .button-wrap,
+.shrink .context-menu {
+  display: block;
+}
+
+/* BOOTSTRAP OVERRIDE */
 #signupform-container-override {
     width: 100%;
     height: 100%;
@@ -170,6 +485,8 @@
     grid-row: 1 / span 1;
     grid-column: 1 / span 1;
     margin: auto auto;
+    width: 3.3em;
+    height: auto;
     border-radius: 50%;
 }
 .projectfeed-username {
@@ -263,4 +580,98 @@
     list-style: none;
     margin: 0.5em 0;
     padding: 0 0;
+}
+
+
+
+/* ANIMATED PLANTS */
+
+svg {
+  height: 99vh;
+  max-height: 100vw;
+}
+.no-fill, .cactus-prickle {
+  fill: none;
+}
+
+.replay-text {
+  fill: #ffffff;
+  font-size: 24px;
+  font-family: Helvetica, sans, monospace, sans-serif;
+  user-select: none;
+}
+
+.back {
+  fill: #b8c6d1;
+}
+
+.pot {
+  fill: #e3e5e1;
+}
+.pot-lighter {
+  fill: #edeeeb;
+}
+.pot-lightest {
+  fill: #f6f6f4;
+}
+.pot-top-lightest {
+  fill: #fff;
+}
+.pot-top-soil {
+  fill: #afb4a6;
+}
+.pot-shadow {
+  fill: #a1b4bd;
+}
+
+.haworthia {
+  clip-path: url(#haworthia-clip-path);
+  fill: #7ea981;
+}
+.haworthia-strip {
+  fill: #c7e5ce;
+}
+.haworthia-ouline {
+  fill: #709c74;
+  opacity: 0.5;
+}
+
+.cactus {
+  clip-path: url(#cactus-clip-path);
+  fill: #5b9a7c;
+}
+.cactus-lighter {
+  fill: #63a689;
+}
+.cactus-lightest {
+  fill: #6fb293;
+}
+.cactus-prickle {
+  stroke: #4c8165;
+  stroke-linecap: round;
+  stroke-miterlimit: 10;
+  stroke-width: 3px;
+}
+.flower-root {
+  fill: #71d1a8;
+}
+.flower-lighter {
+  fill: #efad96;
+}
+.flower {
+  fill: #e19680;
+}
+.flower-back {
+  fill: #d38570;
+}
+
+.echeveria {
+  clip-path: url(#echeveria-clip-path);
+  fill: #78b1b5;
+}
+.echeveria-darker {
+  fill: #6ea8a8;
+}
+.echeveria-lighter {
+  fill: #88bfbf;
 }

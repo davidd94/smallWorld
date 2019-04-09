@@ -324,7 +324,6 @@
     width: 22em;
     height: 1em;
     text-align: left;
-    padding-left: 2.6em;
 }
 .project-nav-ul {
     list-style: none;
@@ -336,7 +335,7 @@
   background: none;
   border: 0;
   box-sizing: border-box;
-  margin: 0.7em;
+  margin: 0.75em;
   padding: 0.5em 0.5em;
   color: #56CC9D;
   font-size: inherit;
@@ -384,6 +383,36 @@
   transition: transform 0.5s;
   transition: transform 0.5s, -webkit-transform 0.5s;
 }
+.navlist-delete-project {
+    color: rgb(236, 33, 33);
+}
+.navlist-delete-project::before {
+    border-top: 2px solid #c02020;
+    border-bottom: 2px solid #c02020;
+}
+.navlist-delete-project::after {
+    border-left: 2px solid #c02020;
+    border-right: 2px solid #c02020;
+}
+#modalDel {
+    top: 10em;
+}
+.modal-content {
+    width: 40em;
+}
+.modal-body{
+    overflow: hidden;
+}
+.del-input-wrapper {
+    width: 60%;
+    margin: 0 auto;
+}
+.project-delete-input {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+}
+
 
 .project-privacy-label {
     text-align: center;
@@ -397,6 +426,7 @@
     border-radius: 0.7em;
     padding: 0.3em;
     color: white;
+    font-size: 0.7em;
 }
 .project-last-update {
     text-align: center;
@@ -481,6 +511,98 @@
 .project-faq:hover .project-faq-edit {
     visibility: visible;
 }
+
+.item-list-container {
+    width: 60%;
+    height: 100%;
+    margin: 0 auto;
+  background: #fff;
+  padding: 30px;
+  position: relative;
+}
+.item-list-container,
+.item-list-container::before,
+.item-list-container::after {
+  /* Styles to distinguish sheets from one another */
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.25);
+  border: 1px solid #bbb;
+}
+.item-list-container::before,
+.item-list-container::after {
+  content: "";
+  position: absolute;
+  height: 95%;
+  width: 99%;
+  background-color: #eee;
+}
+.item-list-container::before {
+  right: 15px;
+  top: 0;
+  transform: rotate(-1deg);
+  z-index: -1;
+}
+.item-list-container::after {
+  top: 5px;
+  right: -5px;
+  transform: rotate(1deg);
+  z-index: -2;
+}
+
+.item-list {
+    width: 100%;
+    height: 100%;
+    padding: 1em 1em 0 1em;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.item-sublist {
+    background: url('leaf_icon.jpg') no-repeat left top;
+    height: 4em;
+    padding-left: 2.5em;
+    padding-top: 0;
+}
+.item-name {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin: 0;
+}
+.item-brand {
+    font-size: 0.9em;
+    font-style: italic;
+}
+.item-qty {
+    float: right;
+}
+/* ITEM LINK POPOVER CONTAINER */
+.popover-container {
+    height: 10em;
+    width: 17em;
+    max-height: 10em;
+    max-width: 17em;
+    display: grid;
+    grid-template: 2em 1fr / 1fr 1fr;
+}
+.popover-notes-title {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 2;
+    font-size: 1em;
+    text-align: center;
+    margin: 0 0 0.5em 0;
+    border-bottom: 2px solid rgb(160, 160, 160);
+}
+.popover-notes {
+    grid-row: 2 / span 1;
+    grid-column: 1 / span 2;
+    font-size: 0.8em;
+    text-align: center;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
 
 .faq-title-disabled {
     width: 100%;

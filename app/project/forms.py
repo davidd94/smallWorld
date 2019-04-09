@@ -12,7 +12,6 @@ class ProjectForm(FlaskForm):
     difficulty = IntegerField('Difficulty Level (1-10)', validators=[DataRequired(), NumberRange(min=1, max=10, message="You must select a value between 1-10")])
     cost = IntegerField('Cost ($ - USD)', validators=[DataRequired()])
     duration = IntegerField('Hours', validators=[DataRequired()])
-    tutorial = TextAreaField('Tutorial Instructions')
     video = StringField('External Video link')
     item_list = TextAreaField('List of Items')
     privacy = BooleanField('Keep Private')

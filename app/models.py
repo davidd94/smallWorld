@@ -106,23 +106,28 @@ class User(UserMixin, db.Model):
                                         primaryjoin=(followers.c.follower_id == id),
                                         secondaryjoin=(followers.c.followed_id == id),
                                         backref=db.backref('followers', lazy='dynamic'),
-                                        lazy='dynamic')
+                                        lazy='dynamic',
+                                        passive_deletes=True)
     projects_liked = db.relationship('Projects', secondary=project_likers,
                                             primaryjoin=(project_likers.c.user_id == id),
                                             backref=db.backref('likers', lazy='dynamic'),
-                                            lazy='dynamic')
+                                            lazy='dynamic',
+                                            passive_deletes=True)
     comments_liked = db.relationship('ProjectComments', secondary=comment_likers,
                                             primaryjoin=(comment_likers.c.user_id == id),
                                             backref=db.backref('likers', lazy='dynamic'),
-                                            lazy='dynamic')
+                                            lazy='dynamic',
+                                            passive_deletes=True)
     replies_liked = db.relationship('CommentReplies', secondary=reply_likers,
                                             primaryjoin=(reply_likers.c.user_id == id),
                                             backref=db.backref('likers', lazy='dynamic'),
-                                            lazy='dynamic')
+                                            lazy='dynamic',
+                                            passive_deletes=True)
     project_visited = db.relationship('Projects', secondary=project_visitors,
                                             primaryjoin=(project_visitors.c.user_id == id),
                                             backref=db.backref('visitor', lazy='dynamic'),
-                                            lazy='dynamic')
+                                            lazy='dynamic',
+                                            passive_deletes=True)
     # RELATIONSHIPS TABLES
     message_sent = db.relationship('Messages',
                                     foreign_keys='Messages.sender_id',
@@ -313,7 +318,6 @@ class Projects(SearchableMixin, db.Model):
     tutorial = db.Column(db.Text(100000))
     maintenance = db.Column(db.Text(100000))
     video = db.Column(db.String(220))
-    item_list = db.Column(db.String(10000))
     created_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     last_edit = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     likes = db.Column(db.Integer, default=0)
@@ -325,6 +329,10 @@ class Projects(SearchableMixin, db.Model):
     # TABLE RELATIONSHIPS
     photo_gallery = db.relationship('PhotoGallery',
                                     foreign_keys='PhotoGallery.project_id',
+                                    backref='projects',
+                                    lazy='dynamic')
+    item_list = db.relationship('Itemlist',
+                                    foreign_keys='Itemlist.project_id',
                                     backref='projects',
                                     lazy='dynamic')
     project_comments = db.relationship('ProjectComments',
@@ -343,11 +351,13 @@ class Projects(SearchableMixin, db.Model):
     users_liked = db.relationship('User', secondary=project_likers,
                                         primaryjoin=(project_likers.c.project_id == id),
                                         backref=db.backref('projects', lazy='dynamic'),
-                                        lazy='dynamic')
+                                        lazy='dynamic',
+                                        passive_deletes=True)
     users_visited = db.relationship('User', secondary=project_visitors,
                                         primaryjoin=(project_visitors.c.project_id == id),
                                         backref=db.backref('projectvisited', lazy='dynamic'),
-                                        lazy='dynamic')
+                                        lazy='dynamic',
+                                        passive_deletes=True)
 
     def __repr__(self):
         return '<Project {}>'.format(self.title)
@@ -359,6 +369,18 @@ class Projects(SearchableMixin, db.Model):
                     .filter_by(user_id= user_id) \
                     .filter_by(title=title) \
                     .first()
+
+
+class Itemlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True)
+    title = db.Column(db.String(40), index=True)
+    itemname = db.Column(db.String(100))
+    itemlink = db.Column(db.String(300))
+    itembrand = db.Column(db.String(30))
+    quantity = db.Column(db.Integer)
+    notes = db.Column(db.String(250))
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
 
 
 class PhotoGallery(db.Model):
@@ -406,7 +428,8 @@ class ProjectComments(db.Model):
     users_liked = db.relationship('User', secondary=comment_likers,
                                         primaryjoin=(comment_likers.c.comment_id == id),
                                         backref=db.backref('projectcomments', lazy='dynamic'),
-                                        lazy='dynamic')
+                                        lazy='dynamic',
+                                        passive_deletes=True)
 
     def __repr__(self):
         return '<Project Comment for {}>'.format(self.title)
@@ -435,7 +458,8 @@ class CommentReplies(db.Model):
     users_liked = db.relationship('User', secondary=reply_likers,
                                         primaryjoin=(reply_likers.c.reply_id == id),
                                         backref=db.backref('projectreplies', lazy='dynamic'),
-                                        lazy='dynamic')
+                                        lazy='dynamic',
+                                        passive_deletes=True)
 
     def __repr__(self):
         return '<Comment Reply for {}>'.format(self.title)
@@ -447,23 +471,6 @@ class CommentReplies(db.Model):
                     .filter_by(title=title) \
                     .order_by(cls.timestamp.asc()) \
                     .all()
-
-
-class Notifications(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    notification_type = db.Column(db.String(128), index=True)
-    username = db.Column(db.String(64), index=True)
-    title = db.Column(db.String(100), index=True)
-    data = db.Column(db.String(150))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def __repr__(self):
-        return '<Notification type: {} from {}>'.format(self.notification_type, self.username)
-    
-    @classmethod
-    def get_notification_number(cls):
-        return cls.query.filter_by(user=current_user).count()
 
 
 class FAQs(db.Model):
@@ -519,6 +526,22 @@ class FAQs(db.Model):
     def __repr__(self):
         return '<FAQ for {}'.format(self.title)
 
+
+class Notifications(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    notification_type = db.Column(db.String(128), index=True)
+    username = db.Column(db.String(64), index=True)
+    title = db.Column(db.String(100), index=True)
+    data = db.Column(db.String(150))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return '<Notification type: {} from {}>'.format(self.notification_type, self.username)
+    
+    @classmethod
+    def get_notification_number(cls):
+        return cls.query.filter_by(user=current_user).count()
 
 
 #FLASK-LOGIN LOADS EACH USER INTO ITS SESSION

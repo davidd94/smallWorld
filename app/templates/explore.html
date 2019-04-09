@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block css %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='explore.css') }}">
@@ -97,6 +98,8 @@ $(function() {
 
 /* POPOVER EFFECTS */
 $(function() {
+    // SETTING CLEAR TIMEOUT VARIABLE GLOBALLY
+    var popoverShow;
     $("[data-toggle=popover]").each(function(i, obj) {
         $(this)
             .popover({
@@ -109,7 +112,8 @@ $(function() {
             })
             .on("mouseenter", function() {
                 var _this = this;
-                setTimeout(function() {
+                // SETTING 'SHOW' ON POPOVER AS VARIABLE AND TRIGGER
+                popoverShow = setTimeout(function() {
                     $(_this).popover("show");
                 }, 600);
                 $(".popover").on("mouseleave", function() {
@@ -118,6 +122,8 @@ $(function() {
             })
             .on("mouseleave", function() {
                 var _this = this;
+                // CLEARS ANY EXISTING POPOVER 'SHOW' TIMEOUT TO PREVENT UNWANTED POPOVER DISPLAYS
+                clearTimeout(popoverShow);
                 setTimeout(function() {
                     if (!$(".popover:hover").length) {
                     $(_this).popover("hide");

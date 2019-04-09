@@ -66,11 +66,6 @@
         {{ form.duration(id="new-project-duration", class="form-control", placeholder="Total Hours", type="number", autocomplete="off") }}
         {% endif %}
 
-        <label id="new-project-tutorial-label" class="col-sm-2 col-form-label" for="new-project-tutorial">{{ form.tutorial.label }}</label>
-        <div class="col-sm-10 project-tutorial">
-            {{ form.tutorial(class="form-control", id="new-project-tutorial", rows="8", maxlength="10000") }}
-        </div>
-
         <label id="new-project-link-label" for="new-project-video" class="col-sm-2 col-form-label">{{ form.video.label }}</label>
         <div class="col-sm-10 project-video">
             {{ form.video(class="form-control", id="new-project-video", placeholder="YouTube recommended", type="text", maxlength="200") }}

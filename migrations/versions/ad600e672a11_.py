@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ecdf0a21c319
+Revision ID: ad600e672a11
 Revises: 
-Create Date: 2019-04-06 21:03:45.653051
+Create Date: 2019-04-07 21:23:00.119364
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ecdf0a21c319'
+revision = 'ad600e672a11'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -84,7 +84,6 @@ def upgrade():
     sa.Column('tutorial', sa.Text(length=100000), nullable=True),
     sa.Column('maintenance', sa.Text(length=100000), nullable=True),
     sa.Column('video', sa.String(length=220), nullable=True),
-    sa.Column('item_list', sa.String(length=10000), nullable=True),
     sa.Column('created_date', sa.DateTime(), nullable=True),
     sa.Column('last_edit', sa.DateTime(), nullable=True),
     sa.Column('likes', sa.Integer(), nullable=True),
@@ -163,6 +162,20 @@ def upgrade():
     op.create_index(op.f('ix_FAQs_question9'), 'FAQs', ['question9'], unique=False)
     op.create_index(op.f('ix_FAQs_title'), 'FAQs', ['title'], unique=False)
     op.create_index(op.f('ix_FAQs_username'), 'FAQs', ['username'], unique=False)
+    op.create_table('itemlist',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('username', sa.String(length=64), nullable=True),
+    sa.Column('title', sa.String(length=40), nullable=True),
+    sa.Column('itemname', sa.String(length=100), nullable=True),
+    sa.Column('itembrand', sa.String(length=30), nullable=True),
+    sa.Column('quantity', sa.Integer(), nullable=True),
+    sa.Column('notes', sa.String(length=250), nullable=True),
+    sa.Column('project_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_itemlist_title'), 'itemlist', ['title'], unique=False)
+    op.create_index(op.f('ix_itemlist_username'), 'itemlist', ['username'], unique=False)
     op.create_table('photo_gallery',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=True),
@@ -264,6 +277,9 @@ def downgrade():
     op.drop_table('project_comments')
     op.drop_index(op.f('ix_photo_gallery_title'), table_name='photo_gallery')
     op.drop_table('photo_gallery')
+    op.drop_index(op.f('ix_itemlist_username'), table_name='itemlist')
+    op.drop_index(op.f('ix_itemlist_title'), table_name='itemlist')
+    op.drop_table('itemlist')
     op.drop_index(op.f('ix_FAQs_username'), table_name='FAQs')
     op.drop_index(op.f('ix_FAQs_title'), table_name='FAQs')
     op.drop_index(op.f('ix_FAQs_question9'), table_name='FAQs')

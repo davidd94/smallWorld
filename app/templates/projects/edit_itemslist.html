@@ -2,9 +2,263 @@
 
 {% block css %}
 {{ super () }}
-
+<link rel="stylesheet" href="{{ url_for('static', filename='edit_itemlist.css') }}">
 {% endblock css %}
 
 {% block bodycontent %}
+<div class="item-container">
+    <!-- ALERT BOX -->
+    <div class="alert-box-wrapper">
+        <div id="message-alert-box" class="alert alert-dismissible alert-success">
+            <strong class="message-success-msg"></strong>
+        </div>
+    
+        <div id="message-alert-box" class="alert alert-dismissible alert-secondary">
+            <strong class="message-fail-msg"></strong>
+        </div>
+    </div>
 
+    <div class="item-box">
+        <ol class="item-list">
+            {% if existingitems %}
+            {% for eachitem in existingitems %}
+            <li class="item-sublist item-sublist-{{ loop.index }}" data-item="{{ loop.index }}">
+                <div class="item-name item-name-{{ loop.index }} input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">Item Name</span>
+                    </div>
+                    <input type="text" class="item-name-value item-name-value-{{ loop.index }} form-control" id="basic-url" value="{{ eachitem.itemname }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="95" autocomplete="off">
+                </div>
+
+                <i class="item-del-{{ loop.index }} item-del fas fa-times-circle fa-1x" data-item="{{ loop.index }}"></i>
+
+                <div class="item-link item-link-{{ loop.index }} input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">URL</span>
+                    </div>
+                    <input type="text" class="item-link-value item-link-value-{{ loop.index }} form-control" id="basic-url"  value="{{ eachitem.itemlink }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="295" autocomplete="off">
+                </div>
+
+                <div class="item-brand item-brand-{{ loop.index }} input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">Brand Name</span>
+                    </div>
+                    <input type="text" class="brand-name-value brand-name-value-{{ loop.index }} form-control" id="basic-url" value="{{ eachitem.itembrand }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="30" autocomplete="off">
+                </div>
+
+                <div class="item-quantity item-quantity-{{ loop.index }} input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Qty</span>
+                    </div>
+                    <input type="number" class="item-qty-value item-qty-value-{{ loop.index }} form-control"  value="{{ eachitem.quantity }}" name="item-{{ loop.index }}" aria-describedby="basic-addon1" min="0" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "4">
+                </div>
+
+                <div class="item-notes item-notes-{{ loop.index }} input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Notes</span>
+                    </div>
+                    <textarea class="textarea-notes textarea-notes-{{ loop.index }} form-control" name="item-{{ loop.index }}" aria-label="With textarea" maxlength="245">{{ eachitem.notes }}</textarea>
+                </div>
+            </li>
+            {% endfor %}
+            {% endif %}
+        </ol>
+        
+        <div class="item-add-box">
+            <i class="item-add-btn far fa-plus-square fa-2x"></i>
+            <span class="item-add-text">Add Item</span>
+        </div>
+
+        <a class="item-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}"><button type="button" class="btn btn-info">Back</button></a>
+        <button type="button" class="item-save-btn btn btn-primary">Save</button>
+    </div>
+</div>
 {% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+/* ADD NEW ITEMS TO LIST */
+var existingItemNumber = $('.item-list')[0].childElementCount;
+$(function () {
+    $('.item-add-btn, .item-add-text').on('click', () => {
+        var itemNumber = (existingItemNumber + 1);
+        existingItemNumber += 1;
+        
+        $('.item-list').append($('<li>')
+        .attr('class', 'item-sublist item-sublist-' + itemNumber)
+        .attr('data-item', itemNumber)
+        .append($('<i>')
+            .attr('class', 'fas fa-times-circle fa-1x item-del item-del-' + itemNumber)
+            .attr('data-item', itemNumber))
+            .append($('<div>')
+                .attr('class', 'input-group item-name item-name-' + itemNumber)
+                .append($('<div>')
+                    .attr('class', 'input-group-prepend')
+                    .append($('<span>')
+                        .attr('id', 'basic-addon3')
+                        .attr('class', 'input-group-text')
+                        .text('Item Name')))
+                .append($('<input>')
+                    .attr('type', 'text')
+                    .attr('class', 'form-control item-name-value item-name-value-' + itemNumber)
+                    .attr('id', 'basic-url')
+                    .attr('aria-describedby', 'basic-addon3')
+                    .attr('maxlength', '95')
+                    .attr('autocomplete', 'off')))
+            .append($('<div>')
+                .attr('class', 'input-group item-link item-link-' + itemNumber)
+                .append($('<div>')
+                    .attr('class', 'input-group-prepend')
+                    .append($('<span>')
+                        .attr('id', 'basic-addon3')
+                        .attr('class', 'input-group-text')
+                        .text('URL')))
+                .append($('<input>')
+                    .attr('type', 'text')
+                    .attr('class', 'form-control item-link-value item-link-value-' + itemNumber)
+                    .attr('id', 'basic-url')
+                    .attr('aria-describedby', 'basic-addon3')
+                    .attr('maxlength', '95')
+                    .attr('autocomplete', 'off')))
+            .append($('<div>')
+                .attr('class', 'input-group item-brand item-brand-' + itemNumber)
+                .append($('<div>')
+                    .attr('class', 'input-group-prepend')
+                    .append($('<span>')
+                        .attr('class', 'input-group-text')
+                        .attr('id', 'basic-addon3')
+                        .text('Brand Name')))
+                .append($('<input>')
+                    .attr('class', 'form-control brand-name-value brand-name-value-' + itemNumber)
+                    .attr('id', 'basic-url')
+                    .attr('type', 'text')
+                    .attr('aria-describedby', 'basic-addon3')
+                    .attr('maxlength', '30')
+                    .attr('autocomplete', 'off')))
+            .append($('<div>')
+                .attr('class', 'input-group item-quantity item-quantity-' + itemNumber)
+                .append($('<div>')
+                    .attr('class', 'input-group-prepend')
+                    .append($('<span>')
+                        .attr('class', 'input-group-text')
+                        .attr('id', 'basic-addon1')
+                        .text('Qty')))
+                .append($('<input>')
+                    .attr('class', 'form-control item-qty-value item-qty-value-' + itemNumber)
+                    .attr('type', 'number')
+                    .attr('aria-describedby', 'basic-addon1')
+                    .attr('maxlength', '4')))
+            .append($('<div>')
+                .attr('class', 'input-group item-notes item-notes-' + itemNumber)
+                .append($('<div>')
+                    .attr('class', 'input-group-prepend')
+                    .append($('<span>')
+                        .attr('class', 'input-group-text')
+                        .text('Notes')))
+                .append($('<textarea>')
+                    .attr('class', 'form-control textarea-notes textarea-notes-' + itemNumber)
+                    .attr('aria-label', 'With textarea')
+                    .attr('maxlength', '245')
+                )
+            )
+        )
+        
+    });
+});
+
+/* DELETING ITEMS FROM LIST */
+$(function () {
+    $('.item-list').on('click', '.item-del', (event) => {
+        var currentItem = event.currentTarget.dataset.item;
+        $('.item-sublist-' + currentItem).remove();
+    });
+});
+
+/* SENDING SAVED ITEMS TO DB */
+$(function () {
+    var timeoutmsg;
+    $('.item-save-btn').on('click', (event) => {
+        var totalitems = ($('.item-list')[0].childElementCount);
+        var emptyFields = false;
+        $('.item-name-value').css('border', '1px solid #ced4da');
+        $('.brand-name-value').css('border', '1px solid #ced4da');
+        $('.alert-secondary').css('right', '-10em');
+        $('.alert-success').css('right', '-10em');
+        // CLEARS ANY EXISTING setTimeout TIMER
+        clearTimeout(timeoutmsg);
+        var data = []
+        for (i = 0; i < totalitems; i++) {
+            var currentItemNumber = $('.item-list')[0].children[i].dataset.item;
+            var itemName = $('.item-name-value-' + currentItemNumber)[0].value;
+            var itemLink = $('.item-link-value-' + currentItemNumber)[0].value;
+            var itemBrand = $('.brand-name-value-' + currentItemNumber)[0].value;
+            var itemQty = $('.item-qty-value-' + currentItemNumber)[0].value;
+            var itemNotes = $('.textarea-notes-' + currentItemNumber)[0].value;
+
+            if (itemName == '' && itemBrand != '') {
+                $('.item-name-value-' + currentItemNumber).css('border', '0.5px solid red');
+                $('.message-fail-msg')[0].textContent = 'Missing item name';
+                emptyFields = true;
+            }
+            if (itemBrand == '' && itemName != '') {
+                $('.brand-name-value-' + currentItemNumber).css('border', '0.5px solid red');
+                emptyFields = true;
+            }
+            if (itemBrand == '' && itemName == '') {
+                $('.item-name-value-' + currentItemNumber).css('border', '0.5px solid red');
+                $('.brand-name-value-' + currentItemNumber).css('border', '0.5px solid red');
+                emptyFields = true;
+            }
+
+            var item = {'name': itemName,
+                        'link': itemLink,
+                        'brand': itemBrand,
+                        'qty': itemQty,
+                        'notes': itemNotes}
+            data.push(item);
+        };
+
+        if (emptyFields == true) {
+            $('.alert-secondary').css('right', '35em');
+            $('.message-fail-msg')[0].textContent = 'Missing item/brand details!';
+
+            timeoutmsg = setTimeout(function() {
+                $('.alert-secondary').css('right', '-10em');
+            }, 8000);
+            event.stopImmediatePropagation();
+            return false
+        }
+
+        if (data) {
+            var csrf_token = "{{ csrf_token() }}";
+            // Inject imported CSRF token into our AJAX request.
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                    }
+                }
+            });
+
+            $.ajax({
+                url: '{{ url_for("project.edit_itemslist", title=project.title) }}',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function(response) {
+                    $('.alert-success').css('right', '35em');
+                    $('.message-success-msg')[0].textContent = response;
+
+                    timeoutmsg = setTimeout(function() {
+                        $('.alert-success').css('right', '-10em');
+                    }, 8000);
+                },
+            });
+        };
+    });
+    
+});
+
+</script>
+{% endblock scripts %}

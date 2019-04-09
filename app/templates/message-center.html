@@ -145,7 +145,6 @@ $(function () {
             data: JSON.stringify(newmsg),
             contentType: 'application/json',
             success: function(response) {
-                console.log(response);
                 if (response == 'Message successfully sent!') {
                     $('.form-popup').attr('style','display: none;');
                     $(".new-msg-recip")[0].value = "";
@@ -157,7 +156,7 @@ $(function () {
                     setTimeout(function () {
                         $('.alert-success').attr('style','right: -70em;');
                     }, 4000);
-                } else if (response == "That user does not exist" || response == "You cannot message yourself!") {
+                } else if (response == "That user does not exist" || response == "You cannot message yourself") {
                     $(".new-msg-recip")[0].value = "";
                     $('.message-fail-msg')[0].textContent = response;
                     $('.alert-secondary').attr('style','right: 3em;');

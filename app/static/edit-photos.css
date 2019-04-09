@@ -125,3 +125,32 @@ h2 {
 #image-box:hover .picture-remove-btn {
     opacity: 1;
 }
+
+/* MODAL POPUP */
+.modal-content {
+    height: 40em;
+    width: 50em;
+    padding: 1em;
+    margin: 0 0;
+}
+.pic-modal {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.modal img {
+    width: auto;
+    height: 100%;
+    max-width: 40em;
+    max-height: 25em;
+    text-align: center;
+    margin: 0 0;
+}
+.modal-header p {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: black;
+    text-align: center;
+    width: 100%;
+}

@@ -34,7 +34,7 @@
         {% if project_gallery %}
         {% if project_gallery.photoOne %}
         <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoOne }}">
-            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal{{ project_gallery.photoOne }}">
+            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal1">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
                 </div>
@@ -42,10 +42,11 @@
             </a>
         </div>
         <!-- PICTURE POPUP MODAL -->
-        <div class="modal fade pic-modal" id="exampleModal{{ project_gallery.photoOne }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade pic-modal" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <p>{{ project_gallery.photoOne }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -64,7 +65,7 @@
         {% endif %}
         {% if project_gallery.photoTwo %}
         <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoTwo }}">
-            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal{{ project_gallery.photoTwo }}">
+            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal2">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
                 </div>
@@ -72,10 +73,11 @@
             </a>
         </div>
         <!-- PICTURE POPUP MODAL -->
-        <div class="modal fade pic-modal" id="exampleModal{{ project_gallery.photoTwo }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade pic-modal" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <p>{{ project_gallery.photoTwo }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -94,7 +96,7 @@
         {% endif %}
         {% if project_gallery.photoThree %}
         <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoThree }}">
-            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal{{ project_gallery.photoThree }}">
+            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal3">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
                 </div>
@@ -102,10 +104,11 @@
             </a>
         </div>
         <!-- PICTURE POPUP MODAL -->
-        <div class="modal fade pic-modal" id="exampleModal{{ project_gallery.photoThree }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade pic-modal" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <p>{{ project_gallery.photoThree }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -124,7 +127,7 @@
         {% endif %}
         {% if project_gallery.photoFour %}
         <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoFour }}">
-            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal{{ project_gallery.photoFour }}">
+            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal4">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
                 </div>
@@ -132,10 +135,11 @@
             </a>
         </div>
         <!-- PICTURE POPUP MODAL -->
-        <div class="modal fade pic-modal" id="exampleModal{{ project_gallery.photoFour }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade pic-modal" id="exampleModal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <p>{{ project_gallery.photoFour }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -154,7 +158,7 @@
         {% endif %}
         {% if project_gallery.photoFive %}
         <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoFive }}">
-            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal{{ project_gallery.photoFive }}">
+            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal5">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
                 </div>
@@ -162,10 +166,11 @@
             </a>
         </div>
         <!-- PICTURE POPUP MODAL -->
-        <div class="modal fade pic-modal" id="exampleModal{{ project_gallery.photoFive }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade pic-modal" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <p>{{ project_gallery.photoFive }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -184,7 +189,7 @@
         {% endif %}
         {% if project_gallery.photoSix %}
         <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoSix }}">
-            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal{{ project_gallery.photoSix }}">
+            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal6">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
                 </div>
@@ -192,10 +197,11 @@
             </a>
         </div>
         <!-- PICTURE POPUP MODAL -->
-        <div class="modal fade pic-modal" id="exampleModal{{ project_gallery.photoSix }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade pic-modal" id="exampleModal6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <p>{{ project_gallery.photoSix }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -214,7 +220,7 @@
         {% endif %}
         {% if project_gallery.photoSeven %}
         <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoSeven }}">
-            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal{{ project_gallery.photoSeven }}">
+            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal7">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
                 </div>
@@ -222,10 +228,11 @@
             </a>
         </div>
         <!-- PICTURE POPUP MODAL -->
-        <div class="modal fade pic-modal" id="exampleModal{{ project_gallery.photoSeven }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade pic-modal" id="exampleModal7" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <p>{{ project_gallery.photoSeven }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -244,7 +251,7 @@
         {% endif %}
         {% if project_gallery.photoEight %}
         <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoEight }}">
-            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal{{ project_gallery.photoEight }}">
+            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal8">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
                 </div>
@@ -252,10 +259,11 @@
             </a>
         </div>
         <!-- PICTURE POPUP MODAL -->
-        <div class="modal fade pic-modal" id="exampleModal{{ project_gallery.photoEight }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade pic-modal" id="exampleModal8" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <p>{{ project_gallery.photoEight }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -274,7 +282,7 @@
         {% endif %}
         {% if project_gallery.photoNine %}
         <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoNine }}">
-            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal{{ project_gallery.photoNine }}">
+            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal9">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
                 </div>
@@ -282,10 +290,11 @@
             </a>
         </div>
         <!-- PICTURE POPUP MODAL -->
-        <div class="modal fade pic-modal" id="exampleModal{{ project_gallery.photoNine }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade pic-modal" id="exampleModal9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <p>{{ project_gallery.photoNine }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -304,7 +313,7 @@
         {% endif %}
         {% if project_gallery.photoTen %}
         <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoTen }}">
-            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal{{ project_gallery.photoTen }}">
+            <a href="#" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal10">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
                 </div>
@@ -312,10 +321,11 @@
             </a>
         </div>
         <!-- PICTURE POPUP MODAL -->
-        <div class="modal fade pic-modal" id="exampleModal{{ project_gallery.photoTen }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade pic-modal" id="exampleModal10" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <p>{{ project_gallery.photoTen }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -433,8 +443,6 @@ $(function () {
                             $('.error_msg').text(data);
                             $('#file_input').css('display', 'none');
                         } else if (data) {
-                            console.log(data);
-                            console.log('success...!');
                             $form.addClass('is-success');
                             $('.success_msg').text('Files were successfully uploaded!');
                             $('#file_input').css('display', 'none');
@@ -546,7 +554,7 @@ $(function () {
     $('#main-gallery-frame').on('click', '.picture-remove-btn', (event) => {
         var current_img = event.currentTarget.parentElement.nextElementSibling.name;
         var current_div = event.currentTarget.parentElement.parentElement.parentElement;
-        console.log(current_img);
+        
         $.ajax({
             url: '/project/delete_photos/' + '{{ project.title }}' + '/' + current_img,
             type: 'GET',
@@ -572,11 +580,9 @@ $(function () {
         var idx = $e.index();
         var itemsPerSlide = 6;
         var totalItems = $('.carousel-item').length;
-        console.log(idx);
 
         if (idx >= totalItems-(itemsPerSlide-1)) {
             var it = itemsPerSlide - (totalItems - idx);
-            console.log(it);
             for (var i=0; i<it; i++) {
                 // append slides to end
                 if (e.direction=="left") {

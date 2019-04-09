@@ -5,12 +5,12 @@ from flask_moment import Moment
 from datetime import datetime
 from sqlalchemy import update
 from app import db, moment
-from app.models import User, Projects, PhotoGallery, ProjectComments, CommentReplies, Notifications, FAQs, comment_likers, reply_likers, project_likers
+from app.models import User, Projects, PhotoGallery, Itemlist, ProjectComments, CommentReplies, Notifications, FAQs, comment_likers, reply_likers, project_likers
 from app.project import bp
 from app.project.forms import ProjectForm, EditProjectForm, FAQForm
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
-import os
+import os, shutil
 
 
 @bp.route('/new_project', methods=['GET', 'POST'])
@@ -19,21 +19,23 @@ def new_project():
     form = ProjectForm()
     #VALIDATE ON SUBMIT CHECKS IF AN EXISTING TITLE NAME EXIST
     if form.validate_on_submit():
+        file_path = current_app.config['PHOTO_UPLOAD_DIR']
+        projectname = form.title.data
+        username = current_user.username
+        user_path = file_path + '/' + username
+        full_file_path = file_path + '/' + username + '/' + projectname
+
+        if not os.path.isdir(user_path):
+            os.mkdir(user_path)
+            os.mkdir(full_file_path)
+        if os.path.isdir(user_path) and not os.path.isdir(full_file_path):
+            os.mkdir(full_file_path)
+        
         try:
             file_upload = request.files['file']
             if file_upload and allowed_file(file_upload.filename):
                 file_name = secure_filename(file_upload.filename)
-                file_path = current_app.config['PHOTO_UPLOAD_DIR']
-                username = current_user.username
-                projectname = form.title.data
-                if not os.path.isdir(file_path + '/' + username):
-                    os.mkdir(file_path + '/' + username)
-                    os.mkdir(file_path + '/' + username + '/' + projectname)
-                if os.path.isdir(file_path + '/' + username ) and not os.path.isdir(file_path + '/' + username + '/' + projectname):
-                    os.mkdir(file_path + '/' + username + '/' + projectname)
-                file_path = current_app.config['PHOTO_UPLOAD_DIR'] + '/' + username + '/' + projectname
-                #full_file_path = file_path + '/' + file_name
-                file_upload.save(os.path.join(file_path, file_name))
+                file_upload.save(os.path.join(full_file_path, file_name))
         except:
             file_upload = None
             file_name = ''
@@ -43,7 +45,6 @@ def new_project():
                                 difficulty=form.difficulty.data,
                                 cost=form.cost.data,
                                 duration=form.duration.data,
-                                tutorial=form.tutorial.data,
                                 video=form.video.data,
                                 private=form.privacy.data,
                                 author=current_user,
@@ -73,6 +74,7 @@ def project(username, title):
         project_gallery = project.photo_gallery \
                                     .filter_by(project_id=project.id) \
                                     .first()
+        project_itemlist = Itemlist.query.filter_by(projects=project).all()
         project_faqs = FAQs.query.filter_by(project_id=project.id).first()
 
         # LOADS CERTAIN FEATURES FOR LOGGED IN USERS, SPECIFICALLY COMMENT/REPLY SYSTEM
@@ -108,6 +110,7 @@ def project(username, title):
                                     user=user, 
                                     project=project,
                                     project_gallery=project_gallery,
+                                    itemlist=project_itemlist,
                                     project_likes=project_likes,
                                     project_comments=project_comments,
                                     project_comment_likes=project_comment_likes,
@@ -120,6 +123,7 @@ def project(username, title):
                                 user=user,
                                 project=project,
                                 project_gallery=project_gallery,
+                                itemlist=project_itemlist,
                                 tutorial_text=project.tutorial,
                                 maintenance_text=project.maintenance,
                                 project_faqs=project_faqs)
@@ -293,13 +297,41 @@ def load_maintenance(title):
     return jsonify('Failed to retrieve maintenance')
 
 
-@bp.route('/project/edit_itemslist/<title>')
+@bp.route('/project/edit_itemslist/<title>', methods=['GET', 'POST'])
 @login_required
 def edit_itemslist(title):
     project = Projects.single_project(current_user.id, title)
     if project:
-        return render_template('/projects/edit_itemslist.html')
-    return redirect(url_for('project.project', username=current_user.username, title=title))
+        if request.method == 'POST':
+            # TO QUERY AND DELETE ANY EXISTING ITEMS
+            existingitems = Itemlist.query.filter_by(project_id=project.id).all()
+            if existingitems:
+                for eachitem in existingitems:
+                    print(eachitem)
+                    db.session.delete(eachitem)
+                db.session.commit()
+            
+            # FOR NEW ITEM SUBMISSION TO BE SAVED TO DB
+            allitems = request.json
+            if allitems:
+                for eachitem in allitems:
+                    print(eachitem)
+                    newitem = Itemlist(username=current_user.username,
+                                        title=project.title,
+                                        itemname=eachitem['name'],
+                                        itemlink=eachitem['link'],
+                                        itembrand=eachitem['brand'],
+                                        quantity=eachitem['qty'],
+                                        notes=eachitem['notes'],
+                                        projects=project)
+                    db.session.add(newitem)
+                    db.session.commit()
+                return jsonify('Items saved!')
+        if request.method == 'GET':
+            existingitems = Itemlist.query.filter_by(project_id=project.id).all()
+            return render_template('/projects/edit_itemslist.html', project=project, existingitems=existingitems)
+        return render_template('/projects/edit_itemslist.html', project=project)
+    return redirect(url_for('project.project', username=current_user.username, title=project.title))
 
 
 @bp.route('/project/edit_photos/<title>', methods=['GET', 'POST'])
@@ -316,7 +348,7 @@ def edit_photos(title):
         rows = photo_gallery.__dict__
         empty_pic_slot = []
         for row in rows:
-            if rows[row] == None:
+            if rows[row] == None or rows[row] == '':
                 empty_pic_slot.append(row)
     
     """ FIND OUT EACH COLUMN NAME OR TYPE
@@ -326,34 +358,29 @@ def edit_photos(title):
 
     # CREATES PROJECT DIRECTORY FOLDER IF IT DOESN'T EXIST
     if project and request.files and request.method == 'POST':
-        username = current_user.username
         projectname = project.title
-        file_path = current_app.config['PHOTO_UPLOAD_DIR']
+        username = current_user.username
+        
         num_pics_allowed = len(empty_pic_slot)
         num_pics_uploading = len(request.files)
-
-        if not os.path.isdir(file_path + '/' + username):
-            os.mkdir(file_path + '/' + username)
-            os.mkdir(file_path + '/' + username + '/' + projectname)
-        if os.path.isdir(file_path + '/' + username ) and not os.path.isdir(file_path + '/' + username + '/' + projectname):
-            os.mkdir(file_path + '/' + username + '/' + projectname)
-        
         # CHECKS IF USER REACHED FILE UPLOAD LIMIT
         if (len(empty_pic_slot) == 0):
             return jsonify('You have reached your maximum file limit of 10!')
         # CHECK IF USERS UPLOADED MORE THAN 10 FILES AT ONCE
         if (num_pics_uploading > 10):
             return jsonify('You can only upload a maximum of 10 files at once!')
+        
         # UPDATES THE LAST EDITED DATE FOR PROJECT
         Projects.last_edit = datetime.utcnow()
-
+        
         pictures = request.files
         uploaded_pics = []
         for n in range(min(num_pics_allowed,num_pics_uploading)):
             each_pic = pictures[str(n)]
             if each_pic and allowed_file(each_pic.filename):
                 file_name = secure_filename(each_pic.filename)
-                file_path = current_app.config['PHOTO_UPLOAD_DIR'] + '/' + username + '/' + projectname
+                file_path = current_app.config['PHOTO_UPLOAD_DIR']
+                file_path = file_path + '/' + username + '/' + projectname
                 full_file_path = file_path + '/' + file_name
                 
                 # CHECKING IF USER HAS DUPLICATE FILE NAMES
@@ -383,6 +410,8 @@ def delete_photos(title, img_name):
     if project and photo_gallery:
         rows = photo_gallery.__dict__
         found_pic_row = ""
+        # UPDATES THE PROJECT LAST EDIT DATE
+        Projects.last_edit = datetime.utcnow()
         for row in rows:
             if rows[row] == img_name:
                 found_pic_row = row
@@ -623,6 +652,9 @@ def edit_faq(title):
             faqs.answer10 = form.answer10.data
             faqs.enabled10 = form.enabled10.data
 
+            # UPDATES THE LAST EDITED DATE FOR PROJECT
+            Projects.last_edit = datetime.utcnow()
+            
             flash('Questions Saved!')
             db.session.commit()
 
@@ -662,6 +694,48 @@ def edit_faq(title):
         return render_template('/projects/edit_faq.html', project=project, form=form)
     return redirect(url_for('project.project', username=current_user.username, title=title))
 
+@bp.route('/project/delete_project/<title>')
+@login_required
+def delete_project(title):
+    project = Projects.single_project(current_user.id, title)
+    if project:
+        photo_gallery = project.photo_gallery.first()
+        project_faqs = project.faqs.first()
+        project_comments = project.project_comments.all()
+        project_replies = project.comment_replies.all()
+        project_note_comments = Notifications.query \
+                                            .filter_by(notification_type='comment') \
+                                            .filter_by(title=title) \
+                                            .all()
+        project_note_replies = Notifications.query \
+                                            .filter_by(notification_type='comment reply') \
+                                            .filter_by(title=title) \
+                                            .all()
+        # REMOVING PROJECT AND ALL RELATED TABLES
+        db.session.delete(project)
+        db.session.delete(photo_gallery)
+        db.session.delete(project_faqs)
+        if project_comments:
+            for eachcomment in project_comments:
+                db.session.delete(eachcomment)
+        if project_replies:
+            for eachreply in project_replies:
+                db.session.delete(eachreply)
+        if project_note_comments:
+            for each_note in project_note_comments:
+                db.session.delete(each_note)
+        if project_note_replies:
+            for each_note in project_note_replies:
+                db.session.delete(each_note)
+        # REMOVING MAIN PROJECT DIRECTORY WITH ALL IMAGES
+        file_path = current_app.config['PHOTO_UPLOAD_DIR']
+        username = current_user.username
+        if os.path.isdir(file_path + '/' + username + '/' + title):
+            # shutil IS REQUIRED TO REMOVE ALL FILES AND SUBDIRECTORIES WITHIN A DIRECTORY. rmdir only removes when empty
+            shutil.rmtree(file_path + '/' + username + '/' + title)
+        db.session.commit()
+        return jsonify('Successfully deleted!')
+    return jsonify('Was unable to delete')
 
 
 @bp.route('/project/privacy')

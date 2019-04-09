@@ -20,6 +20,7 @@
 #new-project-descrip {
     width: 75%;
     margin-top: 0.5em;
+    resize: none;
 }
 
 #new-project-difficulty-label {
@@ -58,13 +59,6 @@
 #new-project-duration {
     width: 12%;
     align-self: center;
-}
-
-#new-project-tutorial-label {
-    align-self: center;
-}
-#new-project-tutorial {
-    width: 95%;
 }
 
 #new-project-link-label {

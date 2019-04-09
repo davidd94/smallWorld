@@ -132,6 +132,9 @@
             <li><button class="navlist-photos btn-animate">Photos/Videos</button></li>
             <li><button class="navlist-comments btn-animate">Comments</button></li>
             <li><button class="navlist-faq btn-animate">FAQs</button></li>
+            {% if current_user == user %}
+            <li><button class="navlist-delete-project btn-animate" data-toggle="modal" data-target="#modalDel">DELETE</button></li>
+            {% endif %}
         </ul>
         {% if project.private == True %}
         <p class="project-privacy-label"><span>PRIVATE</span></p>
@@ -186,6 +189,18 @@
             {% if current_user == user %}
             <p class="project-itemslist-edit"><a href="{{ url_for('project.edit_itemslist', title=project.title) }}">Edit</a></p>
             {% endif %}
+            <div class="item-list-container">
+            {% if itemlist %}
+                <ul class="item-list">
+                    {% for eachitem in itemlist %}
+                    <li class="item-sublist">
+                        <p class="item-name"><a class="item-link" href="{{ eachitem.itemlink }}" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container popover-container-{{ eachitem.id }}'><p class='popover-notes-title'>Notes</p><p class='popover-notes'>{{ eachitem.notes }}</p></div>">{{ eachitem.itemname }}</a><span class="item-qty">Qty: {{ eachitem.quantity }}</span></p>
+                        <p class="item-brand">Brand: {{ eachitem.itembrand }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
         </div>
 
         <div class="project-photo-gallery">
@@ -250,6 +265,31 @@
         </div>
     </div>
 </div>
+
+<!--  DELETE PROJECT POPUP MODAL  -->
+<div id="modalDel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" style="text-align: center; width: 100%;">Project Deletion</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Please enter the project name ( <strong style="color: rgb(81, 81, 199);">{{ project.title }}</strong> ) to confirm the deletion.</p>
+        <p><strong style="color: darkred;">WARNING: </strong>You will not be able to recover this project after deleting!</p>
+        <div class="del-input-wrapper">
+            <input type="text" class="project-delete-input" maxlength="150" placeholder="Insert project title here">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary project-del-btn" disabled>DELETE</button>
+        <button type="button" class="btn btn-primary project-delclose-btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock bodycontent %}
 
 {% block scripts %}
@@ -293,6 +333,7 @@ $(function () {
     $('.btn-animate').on('click', (event) => {
         let btn = event.currentTarget.classList[0];
         $('.btn-animate').attr('style', 'color: #56CC9D; text-decoration: none;');
+        $('.navlist-delete-project').css('color', 'rgb(236, 33, 33)');
         $('.' + btn).attr('style', 'color: #6477b9; text-decoration: underline;');
     });
 });
@@ -389,6 +430,50 @@ $(function () {
         $('.project-itemslist').css('display', 'none');
         $('.project-maintenance').css('display', 'none');
         $('.project-faq').css('display', 'block');
+    });
+});
+
+/* ITEM LIST POPUP EFFECTS */
+$(function() {
+    // NEED TO SET CLEAR TIMEOUT GLOBALLY
+    var popoverTimerShow;
+    $("[data-toggle=popover]").each(function(i, obj) {
+        $(this)
+            .popover({
+                html: true,
+                container: 'body',
+                viewport: {selector: '.item-list-container'},
+                selector: '[data-popover]',
+                trigger: 'hover',
+                placement: 'right',
+            })
+            .on("mouseenter", function() {
+                var _this = this;
+                // SET POPOVER TO VARIABLE AND TRIGGER
+                popoverTimerShow = setTimeout(function() {
+                    $(_this).popover("show");
+                }, 600);
+                $(".popover").on("mouseleave", function() {
+                    $(_this).popover("hide");
+                });
+            })
+            .on("mouseleave", function() {
+                var _this = this;
+                // CLEARS EXISTING 'SHOW' TIMEOUT WHEN LEAVING TO PREVENT DISPLAYING UNWANTED POPOVER
+                clearTimeout(popoverTimerShow);
+                popoverTimerHide = setTimeout(function() {
+                    if (!$(".popover:hover").length) {
+                    $(_this).popover("hide");
+                    }
+                }, 400);
+            });
+        });
+});
+
+/* UNIVERSALLY CLOSES ANY STUCK POPOVERS */
+$(function() {
+    $('.project-itemslist, .item-list, .item-list-container').on('mouseenter', () => {
+        $('.item-link').popover('hide');
     });
 });
 
@@ -617,7 +702,6 @@ $(function () {
                 url: '/project/project_like/' + project_id,
                 type: 'GET',
                 success: function(response) {
-                    console.log(response);
                     if (response == 'Project liked!') {
                         $('.projectlike-' + project_id).css('color', 'red');
                         $('.projectlike-' + project_id).attr('id', 'projectlike');
@@ -636,7 +720,6 @@ $(function () {
                 url: '/project/project_unlike/' + project_id,
                 type: 'GET',
                 success: function (response) {
-                    console.log(response);
                     if (response == 'Project unliked!') {
                         $('.projectlike-' + project_id).css('color', '#A6A6A6');
                         $('.projectlike-' + project_id).removeAttr('id');
@@ -666,7 +749,6 @@ $(function () {
                 url: '/project/comment_like/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + commentID,
                 type: 'GET',
                 success: function (response) {
-                    console.log(response);
                     if (response == 'Comment liked!') {
                         $('.commentlike-' + commentID).css('color', 'red');
                         $('.commentlike-' + commentID).attr('id', 'commentlike');
@@ -685,7 +767,6 @@ $(function () {
                 url: '/project/comment_unlike/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + commentID,
                 type: 'GET',
                 success: function (response) {
-                    console.log(response);
                     if (response == 'Comment unliked!') {
                         $('.commentlike-' + commentID).css('color', '#A6A6A6');
                         $('.commentlike-' + commentID).removeAttr('id');
@@ -706,7 +787,6 @@ $(function () {
                 url: '/project/reply_like/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + replyID,
                 type: 'GET',
                 success: function (response) {
-                    console.log(response);
                     if (response == 'Reply liked!') {
                         $('.replylike-' + replyID).css('color', 'red');
                         $('.replylike-' + replyID).attr('id', 'replylike');
@@ -725,7 +805,6 @@ $(function () {
                 url: '/project/reply_unlike/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + replyID,
                 type: 'GET',
                 success: function (response) {
-                    console.log(response);
                     if (response == 'Reply unliked!') {
                         $('.replylike-' + replyID).css('color', '#A6A6A6');
                         $('.replylike-' + replyID).removeAttr('id');
@@ -748,8 +827,6 @@ $(function () {
     $('#comments-list').on('click', '.comment-like-number', (event) => {
         let currentUserLikes = event.currentTarget.classList[1];
         let commentID = event.currentTarget.parentElement.dataset.commentId;
-        console.log(currentUserLikes);
-        console.log(commentID);
         $.ajax({
             url: '/project/show_user_commentlikes/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + commentID,
             type: 'GET',
@@ -785,8 +862,6 @@ $(function () {
     $('.comment-root').on('click', '.reply-like-number', (event) => {
         let currentUserLikes = event.currentTarget.classList[1];
         let replyID = event.currentTarget.parentElement.dataset.replyId;
-        console.log(currentUserLikes);
-        console.log(replyID);
         $.ajax({
             url: '/project/show_user_replylikes/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + replyID,
             type: 'GET',
@@ -818,5 +893,39 @@ $(function () {
     });
 });
 
+/* DELETE PROJECT FEATURES */
+$(function () {
+    // VERIFIES IF USER ENTERED CORRECT PROJECT TITLE BEFORE PROCEEDING TO DELETION
+    $('.project-delete-input').on('keyup', () => {
+        var deleteInput = $('.project-delete-input')[0].value;
+        var projectTitle = "{{ project.title }}";
+        if (deleteInput == projectTitle) {
+            $('.project-del-btn').removeAttr('disabled');
+        } else if (deleteInput != projectTitle) {
+            $('.project-del-btn').attr('disabled', 'disabled');
+        }
+    });
+
+    // PROJECT DELETION
+    $('.project-del-btn').on('click', () => {
+        var projectTitle = "{{ project.title }}"
+
+        $.ajax({
+            url: '{{ url_for("project.delete_project", title=project.title) }}',
+            type: 'GET',
+            success: function(response) {
+                window.location.replace('{{ url_for("main.profile", username=current_user.username) }}')
+            },
+        });
+    });
+
+    $('.project-delclose-btn').on('click', () => {
+        // REMOVES NAVLIST BUTTON EFFECTS
+        $('.navlist-delete-project').attr('style', 'color: rgb(236, 33, 33); text-decoration: none;');
+        // RESETS DELETE INPUT VALUE
+        $('.project-delete-input')[0].value = '';
+        $('.project-del-btn').attr('disabled', 'disabled');
+    });
+})
 </script>
 {% endblock scripts %}
