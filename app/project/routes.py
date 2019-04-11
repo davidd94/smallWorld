@@ -56,11 +56,20 @@ def new_project():
                         title=form.title.data,
                         projects=new_project)
         
+        # IF TAGS CHECKED, SAVE TO DB AS 'TRUE'
+        all_tags = request.form.getlist('tags')
+        if all_tags:
+            for eachtag in all_tags:
+                print(eachtag)
+                # USES PYTHON BUILT-IN FEATURE 'SETATTR' TO SET DB TABLE VALUES USING DYNAMIC VARIABLES
+                setattr(new_project, eachtag, True)
+
         db.session.add(new_project)
         db.session.add(new_photo_gallery)
         db.session.commit()
 
         return redirect(url_for('project.project', username=current_user.username, title=form.title.data))
+    
     return render_template('/projects/new-project.html', form=form)
 
 @bp.route('/project/<username>/<title>')
@@ -226,6 +235,7 @@ def edit_tutorial_save(title):
     if project:
         project.tutorial = html_content
         project.last_edit = datetime.utcnow()
+        project.last_update_type = 'Updated tutorial contents'
         db.session.commit()
         return jsonify(html_content)
     return jsonify('tutorial did not save!')
@@ -238,6 +248,20 @@ def load_tutorial(title):
         tutorial = project.tutorial
         return jsonify(tutorial)
     return jsonify('Failed to retrieve tutorial')
+
+@bp.route('/project/edit_tutorial_toggle/<title>', methods=['POST'])
+@login_required
+def edit_tutorial_toggle(title):
+    project = Projects.single_project(current_user.id, title)
+    if project:
+        data = request.json
+        if data == 'true':
+            project.tutorial_enabled = True
+        elif data == 'false':
+            project.tutorial_enabled = False
+        db.session.commit()
+        return jsonify('toggle saved')
+    return redirect(url_for('project.project', username=current_user.username, title=project.title))
 
 
 @bp.route('/project/edit_maintenance/<title>')
@@ -283,6 +307,7 @@ def edit_maintenance_save(title):
     if project:
         project.maintenance = html_content
         project.last_edit = datetime.utcnow()
+        project.last_update_type = 'Updated maintenance guide'
         db.session.commit()
         return jsonify(html_content)
     return jsonify('maintenance did not save!')
@@ -296,6 +321,20 @@ def load_maintenance(title):
         return jsonify(maintenance)
     return jsonify('Failed to retrieve maintenance')
 
+@bp.route('/project/edit_maintenance_toggle/<title>', methods=['POST'])
+@login_required
+def edit_maintenance_toggle(title):
+    project = Projects.single_project(current_user.id, title)
+    if project:
+        data = request.json
+        if data == 'true':
+            project.maintenance_enabled = True
+        elif data == 'false':
+            project.maintenance_enabled = False
+        db.session.commit()
+        return jsonify('toggle saved')
+    return redirect(url_for('project.project', username=current_user.username, title=project.title))
+
 
 @bp.route('/project/edit_itemslist/<title>', methods=['GET', 'POST'])
 @login_required
@@ -307,15 +346,14 @@ def edit_itemslist(title):
             existingitems = Itemlist.query.filter_by(project_id=project.id).all()
             if existingitems:
                 for eachitem in existingitems:
-                    print(eachitem)
                     db.session.delete(eachitem)
                 db.session.commit()
             
             # FOR NEW ITEM SUBMISSION TO BE SAVED TO DB
             allitems = request.json
             if allitems:
+                project.last_update_type = 'Updated item list'
                 for eachitem in allitems:
-                    print(eachitem)
                     newitem = Itemlist(username=current_user.username,
                                         title=project.title,
                                         itemname=eachitem['name'],
@@ -333,6 +371,19 @@ def edit_itemslist(title):
         return render_template('/projects/edit_itemslist.html', project=project)
     return redirect(url_for('project.project', username=current_user.username, title=project.title))
 
+@bp.route('/project/edit_itemslist_toggle/<title>', methods=['POST'])
+@login_required
+def edit_itemslist_toggle(title):
+    project = Projects.single_project(current_user.id, title)
+    if project:
+        data = request.json
+        if data == 'true':
+            project.itemlist_enabled = True
+        elif data == 'false':
+            project.itemlist_enabled = False
+        db.session.commit()
+        return jsonify('toggle saved')
+    return redirect(url_for('project.project', username=current_user.username, title=project.title))
 
 @bp.route('/project/edit_photos/<title>', methods=['GET', 'POST'])
 @login_required
@@ -371,7 +422,8 @@ def edit_photos(title):
             return jsonify('You can only upload a maximum of 10 files at once!')
         
         # UPDATES THE LAST EDITED DATE FOR PROJECT
-        Projects.last_edit = datetime.utcnow()
+        project.last_edit = datetime.utcnow()
+        project.last_update_type = 'Added new photos in gallery'
         
         pictures = request.files
         uploaded_pics = []
@@ -653,7 +705,8 @@ def edit_faq(title):
             faqs.enabled10 = form.enabled10.data
 
             # UPDATES THE LAST EDITED DATE FOR PROJECT
-            Projects.last_edit = datetime.utcnow()
+            project.last_edit = datetime.utcnow()
+            project.last_update_type = 'Updated the FAQs section'
             
             flash('Questions Saved!')
             db.session.commit()
@@ -742,6 +795,264 @@ def delete_project(title):
 def privacy():
     return render_template('/projects/privacy.html')
 
+@bp.route('/project/tagsearch', methods=['GET', 'POST'])
+def tagsearch():
+    if request.args and request.method == 'GET':
+        tag = request.args.get('tag')
+        search = ''
+        # IF INITIAL QUERY STRING IS 'DIFFICULTY'
+        if tag == 'difficulty':
+            difficultylevel = request.args.get('value')
+            if difficultylevel == 'easy':
+                projects = Projects.query \
+                                .filter_by(private=False) \
+                                .filter(Projects.difficulty < 4) \
+                                .all()
+                search = 'Easy'
+            elif difficultylevel == 'medium':
+                projects = Projects.query \
+                                .filter_by(private=False) \
+                                .filter(Projects.difficulty < 8) \
+                                .filter(Projects.difficulty > 3) \
+                                .all()
+                search = 'Medium'
+            elif difficultylevel == 'hard':
+                projects = Projects.query \
+                                .filter_by(private=False) \
+                                .filter(Projects.difficulty > 7) \
+                                .all()
+                search = 'Hard'
+        # IF INITIAL QUERY STRING IS 'COST'
+        if tag == 'cost':
+            costvalue = request.args.get('value')
+            if costvalue == '$':
+                projects = Projects.query \
+                                    .filter_by(private=False) \
+                                    .filter(Projects.cost <= 100) \
+                                    .all()
+                search = '$'
+            if costvalue == '$$':
+                projects = Projects.query \
+                                    .filter_by(private=False) \
+                                    .filter(Projects.cost > 100) \
+                                    .filter(Projects.cost < 300) \
+                                    .all()
+                search = '$$'
+            if costvalue == '$$$':
+                projects = Projects.query \
+                                    .filter_by(private=False) \
+                                    .filter(Projects.cost >= 300) \
+                                    .filter(Projects.cost < 600) \
+                                    .all()
+                search = '$$$'
+            if costvalue == '$$$$':
+                projects = Projects.query \
+                                    .filter_by(private=False) \
+                                    .filter(Projects.cost >= 600) \
+                                    .filter(Projects.cost < limit4) \
+                                    .all()
+                search = '$$$$'
+            if costvalue == '$$$$$':
+                projects = Projects.query \
+                                    .filter_by(private=False) \
+                                    .filter(Projects.cost >= 1000) \
+                                    .all()
+                search = '$$$$$'
+        # IF INITIAL QUERY STRING IS ALL OTHERS
+        if (tag != 'difficulty') and (tag != 'cost'):
+            # NEED TO SET 'kwargs' INTO A DICT IN ORDER TO PASS THE VARIABLE 'tag' AS A KEY IN FILTER_BY
+            kwargs = {tag : True}
+            projects = Projects.query \
+                                .filter_by(**kwargs) \
+                                .filter_by(private=False) \
+                                .all()
+            search = tag
+        return render_template('/projects/tags.html', projects=projects, search=search)
+    
+    if request.method == 'POST':
+        all_tags = request.form.getlist('tags')
+        all_cost = request.form.getlist('cost')
+        all_difficulty = request.form.getlist('difficulty')
+        saved_tags = all_tags + all_cost + all_difficulty
+        print(saved_tags)
+        kwargs = {}
+
+        # IF USER'S FILTER CONTAINS ANY TYPES.... APPEND TO A QUERY OBJECT
+        for tag in all_tags:
+            kwargs[tag] = True
+        if kwargs:
+            projectsby_tags = Projects.query \
+                            .filter_by(private=False) \
+                            .filter_by(**kwargs) \
+                            .all()
+        else:
+            projectsby_tags = Projects.query \
+                                .filter_by(private=False) \
+                                .all()
+        
+        # IF USER'S FILTER CONTAINS COST.... RUN THROUGH ALL OPTIONS
+        if all_cost:
+            limit1 = 100    # '$'
+            limit2 = 300    # '$$
+            limit3 = 600    # '$$$'
+            limit4 = 1000   # '$$$$' or '$$$$$' if > limit4
+
+            if all_cost == ['$']:
+                projectsby_cost = Projects.query.filter(Projects.cost < limit1).all()
+            elif all_cost == ['$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > limit1).filter(Projects.cost < limit2).all()
+            elif all_cost == ['$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > limit2).filter(Projects.cost < limit3).all()
+            elif all_cost == ['$$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > limit3).filter(Projects.cost < limit4).all()
+            elif all_cost == ['$$$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > limit4).all()
+
+            elif all_cost == ['$', '$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost < limit2).all()
+            elif all_cost == ['$', '$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit3).filter(Projects.cost > limit2)
+                projects2 = Projects.query.filter(Projects.cost < limit3).filter(Projects.cost > limit2)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$', '$$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit4).filter(Projects.cost > limit3)
+                projects2 = Projects.query.filter(Projects.cost < limit1)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$', '$$$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit1)
+                projects2 = Projects.query.filter(Projects.cost > limit4)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$$', '$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost < limit3).filter(Projects.cost > limit1).all()
+            elif all_cost == ['$$', '$$$$']:
+                projects1 = Projects.query.filter(Projects.cost > limit1).filter(Projects.cost < limit2)
+                projects2 = Projects.query.filter(Projects.cost > limit3).filter(Projects.cost < limit4)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$$', '$$$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > limit1).filter(Projects.cost < limit2)
+                projects2 = Projects.query.filter(Projects.cost > limit4)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$$$', '$$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > limit2).filter(Projects.cost < limit4).all()
+            elif all_cost == ['$$$', '$$$$$']:
+                projects1 = Projects.query.filter(Projects.cost > limit2).filter(Projects.cost < limit3)
+                projects2 = Projects.query.filter(Projects.cost > limit4)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$$$$', '$$$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > limit3).all()
+
+            elif all_cost == ['$', '$$', '$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost < limit3).all()
+            elif all_cost == ['$', '$$', '$$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit2)
+                projects2 = Projects.query.filter(Projects.cost > limit3).filter(Projects.cost < limit4)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$', '$$', '$$$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit2)
+                projects2 = Projects.query.filter(Projects.cost > limit4)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$', '$$$', '$$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit1)
+                projects2 = Projects.query.filter(Projects.cost < limit4).filter(Projects.cost > limit2)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$', '$$$', '$$$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit1)
+                projects2 = Projects.query.filter(Projects.cost > limit2).filter(Projects.cost < limit3)
+                projects3 = Projects.query.filter(Projects.cost > limit4)
+                projectsby_cost = projects1.union(projects2, projects3).all()
+            elif all_cost == ['$', '$$$$', '$$$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit1)
+                projects2 = Projects.query.filter(Projects.cost > limit3)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$$', '$$$', '$$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > limit1).filter(Projects.cost < limit4).all()
+            elif all_cost == ['$$', '$$$', '$$$$$']:
+                projects1 = Projects.query.filter(Projects.cost > limit1).filter(Projects.cost < limit3)
+                projects2 = Projects.query.filter(Projects.cost > limit4)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$$', '$$$$', '$$$$$']:
+                projects1 = Projects.query.filter(Projects.cost > limit1).filter(Projects.cost < limit2)
+                projects2 = Projects.query.filter(Projects.cost > limit3)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$$$', '$$$$', '$$$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > limit2).all()
+
+            elif all_cost == ['$', '$$', '$$$', '$$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost < limit4).all()
+            elif all_cost == ['$', '$$', '$$$', '$$$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit3)
+                projects2 = Projects.query.filter(Projects.cost > limit4)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$', '$$', '$$$$', '$$$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit2)
+                projects2 = Projects.query.filter(Projects.cost > limit3)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$', '$$$', '$$$$', '$$$$$']:
+                projects1 = Projects.query.filter(Projects.cost < limit1)
+                projects2 = Projects.query.filter(Projects.cost > limit2)
+                projectsby_cost = projects1.union(projects2).all()
+            elif all_cost == ['$$', '$$$', '$$$$', '$$$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > limit1).all()
+
+            elif all_cost == ['$', '$$', '$$$', '$$$$', '$$$$$']:
+                projectsby_cost = Projects.query.filter(Projects.cost > 1).all()
+
+        
+        # IF USER'S FILTER CONTAINS DIFFICULTY.... RUN THROUGH ALL OPTIONS
+        if all_difficulty:
+            if all_difficulty == ['easy']:
+                projectsby_difficulty = Projects.query.filter(Projects.difficulty < 4).all()
+            elif all_difficulty == ['medium']:
+                projectsby_difficulty = Projects.query.filter(Projects.difficulty > 3).filter(Projects.difficulty < 8).all()
+            elif all_difficulty == ['hard']:
+                projectsby_difficulty = Projects.query.filter(Projects.difficulty > 7).all()
+            elif all_difficulty == ['easy', 'medium']:
+                projectsby_difficulty = Projects.query.filter(Projects.difficulty < 8).all()
+            elif all_difficulty == ['easy', 'hard']:
+                projects1 = Projects.query.filter(Projects.difficulty < 4)
+                projects2 = Projects.query.filter(Projects.difficulty > 7)
+                projectsby_difficulty = projects1.union(projects2).all()
+            elif all_difficulty == ['medium', 'hard']:
+                projectsby_difficulty = Projects.query.filter(Projects.difficulty > 3).all()
+            elif all_difficulty == ['easy', 'medium', 'hard']:
+                projectsby_difficulty = Projects.query.filter(Projects.difficulty > 0).all()
+            
+
+        if all_tags and all_cost and all_difficulty:
+            # MERGING LIST RESULTS INTO SETS (REMOVES DUPLICATES)
+            projectsby_tags = set(projectsby_tags)
+            projectsby_cost = set(projectsby_cost)
+            projectsby_difficulty = set(projectsby_difficulty)
+            # INTERSECT SETS (EXTRACTS COMMON DATA BETWEEN ALL SETS)
+            project_intersection = set.intersection(projectsby_tags, projectsby_cost, projectsby_difficulty)
+        elif all_tags and all_cost:
+            projectsby_tags = set(projectsby_tags)
+            projectsby_cost = set(projectsby_cost)
+            project_intersection = set.intersection(projectsby_tags, projectsby_cost)
+        elif all_tags and all_difficulty:
+            projectsby_tags = set(projectsby_tags)
+            projectsby_difficulty = set(projectsby_difficulty)
+            project_intersection = set.intersection(projectsby_tags, projectsby_difficulty)
+        elif all_cost and all_difficulty:
+            projectsby_cost = set(projectsby_cost)
+            projectsby_difficulty = set(projectsby_difficulty)
+            project_intersection = set.intersection(projectsby_cost, projectsby_difficulty)
+        elif all_tags:
+            # DONT NEED MERGE/INTERSECT IF ONLY ONE CATEGORY SEARCH
+            projects = projectsby_tags
+        elif all_cost:
+            projects = projectsby_cost
+        elif all_difficulty:
+            projects = projectsby_difficulty
+        
+        # CONVERT SET BACK TO LIST
+        try:
+            projects = list(project_intersection)
+        except:
+            pass
+
+        return render_template('/projects/tags.html', projects=projects, search='Custom', checked=saved_tags)
+    return render_template('/projects/tags.html')
 
 
 def allowed_file(filename):

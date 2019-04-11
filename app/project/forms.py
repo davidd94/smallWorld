@@ -1,7 +1,7 @@
 from flask import request
 from flask_wtf import FlaskForm
 from flask_login import current_user
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, DecimalField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, DecimalField, SelectMultipleField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, NumberRange
 from app.models import User, Projects
 
@@ -9,12 +9,11 @@ from app.models import User, Projects
 class ProjectForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=3, max=40, message="Your awesome creation must have a title! (3-50 characters)")])
     description = TextAreaField('Description')
-    difficulty = IntegerField('Difficulty Level (1-10)', validators=[DataRequired(), NumberRange(min=1, max=10, message="You must select a value between 1-10")])
-    cost = IntegerField('Cost ($ - USD)', validators=[DataRequired()])
-    duration = IntegerField('Hours', validators=[DataRequired()])
+    difficulty = IntegerField('Difficulty Level (1-10)', validators=[DataRequired(message="Difficulty level missing"), NumberRange(min=1, max=10, message="You must select a value between 1-10")])
+    cost = IntegerField('Cost ($ - USD)', validators=[DataRequired(message="Cost missing")])
+    duration = IntegerField('Hours', validators=[DataRequired(message="Duration missing")])
     video = StringField('External Video link')
-    item_list = TextAreaField('List of Items')
-    privacy = BooleanField('Keep Private')
+    privacy = BooleanField('Keep Private?')
     submit = SubmitField('Submit')
     
     def validate_title(self, title):

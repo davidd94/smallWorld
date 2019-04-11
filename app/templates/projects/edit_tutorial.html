@@ -2,6 +2,7 @@
 
 {% block css %}
 <!--  PLACED BOOTSTRAP CSS FIRST TO BE OVERRIDDEN BY OTHERS AFTER  -->
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link href="{{ url_for('static', filename='base.css') }}" rel="stylesheet">
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
@@ -28,6 +29,9 @@
 {% block bodycontent %}
 <h1 class="edit-tutorial-title" style="text-align: center;">Edit Tutorial</h1>
 <div class="tutorial-container">
+    <div class="toggle-wrapper">
+        <input id="chkToggle" type="checkbox" class="toggle-tutorial" data-toggle="toggle">
+    </div>
     <div class="tutorial-btn-wrapper">
         <i class="tutorial-main-add-btn fas fa-edit fa-2x nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
         <a class="edit-tutorial-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}">Back to project</a>
@@ -49,6 +53,7 @@
         <!-----  SUMMERNOTES 0.8.8 IS ONLY COMPATIABLE WITH JQUERY 3.2.1  ----->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 <!--
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
@@ -349,6 +354,70 @@ function saveTutorial(html) {
 
 </script>
 
+<script>
+/* ENABLE-DISABLE TOGGLE */
+$(function() {
+    // LOADS THE USER'S TOGGLE SETTING
+        {% if project.tutorial_enabled == True %}
+            $('.toggle').removeClass('btn btn-light off');
+            $('.toggle').addClass('toggle btn btn-primary');
+            $('#chkToggle')[0].checked = true;
+        {% else %}
+            $('.tutorial-container-text').css('display', 'none');
+            $('.tutorial-main-add-btn').css('visibility','hidden');
+            $('#chkToggle')[0].checked = false;
+        {% endif %}
+
+    // UPDATES SERVER WITH TOGGLE SETTING
+    $('.toggle-wrapper').on('click', () => {
+        var toggleValue = $('#chkToggle')[0].checked;
+        
+        if (toggleValue == true) {
+            var csrf_token = "{{ csrf_token() }}";
+            // Inject imported CSRF token into our AJAX request.
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                    }
+                }
+            });
+            $.ajax({
+                url: "{{ url_for('project.edit_tutorial_toggle', title=project.title) }}",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify('false'),
+                success: function(response) {
+                    $('.tutorial-container-text').css('display', 'none');
+                    $('.tutorial-main-add-btn').css('visibility','hidden');
+                }
+            });
+        } else if (toggleValue == false) {
+            var csrf_token = "{{ csrf_token() }}";
+            // Inject imported CSRF token into our AJAX request.
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                    }
+                }
+            });
+            $.ajax({
+                url: "{{ url_for('project.edit_tutorial_toggle', title=project.title) }}",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify('true'),
+                success: function(response) {
+                    $('.tutorial-container-text').css('display', 'block');
+                    $('.tutorial-main-add-btn').css('visibility','visible');
+                }
+            });
+        }
+    });
+
+});
+
+</script>
 
 <!--
     BORDER EFFECTS FOR FUTURE IMPLEMENTATION

@@ -3,6 +3,7 @@
     height: 85vh;
     padding: 1em;
     overflow: hidden;
+    position: relative;
 }
 .maintenance-container-text {
     width: auto;
@@ -14,6 +15,13 @@
     overflow-y: scroll;
     overflow-x: hidden;
 }
+.toggle-wrapper {
+    position: absolute;
+    margin: 0;
+    top: 1.5em;
+    left: 15em;
+    z-index: 500;
+}
 
 /* ADD BUTTON WITH DROPDOWN FEATURES */
 .maintenance-btn-wrapper {
@@ -21,13 +29,14 @@
     width: 100%;
     height: 4em;
     position: relative;
+    z-index: 50;
 }
 .maintenance-main-add-btn {
     max-width: 5em;
     height: auto;
     cursor: pointer;
     margin: 0 0 0 6.5em;
-    transition: all 500ms ease;
+    
 }
 .maintenance-main-add-btn:hover {
     color: #007cba;

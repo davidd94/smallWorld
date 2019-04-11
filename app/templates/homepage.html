@@ -43,13 +43,10 @@
 
 <p class="create-terrarium-text">Create your own animated terriarum here !</p>
 
+<!------ TERRARIUM CREATOR ----->
 <div class="create-terrarium-container">
     <p class="create-terrarium-close">Close</p>
-    <main>  
-  <div class="tut-wrap">
-    <a class="tutorial" href="https://codepen.io/natacoops/post/drag-and-drop-succulent-garden-project-outline" target="_blank">Project Outline</a>
-  <a class="tutorial" href="https://codepen.io/natacoops/post/a-drag-and-drop-succulent-garden-project-solution" target="_blank">Project Solution</a>
-  </div>
+    <main>
   <section class="plant-drawer">
     <div class="small">
       <img class="succulent original" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/160607/succulent-agave.svg" alt="agave succulent">
@@ -118,6 +115,7 @@
 </main>
 </div>
 
+<!----- ANIMATED PLANTS ----->
 <div class="animated-plants-container">
 <p class="animated-plant-text">Click me! :)</p>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 850.5 850.5">
@@ -379,6 +377,7 @@
   </g>
 </svg>
 </div>
+
 {% elif current_user.is_authenticated %}
 <div class="dashboard-container">
     <div class="followed-feed-container">
@@ -404,7 +403,7 @@
                         </div>
                     </li>
                 </ul>
-                <div class="update-border"><span class="projectfeed-update">Insert type of updates here..</span></div>
+                <div class="update-border"><span class="projectfeed-update">{{ project.last_update_type }}</span></div>
             </li>
             {% endfor %}
         </ul>
@@ -450,7 +449,7 @@ $(function() {
             $('.create-terrarium-text').css('display', 'none');
         }
     });
-    
+
     $('.create-terrarium-close').on('click', () => {
         $('.create-terrarium-container').css('display', 'none');
         $('#carouselExampleIndicators').css('display', 'block');

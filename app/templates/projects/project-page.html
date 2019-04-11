@@ -67,6 +67,22 @@
             {% endif %}
             <p class="project-descrip-title">Description</p>
             <p class="project-descrip">{{ project.description }}</p>
+            <p class="project-tags">Tags:
+                {% if project.aquariums == True %}<a href="{{ url_for('project.tagsearch', tag='aquariums') }}"> Aquariums</a>,{% endif %}
+                {% if project.saltwater == True %}<a href="{{ url_for('project.tagsearch', tag='saltwater') }}"> Saltwater</a>,{% endif %}
+                {% if project.freshwater == True %}<a href="{{ url_for('project.tagsearch', tag='freshwater') }}"> Freshwater</a>,{% endif %}
+                {% if project.terrariums == True %}<a href="{{ url_for('project.tagsearch', tag='terrariums') }}"> Terrariums</a>,{% endif %}
+                {% if project.enclosedtropical == True %}<a href="{{ url_for('project.tagsearch', tag='enclosedtropical') }}"> Enclosed Tropical</a>,{% endif %}
+                {% if project.opentropical == True %}<a href="{{ url_for('project.tagsearch', tag='opentropical') }}"> Open Tropical</a>,{% endif %}
+                {% if project.carnivorous == True %}<a href="{{ url_for('project.tagsearch', tag='carnivorous') }}"> Carnivorous</a>,{% endif %}
+                {% if project.desert == True %}<a href="{{ url_for('project.tagsearch', tag='desert') }}"> Desert</a>,{% endif %}
+                {% if project.reptiles == True %}<a href="{{ url_for('project.tagsearch', tag='reptiles') }}"> Reptiles</a>,{% endif %}
+                {% if project.vivariumpaludarium == True %}<a href="{{ url_for('project.tagsearch', tag='vivariumpaludarium') }}"> Vivarium/Paludarium</a>,{% endif %}
+                {% if project.waterreptiles == True %}<a href="{{ url_for('project.tagsearch', tag='waterreptiles') }}"> Water Reptiles</a>,{% endif %}
+                {% if project.plantsonly == True %}<a href="{{ url_for('project.tagsearch', tag='plantsonly') }}"> Plants only</a>,{% endif %}
+                {% if project.difficulty < 4 %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='easy') }}"> Easy</a>,{% elif project.difficulty > 7 %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='hard') }}"> Hard</a>,{% else %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='medium') }}"> Medium</a>,{% endif %}
+                {% if project.cost < 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$') }}"> $</a>,{% elif project.cost > 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$') }}"> $$</a>,{% elif project.cost > 300 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$') }}"> $$$</a>,{% elif project.cost > 600 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$') }}"> $$$$</a>,{% elif project.cost > 1000 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$$') }}"> $$$$$</a>,{% endif %}
+            </p>
         </div>
         <div class="project-difficulty-box">
             <div class="wrapper">
@@ -171,6 +187,9 @@
             {% if current_user == user %}
             <p class="project-tutorial-edit"><a href="{{ url_for('project.edit_tutorial', title=project.title) }}">Edit</a></p>
             {% endif %}
+            {% if project.tutorial_enabled == False %}
+                <h3 class="tutorial-title-disabled"><strong>Sorry! </strong> Tutorial guide has been disabled by the creator</h3>
+            {% endif %}
             <div class="project-tutorial-textarea">
             <!--  DYNAMICALLY INSERTING TUTORIAL DATA HERE WITH JQUERY  -->
             </div>
@@ -180,8 +199,11 @@
             {% if current_user == user %}
             <p class="project-maintenance-edit"><a href="{{ url_for('project.edit_maintenance', title=project.title) }}">Edit</a></p>
             {% endif %}
+            {% if project.maintenance_enabled == False %}
+                <h3 class="maintenance-title-disabled"><strong>Sorry! </strong> Maintenance guide has been disabled by the creator</h3>
+            {% endif %}
             <div class="project-maintenance-textarea">
-            <!--  DYNAMICALLY INSERTING TUTORIAL DATA HERE WITH JQUERY  -->
+                <!--  DYNAMICALLY INSERTING TUTORIAL DATA HERE WITH JQUERY  -->
             </div>
         </div>
 
@@ -190,7 +212,7 @@
             <p class="project-itemslist-edit"><a href="{{ url_for('project.edit_itemslist', title=project.title) }}">Edit</a></p>
             {% endif %}
             <div class="item-list-container">
-            {% if itemlist %}
+            {% if itemlist and project.itemlist_enabled == True %}
                 <ul class="item-list">
                     {% for eachitem in itemlist %}
                     <li class="item-sublist">
@@ -199,7 +221,9 @@
                     </li>
                     {% endfor %}
                 </ul>
-                {% endif %}
+            {% else %}
+                <h5 class="item-list-disabled">The creator has disabled the item list</h5>
+            {% endif %}
             </div>
         </div>
 
@@ -219,8 +243,9 @@
             <p class="project-faq-edit"><a href="{{ url_for('project.edit_faq', title=project.title) }}">Edit</a></p>
             {% endif %}
             {% if project_faqs.faqenabled != True %}
-            <h3 class="faq-title-disabled"><strong>Sorry! </strong> Frequently Asked Questions has been disabled by the owner.</h1>
+            <h3 class="faq-title-disabled"><strong>Sorry! </strong> Frequently Asked Questions has been disabled by the owner.</h3>
             {% else %}
+            <div class="faq-question-container">
                 {% if project_faqs.enabled1 == True %}
                 <p class="faq-question">{{ project_faqs.question1 }}</p>
                 <p class="faq-answer">{{ project_faqs.answer1 }}</p>
@@ -261,6 +286,7 @@
                 <p class="faq-question">{{ project_faqs.question10 }}</p>
                 <p class="faq-answer">{{ project_faqs.answer10 }}</p>
                 {% endif %}
+            </div>
             {% endif %}
         </div>
     </div>
@@ -372,10 +398,10 @@ $(function () {
         $('.project-comments').css('display', 'none');
         $('.project-tutorial').css('display', 'none');
         $('.project-maintenance').css('display', 'block');
-        $('.project-maintenance-textarea').html('{{ project.maintenance|safe }}');
         $('.project-faq').css('display', 'none');
         $('.project-itemslist').css('display', 'none');
-
+        $('.project-maintenance-textarea').html('{{ project.maintenance|safe }}');
+        
     });
 
     $('.navlist-items').on('click', (event) => {

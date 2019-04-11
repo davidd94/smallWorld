@@ -1,12 +1,17 @@
-.explore-main-container {
+.tags-main-container {
     width: 100%;
     height: 93vh;
     padding: 2em;
+    position: relative;
 }
-.explore-main-container .row {
-    height: 100%;
+.tags-main-container .tag-row {
+    text-align: center;
 }
 
+.tag-card {
+    width: 40em;
+    margin: 0 auto;
+}
 .card {
     background:#FFF;
     display: block;
@@ -30,7 +35,7 @@
     overflow-y: scroll;
 }
 .card-content {
-    height: 42em;
+    height: 85vh;
 }
 .card-header {
     width:100%;
@@ -43,16 +48,8 @@
     -webkit-transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.card-header-most-popular {
-    background-color:#85144b;
-    color:#FFFFFF;
-}
-.card-header-new-projects {
-    background-color:#2196F3;
-    color:#FFFFFF;
-}
-.card-header-trending-now {
-    background-color:#E65100;
+.card-header-tags {
+    background-color:#148547;
     color:#FFFFFF;
 }
 .card-heading {
@@ -65,6 +62,11 @@
     color:#fff;
     text-align: center;
     padding: 0.6em 0;
+}
+.card-heading span {
+    margin-left: 1em;
+    font-weight: 800;
+    color: rgb(216, 146, 42);
 }
 .card {
     height: 100%;
@@ -106,20 +108,13 @@
     text-decoration: none;
 }
 .project-tags {
-    margin-bottom: 0;
-    padding: 0.5em;
-    font-size: 0.8em;
+    margin: auto 0;
+    padding: 0.2em 1em;
+    font-size: 0.7em;
+    letter-spacing: 0.5px;
     font-weight: 600;
 }
-.project-tags a {
-    color: rgb(209, 13, 209);
-    text-decoration: none;
-    transition: all 500ms ease;
-    font-weight: 400;
-}
-.project-tags a:hover {
-    color: rgb(98, 98, 240);
-}
+
 
 /* POPOVER CONTAINER */
 .popover-container {
@@ -150,4 +145,54 @@
     grid-column: 2 / span 1;
     text-align: right;
     margin: 0.7em 0;
+}
+
+
+/* TAG SEARCH */
+#profile-filter-box {
+    position: absolute;
+    border: 1px solid black;
+    background-color: rgb(247, 247, 247);
+    border-radius: 0.75em;
+    overflow: scroll;
+    transform: scale(1.2, 1.2);
+    top: 7em;
+    left: 7em;
+    width: 15em;
+    max-height: 25em;
+}
+.filter-box-title {
+    font-size: 1em;
+    text-align: center;
+    margin-top: 0.1em;
+    margin-bottom: 0;
+    padding: 0;
+}
+.filter-box-title span {
+    font-weight: 600;
+    color: black;
+}
+.filter-main-ul {
+    list-style: none;
+    padding: 0.3em;
+}
+.main-li-label {
+    font-size: 0.9em;
+}
+.secondary-li-label {
+    font-size: 0.75em;
+}
+.filter-main-ul li label {
+    margin-bottom: 0;
+}
+.filter-btn-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+.search-btn {
+    width: 25%;
+    height: 2.5em;
+    font-size: 0.7em;
+    padding: 0;
 }

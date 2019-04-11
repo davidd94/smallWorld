@@ -28,6 +28,20 @@
     position: absolute;
     transition: all 1800ms ease;
 }
+.toggle-wrapper {
+    position: absolute;
+    margin: 0;
+    top: 2em;
+    left: 13em;
+}
+.item-back-btn2 {
+    width: 4em;
+    height: 2.25em;
+    position: absolute;
+    top: 8em;
+    left: 13em;
+    display: none;
+}
 
 .item-list {
     height: 92%;

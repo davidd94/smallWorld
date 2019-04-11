@@ -3,6 +3,8 @@
 {% block css %}
 {{ super () }}
 <link rel="stylesheet" href="{{ url_for('static', filename='edit_itemlist.css') }}">
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 {% endblock css %}
 
 {% block bodycontent %}
@@ -17,7 +19,10 @@
             <strong class="message-fail-msg"></strong>
         </div>
     </div>
-
+    <div class="toggle-wrapper">
+        <input id="chkToggle" type="checkbox" class="toggle-itemlist" data-toggle="toggle">
+    </div>
+    <a class="item-back-btn2" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}"><button type="button" class="btn btn-info">Back</button></a>
     <div class="item-box">
         <ol class="item-list">
             {% if existingitems %}
@@ -258,6 +263,69 @@ $(function () {
         };
     });
     
+});
+
+/* ENABLE-DISABLE TOGGLE */
+$(document).ready(function() {
+        // LOADS THE USER'S TOGGLE SETTING
+        {% if project.itemlist_enabled == True %}
+            $('.toggle').removeClass('btn btn-light off');
+            $('.toggle').addClass('toggle btn btn-primary');
+            $('#chkToggle')[0].checked = true;
+            $('.item-box').css('display', 'block');
+        {% else %}
+            $('.item-box').css('display', 'none');
+            $('#chkToggle')[0].checked = false;
+            $('.item-back-btn2').css('display','block');
+        {% endif %}
+
+        // UPDATES SERVER WITH TOGGLE SETTING
+        $('.toggle-wrapper').on('click', () => {
+            var toggleValue = $('#chkToggle')[0].checked;
+            
+            if (toggleValue == true) {
+                var csrf_token = "{{ csrf_token() }}";
+                // Inject imported CSRF token into our AJAX request.
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                        }
+                    }
+                });
+                $.ajax({
+                    url: "{{ url_for('project.edit_itemslist_toggle', title=project.title) }}",
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify('false'),
+                    success: function(response) {
+                        $('.item-box').css('display', 'none');
+                        $('.item-back-btn2').css('display','block');
+                    }
+                });
+            } else if (toggleValue == false) {
+                var csrf_token = "{{ csrf_token() }}";
+                // Inject imported CSRF token into our AJAX request.
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                        }
+                    }
+                });
+                $.ajax({
+                    url: "{{ url_for('project.edit_itemslist_toggle', title=project.title) }}",
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify('true'),
+                    success: function(response) {
+                        $('.item-box').css('display', 'block');
+                        $('.item-back-btn2').css('display','none');
+                    }
+                });
+            }
+        });
+        
 });
 
 </script>

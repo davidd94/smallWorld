@@ -14,6 +14,13 @@
     overflow-y: scroll;
     overflow-x: hidden;
 }
+.toggle-wrapper {
+    position: absolute;
+    margin: 0;
+    top: 9em;
+    left: 16em;
+    z-index: 500;
+}
 
 /* ADD BUTTON WITH DROPDOWN FEATURES */
 .tutorial-btn-wrapper {
@@ -27,7 +34,6 @@
     height: auto;
     cursor: pointer;
     margin: 0 0 0 6.5em;
-    transition: all 500ms ease;
 }
 .tutorial-main-add-btn:hover {
     color: #007cba;

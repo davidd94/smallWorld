@@ -143,8 +143,8 @@
 .create-terrarium-close {
     color: rgb(173, 0, 0);
     position: absolute;
-    top: 1em;
-    right: 1em;
+    top: 0.5em;
+    right: 13em;
     transition: all 500ms ease;
     cursor: pointer;
     font-size: 1.2em;

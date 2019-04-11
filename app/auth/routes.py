@@ -20,7 +20,10 @@ def homepage():
         public_projects = []
         for eachuser in followed_users:
             # FILTERING EACH USER'S PROJECT PRIVACY SETTINGS
-            projects = eachuser.all_projects.filter(Projects.private != 1).all()
+            projects = eachuser.all_projects \
+                                .filter(Projects.private != 1) \
+                                .order_by(Projects.last_edit.desc()) \
+                                .all()
             for project in projects:
                 public_projects.append(project)
         return render_template('homepage.html', public_projects=public_projects)

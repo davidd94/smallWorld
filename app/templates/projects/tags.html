@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='tags.css') }}">
+{% endblock css %}
+
+{% block bodycontent %}
+<div class="tags-main-container">
+    <form id="profile-filter-box" action="{{ url_for('project.tagsearch') }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="filter-box-title">
+            <span>Search Tags</span>
+        </div>
+        <ul class="filter-main-ul">
+            <li>
+                <input type="checkbox" class="checked-aquariums" name="tags" id="short" value="aquariums">
+                <label class="main-li-label" for="short">Aquariums</label>
+                <ul style="list-style: none;">
+                    <li>
+                        <input type="checkbox" class="checked-saltwater" name="tags" id="short-1" value="saltwater">
+                        <label class="secondary-li-label" for="short-1">Saltwater</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-freshwater" name="tags" id="short-2" value="freshwater">
+                        <label class="secondary-li-label" for="short-2">Freshwater</label>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <input type="checkbox" class="checked-terrariums" name="tags" id="short" value="terrariums">
+                <label class="main-li-label" for="short">Terrariums</label>
+                <ul style="list-style: none;">
+                    <li>
+                        <input type="checkbox" class="checked-enclosedtropical" name="tags" id="short-1" value="enclosedtropical">
+                        <label class="secondary-li-label" for="short-1">Enclosed Tropical</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-opentropical" name="tags" id="short-2" value="opentropical">
+                        <label class="secondary-li-label" for="short-2">Open Tropical</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-carnivorous" name="tags" id="short-2" value="carnivorous">
+                        <label class="secondary-li-label" for="short-2">Carnivorous</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-desert" name="tags" id="short-2" value="desert">
+                        <label class="secondary-li-label" for="short-2">Desert</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-reptiles" name="tags" id="short-2" value="reptiles">
+                        <label class="secondary-li-label" for="short-2">Reptiles/creatures</label>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <input type="checkbox" class="checked-vivariumpaludarium" name="tags" id="short" value="vivariumpaludarium">
+                <label class="main-li-label" for="short">Vivarium/Paludarium</label>
+                <ul style="list-style: none;">
+                    <li>
+                        <input type="checkbox" class="checked-waterreptiles" name="tags" id="short-1" value="waterreptiles">
+                        <label class="secondary-li-label" for="short-1">Water reptiles/creatures</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-plantsonly" name="tags" id="short-2" value="plantsonly">
+                        <label class="secondary-li-label" for="short-2">Plants only</label>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <input type="checkbox" name="none" id="short">
+                <label class="main-li-label" for="short">Cost</label>
+                <ul style="list-style: none;">
+                    <li>
+                        <input type="checkbox" class="checked-1" name="cost" id="short-1" value="$">
+                        <label class="secondary-li-label" for="short-1">$</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-2" name="cost" id="short-2" value="$$">
+                        <label class="secondary-li-label" for="short-2">$$</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-3" name="cost" id="short-2" value="$$$">
+                        <label class="secondary-li-label" for="short-2">$$$</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-4" name="cost" id="short-2" value="$$$$">
+                        <label class="secondary-li-label" for="short-2">$$$$</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-5" name="cost" id="short-2" value="$$$$$">
+                        <label class="secondary-li-label" for="short-2">$$$$$</label>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <input type="checkbox" name="none" id="short">
+                <label class="main-li-label" for="short">Difficulty</label>
+                <ul style="list-style: none;">
+                    <li>
+                        <input type="checkbox" class="checked-easy" name="difficulty" id="short-1" value="easy">
+                        <label class="secondary-li-label" for="short-1">Easy</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-medium" name="difficulty" id="short-2" value="medium">
+                        <label class="secondary-li-label" for="short-2">Medium</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-hard" name="difficulty" id="short-2" value="hard">
+                        <label class="secondary-li-label" for="short-2">Hard</label>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="filter-btn-container">
+            <button type="submit" class="btn btn-primary search-btn">Search</button>
+        </div>
+    </form>
+
+    <div class="row tag-row">
+        <div class="card tag-card">
+            <div class="card-content">
+                <div class="card-header-tags">
+                    <h1 class="card-heading">Tag Search: <span>{% if search %}{{ search }}{% endif %}</span></h1>
+                </div>
+                <div class="card-body">
+                    <div class="card-p">
+                        {% if projects %}
+                        <ul class="card-ul">
+                            {% for project in projects %}
+                            <li>
+                                <p class="project-title"><a class="project-title-link project-title-link-{{ project.id }}" href="{{ url_for('project.project', username=project.username, title=project.title) }}" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container popover-container-{{ project.id }}'><img class='popover-avatar' src='{{ project.author.avatar(40) }}'><a class='popover-userlink' href='{{ url_for('main.profile', username=project.username) }}' target='blank'>{{ project.username }}</a><p class='popover-description'>{{ project.description }}</p></div>">{{ project.title }}</a></p>
+                                <span class="project-likes">{{ project.likes }} Likes</span>
+                                <hr>
+                                <p class="project-tags">Tags:
+                                    {% if project.aquariums == True %} Aquariums,{% endif %}
+                                    {% if project.saltwater == True %} Saltwater,{% endif %}
+                                    {% if project.freshwater == True %} Freshwater,{% endif %}
+                                    {% if project.terrariums == True %} Terrariums,{% endif %}
+                                    {% if project.enclosedtropical == True %} Enclosed Tropical,{% endif %}
+                                    {% if project.opentropical == True %} Open Tropical,{% endif %}
+                                    {% if project.carnivorous == True %} Carnivorous,{% endif %}
+                                    {% if project.desert == True %} Desert,{% endif %}
+                                    {% if project.reptiles == True %} Reptiles,{% endif %}
+                                    {% if project.vivariumpaludarium == True %} Vivarium/Paludarium,{% endif %}
+                                    {% if project.waterreptiles == True %} Water Reptiles,{% endif %}
+                                    {% if project.plantsonly == True %} Plants only,{% endif %}
+                                    {% if project.difficulty < 4 %} Easy,{% elif project.difficulty > 7 %} Hard,{% else %} Medium,{% endif %}
+                                    {% if project.cost < 100 %} $,{% elif project.cost > 100 and project.cost < 300 %} $$,{% elif project.cost > 300 and project.cost < 600 %} $$$,{% elif project.cost > 600 and project.cost < 1000 %} $$$$,{% elif project.cost > 1000 %} $$$$$,{% endif %}
+                                </p>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock bodycontent %}
+
+{% block scripts %}
+{{ super () }}
+<script>
+/* POPOVER EFFECTS */
+$(function() {
+    // SETTING CLEAR TIMEOUT VARIABLE GLOBALLY
+    var popoverShow;
+    $("[data-toggle=popover]").each(function(i, obj) {
+        $(this)
+            .popover({
+                html: true,
+                container: 'body',
+                viewport: {selector: '.tags-main-container'},
+                selector: '[data-popover]',
+                trigger: 'hover',
+                placement: 'top',
+            })
+            .on("mouseenter", function() {
+                var _this = this;
+                // SETTING 'SHOW' ON POPOVER AS VARIABLE AND TRIGGER
+                popoverShow = setTimeout(function() {
+                    $(_this).popover("show");
+                }, 600);
+                $(".popover").on("mouseleave", function() {
+                    $(_this).popover("hide");
+                });
+            })
+            .on("mouseleave", function() {
+                var _this = this;
+                // CLEARS ANY EXISTING POPOVER 'SHOW' TIMEOUT TO PREVENT UNWANTED POPOVER DISPLAYS
+                clearTimeout(popoverShow);
+                setTimeout(function() {
+                    if (!$(".popover:hover").length) {
+                    $(_this).popover("hide");
+                    }
+                }, 400);
+            });
+        });
+});
+
+/* UNIVERSALLY CLOSES ANY STUCK POPOVERS */
+$(function() {
+    $('.card-body, .tags-main-container').on('mouseenter', () => {
+        $('.project-title-link').popover('hide');
+    });
+});
+
+</script>
+
+<script>
+/* FILTER CHECKBOXES */
+$(function () {
+    $('input[type="checkbox"]').change(function(e) {
+        var checked = $(this).prop("checked"),
+            container = $(this).parent(),
+            siblings = container.siblings();
+
+        container.find('input[type="checkbox"]').prop({
+            indeterminate: false,
+            checked: checked
+        });
+
+        function checkSiblings(el) {
+
+            var parent = el.parent().parent(),
+                all = true;
+
+            el.siblings().each(function() {
+            return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
+            });
+
+            if (all && checked) {
+
+            parent.children('input[type="checkbox"]').prop({
+                indeterminate: false,
+                checked: checked
+            });
+
+            checkSiblings(parent);
+
+            } else if (all && !checked) {
+
+            parent.children('input[type="checkbox"]').prop("checked", checked);
+            parent.children('input[type="checkbox"]').prop("indeterminate", (parent.find('input[type="checkbox"]:checked').length > 0));
+            checkSiblings(parent);
+
+            } else {
+
+            el.parents("li").children('input[type="checkbox"]').prop({
+                indeterminate: true,
+                checked: checked // NEED TO CHANGE THIS TO 'checked' SO PARENT IS MARKED CHECKED IF ANY CHILDREN IS CHECKED
+            });
+
+            }
+
+        }
+
+        checkSiblings(container);
+    });
+
+});
+
+/* KEEPS EXISTING CHECK BOXES CHECKED AFTER RENDERING NEW PAGE */
+{% if checked %}
+$(function() {
+    var existingChecks = {{ checked|tojson }};
+
+    for (i=0; i < existingChecks.length; i++) {
+        var checkeditem = existingChecks[i];
+        
+        if (checkeditem == '$') {
+            $('.checked-1').attr('checked', true);
+        } else if (checkeditem == '$$') {
+            $('.checked-2').attr('checked', true);
+        } else if (checkeditem == '$$$') {
+            $('.checked-3').attr('checked', true);
+        } else if (checkeditem == '$$$$') {
+            $('.checked-4').attr('checked', true);
+        } else if (checkeditem == '$$$$$') {
+            $('.checked-5').attr('checked', true);
+        } else {
+            $('.checked-' + checkeditem).attr('checked', true);
+        }
+        
+    }
+});
+{% endif %}
+</script>
+
+{% endblock scripts %}

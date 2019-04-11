@@ -8,82 +8,233 @@
 {% block bodycontent %}
 <form class="project-container" action="{{ url_for('project.new_project') }}" method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-    <legend>Create New Project</legend><br>
+    <legend class="new-project-header">Create New Project</legend><br>
+    
+    <!----- ERROR ALERT MSGS ----->
+    {% if form.title.errors %}
     {% for error in form.title.errors %}
-    {% if error %}
-    <div class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
+    <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         <strong>{{ error }}</strong>
     </div>
-    {% endif %}
     {% endfor %}
-    <div class="form-group row">
+    {% endif %}
 
-        <label for="new-project-title" class="col-sm-2 col-form-label">{{ form.title.label }}</label>
-        <div class="col-sm-10 project-title">
-            {% if form.title.errors %}
-                {{ form.title(style="border: 1px solid red;", class="form-control", id="new-project-title", placeholder="Title of project", type="text", maxlength="40") }}
-            {% else %}
-                {{ form.title(class="form-control", id="new-project-title", placeholder="Title of project", type="text", maxlength="40") }}
-            {% endif %}
-        </div>
+    {% if form.cost.errors %}
+    {% for error in form.cost.errors %}
+    <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>{{ error }}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
 
-        <label id="new-project-description-label" class="col-sm-2 col-form-label" for="new-project-descrip">{{ form.description.label }}</label>
-        <div class="col-sm-10 project-description">
-            {{ form.description(class="form-control", id="new-project-descrip", rows="3", maxlength="300") }}
-        </div>
+    {% if form.difficulty.errors %}
+    {% for error in form.difficulty.errors %}
+    <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>{{ error }}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
 
-        <label id="new-project-difficulty-label" class="" for="new-project-difficulty">{{ form.difficulty.label }}</label>
-        <div class="project-difficulty">
-            <select class="form-control" id="new-project-difficulty" value="{{ form.difficulty }}">
-                <option>-</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-            </select>
-        </div>
-        
-        <label id="new-project-cost-label" class="">{{ form.cost.label }}</label>
+    {% if form.duration.errors %}
+    {% for error in form.duration.errors %}
+    <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>{{ error }}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <!----- NEW PROJECT FORM ----->
+    {{ form.title.label(class="title-label") }}
+    <div class="project-title">
+        {% if form.title.errors %}
+            {{ form.title(style="border: 1px solid red;", class="form-control", id="new-project-title", placeholder="Title of project", type="text", maxlength="40") }}
+        {% else %}
+            {{ form.title(class="form-control", id="new-project-title", placeholder="Title of project", type="text", maxlength="40") }}
+        {% endif %}
+    </div>
+    
+    {{ form.description.label(class="description-label") }}
+    <div class="project-description">
+        {{ form.description(class="form-control description-textarea", id="new-project-descrip", rows="3", maxlength="300") }}
+    </div>
+
+    {{ form.difficulty.label(class="difficulty-label") }}
+    <div class="project-difficulty">
+        <select class="form-control" id="new-project-difficulty" value="{{ form.difficulty }}">
+            <option>-</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+        </select>
+    </div>
+    
+    {{ form.cost.label(class="cost-label") }}
+    <div class="project-cost">
         <span id="dollar-sign" class="input-group-text">$</span>
         {% if form.cost.errors %}
-        {{ form.cost(id="cost-amt", class="form-control", placeholder="Amount", type="number", autocomplete="off", style="border: 1px solid red;") }}
+            {{ form.cost(id="cost-amt", class="form-control", placeholder="Amount", type="number", autocomplete="off", style="border: 1px solid red;") }}
         {% else %}
-        {{ form.cost(id="cost-amt", class="form-control", placeholder="Amount", type="number", autocomplete="off") }}
+            {{ form.cost(id="cost-amt", class="form-control", placeholder="Amount", type="number", autocomplete="off") }}
         {% endif %}
         <span id="cost-decimal" class="input-group-text">.00</span>
+    </div>
 
-        <label id="new-project-duration-label">{{ form.duration.label }}</label>
-        {% if form.duration.errors %}
+    {{ form.duration.label(class="duration-label") }}
+    {% if form.duration.errors %}
         {{ form.duration(id="new-project-duration", class="form-control", placeholder="Total Hours", type="number", autocomplete="off", style="border: 1px solid red;") }}
-        {% else %}
+    {% else %}
         {{ form.duration(id="new-project-duration", class="form-control", placeholder="Total Hours", type="number", autocomplete="off") }}
-        {% endif %}
+    {% endif %}
 
-        <label id="new-project-link-label" for="new-project-video" class="col-sm-2 col-form-label">{{ form.video.label }}</label>
-        <div class="col-sm-10 project-video">
-            {{ form.video(class="form-control", id="new-project-video", placeholder="YouTube recommended", type="text", maxlength="200") }}
-            <div class="file-upload-box">
-                <label for="InputFile">File input</label>
-                <input type='file' name='file' class="form-control-file" aria-describedby="fileHelp">
-                <small id="fileHelp" class="form-text text-muted">Upload a cover photo for your new project (.jpg, .jpeg or .png). Recommended picture size of 1400 x 524.</small>
-            </div>
-        </div>
+    {{ form.video.label(class="video-label") }}
+    {{ form.video(class="form-control", class="project-video", placeholder="YouTube recommended", type="text", maxlength="200", autocomplete="off") }}
 
-        <div class="new-project-privacy custom-control custom-checkbox">
-            {{ form.privacy(type="checkbox", class="custom-control-input", id="customCheck1") }}
-            <label class="custom-control-label" for="customCheck1">{{ form.privacy.label }}?</label>
-        </div>
-
-        <div class="new-project-submit">
-            {{ form.submit(class="btn btn-primary") }}
+    <p class="file-input-label" for="InputFile">File input</p>
+    <div class="file-upload-box">
+        <input type='file' name='file' class="form-control-file" aria-describedby="fileHelp">
+        <small id="fileHelp" class="form-text text-muted">Upload a cover photo for your new project (.jpg, .jpeg or .png). Recommended picture size of 1400 x 524.</small>
+    </div>
+    
+    <!----- PROJECT TAGS DROPDOWN ----->
+    <div class="tag-container">
+        <div class="button-group">
+            <button type="button" class="btn btn-default dropdown-toggle tag-btn" data-toggle="dropdown"><a class="tag-text">Tags<span class="caret"></span></a></button>
+            <ul class="dropdown-menu tag-dropdown">
+                <li>
+                    <input type="checkbox" name="tags" id="short" value="aquariums">
+                    <label class="main-li-label" for="short">Aquariums</label>
+                    <ul style="list-style: none;">
+                        <li>
+                            <input type="checkbox" name="tags" id="short-1" value="saltwater">
+                            <label class="secondary-li-label" for="short-1">Saltwater</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="tags" id="short-2" value="freshwater">
+                            <label class="secondary-li-label" for="short-2">Freshwater</label>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <input type="checkbox" name="tags" id="short" value="terrariums">
+                    <label class="main-li-label" for="short">Terrariums</label>
+                    <ul style="list-style: none;">
+                        <li>
+                            <input type="checkbox" name="tags" id="short-1" value="enclosedtropical">
+                            <label class="secondary-li-label" for="short-1">Enclosed Tropical</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="tags" id="short-2" value="opentropical">
+                            <label class="secondary-li-label" for="short-2">Open Tropical</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="tags" id="short-2" value="carnivorous">
+                            <label class="secondary-li-label" for="short-2">Carnivorous</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="tags" id="short-2" value="desert">
+                            <label class="secondary-li-label" for="short-2">Desert</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="tags" id="short-2" value="reptiles">
+                            <label class="secondary-li-label" for="short-2">Reptiles/creatures</label>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <input type="checkbox" name="tags" id="short" value="vivariumspaludarium">
+                    <label class="main-li-label" for="short">Vivariums/Paludarium</label>
+                    <ul style="list-style: none;">
+                        <li>
+                            <input type="checkbox" name="tags" id="short-1" value="waterreptiles">
+                            <label class="secondary-li-label" for="short-1">Water reptiles/creatures</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="tags" id="short-2" value="plantsonly">
+                            <label class="secondary-li-label" for="short-2">Plants only</label>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
+
+    {{ form.privacy.label(class="privacy-label") }}
+    {{ form.privacy(type="checkbox", class="privacy-checkbox") }}
+
+    {{ form.submit(class="btn btn-primary new-project-submit") }}
 </form>
+-->
 {% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+/* PREVENTS CLOSING DROPDOWN WHEN CLICKING INSIDE BOX */
+$(document).on('click', '.tag-dropdown', function (e) {
+  e.stopPropagation();
+});
+
+/* CHECKBOX AND SUBCHECKBOX EFFECTS */
+$(function() {
+    $('input[type="checkbox"]').change(function(e) {
+
+  var checked = $(this).prop("checked"),
+      container = $(this).parent(),
+      siblings = container.siblings();
+
+  container.find('input[type="checkbox"]').prop({
+    indeterminate: false,
+    checked: checked
+  });
+
+  function checkSiblings(el) {
+    var parent = el.parent().parent(),
+        all = true;
+
+    el.siblings().each(function() {
+        return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
+        });
+
+        if (all && checked) {
+
+        parent.children('input[type="checkbox"]').prop({
+            indeterminate: false,
+            checked: checked
+        });
+
+        checkSiblings(parent);
+
+        } else if (all && !checked) {
+
+        parent.children('input[type="checkbox"]').prop("checked", checked);
+        parent.children('input[type="checkbox"]').prop("indeterminate", (parent.find('input[type="checkbox"]:checked').length > 0));
+        checkSiblings(parent);
+
+        } else {
+
+        el.parents("li").children('input[type="checkbox"]').prop({
+            indeterminate: true,
+            checked: checked
+        });
+
+        }
+
+    }
+
+    checkSiblings(container);
+    });
+});
+
+</script>
+{% endblock scripts %}

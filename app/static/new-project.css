@@ -1,86 +1,165 @@
 .project-container {
-    width: 70%;
-    height: 100%;
-    justify-self: center;
+    width: 80%;
+    height: 85vh;
+    display: grid;
+    grid-template: 4em 6em 5em 10em 4em repeat(4, 1fr) / 12em 10em repeat(4, 1fr);
     margin: 3em auto 0 auto;
     text-align: center;
+    overflow: scroll;
+    align-items: center;
 }
 
-.form-group {
-    justify-content: left;
+.new-project-header {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 5;
 }
 
-#new-project-title {
-    width: 50%;
-}
-
-#new-project-description-label {
+#new-project-alert {
+    grid-row: 2 / span 1;
+    grid-column: 2 / span 3;
+    width: 20em !important;
+    height: auto;
     align-self: center;
+    justify-self: center;
 }
-#new-project-descrip {
-    width: 75%;
-    margin-top: 0.5em;
+
+.title-label {
+    grid-row: 3 / span 1;
+    grid-column: 1 / span 1;
+    margin: 0;
+    justify-self: center;
+}
+.project-title {
+    grid-row: 3 / span 1;
+    grid-column: 2 / span 3;
+    justify-self: left;
+    width: 100%;
+}
+
+.tag-container {
+    grid-row: 3 / span 1;
+    grid-column: 5 / span 1;
+    margin: 0;
+}
+.tag-dropdown {
+    overflow: scroll;
+    height: 20em;
+}
+.tag-dropdown li {
+    margin-left: 0.5em;
+    padding: 0.3em;
+}
+.tag-btn {
+    background-color: #78C2AD;
+    border-color: #78C2AD;
+}
+
+.description-label {
+    grid-row: 4 / span 1;
+    grid-column: 1 / span 1;
+    margin: 0;
+}
+.project-description {
+    grid-row: 4 / span 1;
+    grid-column: 2 / span 3;
+    height: 100%;
+    width: auto;
+}
+.description-textarea {
+    height: 100% !important;
     resize: none;
 }
 
-#new-project-difficulty-label {
-    align-self: center;
-    margin: 2em 1em 2em 1em;
+.difficulty-label {
+    grid-row: 5 / span 1;
+    grid-column: 1 / span 1;
+    margin: 0;
 }
-#new-project-difficulty {
-    width: 100%;
-    align-self: center;
-    margin: 2em 1em 2em 1em;
+.project-difficulty {
+    grid-row: 5 / span 1;
+    grid-column: 2 / span 1;
+    width: 70%;
 }
 
-#new-project-cost-label {
-    align-self: center;
-    margin: 2em 1em 2em 3em;
+
+.cost-label {
+    grid-row: 5 / span 1;
+    grid-column: 3 / span 1;
+    margin: 0;
+}
+.project-cost {
+    grid-row: 5 / span 1;
+    grid-column: 4 / span 1;
+    display: grid;
+    grid-template: 1fr / 2em 1fr 3em;
 }
 #dollar-sign {
-    width: 4%;
-    align-self: center;
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    width: 100%;
+    margin: 0;
 }
 #cost-amt {
-    width: 15%;
-    align-self: center;
-    margin: 2em 0 2em 0;
+    grid-row: 1 / span 1;
+    grid-column: 2 / span 1;
+    width: 100%;
 }
 #cost-decimal {
-    align-self:center;
-    width: 5%;
+    grid-row: 1 / span 1;
+    grid-column: 3 / span 1;
+    width: 100%;
 }
 
-#new-project-duration-label {
-    width: 10%;
-    align-self: center;
-    margin: 2em 1em 2em 1em;
+.duration-label {
+    grid-row: 5 / span 1;
+    grid-column: 5 / span 1;
+    margin: 0;
 }
 #new-project-duration {
-    width: 12%;
-    align-self: center;
+    grid-row: 5 / span 1;
+    grid-column: 6 / span 1;
+    width: 70%;
+    justify-self: left;
 }
 
-#new-project-link-label {
-    margin: 2em 0;
+.video-label {
+    grid-row: 6 / span 1;
+    grid-column: 1 / span 1;
+    margin: 0;
 }
-#new-project-video {
-    width: 50%;
-    margin: 2em 0;
-}
-
-.new-project-privacy {
-    width: 100%;
-    text-align: left;
-    padding-left: 15em;
-    padding-top: 2em;
+.project-video {
+    grid-row: 6 / span 1;
+    grid-column: 2 / span 3;
+    border-radius: 0.5em;
+    text-align: center;
+    outline: none;
 }
 
+.file-input-label {
+    grid-row: 7 / span 1;
+    grid-column: 1 / span 1;
+    margin: 0;
+}
 .file-upload-box {
-    width: 30%;
+    grid-row: 7 / span 1;
+    grid-column: 2 / span 4;
+    width: 40%;
     text-align: left;
+}
+
+.privacy-label {
+    grid-row: 8 / span 1;
+    grid-column: 1 / span 1;
+    margin: 0;
+}
+.privacy-checkbox {
+    grid-row: 8 / span 1;
+    grid-column: 2 / span 1;
 }
 
 .new-project-submit {
-    margin: 3em auto 1em auto;
+    grid-row: 9 / span 1;
+    grid-column: 1 / span 5;
+    width: 15%;
+    justify-self: center;
 }
