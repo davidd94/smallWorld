@@ -1,5 +1,345 @@
 {% extends "base.html" %}
 
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/foundation/5.0.2/css/foundation.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='privacy.css') }}">
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+{% endblock css %}
+
 {% block bodycontent %}
-<p>Will add profile privacy settings here....</p>
+<div class="privacy-container">
+
+<!----- HULU THEMED BOX ----->
+<div class="container">
+  <div id="logo">
+      <h1 class="logo"></h1>
+  </div>
+  <div class="leftbox">
+    <nav class="settings-nav">
+      <a id="profile" class="active"><i class="fa fa-user"></i></a>
+      <a id="payment"><i class="fa fa-credit-card"></i></a>
+      <a id="subscription"><i class="fa fa-tv"></i></a>
+      <a id="privacy"><i class="fa fa-tasks"></i></a>
+      <a id="settings"><i class="fa fa-cog"></i></a>
+    </nav>
+  </div>
+  <div class="rightbox">
+    <div class="profile">
+      <h1>Personal Info</h1>
+      <h6 class="personal-info-title username">User Name</h6>
+        <p class="personal-info username-value">davie1</p>
+      <h6 class="personal-info-title firstname">First Name</h6>
+        <p class="personal-info firstname-value">David</p>
+      <h6 class="personal-info-title lastname">Last Name</h6>
+        <p class="personal-info lastname-value">Duong</p>
+      <h6 class="personal-info-title email">Email</h6>
+        <p class="personal-info email-value">example@example.com <a href="{{ url_for('main.edit_profile') }}" style="cursor: pointer;"><button class="btn privacy-btn email-btn">update</button></a></p>
+      <h6 class="personal-info-title password">Password </h6>
+        <p class="personal-info password-value">••••••• <a href="{{ url_for('main.edit_profile') }}" style="cursor: pointer;"><button class="btn privacy-btn pw-btn">Change</button></a></p>
+    </div>
+    
+    <div class="payment-wrapper noshow">
+        <img class="payment-construction" src="{{ url_for('static', filename='comingsoon2.jpg') }}">
+    <div class="payment">
+      <h1>Payment Info</h1>
+      <h6 class="payment-info-title">Payment Method</h6>
+        <p>Mastercard •••• •••• •••• 0000 <button class="btn privacy-btn">update</button></p>
+      <h6 class="payment-info-title">Billing Address</h6>
+        <p>1234 Example Ave | Seattle, WA <button class="btn privacy-btn">change</button></p>
+      <h6 class="payment-info-title">Zipcode</h6>
+        <p>999000</p>
+      <h6 class="payment-info-title">Billing History</h6>
+        <p>2018<button class="btn privacy-btn">view</button></p>
+      <p class="payment-info-title">Redeem Gift Subscription </p>
+      <p><input type="text" class="gift-card-input" placeholder="Enter Gift Code"></input> <button class="btn privacy-btn">Redeem</button></p>
+    </div>
+    </div>
+
+    <div class="subscription-wrapper noshow">
+        <img class="subscription-construction" src="{{ url_for('static', filename='comingsoon2.jpg') }}">
+    <div class="subscription">
+      <h1>Your Subscription</h1>
+      <h6 class="subscription-info-title">Payment Date</h6>
+        <p>05-15-2018 <button class="btn privacy-btn">pay now</button></p>
+      <h6 class="subscription-info-title">Your Next Charge</h6>
+        <p>$8.48<span> includes tax</span></p>
+      <h6 class="subscription-info-title">Hulu Base Plan</h6>
+        <p>Limited Commercials <button class="btn privacy-btn">change plan</button></p>
+      <h6 class="subscription-info-title">Add-ons</h6>
+        <p>None <button class="btn privacy-btn">manage</button></p>
+      <h6 class="subscription-info-title">Monthly Recurring Total </h6>
+        <p>$7.99/month</p>
+    </div>
+    </div>
+
+    <div class="privacy noshow">
+      <h1>Privacy Settings</h1>
+      <h6 class="privacy-info-title">Manage Email Notifications<button class="btn privacy-btn" data-toggle="modal" data-target="#modalNote">manage</button></h6>
+      <p></p>
+      <h6 class="privacy-info-title">Manage Privacy Settings<button class="btn privacy-btn">manage</button></h6>
+      <p></p>
+      <h6 class="privacy-info-title">View Terms of Use <button class="btn privacy-btn">view</button></h6>
+      <p></p>
+      <h6 class="privacy-info-title">Protect Your Account <button class="btn privacy-btn">protect</button></h6>
+      <p></p>
+    </div>
+ <div class="settings noshow">
+      <h1>Account Settings</h1>
+      <h6 class="settings-info-title">Hold Your Subscription<button class="btn privacy-btn">hold</button></h6>
+      <p></p>
+      <h6 class="settings-info-title">Cancel Your Subscription <button class="btn privacy-btn">cancel</button></h6>
+      <p></p>
+      <h6 class="settings-info-title">Account Status <button class="btn privacy-btn" data-toggle="modal" data-target="#modalDel">DEACTIVATE</button></h6>
+   <p></p>
+    </div>
+    
+  </div>
+</div>
+
+
+
+<!--  NOTIFICATION EMAIL POPUP MODAL  -->
+<div id="modalNote" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" style="text-align: center; width: 100%;">Notification Emails</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="emailnote-list">
+            <li><input type="checkbox" class="email-msg-note-btn" checked data-toggle="toggle" data-onstyle="success"><span>Send email for all private messages</span></li>
+            <li><input type="checkbox" class="email-comment-note-btn" checked data-toggle="toggle" data-onstyle="success"><span>Send email for all project comments</span></li>
+            <li><input type="checkbox" class="email-reply-note-btn" checked data-toggle="toggle" data-onstyle="success"><span>Send email for all project replies</span></li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <div class="emailnote-save-wrapper"><button type="button" class="btn btn-secondary acct-emailnote-btn" data-dismiss="modal">Save</button></div>
+        <button type="button" class="btn btn-primary acct-emailnoteclose-btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  DELETE ACCOUNT POPUP MODAL  -->
+<div id="modalDel" class="modal del-modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" style="text-align: center; width: 100%;">Account Deletion</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="text-align: center; margin: 0; width: 100%;">Please enter ( <strong style="color: rgb(255, 45, 45);">I understand the terms and wish to delete my account</strong> ) to confirm your account deletion.</p>
+        <br>
+        <p><strong style="color: darkred;">WARNING: </strong>Account deletion is PERMANENT!</p>
+        <div class="del-input-wrapper">
+            <input type="text" class="acct-delete-input" maxlength="150" placeholder="Insert your acknowledgement here">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="del-btn-wrapper"><button type="button" class="btn btn-secondary acct-del-btn" disabled>DELETE</button></div>
+        <button type="button" class="btn btn-primary acct-delclose-btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-----  BLOCKED USER BOX ----->
+<div id="bodywrap">
+<div class="row">
+<div class="columns">
+    <div class="scroll-window-wrapper">
+        <h2 class="privacy-blocked-title">Blocked Users</h2>
+        <div class="scroll-window">
+        <table class="table table-striped table-hover user-list fixed-header">
+            <thead>
+                <th class="blockedavatar-title"><div>Avatar</div></th>
+                <th class="blockeduser-title"><div>User Name</div></th>
+                <th><div></div></th>
+            </thead>
+            <tbody>
+                {% if blocked_users %}
+                {% for user in blocked_users %}
+                <tr class="userrow-{{ user.id }}">
+                    <td><img class="blockeduser-avatar" src="{{ user.avatar(50) }}"></td>
+                    <td class="blockeduser-name">{{ user.username }}</td>
+                    <td></td>
+                    <td class="text-right">
+                        <a href="{{ url_for('main.profile', username=user.username) }}" target="_blank"><button class="button tiny">View User</button></a>
+                        <button class="button alert tiny privacy-unblock" data-user="{{ user.username }}" data-id="{{ user.id }}">Unblock</button>	
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
 {% endblock bodycontent %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+
+<script>
+/* UNBLOCKS USER - AJAX USED FOR BETTER USER EXPERIENCE */
+$(function () {
+    $('.privacy-unblock').on('click', (event) => {
+        var username = event.currentTarget.dataset.user;
+        var userid = event.currentTarget.dataset.id;
+        var tablerow = $('.userrow-' + userid);
+
+        if (username) {
+            var csrf_token = "{{ csrf_token() }}"
+            // Inject imported CSRF token into our AJAX request.
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "/unblock/" + username,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify('json request'),
+                success: function(response) {
+                    console.log(response);
+                    tablerow.remove();
+                }
+            });
+        };
+    });
+});
+
+/* ACCOUNT DELETION JS */
+$(function () {
+    // VERIFIES IF USER ENTERS THE CORRECT ACKNOWLEDGMENT
+    $('.acct-delete-input').on('keyup', () => {
+        var deleteInput = $('.acct-delete-input')[0].value;
+        var terms = "I understand the terms and wish to delete my account";
+        if (deleteInput == terms) {
+            $('.acct-del-btn').removeAttr('disabled');
+        } else if (deleteInput != terms) {
+            $('.acct-del-btn').attr('disabled', 'disabled');
+        }
+    });
+
+    // ACCOUNT DELETION
+    $('.acct-del-btn').on('click', () => {
+        $.ajax({
+            url: '{{ url_for("main.delete_acct") }}',
+            type: 'GET',
+            success: function(response) {
+                window.location.replace('{{ url_for("auth.homepage") }}')
+            },
+        });
+    });
+
+    $('.acct-delclose-btn').on('click', () => {
+        // RESETS DELETE INPUT VALUE
+        $('.acct-delete-input')[0].value = '';
+        $('.acct-del-btn').attr('disabled', 'disabled');
+    });
+})
+
+/* EMAIL NOTIFICATION */
+$(document).ready(function () {
+    $(function() {
+        // LOADS THE USER'S EXISTING NOTIFICATION SETTINGS
+        if ("{{ current_user.msg_note }}" == 'True') {
+            $('.email-msg-note-btn').bootstrapToggle('on');
+        } else {
+            $('.email-msg-note-btn').bootstrapToggle('off');
+        }
+        if ("{{ current_user.comment_note }}" == 'True') {
+            $('.email-comment-note-btn').bootstrapToggle('on');
+        } else {
+            $('.email-comment-note-btn').bootstrapToggle('off');
+        }
+        if ("{{ current_user.reply_note }}" == 'True') {
+            $('.email-reply-note-btn').bootstrapToggle('on');
+        } else {
+            $('.email-reply-note-btn').bootstrapToggle('off');
+        }
+
+        $('.acct-emailnote-btn').on('click', () => {
+            var msg_note = $('.email-msg-note-btn').prop('checked');
+            var comment_note = $('.email-comment-note-btn').prop('checked');
+            var reply_note = $('.email-reply-note-btn').prop('checked');
+            var data = {'msg_note': msg_note,
+                        'comment_note': comment_note,
+                        'reply_note': reply_note}
+            
+            var csrf_token = "{{ csrf_token() }}";
+            // Inject imported CSRF token into our AJAX request.
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                    }
+                }
+            });
+            $.ajax({
+                url: "{{ url_for('main.email_notifications') }}",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function(response) {
+                    
+                }
+            });
+        });
+    });
+
+});
+
+/* HULU JS */
+$(function () {
+    /*active button class onclick*/
+    $('.settings-nav a').click(function(e) {
+        e.preventDefault();
+        $('.settings-nav a').removeClass('active');
+        $(this).addClass('active');
+        if(this.id === !'payment'){
+            $('.payment-wrapper').addClass('noshow');
+        }
+        else if(this.id === 'payment') {
+            $('.payment-wrapper').removeClass('noshow');
+            $('.rightbox').children().not('.payment-wrapper').addClass('noshow');
+        }
+        else if (this.id === 'profile') {
+            $('.profile').removeClass('noshow');
+            $('.rightbox').children().not('.profile').addClass('noshow');
+        }
+        else if(this.id === 'subscription') {
+            $('.subscription-wrapper').removeClass('noshow');
+            $('.rightbox').children().not('.subscription-wrapper').addClass('noshow');
+        }
+            else if(this.id === 'privacy') {
+            $('.privacy').removeClass('noshow');
+            $('.rightbox').children().not('.privacy').addClass('noshow');
+        }
+        else if(this.id === 'settings') {
+            $('.settings').removeClass('noshow');
+            $('.rightbox').children().not('.settings').addClass('noshow');
+        }
+    });
+});
+
+</script>
+
+{% endblock %}

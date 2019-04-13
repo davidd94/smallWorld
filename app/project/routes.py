@@ -5,6 +5,7 @@ from flask_moment import Moment
 from datetime import datetime
 from sqlalchemy import update
 from app import db, moment
+from app.email import send_notification_email
 from app.models import User, Projects, PhotoGallery, Itemlist, ProjectComments, CommentReplies, Notifications, FAQs, comment_likers, reply_likers, project_likers
 from app.project import bp
 from app.project.forms import ProjectForm, EditProjectForm, FAQForm
@@ -476,13 +477,14 @@ def delete_photos(title, img_name):
                 return jsonify('successfully deleted db image!')
     return jsonify('An error occurred...')
 
-@bp.route('/project/new_comment/<username>/<title>', methods=['POST'])
+@bp.route('/project/new_comment/<username>/<project_id>', methods=['POST'])
 @login_required
-def new_comment(username, title):
+def new_comment(username, project_id):
     user = User.query.filter_by(username=username).first_or_404()
-    project = Projects.query.filter_by(title=title).filter_by(user_id=user.id).first()
+    project = Projects.query.get(project_id)
     comment = request.json
     if project and comment:
+        # ADD NEW COMMENT TO PROJECT
         new_comment = ProjectComments(title=project.title,
                                     username=current_user.username,
                                     comment=comment,
@@ -497,6 +499,14 @@ def new_comment(username, title):
                                         data=comment,
                                         user=user)
             db.session.add(notification)
+            # SENDING EMAIL NOTIFICATION TO PROJECT CREATOR
+            if user.comment_note == True:
+                send_notification_email(sendinguser=current_user,
+                                        recip=user, 
+                                        note_type='comment',
+                                        title=project.title,
+                                        content=comment)
+        
         db.session.commit()
         return_data = {'author': project.author.username,
                         'avatar': current_user.avatar(60),
@@ -506,20 +516,18 @@ def new_comment(username, title):
         return jsonify(return_data)
     return jsonify('Comment did not save...')
 
-@bp.route('/project/new_reply/<username>/<title>/<comment_id>', methods=['POST'])
+@bp.route('/project/new_reply/<username>/<project_id>/<comment_id>', methods=['POST'])
 @login_required
-def new_reply(username, title, comment_id):
+def new_reply(username, project_id, comment_id):
     user = User.query.filter_by(username=username).first_or_404()
-    project = Projects.query \
-                        .filter_by(title=title) \
-                        .filter_by(user_id=user.id) \
-                        .first()
+    project = Projects.query.get(project_id)
     project_comment = project.project_comments \
                             .filter_by(id=comment_id) \
                             .first()
     reply = request.json
 
     if project and reply:
+        # ADD NEW REPLY TO PROJECT
         new_reply = CommentReplies(title=project.title,
                                     username=current_user.username,
                                     reply=reply,
@@ -535,6 +543,14 @@ def new_reply(username, title, comment_id):
                                         data=reply,
                                         user=user)
             db.session.add(notification)
+            # SENDING EMAIL NOTIFICATION TO PROJECT CREATOR
+            if user.reply_note == True:
+                send_notification_email(sendinguser=current_user,
+                                        recip=user, 
+                                        note_type='reply',
+                                        title=project.title,
+                                        content=reply)
+        
         db.session.commit()
         return_data = {'reply_id': new_reply.id,
                         'author': project.author.username,
@@ -754,6 +770,7 @@ def delete_project(title):
     if project:
         photo_gallery = project.photo_gallery.first()
         project_faqs = project.faqs.first()
+        project_itemlist = project.item_list.all()
         project_comments = project.project_comments.all()
         project_replies = project.comment_replies.all()
         project_note_comments = Notifications.query \
@@ -768,6 +785,9 @@ def delete_project(title):
         db.session.delete(project)
         db.session.delete(photo_gallery)
         db.session.delete(project_faqs)
+        if project_itemlist:
+                for eachitem in project_itemlist:
+                    db.session.delete(eachitem)
         if project_comments:
             for eachcomment in project_comments:
                 db.session.delete(eachcomment)
@@ -789,11 +809,6 @@ def delete_project(title):
         db.session.commit()
         return jsonify('Successfully deleted!')
     return jsonify('Was unable to delete')
-
-
-@bp.route('/project/privacy')
-def privacy():
-    return render_template('/projects/privacy.html')
 
 @bp.route('/project/tagsearch', methods=['GET', 'POST'])
 def tagsearch():
@@ -1053,6 +1068,7 @@ def tagsearch():
 
         return render_template('/projects/tags.html', projects=projects, search='Custom', checked=saved_tags)
     return render_template('/projects/tags.html')
+
 
 
 def allowed_file(filename):

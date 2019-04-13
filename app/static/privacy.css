@@ -1,0 +1,365 @@
+.privacy-container {
+    width: 100%;
+    height: 92vh;
+    display: grid;
+    grid-template: 1fr 1fr / 1fr 40em;
+    padding: 2em;
+}
+#bodywrap {
+    grid-row: 1 / span 2;
+    grid-column: 2 / span 1;
+    width: 100%;
+}
+.privacy-blocked-title {
+    text-align: center;
+}
+
+
+/* HULU THEMED BOX */
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,900|Montserrat|Roboto");
+
+.container {
+    grid-row: 1 / span 2;
+    grid-column: 1 / span 1;
+  background: #ffffff;
+  width: 45em;
+  height: 40em;
+  margin: 0 auto;
+  position: relative;
+  margin-top: 2%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+.container:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.logo {
+  float: right;
+  margin-right: 12px;
+  margin-top: 12px;
+  font-family: "Nunito Sans", sans-serif;
+  color: #3dbb3d;
+  font-weight: 900;
+  font-size: 1.5em;
+  letter-spacing: 1px;
+}
+
+.leftbox {
+  float: left;
+  top: -5%;
+  left: 5%;
+  position: absolute;
+  width: 15%;
+  height: 110%;
+  background: #7ed386;
+  box-shadow: 3px 3px 10px rgba(119, 119, 119, 0.5);
+}
+
+.leftbox .settings-nav a {
+  list-style: none;
+  padding: 35px;
+  color: #ffffff;
+  font-size: 1.1em;
+  display: block;
+  transition: all 0.3s ease-in-out;
+}
+.leftbox .settings-nav a:hover {
+  color: #3fb6a8;
+  transform: scale(1.3);
+  cursor: pointer;
+}
+.leftbox .settings-nav a:first-child {
+  margin-top: 7px;
+}
+
+.active {
+  color: #3fb6a8 !important;
+  transform: scale(1.3);
+}
+
+.rightbox {
+  float: right;
+  margin-right: 4em;
+  width: 60%;
+  height: 100%;
+}
+
+.profile,
+.privacy,
+.settings {
+  transition: opacity 1s ease-in;
+  position: absolute;
+  width: 70%;
+}
+.payment-wrapper,
+.subscription-wrapper {
+    transition: opacity 1s ease-in;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.payment,
+.subscription {
+    transition: opacity 1s ease-in;
+    position: absolute;
+    width: 70%;
+    pointer-events: none;
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -o-filter: blur(2px);
+    -ms-filter: blur(2px);
+    filter: blur(2px);
+}
+.payment-construction,
+.subscription-construction {
+    top: 4em;
+    left: 0em;
+    width: 25em;
+    height: auto;
+    opacity: 1;
+    position: absolute;
+}
+
+h1 {
+  font-family: "Montserrat", sans-serif;
+  color: #7ed386;
+  font-size: 1em;
+  margin-top: 40px;
+  margin-bottom: 35px;
+}
+
+.profile .personal-info-title,
+.payment .payment-info-title,
+.subscription .subscription-info-title,
+.privacy .privacy-info-title,
+.settings .settings-info-title {
+  color: #777777;
+  font-family: "Roboto", sans-serif;
+  width: 80%;
+  text-transform: uppercase;
+  font-size: 0.5em;
+  letter-spacing: 1px;
+  margin-left: 2px;
+}
+
+p {
+  border-width: 1px;
+  border-style: solid;
+  border-image: linear-gradient(to right, #3fb6a8, rgba(126, 211, 134, 0.5)) 1 0%;
+  border-top: 0;
+  width: 80%;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.7em;
+  padding: 7px 0;
+  color: #070707;
+}
+
+span {
+  font-size: 0.5em;
+  color: #777777;
+}
+
+.privacy-btn {
+  float: right;
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  font-size: 10px;
+  border: none;
+  color: #3fb6a8;
+  cursor: pointer;
+}
+.privacy .privacy-btn,
+.settings .privacy-btn {
+    padding-top: 0;
+}
+
+.privacy-btn:hover {
+  text-decoration: underline;
+  font-weight: 900;
+}
+
+.gift-card-input {
+  border: 1px solid #dddddd;
+  font-family: "Roboto", sans-serif;
+  padding: 2px;
+  margin: 0;
+}
+
+.privacy .privacy-info-title  {
+  margin-top: 25px;
+}
+
+.settings .settings-info-title {
+  margin-top: 25px;
+}
+
+.noshow {
+  opacity: 0;
+  z-index: -1;
+}
+
+
+/* BLOCKED USER TABLE */
+/*wrapper element so column padding doesn't affect fixed header background*/
+.scroll-window-wrapper{
+  position:relative;
+  height: 100%;
+  border-radius: 0.5em;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+.scroll-window-wrapper:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+/* element containing the table */
+.scroll-window{
+	height: 75vh;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+.scroll-window table{
+  margin-bottom:0;
+}
+	/*fixed header background*/
+.scroll-window:before{
+	content:"";
+	position: absolute;
+	width:100%;
+	height:2.5rem;
+	display: table;
+	z-index: 10;
+	background:rgb(170, 170, 170);
+}
+
+
+/*the actual fixed header*/
+table.fixed-header th div{
+  position: absolute;
+  margin-top: -.5rem;
+  z-index: 11;
+  color:#333;
+}
+table.fixed-header  thead tr{
+  height:2.5rem;
+  max-height: 2.5rem;
+}
+
+.user-list{
+	width:100%;
+}
+
+.user-list	td.text-right{
+	width:16rem;
+}
+/*-----experimental scrollbar styles-----*/
+/* line 199, ../scss/main.scss */
+#bodywrap ::-webkit-scrollbar {
+  width: 1rem;
+}
+/* line 202, ../scss/main.scss */
+#bodywrap ::-webkit-scrollbar-button {
+  /* width:1rem;*/
+}
+/* line 205, ../scss/main.scss */
+#bodywrap ::-webkit-scrollbar-track {
+  background-color: #eaeaea;
+  border-left: 1px solid #ccc;
+}
+/* line 212, ../scss/main.scss */
+#bodywrap ::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+/* line 215, ../scss/main.scss */
+#bodywrap ::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+tbody tr .blockeduser-name {
+    height: 100%;
+    text-align: left;
+    padding-left: 2em;
+    vertical-align: middle;
+}
+.text-right button {
+    margin: 0.75em 0 0 0;
+    cursor: pointer;
+}
+
+
+/* ACCOUNT NOTIFICATION EMAIL MODAL */
+#modalDel {
+    top: 10em;
+}
+.modal-content {
+    width: 40em;
+}
+.modal-body{
+    overflow: hidden;
+}
+.emailnote-list {
+    list-style: none;
+}
+.emailnote-list li {
+    margin-bottom: 1.5em;
+}
+.emailnote-list .toggle {
+    height: 2em !important;
+    width: 5em !important;
+    border: 1px solid rgb(179, 179, 179);
+}
+.emailnote-list span {
+    font-size: 1em;
+    color: black;
+    margin-left: 2em;
+}
+.modal-footer .emailnote-save-wrapper {
+    width: 100%;
+}
+.acct-emailnote-btn {
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.acct-emailnoteclose-btn {
+    margin-right: 2em;
+    margin-top: 1em;
+}
+
+/* ACCOUNT DELETION MODAL */
+#modalDel {
+    top: 10em;
+}
+.modal-content {
+    width: 40em;
+}
+.modal-body{
+    overflow: hidden;
+}
+.del-input-wrapper {
+    width: 60%;
+    margin: 0 auto;
+}
+.acct-delete-input {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+}
+.modal-body p {
+    font-size: 1em;
+    color: black;
+    border-image: none;
+    border-style: none;
+    border-width: 0;
+    border-top: none;
+}
+.modal-footer .del-btn-wrapper {
+    width: 100%;
+}
+.acct-del-btn {
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.acct-delclose-btn {
+    margin-right: 2em;
+    margin-top: 1em;
+}

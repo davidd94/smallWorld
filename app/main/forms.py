@@ -13,10 +13,10 @@ class EditProfileForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=50, message='An email is required with a maximum of 50 characters.')])
     password = PasswordField('Password')
     repassword = PasswordField('Retype Password', validators=[EqualTo('password')])
-    picture = StringField('Gravatar Picture')
+    picture = StringField('Avatar Picture')
     randomavatar = BooleanField('Get randomized Gravatar?')
     bio = TextAreaField('Bio', validators=[Length(min=0, max=400)])
-    submit = SubmitField('Submit')
+    submit = SubmitField('Save')
 
     
     def __init__(self, original_email, *args, **kwargs):

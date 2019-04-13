@@ -38,6 +38,10 @@ db.Column('last_visit_date', db.DateTime, default=datetime.utcnow),
 db.Column('initial_visit_date', db.DateTime, default=datetime.utcnow)
 )
 
+blocked_users = db.Table('blocked_users',
+db.Column('blocker_id', db.Integer, db.ForeignKey('user.id')),
+db.Column('blocked_id', db.Integer, db.ForeignKey('user.id'))
+)
 
 class SearchableMixin(object):
     @classmethod
@@ -97,6 +101,10 @@ class User(UserMixin, db.Model):
     picture = db.Column(db.Text(500), default=None)
     verified = db.Column(db.Boolean, default=False)
     max_failed_login = db.Column(db.Integer)
+    # EMAIL NOTIFICATION SETTINGS
+    msg_note = db.Column(db.Boolean, default=False)
+    comment_note = db.Column(db.Boolean, default=False)
+    reply_note = db.Column(db.Boolean, default=False)
     # TOKEN VARIABLES FOR APIs ONLY
     token = db.Column(db.String(50), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
@@ -128,6 +136,12 @@ class User(UserMixin, db.Model):
                                             backref=db.backref('visitor', lazy='dynamic'),
                                             lazy='dynamic',
                                             passive_deletes=True)
+    blocked = db.relationship('User', secondary=blocked_users,
+                                        primaryjoin=(blocked_users.c.blocker_id == id),
+                                        secondaryjoin=(blocked_users.c.blocked_id == id),
+                                        backref=db.backref('blocker', lazy='dynamic'),
+                                        lazy='dynamic',
+                                        passive_deletes=True)
     # RELATIONSHIPS TABLES
     message_sent = db.relationship('Messages',
                                     foreign_keys='Messages.sender_id',
@@ -207,6 +221,16 @@ class User(UserMixin, db.Model):
         # NEED TO ADD MORE TO THIS IN THE FUTURE
         return
 
+    def is_blocking(self, user):
+        return self.blocked.filter(blocked_users.c.blocked_id == user.id).count() > 0
+
+    def block(self, user):
+        if not self.is_blocking(user):
+            self.blocked.append(user)
+    
+    def unblock(self, user):
+        if self.is_blocking(user):
+            self.blocked.remove(user)
 
     def is_liking_project(self, project):
         return Projects.query.join(project_likers).join(User).filter(project_likers.c.user_id == self.id).filter(project_likers.c.project_id == project.id).count() > 0
@@ -303,7 +327,7 @@ class Messages(db.Model):
     message_read = db.Column(db.Boolean, index=True, default=False)
 
     def __repr__(self):
-        return '<Message {}>'.format(self.body)
+        return '<Message {}>'.format(self.subject)
 
 
 class Projects(SearchableMixin, db.Model):

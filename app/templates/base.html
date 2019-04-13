@@ -61,7 +61,7 @@
                     <a id="dropdown-toggle-override" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
                         <a class="dropdown-item" href="{{ url_for('main.edit_profile', username=current_user.username) }}">Edit</a>
-                        <a class="dropdown-item" href="{{ url_for('main.privacy') }}">Privacy Settings</a>
+                        <a class="dropdown-item" href="{{ url_for('main.privacy') }}">Account Settings</a>
                         <a class="dropdown-item" href="{{ url_for('main.message_inbox') }}">Messages</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>

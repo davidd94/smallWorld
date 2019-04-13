@@ -31,3 +31,17 @@ def send_password_reset_email(user):
     send_email('smallWorld - Password Reset', sender=current_app.config['ADMIN'], recipients=[user.email],
                 html_body=render_template('email/reset_password.html', user=user, token=token),
                 text_body=None)
+
+def send_notification_email(sendinguser, recip, note_type, title, content):
+    if note_type == 'message':
+        template = render_template('email/message_notification.html', sender=sendinguser, recip=recip, title=title, content=content)
+    elif note_type == 'comment':
+        template = render_template('email/comment_notification.html', sender=sendinguser, recip=recip, title=title, content=content)
+    else:
+        template = render_template('email/reply_notification.html', sender=sendinguser, recip=recip, title=title, content=content)
+    
+    send_email('smallWorld - New ' + note_type + ' Notification',
+                sender=current_app.config['ADMIN'],
+                recipients=[recip.email],
+                html_body=template,
+                text_body=None)

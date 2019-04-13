@@ -24,11 +24,11 @@
             </div>
                 {% if not current_user.is_following(user) %}
                 <div class="project-social-follow">
-                    <a href="{{ url_for('main.follow', username=user.username, next=request.path) }}">Follow</a>
+                    <a href="{{ url_for('main.follow', username=user.username, redirect='project-page', title=project.title) }}">Follow</a>
                 </div>
                 {% else %}
                 <div class="project-social-unfollow">
-                    <a href="{{ url_for('main.unfollow', username=user.username, next=request.path) }}">Unfollow</a>
+                    <a href="{{ url_for('main.unfollow', username=user.username, redirect='project-page', title=project.title) }}">Unfollow</a>
                 </div>
                 {% endif %}
             <div class="project-social-message">
@@ -246,6 +246,7 @@
             <h3 class="faq-title-disabled"><strong>Sorry! </strong> Frequently Asked Questions has been disabled by the owner.</h3>
             {% else %}
             <div class="faq-question-container">
+                <div class="faq-question-wrapper">
                 {% if project_faqs.enabled1 == True %}
                 <p class="faq-question">{{ project_faqs.question1 }}</p>
                 <p class="faq-answer">{{ project_faqs.answer1 }}</p>
@@ -286,6 +287,7 @@
                 <p class="faq-question">{{ project_faqs.question10 }}</p>
                 <p class="faq-answer">{{ project_faqs.answer10 }}</p>
                 {% endif %}
+                </div>
             </div>
             {% endif %}
         </div>
@@ -511,9 +513,9 @@ $(function () {
     $('.main-comment-btn').on('click', () => {
         let comment = $('.main-comment-text')[0].value;
         let comment_length = (comment).length;
+        let username = "{{ user.username }}";
+        let project_id = "{{ project.id }}";
         var csrf_token = "{{ csrf_token() }}";
-        /* ERROR WITH HAVING JINJA2 STRING WITH APOSTROPHE WHICH REQ TO HAVE |SAFE */
-        let convert_subject = "{{ project.title|safe }}";
 
         if (comment_length > 0) {
             // Inject imported CSRF token into our AJAX request.
@@ -526,7 +528,7 @@ $(function () {
             });
 
             $.ajax({
-                url: '/project/new_comment/' + '{{ user.username }}' + '/' + convert_subject,
+                url: '/project/new_comment/' + username + '/' + project_id,
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(comment),
@@ -635,6 +637,8 @@ $(function () {
     $('#comments-list').on('click', '.reply-btn', (event) => {
         let currentReplyText = event.currentTarget.previousSibling.value;
         let commentID = event.currentTarget.parentElement.parentElement.dataset.commentId;
+        let username = "{{ user.username }}";
+        let project_id = "{{ project.id }}";
 
         if ((currentReplyText).length > 0 && $('.shadow-textarea' + commentID).length != 0) {
             event.preventDefault();
@@ -652,7 +656,7 @@ $(function () {
             });
             
             $.ajax({
-                url: '/project/new_reply/' + '{{ user.username }}' + '/' + convert_subject + '/' + commentID,
+                url: '/project/new_reply/' + username + '/' + project_id + '/' + commentID,
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(currentReplyText),
@@ -953,5 +957,6 @@ $(function () {
         $('.project-del-btn').attr('disabled', 'disabled');
     });
 })
+
 </script>
 {% endblock scripts %}

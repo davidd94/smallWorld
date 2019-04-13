@@ -361,16 +361,16 @@ $(function() {
         {% if project.tutorial_enabled == True %}
             $('.toggle').removeClass('btn btn-light off');
             $('.toggle').addClass('toggle btn btn-primary');
-            $('#chkToggle')[0].checked = true;
+            $('#chkToggle').prop('checked', true);
         {% else %}
             $('.tutorial-container-text').css('display', 'none');
             $('.tutorial-main-add-btn').css('visibility','hidden');
-            $('#chkToggle')[0].checked = false;
+            $('#chkToggle').prop('checked', false);
         {% endif %}
 
     // UPDATES SERVER WITH TOGGLE SETTING
     $('.toggle-wrapper').on('click', () => {
-        var toggleValue = $('#chkToggle')[0].checked;
+        var toggleValue = $('#chkToggle').prop('checked');
         
         if (toggleValue == true) {
             var csrf_token = "{{ csrf_token() }}";

@@ -6,8 +6,8 @@
 {% endblock css%}
 
 {% block bodycontent %}
-<div class="jumbotron-wrapper">
-<div class="jumbotron">
+<div class="edit-wrapper">
+<form class="edit-container" action="" method="POST">
     <h1 class="edit-profile-heading">Edit Profile</h1>
     {% with messages = get_flashed_messages() %}
     {% for message in messages %}
@@ -20,79 +20,66 @@
     {% endif %}
     {% endfor %}
     {% endwith %}
-    <div class="form-group form-group-username">
-        <fieldset disabled="">
-            <label class="control-label" for="disabledInput">{{ form.username.label }}</label>
-            {{ form.username(id="disabledInput", class="form-control", type="text", disabled="") }}
-        </fieldset>
-    </div>
-    <form id="edit-profile-form" action="" method="POST">
+
+    {{ form.username.label(class="username-label") }}
+    {{ form.username(id="disabledInput", class="form-control form-group-username", type="text", disabled="") }}
+
+    
     {{ form.hidden_tag() }}
-        <div class="form-group form-group-firstname">
-            <label class="form-control-label" for="firstnameinput">{{ form.firstname.label }}</label>
-            {{ form.firstname(id="firstnameinput", class="form-control", type="text", placeholder="First Name") }}
-            {% for error in form.firstname.errors %}
-            <div class="firstname-feedback">
-                <span style="color: red;">{{ error }}</span>
-            </div>
-            {% endfor %}
+        {{ form.firstname.label(class="firstname-label") }}
+        {{ form.firstname(id="firstnameinput", class="form-control form-firstname", type="text", placeholder="First Name") }}
+        {% for error in form.firstname.errors %}
+        <div class="firstname-feedback">
+            <span style="color: red;">{{ error }}</span>
         </div>
-        <div class="form-group form-group-lastname">
-            <label class="form-control-label" for="lastnameinput">{{ form.lastname.label }}</label>
-            {{ form.lastname(id="lastnameinput", class="form-control", type="text", placeholder="Last Name") }}
-            {% for error in form.lastname.errors %}
-            <div class="lastname-feedback">
-                <span style="color: red;">{{ error }}</span>
-            </div>
-            {% endfor %}
+        {% endfor %}
+        
+        {{ form.lastname.label(class="lastname-label") }}
+        {{ form.lastname(id="lastnameinput", class="form-control form-lastname", type="text", placeholder="Last Name") }}
+        {% for error in form.lastname.errors %}
+        <div class="lastname-feedback">
+            <span style="color: red;">{{ error }}</span>
         </div>
-        <div class="form-group w-50">
-            <label class="form-control-label" for="emailinput">{{ form.email.label }}</label>
-            {{ form.email(id="emailinput", class="form-control", type="text", placeholder="Email") }}
-            {% for error in form.email.errors %}
-            <div class="email-feedback">
-                <span style="color: red;">{{ error }}</span>
-            </div>
-            {% endfor %}
+        {% endfor %}
+        
+        
+        {{ form.email.label(class="email-label") }}
+        {{ form.email(id="emailinput", class="form-control form-email", type="text", placeholder="Email") }}
+        {% for error in form.email.errors %}
+        <div class="email-feedback">
+            <span style="color: red;">{{ error }}</span>
         </div>
-        <div class="form-group w-50">
-            <label class="form-control-label" for="passwordinput">{{ form.password.label }}</label>
-            {{ form.password(id="passwordinput", class="form-control", type="text", placeholder="New Password") }}
-            {% for error in form.password.errors %}
-            <div class="password-feedback">
-                <span style="color: red;">{{ error }}</span>
-            </div>
-            {% endfor %}
+        {% endfor %}
+        
+        {{ form.password.label(class="password-label") }}
+        {{ form.password(id="passwordinput", class="form-control form-password", type="text", placeholder="New Password") }}
+        {% for error in form.password.errors %}
+        <div class="password-feedback">
+            <span style="color: red;">{{ error }}</span>
         </div>
-        <div class="form-group w-50">
-            <label class="form-control-label" for="repasswordinput">{{ form.repassword.label }}</label>
-            {{ form.repassword(id="repasswordinput", class="form-control", type="text", placeholder="Retype New Password") }}
-            {% for error in form.repassword.errors %}
-            <div class="repassword-feedback">
-                <span style="color: red;">{{ error }}</span>
-            </div>
-            {% endfor %}
+        {% endfor %}
+        
+        {{ form.repassword.label(class="repassword-label") }}
+        {{ form.repassword(id="repasswordinput", class="form-control form-repassword", type="text", placeholder="Retype New Password") }}
+        {% for error in form.repassword.errors %}
+        <div class="repassword-feedback">
+            <span style="color: red;">{{ error }}</span>
         </div>
-
-        <div class="form-group w-50">
-            <label class="form-control-label" for="profilepic">{{ form.picture.label }}</label>
-            {{ form.picture(id="profilepic", class="form-control", type="text", placeholder="Insert Gravatar link here") }}
-        </div>
-        <div class="custom-control custom-checkbox">
-            {{ form.randomavatar(type="checkbox", class="custom-control-input", id="customCheck1") }}
-            <label class="custom-control-label" for="customCheck1">{{ form.randomavatar.label }}</label>
-        </div>
-
-        <div class="form-group">
-            <label for="exampleTextarea">{{ form.bio.label }}</label>
-            {{ form.bio(id="exampleTextarea", class="form-control", row="6", type="text", placeholder="Something about you..", maxlength=400) }}
-        </div>
+        {% endfor %}
+        
+        {{ form.picture.label(class="avatar-label") }}
+        {{ form.picture(id="profilepic", class="form-control form-avatar", type="text", placeholder="Insert Gravatar link here") }}
+        
+        {{ form.randomavatar(type="checkbox", class="custom-gravatar-checkbox") }}
+        {{ form.randomavatar.label(class="random-gravatar-label") }}
+        
+        
+        {{ form.bio.label(class="bio-label") }}
+        {{ form.bio(id="exampleTextarea", class="form-control form-bio", row="6", type="text", placeholder="Something about you..", maxlength=400) }}
+        
     {{ form.submit(id="edit-profile-save-btn", class="btn btn-primary") }}
-    </form>
-    <form class="edit-profile-cancel-btn" action="{{ url_for('main.profile', username=current_user.username) }}">
-        <button type="submit" class="btn btn-primary">Cancel</button>
-    </form>
-</div>
+    <a class="edit-profile-cancel-btn" href="{{ url_for('main.profile', username=current_user.username) }}"><button type="submit" class="btn btn-primary">Cancel</button></a>
+</form>
 </div>
 {% endblock bodycontent %}
 

@@ -5,7 +5,7 @@ from app.email import send_email, send_confirmation_email, send_password_reset_e
 from app.models import User, Projects, Notifications
 from app.auth import bp
 from app.auth.forms import LoginForm, RegistrationForm, PasswordResetRequestForm, PasswordResetForm
-from app.main.forms import SearchForm
+from app.main.forms import SearchForm, MessageForm
 
 
 @bp.route('/clear_flash_msgs')
@@ -18,6 +18,7 @@ def homepage():
     if current_user.is_authenticated:
         followed_users = current_user.followed.all()
         public_projects = []
+        form = MessageForm()
         for eachuser in followed_users:
             # FILTERING EACH USER'S PROJECT PRIVACY SETTINGS
             projects = eachuser.all_projects \
@@ -26,7 +27,7 @@ def homepage():
                                 .all()
             for project in projects:
                 public_projects.append(project)
-        return render_template('homepage.html', public_projects=public_projects)
+        return render_template('homepage.html', public_projects=public_projects, form=form)
     form = LoginForm()
     return render_template('homepage.html', form=form)
 
@@ -69,8 +70,11 @@ def register():
         return redirect(url_for('auth.homepage'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        newuser = User(username=form.username.data, firstname=form.firstname.data,
-                        lastname=form.lastname.data, email=form.email.data, max_failed_login=0)
+        newuser = User(username=form.username.data,
+                        firstname=form.firstname.data,
+                        lastname=form.lastname.data,
+                        email=form.email.data,
+                        max_failed_login=0)
         newuser.create_password(form.password.data)
         
         db.session.add(newuser)

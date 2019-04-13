@@ -120,6 +120,7 @@
     border: 2px solid rgb(187, 187, 187);
     transform: scale(0.80, 0.80);
     display: none;
+    overflow: hidden;
 }
 .create-terrarium-text {
     position: absolute;
@@ -434,6 +435,7 @@ main {
     top: -5.8em;
     left: 5em;
     text-align: center;
+    transition: all 1500ms ease;
 }
 #homepage-forgotpass-link {
     text-decoration: underline;
@@ -484,7 +486,8 @@ main {
 .projectfeed-avatar {
     grid-row: 1 / span 1;
     grid-column: 1 / span 1;
-    margin: auto auto;
+    align-self: center;
+    justify-self: center;
     width: 3.3em;
     height: auto;
     border-radius: 50%;
@@ -583,9 +586,36 @@ main {
 }
 
 
+/* BLOCK USER POPUP MODAL */
+#modalDel {
+    top: 10em;
+}
+.modal-content {
+    width: 40em;
+}
+.modal-body {
+    overflow: hidden;
+    background: rgb(218, 218, 218);
+}
+.block-title-1 {
+    margin: 0;
+    color: green;
+}
+.block-title-2 {
+    margin: 0;
+    color: darkred;
+}
+.block-1, .block-2 {
+    color: black;
+}
+.block-note {
+    margin: 0;
+}
+.modal-footer .user-block-btn, .user-close-btn {
+    margin-right: 3em;
+}
 
 /* ANIMATED PLANTS */
-
 svg {
   height: 99vh;
   max-height: 100vw;
@@ -674,4 +704,107 @@ svg {
 }
 .echeveria-lighter {
   fill: #88bfbf;
+}
+
+
+/* MESSAGE POPUP */
+/* Add styles to the form container */
+.form-container {
+    width: 37.5em;
+    height: 100%;
+    max-width: 37.5em;
+    padding: 10px;
+    background-color: white;
+    position: relative;
+    z-index: 600;
+    opacity: 1;
+}
+
+/* Full-width input fields */
+.form-container input[type=text] {
+    width: 30%;
+    padding: 15px;
+    margin: 1.2em 0;
+    border: none;
+    background: #f1f1f1;
+    font-size: 0.75em;
+    float: left;
+}
+
+.form-container input[type=text2] {
+    width: 60%;
+    padding: 15px;
+    margin: 1.2em 0;
+    border: none;
+    background: #f1f1f1;
+    font-size: 0.75em;
+    float: right;
+}
+
+/* When the inputs get focus, do something */
+.form-container input:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+.message-popup-msg {
+    width: 100%;
+    height: 17em;
+    margin: 1.2em 0 2em 0;
+    resize: none;
+}
+
+/* Set a style for the submit/login button */
+.form-popup {
+  display: none;
+  position: fixed;
+  z-index: 500;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+}
+.form-container .btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 15%;
+  height: 3em;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+.form-container .send {
+  margin-left: 1.5em;
+  float: left;
+}
+
+.form-container .cancel {
+  background-color: red;
+  margin-right: 1.5em;
+  float: right;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+.alert-box-wrapper {
+    position: absolute;
+    top: 9em;
+    right: -10em;
+    height: 1%;
+}
+
+#message-alert-box {
+    width: 15em;
+    height: 5em;
+    max-height: 6em;
+    padding: 0.8em;
+    text-align: center;
+    right: -70em;
+    top: 0;
+    transition: all 1500ms ease;
+    position: absolute;
 }

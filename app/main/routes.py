@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, request, flash, g, current_app, jsonify, Response, send_from_directory, session
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required, logout_user
 from flask_babel import get_locale, _
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
@@ -10,11 +10,13 @@ from app.models import User, Messages, Projects, PhotoGallery, Notifications, pr
 from app.main import bp
 from app.main.forms import EditProfileForm, MessageForm, SearchForm
 from app.project.forms import ProjectForm
+from app.email import send_notification_email
 from sqlalchemy import and_, or_
 from werkzeug.datastructures import MultiDict
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
-import os, json
+import os, shutil
+import json
 import time
 
 @bp.before_app_request
@@ -81,10 +83,76 @@ def project_preview(project_id):
     return jsonify(project_details)
 
 @bp.route('/privacy')
+@login_required
 def privacy():
-    if current_user.is_authenticated:
-        return render_template('privacy.html')
-    return redirect(url_for('auth.homepage'))
+    blocked_users = current_user.blocked.all()
+    print(blocked_users)
+    
+    return render_template('privacy.html', blocked_users=blocked_users)
+
+@bp.route('/delete_acct')
+@login_required
+def delete_acct():
+    user = User.query.get(current_user.id)
+    projects = Projects.query.filter_by(user_id=user.id).all()
+    if projects:
+        for project in projects:
+            photo_gallery = project.photo_gallery.first()
+            project_faqs = project.faqs.first()
+            project_itemlist = project.item_list.all()
+            project_comments = project.project_comments.all()
+            project_replies = project.comment_replies.all()
+            
+            # REMOVING PROJECT AND ALL RELATED TABLES
+            db.session.delete(project)
+            db.session.delete(photo_gallery)
+            db.session.delete(project_faqs)
+            if project_itemlist:
+                for eachitem in project_itemlist:
+                    db.session.delete(eachitem)
+            if project_comments:
+                for eachcomment in project_comments:
+                    db.session.delete(eachcomment)
+            if project_replies:
+                for eachreply in project_replies:
+                    db.session.delete(eachreply)
+    
+    messages = Messages.query.filter_by(recipient_id=user.id).all()
+    if messages:
+        for message in messages:
+            db.session.delete(message)
+    
+    notifications = Notifications.query.filter_by(user_id=user.id).all()
+    if notifications:
+        for eachnote in notifications:
+            db.session.delete(eachnote)
+    
+    # REMOVING MAIN USER DIRECTORY WITH ALL PROJECTS AND IMAGES
+    file_path = current_app.config['PHOTO_UPLOAD_DIR']
+    if os.path.isdir(file_path + '/' + user.username):
+        # shutil IS REQUIRED TO REMOVE ALL FILES AND SUBDIRECTORIES WITHIN A DIRECTORY. rmdir only removes when empty
+        shutil.rmtree(file_path + '/' + user.username)
+    logout_user()
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify('User successfully deleted permanently!')
+
+@bp.route('/email_notifications', methods=['POST'])
+@login_required
+def email_notifications():
+    settings = request.json
+    print(settings)
+    user = current_user
+    if settings:
+        user.msg_note = settings['msg_note']
+        user.comment_note = settings['comment_note']
+        user.reply_note = settings['reply_note']
+
+        db.session.commit()
+
+        return jsonify('Email notification settings saved!')
+    
+    return jsonify('Unable to save email notification settings')
 
 
 @bp.route('/follow/<username>')
@@ -100,6 +168,15 @@ def follow(username):
     
     current_user.follow(user)
     db.session.commit()
+
+    if request.args:
+        args = request.args.get('redirect')
+        if args == 'homepage':
+            return redirect(url_for('auth.homepage'))
+        elif args == 'project-page':
+            title = request.args.get('title')
+            return redirect(url_for('project.project', username=username, title=title))
+
     flash('You are now following {}'.format(username))
     return redirect(url_for('main.profile', username=username))
 
@@ -116,6 +193,15 @@ def unfollow(username):
     
     current_user.unfollow(user)
     db.session.commit()
+
+    if request.args:
+        args = request.args.get('redirect')
+        if args == 'homepage':
+            return redirect(url_for('auth.homepage'))
+        elif args == 'project-page':
+            title = request.args.get('title')
+            return redirect(url_for('project.project', username=username, title=title))
+    
     flash('You have unfollowed {}'.format(username))
     return redirect(url_for('main.profile', username=username))
 
@@ -130,9 +216,18 @@ def message_inbox():
     next_url = url_for('main.message_inbox_list', page=messages.next_num) if messages.has_next else None
     prev_url = url_for('main.message_inbox_list', page=messages.prev_num) if messages.has_prev else None
 
+    # FILTERING ALL MESSAGES AND HIDING ALL BLOCKED USERS' MESSAGES
+    blocked_users = current_user.blocked.all()
+    all_messages = messages.items
+    if blocked_users and all_messages:
+        for blocked_user in blocked_users:
+            for message in all_messages:
+                # NEED TO SLICE PYTHON LIST TO ITERATE AND REMOVE ITEMS. CANNOT 'REMOVE' DURING ITERATION AS IT MUTATES LIST DURING
+                all_messages[:] = [msg for msg in all_messages if not msg.sender_id == blocked_user.id]      
+    
     form = MessageForm()
 
-    return render_template('message-center.html', form=form, messages=messages.items,
+    return render_template('message-center.html', form=form, messages=all_messages,
                             next_url=next_url, prev_url=prev_url)
 
 @bp.route('/view_message/<sender_username>/<msg_id>', methods=['GET', 'POST'])
@@ -191,6 +286,7 @@ def message_inbox_list():
     messages = current_user.message_received.order_by(
                 Messages.timestamp.desc()).paginate(
                     page, current_app.config['MESSAGES_PER_PAGE'], False)
+
     next_url = url_for('main.message_inbox_list', page=messages.next_num) if messages.has_next else None
     prev_url = url_for('main.message_inbox_list', page=messages.prev_num) if messages.has_prev else None
     return render_template('_message-list.html', messages=messages.items, next_url=next_url, prev_url=prev_url)
@@ -198,6 +294,7 @@ def message_inbox_list():
 @bp.route('/send_message', methods=['GET', 'POST'])
 @login_required
 def send_message():
+    # NEED TO ADD NOTES HERE TO EXPLAIN MULTIDICT
     data = MultiDict(mapping=request.json)
     form = MessageForm(data)
     if form.validate():
@@ -213,6 +310,15 @@ def send_message():
                                         user=user)
             db.session.add(notification)
             db.session.commit()
+
+            # SENDING EMAIL NOTIFICATION TO RECIPIENT
+            if user.msg_note == True:
+                send_notification_email(sendinguser=current_user,
+                                        recip=user, 
+                                        note_type='message',
+                                        title=form.subject.data,
+                                        content=form.body.data)
+
             return "Message successfully sent!"
 
     #ERROR MSG TO USERS
@@ -309,6 +415,14 @@ def get_notifications():
                                     .order_by(Notifications.timestamp.asc()) \
                                     .all()
     
+    # FILTERING ALL NOTIFICATIONS FROM ALL BLOCKED USERS'
+    blocked_users = current_user.blocked.all()
+    if blocked_users and all_new_notifications:
+        for blocked_user in blocked_users:
+            for note in all_new_notifications:
+                # NEED TO SLICE PYTHON LIST TO ITERATE AND REMOVE ITEMS. CANNOT 'REMOVE' DURING ITERATION AS IT MUTATES LIST DURING
+                all_new_notifications[:] = [note for note in all_new_notifications if not note.username == blocked_user.username]
+
     # IF ZERO NOTIFICATIONS INITIALLY OR EXISTING ONES REMOVED
     if len(all_new_notifications) == 0:
         return jsonify(0)
@@ -351,6 +465,73 @@ def search():
                                         next_url=next_url,
                                         prev_url=prev_url)
     
+@bp.route('/report_feed/<project_id>')
+@login_required
+def report_feed(project_id):
+    print(project_id)
+    project = Projects.query.get(project_id)
+    if project:
+        send_email(subject='Feed Report - ' + project.title,
+                    sender=current_app.config['ADMIN'],
+                    recipients=[current_app.config['ADMIN']],
+                    html_body='Report submission for username: ' + project.username,
+                    text_body='Report submission for username: ' + project.username)
+                    
+        return jsonify('Report submitted')
+    return jsonify('Failed submission')
+
+@bp.route('/block/<username>', methods=['GET', 'POST'])
+@login_required
+def block(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('Error: User not found!')
+        return redirect(url_for('auth.homepage'))
+    if user == current_user:
+        flash('You cannot block yourself!')
+        return redirect(url_for('auth.homepage'))
+    
+    current_user.unfollow(user)
+    current_user.block(user)
+    db.session.commit()
+
+    if request.args:
+        args = request.args.get('redirect')
+        if args == 'user-profile':
+            return redirect(url_for('main.profile', username=username))
+
+    # FOR AJAX REQUEST - BETTER USER EXPERIENCE
+    if request.json:
+        return jsonify('Successfully unblocked user!')
+
+    return redirect(url_for('auth.homepage'))
+
+@bp.route('/unblock/<username>', methods=['GET', 'POST'])
+@login_required
+def unblock(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('Error: User not found!')
+        return redirect(url_for('auth.homepage'))
+    if user == current_user:
+        flash('You cannot unfollow yourself!')
+        return redirect(url_for('auth.homepage'))
+    
+    current_user.unblock(user)
+    db.session.commit()
+
+    if request.args:
+        args = request.args.get('redirect')
+        if args == 'user-profile':
+            return redirect(url_for('main.profile', username=username))
+        elif args == 'privacy-settings':
+            return redirect
+    
+    # FOR AJAX REQUEST - BETTER USER EXPERIENCE
+    if request.json:
+        return jsonify('Successfully unblocked user!')
+
+    return redirect(url_for('auth.homepage'))
 
 
 def allowed_file(filename):

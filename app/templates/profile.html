@@ -124,6 +124,15 @@
                         <a href="{{ url_for('main.unfollow', username=user.username) }}">Unfollow</a>
                     </div>
                 {% endif %}
+                {% if not current_user.is_blocking(user) %}
+                    <div class="profile-social-block">
+                        <a href="{{ url_for('main.block', username=user.username, redirect='user-profile') }}">Block</a>
+                    </div>
+                {% else %}
+                    <div class="profile-social-unblock">
+                        <a href="{{ url_for('main.unblock', username=user.username, redirect='user-profile') }}">Unblock</a>
+                    </div>
+                {% endif %}
                 <div class="profile-social-message">
                     <a href="{{ url_for('main.message_inbox') }}">Message</a>
                 </div>

@@ -388,18 +388,18 @@
             {% for project in public_projects %}
             <li class="projectfeed-container projectfeed-container-{{ project.id }}">
                 <img class="projectfeed-avatar" src="{{ project.author.avatar(50) }}">
-                <a class="projectfeed-username" href="{{ url_for('main.profile', username=project.username) }}"><span>{{ project.username }}</span></a>
-                <div class="title-border"><p class="projectfeed-title"><a class="projectfeed-title-link projectfeed-title-link-{{ project.id }}" href="{{ url_for('project.project', username=project.username, title=project.title) }}">{{ project.title }}</a></p></div>
+                <a class="projectfeed-username" href="{{ url_for('main.profile', username=project.username) }}"><span class="project-username-value-{{ project.id }}">{{ project.username }}</span></a>
+                <div class="title-border"><p class="projectfeed-title"><a class="projectfeed-title-link projectfeed-title-link-{{ project.id }}" data-id="{{ project.id }}" href="{{ url_for('project.project', username=project.username, title=project.title) }}">{{ project.title }}</a></p></div>
                 <ul class="projectfeed-options">
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">. . .</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 42px, 0px);">
-                        <a class="dropdown-item" href="#">Message</a>
-                        <a class="dropdown-item" href="#">Hide Feed</a>
-                        <a class="dropdown-item" href="#">Unfollow</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Report Feed</a>
-                        <a class="dropdown-item" href="#">Block & Unfollow</a>
+                            <a class="dropdown-item dropdown-item-msg" href="#" data-id="{{ project.id }}">Message</a>
+                            <a class="dropdown-item" href="#" data-id="{{ project.id }}">Hide Feed</a>
+                            <a class="dropdown-item" href="{{ url_for('main.unfollow', username=project.username, redirect='homepage') }}" data-id="{{ project.id }}">Unfollow</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item dropdown-item-report" href="#" data-id="{{ project.id }}">Report Feed</a>
+                            <a class="dropdown-item dropdown-item-block" href="#" data-toggle="modal" data-target="#modalDel" data-username="{{ project.username }}">Block & Unfollow</a>
                         </div>
                     </li>
                 </ul>
@@ -410,13 +410,57 @@
         {% endif %}
     </div>
     <div class="notification-feed-container">
-        <h3 class="followed-note-title">Notifications</h3>
+        <h3 class="followed-note-title">Latest News</h3>
         <hr>
         <ul class="followed-note-list">
             <li>
                 <!-- DYNAMICALLY INSERT EACH NOTIFICATIONS HERE-->
             </li>
         </ul>
+    </div>
+
+    <!----- ALERT MESSAGES ----->
+    <div class="alert-box-wrapper">
+        <div id="message-alert-box" class="alert alert-dismissible alert-success">
+            <strong class="message-success-msg"></strong>
+        </div>
+    
+        <div id="message-alert-box" class="alert alert-dismissible alert-secondary">
+            <strong class="message-fail-msg"></strong>
+        </div>
+    </div>
+    {% include "_message-popup.html" %}
+
+    <!--  BLOCK & UNFOLLOW USER POPUP MODAL  -->
+    <div id="modalDel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" style="text-align: center; width: 100%;">Block User</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="block-title-1">Blocking the user will:</p>
+                <ol class="block-1">
+                    <li>Hide all their project updates from appearing in your homepage feed.</li>
+                    <li>Hide all their privately sent messages from appearing in your inbox and notifications.</li>
+                </ol>
+                <p class="block-title-2">Blocking the user will <strong>NOT</strong>:</p>
+                <ol class="block-2">
+                    <li>Hide any comments and replies left inside any projects.</li>
+                    <li>Prevent the user from liking the project and their respective comments and replies</li>
+                    <li>Prevent any projects from appearing through any search engines</li>
+                </ol>
+                <p class="block-note"><strong style="color: rgb(152, 155, 4);">Please note: </strong>You will be able to unblock through your privacy setting anytime.</p>
+            </div>
+            <form class="modal-footer" method="GET">
+                <button type="submit" class="btn btn-secondary user-block-btn">Block</button></a>
+                <button type="button" class="btn btn-primary user-close-btn" data-dismiss="modal">Close</button>
+            </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endif %}
@@ -428,13 +472,129 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.1/TweenMax.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.1/TimelineMax.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
 <script>
 /* ADDS 'ACTIVE' CLASS TO NAV BAR ITEM */
 $(function() {
     $('#nav-item-home').addClass('active');
+    
+});
+
+/* MESSAGE BOX POPUP */
+$(function () {
+    // OPENS MSGS BOX
+    $('.dropdown-item-msg').on('click', (event) => {
+        var project_id = event.currentTarget.dataset.id;
+        var username = $('.project-username-value-' + project_id)[0].textContent;
+        var subject = $('.projectfeed-title-link-' + project_id)[0].text;
+
+        $('#myForm').css('display', 'block');
+        $('.new-msg-recip').prop('readonly', true);
+        $('.new-msg-recip')[0].value = username;
+        $('.new-msg-subject')[0].value = subject;
+    });
+    // CLOSES MSG BOX
+    $('.msg-popup-closebtn').on('click', (event) => {
+        $('#myForm').css('display', 'none');
+        $('.new-msg-recip')[0].value = "";
+        $('.new-msg-subject')[0].value = "";
+        $('.message-popup-msg')[0].value = "";
+    });
+
+    /* SEND MSG DYNAMICALLY */
+$(function () {
+    $('#send-new-msg-btn').on('click', (event) => {
+        new_msg_recip = $('.new-msg-recip')[0].value;
+        new_msg_subject = $('.new-msg-subject')[0].value;
+        new_msg_body = $('.message-popup-msg')[0].value;
+        newmsg = {'recipient': new_msg_recip, 'subject': new_msg_subject, 'body': new_msg_body};
+        var csrf_token = "{{ csrf_token() }}";
+
+
+        // Inject our CSRF token into our AJAX request.
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                }
+            }
+        });
+        event.preventDefault();
+        $.ajax({
+            url: "{{ url_for('main.send_message') }}",
+            type: 'POST',
+            data: JSON.stringify(newmsg),
+            contentType: 'application/json',
+            success: function(response) {
+                if (response == 'Message successfully sent!') {
+                    $('.form-popup').attr('style','display: none;');
+                    $(".new-msg-recip")[0].value = "";
+                    $(".new-msg-subject")[0].value = "";
+                    $(".message-popup-msg")[0].value = "";
+                    $('.message-success-msg')[0].textContent = response;
+
+                    $('.alert-success').attr('style','right: 16em;');
+                    setTimeout(function () {
+                        $('.alert-success').attr('style','right: -70em;');
+                    }, 4000);
+                } else if (response == "That user does not exist" || response == "You cannot message yourself") {
+                    $(".new-msg-recip")[0].value = "";
+                    $('.message-fail-msg')[0].textContent = response;
+                    $('.alert-secondary').attr('style','right: 16em;');
+                    setTimeout(function () {
+                        $('.alert-secondary').attr('style','right: -70em;');
+                    }, 4000);
+                } else if (response == 'Subject must be 5-50 characters long' || 
+                            response == 'Message: max of 500 characters long' || 
+                            response == 'User name must be a minimum of 5 characters long') {
+                    $('.message-fail-msg')[0].textContent = response;
+                    $('.alert-secondary').attr('style','right: 16em;');
+                    setTimeout(function () {
+                        $('.alert-secondary').attr('style','right: -70em;');
+                    }, 4000);
+                }
+            },
+            error: function(response) {
+                console.log(response);
+                console.log('Something went wrong with sending messages...');
+            }
+        });
+    });
+});
 
 });
 
+/* REPORT & BLOCK FEATURE */
+$(function () {
+    // REPORT USER
+    $('.dropdown-item-report').on('click', (event) => {
+        var project_id = event.currentTarget.dataset.id;
+        $.ajax({
+            url: "/report_feed/" + project_id,
+            type: 'GET',
+            success: function(response) {
+                $('.message-success-msg')[0].textContent = response;
+                $('.alert-success').css('right', '16em');
+                setTimeout(function () {
+                    $('.alert-success').css('right', '-70em');
+                }, 4000);
+            }
+        })
+    });
+    // BLOCK USER
+    $('.dropdown-item-block').on('click', (event) => {
+        var username = event.currentTarget.dataset.username;
+        // TRANSFERRING USER NAME OUTSIDE JINJA2 TO MODAL INSTEAD OF CREATING A NEW MODAL FOR EACH NEWS FEED
+        $('.modal-footer').attr('action', '/block/' + username);
+    })
+});
+
+</script>
+
+<script>
+function closeForm() {
+    // nothing removed from homepage. kept function because other pages still use JS and not jquery
+};
 </script>
 
 <script>
