@@ -1,13 +1,38 @@
 {% extends "base.html" %}
 
 {% block bodycontent %}
-<div class="row" style="justify-content: center; padding-top: 8em;">
+<div class="row" style="justify-content: center; padding-top: 10em;">
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div id="login-alert-container" class="alert alert-dismissible alert-secondary" style="width: auto; height: auto; max-height: 6em; max-width: 25%; position: absolute; top: 14%; left: 38%; text-align: center;">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {% if message == "Please check your email to verify your account before logging in." %}
+            <strong>{{ message }}</strong> <a href="{{ url_for('auth.confirm_acct_request') }}" id="homepage-forgotpass-link" class="alert-link">Send new verification link</a>?
+            {% else %}
+            <strong>{{ message }}</strong> <a href="{{ url_for('auth.reset_password_request') }}" id="homepage-forgotpass-link" class="alert-link">Forgot password</a>?
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <div class="card" style="width: 30%;">
     <article class="card-body">
         <a href="{{ url_for('auth.register') }}" class="float-right btn btn-outline-primary">Sign up</a>
         <h4 class="card-title mb-4 mt-1">Sign in</h4>
         <hr>
-        <form action="{{ url_for('auth.login') }}" method="POST">
+        {% if request.args %}
+        {% set next = request.args.get('next') %}
+            {% if next == 'project-page' %}
+            {% set title = request.args.get('title') %}
+            {% set username = request.args.get('username') %}
+                <form action="{{ url_for('auth.login', next=next, title=title, username=username) }}" method="POST">
+            {% endif %}
+        {% else %}
+        <form action="{{ url_for('auth.login', next='login-page') }}" method="POST">
+        {% endif %}
             {{ form.hidden_tag() }}
             <div class="form-group">
             <div class="input-group">

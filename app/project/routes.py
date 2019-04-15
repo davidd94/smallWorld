@@ -495,7 +495,7 @@ def new_comment(username, project_id):
         if current_user != user:
             notification = Notifications(notification_type='comment',
                                         username=current_user.username,
-                                        title=title,
+                                        title=project.title,
                                         data=comment,
                                         user=user)
             db.session.add(notification)
@@ -539,7 +539,7 @@ def new_reply(username, project_id, comment_id):
         if current_user != user:
             notification = Notifications(notification_type='comment reply',
                                         username=current_user.username,
-                                        title=title,
+                                        title=project.title,
                                         data=reply,
                                         user=user)
             db.session.add(notification)
@@ -584,10 +584,13 @@ def project_unlike(project_id):
         return jsonify('Project unliked!')
     return redirect(url_for('project.project', username=project.username, title=project.title))
 
-@bp.route('/project/comment_like/<username>/<title>/<comment_id>', methods=['GET'])
+@bp.route('/project/comment_like/<project_id>/<comment_id>', methods=['GET'])
 @login_required
-def comment_like(username, title, comment_id):
-    project = Projects.query.filter_by(title=title).filter_by(username=username).first()
+def comment_like(project_id, comment_id):
+    project = Projects.query.get(project_id)
+    # FASTER/BETTER WAY TO GET THE DATA
+    # project_comment = ProjectComments.query.get(project_id)
+    # ANOTHER WAY OF OBTAINING DATA THROUGH PROJECT TABLE
     project_comment = project.project_comments.filter_by(id=comment_id).first()
     if project and project_comment:
         current_user.like_comment(project_comment)
@@ -597,11 +600,11 @@ def comment_like(username, title, comment_id):
         return jsonify('Comment liked!')
     return redirect(url_for('project.project', username=username, title=title))
 
-@bp.route('/project/comment_unlike/<username>/<title>/<comment_id>', methods=['GET'])
+@bp.route('/project/comment_unlike/<project_id>/<comment_id>', methods=['GET'])
 @login_required
-def comment_unlike(username, title, comment_id):
-    project = Projects.query.filter_by(title=title).filter_by(username=username).first()
-    project_comment = project.project_comments.filter_by(id=comment_id).first()
+def comment_unlike(project_id, comment_id):
+    project = Projects.query.get(project_id)
+    project_comment = ProjectComments.query.get(comment_id)
     if project and project_comment:
         current_user.unlike_comment(project_comment)
         project_comment.likes -= 1
@@ -610,11 +613,10 @@ def comment_unlike(username, title, comment_id):
         return jsonify('Comment unliked!')
     return redirect(url_for('project.project', username=username, title=title))
 
-@bp.route('/project/reply_like/<username>/<title>/<reply_id>', methods=['GET'])
+@bp.route('/project/reply_like/<project_id>/<reply_id>', methods=['GET'])
 @login_required
-def reply_like(username, title, reply_id):
-    #project_comments = ProjectComments.query.filter_by(title=title).filter_by(username=username).all()
-    project_reply = CommentReplies.query.filter_by(title=title).filter_by(id=reply_id).first()
+def reply_like(project_id, reply_id):
+    project_reply = CommentReplies.query.get(reply_id)
     if project_reply:
         current_user.like_reply(project_reply)
         project_reply.likes += 1
@@ -623,11 +625,10 @@ def reply_like(username, title, reply_id):
         return jsonify('Reply liked!')
     return redirect(url_for('project.project', username=username, title=title))
 
-@bp.route('/project/reply_unlike/<username>/<title>/<reply_id>', methods=['GET'])
+@bp.route('/project/reply_unlike/<project_id>/<reply_id>', methods=['GET'])
 @login_required
-def reply_unlike(username, title, reply_id):
-    #project_comments = ProjectComments.query.filter_by(title=title).filter_by(username=username).all()
-    project_reply = CommentReplies.query.filter_by(title=title).filter_by(id=reply_id).first()
+def reply_unlike(project_id, reply_id):
+    project_reply = CommentReplies.query.get(reply_id)
     if project_reply:
         current_user.unlike_reply(project_reply)
         project_reply.likes -= 1

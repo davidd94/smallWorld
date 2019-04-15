@@ -16,16 +16,6 @@
 {% block scripts %}
 {{ super() }}
 <script>
-function openForm() {
-  document.getElementById("myForm").style.display = "block";
-};
-function closeForm() {
-  document.getElementById("myForm").style.display = "none";
-  document.getElementsByClassName("new-msg-recip")[0].value = "";
-  document.getElementsByClassName("new-msg-subject")[0].value = "";
-  document.getElementsByClassName("message-popup-msg")[0].value = "";
-};
-
 function openReplyForm() {
   document.getElementById("message-reply-box").style.display = "block";
   document.getElementById("message-reply-box").style.bottom = "2em";
@@ -37,7 +27,71 @@ function closeReplyForm() {
 </script>
 
 <script>
-/* LOAD EACH MSG DYNAMICALLY */
+/* MESSAGES LIST */
+$(function() {
+    // SHOWS ALL RECEIVED MSGS
+    $('.dropdown-item-received').on('click', (event) => {
+        $('.message-list').removeClass('is-active');
+        $('.message-list-received').addClass('is-active');
+        $('.main-dropdown-btn').text('Received');
+        // HIDES REPLY AND DELETE BUTTON
+        $('.message-reply-msg').css('display', 'none');
+        $('.message-del-msg').css('display', 'none');
+        $('.message-restore-msg').css('display', 'none');
+        $('.message-reply-msg').css('visibility', 'visible');
+        $('.message-del-msg').css('visibility', 'visible');
+        $('.message-restore-msg').css('visibility', 'hidden');
+        // REMOVES EXISTING USER'S AVATAR AND NAME
+        $('.message-other-username').text('');
+        $('.message-other-username').removeAttr('href');
+        $('.message-user-avatar').removeAttr('src');
+        /* REMOVES ANY EXISTING DYNAMICALLY LOADED MSGS */
+        $('.received_msg').remove();
+        $('.outgoing_msg').remove();
+    });
+    // SHOWS SENT MSGS
+    $('.dropdown-item-sent').on('click', (event) => {
+        $('.message-list').removeClass('is-active');
+        $('.message-list-sent').addClass('is-active');
+        $('.main-dropdown-btn').text('Sent');
+        // HIDES REPLY AND DELETE BUTTON
+        $('.message-reply-msg').css('display', 'none');
+        $('.message-del-msg').css('display', 'none');
+        $('.message-restore-msg').css('display', 'none');
+        $('.message-reply-msg').css('visibility', 'hidden');
+        $('.message-del-msg').css('visibility', 'hidden');
+        $('.message-restore-msg').css('visibility', 'hidden');
+        // REMOVES EXISTING USER'S AVATAR AND NAME
+        $('.message-other-username').text('');
+        $('.message-other-username').removeAttr('href');
+        $('.message-user-avatar').removeAttr('src');
+        /* REMOVES ANY EXISTING DYNAMICALLY LOADED MSGS */
+        $('.received_msg').remove();
+        $('.outgoing_msg').remove();
+    });
+    // SHOWS DELETED MSGS
+    $('.dropdown-item-deleted').on('click', (event) => {
+        $('.message-list').removeClass('is-active');
+        $('.message-list-deleted').addClass('is-active');
+        $('.main-dropdown-btn').text('Deleted');
+        // HIDES REPLY AND DELETE BUTTON
+        $('.message-reply-msg').css('display', 'none');
+        $('.message-del-msg').css('display', 'none');
+        $('.message-restore-msg').css('display', 'none');
+        $('.message-reply-msg').css('visibility', 'hidden');
+        $('.message-del-msg').css('visibility', 'hidden');
+        $('.message-restore-msg').css('visibility', 'visible');
+        // REMOVES EXISTING USER'S AVATAR AND NAME
+        $('.message-other-username').text('');
+        $('.message-other-username').removeAttr('href');
+        $('.message-user-avatar').removeAttr('src');
+        // REMOVES ANY EXISTING DYNAMICALLY LOADED MSGS
+        $('.received_msg').remove();
+        $('.outgoing_msg').remove();
+    });
+});
+
+/* LOAD EACH RECEIVED MSGS DYNAMICALLY */
 $(function() {
     $('.list-group-item').on('click', (event) => {
         let current_msg_dataid = event.currentTarget.dataset.msgId;
@@ -49,7 +103,7 @@ $(function() {
         let current_msg_id = event.currentTarget.id;
         /* REMOVES PREVIOUSLY READ MSG BACKGROUND COLOR */
         $('.message-list li').removeClass('current-msg');
-
+        
         $.ajax({
             url: "/view_message/" + sender_username + "/" + current_msg_dataid,
             type: 'GET',
@@ -64,17 +118,18 @@ $(function() {
                 $('.' + current_msg_sub).attr('style', 'font-weight: 400; font-style: italic;')
                 $('#' + current_msg_icon).attr('class', 'fas fa-envelope-open message-msg-icon');
 
-                /* SHOWS WHICH MSG IS BEING CURRENTLY READ */
+                /* SHOWS WHICH MSG IS BEING CURRENTLY READ ON LIST */
                 $('#' + current_msg_id).addClass('current-msg');
 
                 /* SHOWS REPLY/DEL BUTTONS */
-                $('.message-reply-msg').attr('style', 'display: block;');
-                $('.message-del-msg').attr('style', 'display: block;');
+                $('.message-reply-msg').css('display', 'block');
+                $('.message-del-msg').css('display', 'block');
+                $('.message-restore-msg').css('display', 'block');
 
                 /* REMOVES EXISTING REPLY TEXT AND BOX BETWEEN MSG CHANGE */
                 document.getElementById("message-reply-box").style.bottom = "-10em";
                 $("#reply_msg")[0].value = "";
-
+                
                 /* LOOPS TO ADD EACH INDIVIDUAL MSGS PER SUBJECT */
                 for (i = 0; i < response.length; i ++) {
                     let each_msg = response[i];
@@ -120,64 +175,11 @@ $(function() {
     });
 });
 
-/* SEND MSG DYNAMICALLY */
-$(function () {
-    $('#send-new-msg-btn').on('click', (event) => {
-        new_msg_recip = $('.new-msg-recip')[0].value;
-        new_msg_subject = $('.new-msg-subject')[0].value;
-        new_msg_body = $('.message-popup-msg')[0].value;
-        newmsg = {'recipient': new_msg_recip, 'subject': new_msg_subject, 'body': new_msg_body};
-        var csrf_token = "{{ csrf_token() }}";
-
-
-        // Inject our CSRF token into our AJAX request.
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrf_token)
-                }
-            }
-        });
-        event.preventDefault();
-        $.ajax({
-            url: "{{ url_for('main.send_message') }}",
-            type: 'POST',
-            data: JSON.stringify(newmsg),
-            contentType: 'application/json',
-            success: function(response) {
-                if (response == 'Message successfully sent!') {
-                    $('.form-popup').attr('style','display: none;');
-                    $(".new-msg-recip")[0].value = "";
-                    $(".new-msg-subject")[0].value = "";
-                    $(".message-popup-msg")[0].value = "";
-                    $('.message-success-msg')[0].textContent = response;
-
-                    $('.alert-success').attr('style','right: 3em;');
-                    setTimeout(function () {
-                        $('.alert-success').attr('style','right: -70em;');
-                    }, 4000);
-                } else if (response == "That user does not exist" || response == "You cannot message yourself") {
-                    $(".new-msg-recip")[0].value = "";
-                    $('.message-fail-msg')[0].textContent = response;
-                    $('.alert-secondary').attr('style','right: 3em;');
-                    setTimeout(function () {
-                        $('.alert-secondary').attr('style','right: -70em;');
-                    }, 4000);
-                } else if (response == 'Subject must be 5-50 characters long' || 
-                            response == 'Message: max of 500 characters long' || 
-                            response == 'User name must be a minimum of 5 characters long') {
-                    $('.message-fail-msg')[0].textContent = response;
-                    $('.alert-secondary').attr('style','right: 3em;');
-                    setTimeout(function () {
-                        $('.alert-secondary').attr('style','right: -70em;');
-                    }, 4000);
-                }
-            },
-            error: function(response) {
-                console.log(response);
-                console.log('Something went wrong with sending messages...');
-            }
-        });
+/* OPEN MESSAGE FORM */
+$(function() {
+    // OPENS MSGS BOX
+    $('.message-list-newmsg').on('click', (event) => {
+        $('#myForm').css('display', 'block');
     });
 });
 
@@ -224,5 +226,72 @@ $(function() {
         };
     });
 });
+
+/* MSG DELETE FEATURE */
+$('.message-del-msg').on('click', () => {
+    let sender_name = $('.message-other-username')[0].textContent;
+    let msg_subj = $('.current-msg').data('msgSub');
+    if (sender_name && msg_subj) {
+        $.ajax({
+            url: "/delete_message/" + msg_subj + '/' + sender_name,
+            type: 'GET',
+            success: function(response) {
+                if (response == 'Message successfully deleted!') {
+                    // REMOVES THE MSG FROM MSG LIST
+                    $('.list-group-item[data-msg-sub="' + msg_subj + '"]').remove();
+                    
+                    // HIDES REPLY/DEL BUTTONS
+                    $('.message-reply-msg').css('display', 'none');
+                    $('.message-del-msg').css('display', 'none');
+                    // REMOVES ANY EXISTING DYNAMICALLY LOADED MSGS
+                    $('.received_msg').remove();
+                    $('.outgoing_msg').remove();
+                    // REMOVES EXISTING USER'S AVATAR AND NAME
+                    $('.message-other-username').text('');
+                    $('.message-other-username').removeAttr('href');
+                    $('.message-user-avatar').removeAttr('src');
+
+                    // REMOVES EXISTING REPLY TEXT AND BOX BETWEEN MSG CHANGE
+                    $('#message-reply-box').css('bottom', '-10em');
+                    $('#reply_msg')[0].value = "";
+                }
+            }
+        });
+    }
+});
+
+/* MSG RESTORE FEATURE */
+$('.message-restore-msg').on('click', () => {
+    let sender_name = $('.message-other-username')[0].textContent;
+    let msg_subj = $('.current-msg').data('msgSub');
+    if (sender_name && msg_subj) {
+        $.ajax({
+            url: "/restore_message/" + msg_subj + '/' + sender_name,
+            type: 'GET',
+            success: function(response) {
+                if (response == 'Message successfully restored!') {
+                    // REMOVES THE MSG FROM MSG LIST
+                    $('.list-group-item[data-msg-sub="' + msg_subj + '"]').remove();
+                    
+                    // HIDES REPLY/DEL BUTTONS
+                    $('.message-restore-msg').css('display', 'none');
+                    // REMOVES ANY EXISTING DYNAMICALLY LOADED MSGS
+                    $('.received_msg').remove();
+                    $('.outgoing_msg').remove();
+                    // REMOVES EXISTING USER'S AVATAR AND NAME
+                    $('.message-other-username').text('');
+                    $('.message-other-username').removeAttr('href');
+                    $('.message-user-avatar').removeAttr('src');
+
+                    // REMOVES EXISTING REPLY TEXT AND BOX BETWEEN MSG CHANGE
+                    $('#message-reply-box').css('bottom', '-10em');
+                    $('#reply_msg')[0].value = "";
+                }
+            }
+        });
+    }
+});
+
+
 </script>
 {% endblock scripts %}

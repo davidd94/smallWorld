@@ -134,10 +134,13 @@
                     </div>
                 {% endif %}
                 <div class="profile-social-message">
-                    <a href="{{ url_for('main.message_inbox') }}">Message</a>
+                    <a class="profile-message-link" href="#" onclick=>Message</a>
                 </div>
             {% endif %}
         {% endif %}
+        <div class="profile-followers-list">
+            <span class="followers-count">{{ followers | count }}</span><a class="followers-list-link" href="#" style="margin-left: 1em;" data-toggle="modal" data-target="#exampleModal">Followers</a>
+        </div>
     </div>
     <div class="profile-card-box">
         <div class="project-descrip-box">
@@ -173,6 +176,49 @@
         <!-- DYNAMICALLY INSERTS EACH PROJECT INTERACTIVE IMAGE HERE -->
         <p style="margin-top: 12em;">Interactive Photo coming soon!</p>
     </div>
+
+    <!-- FOLLOWERS POPUP MODAL -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Followers</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="followers-modal-wrapper">
+                <ul class="followers-modal">
+                    {% if followers %}
+                    {% for follower in followers %}
+                    <li><a href="{{ url_for('main.profile', username=follower.username) }}">{{ follower.username }}</a></li>
+                    {% endfor %}
+                    {% else %}
+                    <p style="text-align: center; color: black; size: 1.2em; margin-top: 10em;">No followers yet. Be the first! :)</p>
+                    {% endif %}
+                </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!----- ALERT MESSAGES ----->
+    <div class="alert-box-wrapper">
+        <div id="message-alert-box" class="alert alert-dismissible alert-success">
+            <strong class="message-success-msg"></strong>
+        </div>
+    
+        <div id="message-alert-box" class="alert alert-dismissible alert-secondary">
+            <strong class="message-fail-msg"></strong>
+        </div>
+    </div>
+    {% include "_message-popup.html" %}
+
 </div>
 {% endblock bodycontent %}
 
@@ -185,10 +231,7 @@ $(function() {
     $('#nav-item-profile').addClass('active');
 
 });
-    
-</script>
 
-<script>
 /* COST COUNTER */
 $(function () {
     $('.project-cost-value').each(function () {
@@ -203,58 +246,7 @@ $(function () {
         });
     });
 });
-</script>
 
-<script>
-/* FILTER CHECKBOXES */
-$('input[type="checkbox"]').change(function(e) {
-
-  var checked = $(this).prop("checked"),
-      container = $(this).parent(),
-      siblings = container.siblings();
-
-  container.find('input[type="checkbox"]').prop({
-    indeterminate: false,
-    checked: checked
-  });
-
-  function checkSiblings(el) {
-
-    var parent = el.parent().parent(),
-        all = true;
-
-    el.siblings().each(function() {
-      return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
-    });
-
-    if (all && checked) {
-
-      parent.children('input[type="checkbox"]').prop({
-        indeterminate: false,
-        checked: checked
-      });
-
-      checkSiblings(parent);
-
-    } else if (all && !checked) {
-
-      parent.children('input[type="checkbox"]').prop("checked", checked);
-      parent.children('input[type="checkbox"]').prop("indeterminate", (parent.find('input[type="checkbox"]:checked').length > 0));
-      checkSiblings(parent);
-
-    } else {
-
-      el.parents("li").children('input[type="checkbox"]').prop({
-        indeterminate: true,
-        checked: false
-      });
-
-    }
-
-  }
-
-  checkSiblings(container);
-});
 </script>
 
 <script>
@@ -374,6 +366,64 @@ $(function () {
             });
         };
     });
+});
+
+/* FILTER CHECKBOXES */
+$('input[type="checkbox"]').change(function(e) {
+
+  var checked = $(this).prop("checked"),
+      container = $(this).parent(),
+      siblings = container.siblings();
+
+  container.find('input[type="checkbox"]').prop({
+    indeterminate: false,
+    checked: checked
+  });
+
+  function checkSiblings(el) {
+
+    var parent = el.parent().parent(),
+        all = true;
+
+    el.siblings().each(function() {
+      return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
+    });
+
+    if (all && checked) {
+
+      parent.children('input[type="checkbox"]').prop({
+        indeterminate: false,
+        checked: checked
+      });
+
+      checkSiblings(parent);
+
+    } else if (all && !checked) {
+
+      parent.children('input[type="checkbox"]').prop("checked", checked);
+      parent.children('input[type="checkbox"]').prop("indeterminate", (parent.find('input[type="checkbox"]:checked').length > 0));
+      checkSiblings(parent);
+
+    } else {
+
+      el.parents("li").children('input[type="checkbox"]').prop({
+        indeterminate: true,
+        checked: false
+      });
+
+    }
+
+  }
+
+  checkSiblings(container);
+});
+
+/* OPENS MSG BOX */
+$('.profile-message-link').on('click', (event) => {
+    var username = "{{ user.username }}";
+    $('#myForm').css('display', 'block');
+    $('.new-msg-recip').prop('readonly', true);
+    $('.new-msg-recip')[0].value = username;
 });
 </script>
 {% endblock scripts %}

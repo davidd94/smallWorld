@@ -135,7 +135,8 @@
 .project-like {
     grid-row: 1 / span 1;
     grid-column: 1 / span 2;
-    text-align: right;
+    justify-self: right;
+    align-self: flex-start;
     font-size: 1em;
     margin: 0 4em 0 0;
     color: #A6A6A6;
@@ -421,6 +422,10 @@
 .modal-content {
     width: 40em;
 }
+.modal-title {
+    width: 100%;
+    text-align: center;
+}
 .modal-body{
     overflow: hidden;
 }
@@ -434,6 +439,15 @@
     text-align: center;
 }
 
+.userlike-modal-wrapper {
+    background: linear-gradient(to right, #b3cae5 12%, #dbdde4 46%, #e4e3e4 70%, #f7ddbb 94%, #efcab2 100%);
+    width: 50%;
+    height: 25em;
+    margin: 0 auto;
+    border-radius: 1em;
+    overflow: scroll;
+    padding: 0.5em;
+}
 
 .project-privacy-label {
     text-align: center;
@@ -497,6 +511,20 @@
     display: none;
     overflow: hidden;
 }
+
+.project-comment-login {
+    width: 50%;
+    height: 25%;
+    background: rgb(235, 235, 235);
+    border-radius: 1em;
+    margin: 10em auto;
+    padding: 3em 0;
+}
+.project-comment-login p {
+    text-align: center;
+    font-size: 1.2em;
+}
+
 .project-tutorial-textarea,
 .project-maintenance-textarea {
     width: 100%;

@@ -1,26 +1,24 @@
 <div class="message-list-box">
     <div class="btn-group message-list-dropdown" role="group" aria-label="Button group with nested dropdown">
-        <button type="button" class="btn btn-info">Messages</button>
+        <button type="button" class="btn btn-info main-dropdown-btn">Received</button>
         <div class="btn-group" role="group">
             <button id="btnGroupDrop3" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop3" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                <a class="dropdown-item" href="#">Sent</a>
-                <a class="dropdown-item" href="#">Deleted</a>
+                <a class="dropdown-item dropdown-item-received" href="#">Received</a>
+                <a class="dropdown-item dropdown-item-sent" href="#">Sent</a>
+                <a class="dropdown-item dropdown-item-deleted" href="#">Deleted</a>
             </div>
         </div>
     </div>
     <div class="message-list-new-msg">
-        <button type="button" class="btn btn-info" onclick="openForm()">New Message</button>
+        <button type="button" class="btn btn-info message-list-newmsg">New Message</button>
     </div>
 
-    <ul id="message-list-override" class="list-group message-list">
+    <!----- MSGS RECEIVED ----->
+    <ul id="message-list-override" class="list-group message-list message-list-received is-active">
         {% for message in messages %}
-        {% if message.subject == msg_subj %}
-        <li id="message-list-{{ message.id }}" class="list-group-item d-flex justify-content-between align-items-center" style="background-color: rgba(211, 211, 211, 0.6);" data-msg-id="{{ message.id }}" data-msg-sub="{{ message.subject }}">
-        {% else %}
         <li id="message-list-{{ message.id }}" class="list-group-item d-flex justify-content-between align-items-center" data-msg-id="{{ message.id }}" data-msg-sub="{{ message.subject }}">
-        {% endif %}
-            {% if message.message_read == False %}
+            {% if (message.message_read == False) and (message.recipient_id == current_user.id) %}
             <span class="message-msg-username-{{ message.id }}" style="font-weight: 800;">{{ message.author.username }}</span>
             <span id="message-msg-subj" class="message-msg-subject-{{ message.id }}" style="font-weight: 800;" maxlength="10">{{ message.subject }}</span>
             <i id="message-msg-icon-{{ message.id }}" class="fas fa-envelope message-msg-icon"></i>
@@ -30,7 +28,28 @@
             <i id="message-msg-icon-{{ message.id }}" class="fas fa-envelope-open message-msg-icon"></i>
             {% endif %}
         </li>
-        </a>
+        {% endfor %}
+    </ul>
+
+    <!----- MSGS SENT ----->
+    <div id="message-list-override" class="list-group message-list message-list-sent">
+        <p style="text-align: center; margin-top: 15em; font-weight: 600; font-style: italic;">Feature coming soon...</p>
+    </div>
+
+    <!----- MSGS DELETED ----->
+    <ul id="message-list-override" class="list-group message-list message-list-deleted">
+        {% for message in del_messages %}
+        <li id="message-list-{{ message.id }}" class="list-group-item d-flex justify-content-between align-items-center" data-msg-id="{{ message.id }}" data-msg-sub="{{ message.subject }}">
+            {% if (message.message_read == False) and (message.recipient_id == current_user.id) %}
+            <span class="message-msg-username-{{ message.id }}" style="font-weight: 800;">{{ message.author.username }}</span>
+            <span id="message-msg-subj" class="message-msg-subject-{{ message.id }}" style="font-weight: 800;" maxlength="10">{{ message.subject }}</span>
+            <i id="message-msg-icon-{{ message.id }}" class="fas fa-envelope message-msg-icon"></i>
+            {% else %}
+            <span class="message-msg-username-{{ message.id }}" style="font-weight: 400;">{{ message.author.username }}</span>
+            <span id="message-msg-subj" class="message-msg-subject-{{ message.id }}" style="font-style: italic;" maxlength="10">{{ message.subject }}</span>
+            <i id="message-msg-icon-{{ message.id }}" class="fas fa-envelope-open message-msg-icon"></i>
+            {% endif %}
+        </li>
         {% endfor %}
     </ul>
 </div>

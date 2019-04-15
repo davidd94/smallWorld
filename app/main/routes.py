@@ -6,12 +6,13 @@ from urllib.parse import urlparse
 from math import sqrt
 from hashlib import md5
 from app import db
-from app.models import User, Messages, Projects, PhotoGallery, Notifications, project_visitors
+from app.models import User, Messages, Projects, PhotoGallery, Notifications, project_visitors, followers, deleted_messages
 from app.main import bp
 from app.main.forms import EditProfileForm, MessageForm, SearchForm
 from app.project.forms import ProjectForm
-from app.email import send_notification_email
+from app.email import send_notification_email, send_email
 from sqlalchemy import and_, or_
+from werkzeug.urls import url_parse
 from werkzeug.datastructures import MultiDict
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
@@ -32,9 +33,18 @@ def before_request():
 def profile(username):
     user = User.query.filter_by(username=username).first()
     if user:
+        form = MessageForm()
         project_list = user.all_projects \
                         .order_by(Projects.last_edit.desc())
-        return render_template('profile.html', user=user, projects=project_list)
+        all_followers = User.query \
+                            .join(followers, followers.c.followed_id == user.id) \
+                            .filter(followers.c.follower_id == User.id) \
+                            .all()
+        return render_template('profile.html',
+                                form=form,
+                                user=user,
+                                projects=project_list,
+                                followers=all_followers)
     return redirect(url_for('auth.homepage'))
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -154,81 +164,67 @@ def email_notifications():
     
     return jsonify('Unable to save email notification settings')
 
-
-@bp.route('/follow/<username>')
-@login_required
-def follow(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash('Error: User not found!')
-        return redirect(url_for('auth.homepage'))
-    if user == current_user:
-        flash('You cannot follow yourself!')
-        return redirect(url_for('main.profile', username=username))
-    
-    current_user.follow(user)
-    db.session.commit()
-
-    if request.args:
-        args = request.args.get('redirect')
-        if args == 'homepage':
-            return redirect(url_for('auth.homepage'))
-        elif args == 'project-page':
-            title = request.args.get('title')
-            return redirect(url_for('project.project', username=username, title=title))
-
-    flash('You are now following {}'.format(username))
-    return redirect(url_for('main.profile', username=username))
-
-@bp.route('/unfollow/<username>')
-@login_required
-def unfollow(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash('Error: User not found!')
-        return redirect(url_for('auth.homepage'))
-    if user == current_user:
-        flash('You cannot unfollow yourself!')
-        return redirect(url_for('main.profile', username=username))
-    
-    current_user.unfollow(user)
-    db.session.commit()
-
-    if request.args:
-        args = request.args.get('redirect')
-        if args == 'homepage':
-            return redirect(url_for('auth.homepage'))
-        elif args == 'project-page':
-            title = request.args.get('title')
-            return redirect(url_for('project.project', username=username, title=title))
-    
-    flash('You have unfollowed {}'.format(username))
-    return redirect(url_for('main.profile', username=username))
-
+"""
+@bp.route('/view_followers/<username>', methods=['GET'])
+def view_followers(username):
+    user = User.single_user(username)
+    if user:
+        all_followers = User.query \
+                            .join(followers, followers.c.followed_id == user.id) \
+                            .filter(followers.c.follower_id == User.id) \
+                            .all()
+        data = []
+        for follower in all_followers:
+            data.append(follower.username)
+        return jsonify(data)
+    return redirect(url_for('auth.homepage'))
+"""
 
 @bp.route('/message_inbox')
 @login_required
 def message_inbox():
+    form = MessageForm()
     page = request.args.get('page', 1, type=int)
-    messages = current_user.message_received.group_by(Messages.subject).order_by(
-                Messages.timestamp.desc()).paginate(
-                    page, current_app.config['MESSAGES_PER_PAGE'], False)
+    messages = Messages.query \
+                    .filter(Messages.recipient_id == current_user.id) \
+                    .group_by(Messages.subject) \
+                    .order_by(Messages.timestamp.desc()) \
+                    .paginate(page, current_app.config['MESSAGES_PER_PAGE'], False)
     next_url = url_for('main.message_inbox_list', page=messages.next_num) if messages.has_next else None
     prev_url = url_for('main.message_inbox_list', page=messages.prev_num) if messages.has_prev else None
 
-    # FILTERING ALL MESSAGES AND HIDING ALL BLOCKED USERS' MESSAGES
-    blocked_users = current_user.blocked.all()
+    del_messages = Messages.query \
+                        .join(deleted_messages) \
+                        .filter((Messages.recipient_id == current_user.id) | (Messages.sender_id == current_user.id)) \
+                        .filter(deleted_messages.c.user_id == current_user.id) \
+                        .filter(deleted_messages.c.message_id == Messages.id)
+    # GROUPING AND ORGANIZING DELETED MSGS
+    del_messages_group = del_messages.group_by(Messages.subject) \
+                        .order_by(Messages.timestamp.desc()) \
+                        .all()
+    
+    # EXTRACTING DELETED MSG'S ID TO USE TO FILTER ALL MSGS
+    deleted_msgs_id = []
+    for eachmsg in del_messages:
+        deleted_msgs_id.append(eachmsg.id)
+    
+    # FIRST FILTER - REMOVING ALL DELETED MESSAGES FROM LIST
     all_messages = messages.items
+    for del_id in deleted_msgs_id:
+        all_messages[:] = [msg for msg in all_messages if not del_id == msg.id]
+
+    # SECOND FILTER - REMOVING ALL BLOCKED USERS' MESSAGES
+    blocked_users = current_user.blocked.all()
     if blocked_users and all_messages:
         for blocked_user in blocked_users:
-            for message in all_messages:
-                # NEED TO SLICE PYTHON LIST TO ITERATE AND REMOVE ITEMS. CANNOT 'REMOVE' DURING ITERATION AS IT MUTATES LIST DURING
-                all_messages[:] = [msg for msg in all_messages if not msg.sender_id == blocked_user.id]      
-    
-    form = MessageForm()
+            # NEED TO SLICE PYTHON LIST TO ITERATE AND REMOVE ITEMS. CANNOT 'REMOVE' DURING ITERATION AS IT MUTATES LIST DURING
+            all_messages[:] = [msg for msg in all_messages if not msg.sender_id == blocked_user.id]      
 
-    return render_template('message-center.html', form=form, messages=all_messages,
-                            next_url=next_url, prev_url=prev_url)
+    return render_template('message-center.html', form=form,
+                            messages=all_messages,
+                            del_messages=del_messages_group,
+                            next_url=next_url,
+                            prev_url=prev_url)
 
 @bp.route('/view_message/<sender_username>/<msg_id>', methods=['GET', 'POST'])
 @login_required
@@ -238,9 +234,15 @@ def view_message(sender_username, msg_id):
     msg_sender_id = msg_sender.id
     msg_subj = msg_from_id.subject
     
-    all_msg_received = Messages.query.filter(Messages.subject==msg_subj, Messages.sender_id==msg_sender_id, Messages.recipient_id==current_user.id)
-    all_msg_sent = Messages.query.filter(Messages.subject==msg_subj, Messages.sender_id==current_user.id, Messages.recipient_id==msg_sender_id)
-    all_msgs = all_msg_received.union(all_msg_sent).order_by(Messages.timestamp.desc()).all()
+    all_msg_received = Messages.query \
+                    .filter(Messages.subject == msg_subj) \
+                    .filter((Messages.sender_id == msg_sender_id) | (Messages.recipient_id == current_user.id))
+    all_msg_sent = Messages.query \
+                            .filter(Messages.subject == msg_subj) \
+                            .filter((Messages.sender_id == current_user.id) | (Messages.recipient_id == msg_sender_id))
+    all_msgs = all_msg_received.union(all_msg_sent) \
+                                .order_by(Messages.timestamp.desc()) \
+                                .all()
     
     if all_msgs:
         other_user = User.query.get(int(msg_sender_id))
@@ -277,19 +279,6 @@ def view_message(sender_username, msg_id):
         
         return jsonify(msgs_json)
     return redirect(url_for('main.message_inbox'))
-
-# THIS MAY REQUIRE THREADING TO WORK CONCURRENTING INSTEAD OF RENDERING THE LIST BY ITSELF
-@bp.route('/message_inbox_list')
-@login_required
-def message_inbox_list():
-    page = request.args.get('page', 1, type=int)
-    messages = current_user.message_received.order_by(
-                Messages.timestamp.desc()).paginate(
-                    page, current_app.config['MESSAGES_PER_PAGE'], False)
-
-    next_url = url_for('main.message_inbox_list', page=messages.next_num) if messages.has_next else None
-    prev_url = url_for('main.message_inbox_list', page=messages.prev_num) if messages.has_prev else None
-    return render_template('_message-list.html', messages=messages.items, next_url=next_url, prev_url=prev_url)
 
 @bp.route('/send_message', methods=['GET', 'POST'])
 @login_required
@@ -356,6 +345,39 @@ def reply_message(subject, recip_name):
     
     return redirect(url_for('main.message_inbox'))
 
+@bp.route('/delete_message/<subject>/<sender_name>', methods=['GET'])
+@login_required
+def delete_message(subject, sender_name):
+    sender = User.query.filter_by(username=sender_name).first()
+    all_msg = Messages.query \
+                    .filter_by(subject=subject) \
+                    .filter((Messages.recipient_id == current_user.id) | (Messages.recipient_id == sender.id)) \
+                    .filter((Messages.sender_id == current_user.id) | (Messages.sender_id == sender.id)) \
+                    .all()
+    if sender and all_msg:
+        for msg in all_msg:
+            current_user.delete_msg(msg)
+
+            db.session.commit()
+        return jsonify('Message successfully deleted!')
+    return 
+
+@bp.route('/restore_message/<subject>/<sender_name>', methods=['GET'])
+@login_required
+def restore_message(subject, sender_name):
+    sender = User.query.filter_by(username=sender_name).first()
+    all_msg = Messages.query \
+                    .filter_by(subject=subject) \
+                    .filter((Messages.recipient_id == current_user.id) | (Messages.recipient_id == sender.id)) \
+                    .filter((Messages.sender_id == current_user.id) | (Messages.sender_id == sender.id)) \
+                    .all()
+    if sender and all_msg:
+        for msg in all_msg:
+            current_user.undelete_msg(msg)
+
+            db.session.commit()
+        return jsonify('Message successfully restored!')
+    return 
 
 @bp.route('/explore')
 def explore():
@@ -474,11 +496,62 @@ def report_feed(project_id):
         send_email(subject='Feed Report - ' + project.title,
                     sender=current_app.config['ADMIN'],
                     recipients=[current_app.config['ADMIN']],
-                    html_body='Report submission for username: ' + project.username,
-                    text_body='Report submission for username: ' + project.username)
+                    html_body='Report submission for username: ' + project.username + ' with project title: ' + project.title,
+                    text_body='Report submission for username: ' + project.username + ' with project title: ' + project.title)
                     
         return jsonify('Report submitted')
     return jsonify('Failed submission')
+
+
+@bp.route('/follow/<username>')
+@login_required
+def follow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('Error: User not found!')
+        return redirect(url_for('auth.homepage'))
+    if user == current_user:
+        flash('You cannot follow yourself!')
+        return redirect(url_for('main.profile', username=username))
+    
+    current_user.follow(user)
+    db.session.commit()
+
+    if request.args:
+        args = request.args.get('redirect')
+        if args == 'homepage':
+            return redirect(url_for('auth.homepage'))
+        elif args == 'project-page':
+            title = request.args.get('title')
+            return redirect(url_for('project.project', username=username, title=title))
+
+    flash('You are now following {}'.format(username))
+    return redirect(url_for('main.profile', username=username))
+
+@bp.route('/unfollow/<username>')
+@login_required
+def unfollow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('Error: User not found!')
+        return redirect(url_for('auth.homepage'))
+    if user == current_user:
+        flash('You cannot unfollow yourself!')
+        return redirect(url_for('main.profile', username=username))
+    
+    current_user.unfollow(user)
+    db.session.commit()
+
+    if request.args:
+        args = request.args.get('redirect')
+        if args == 'homepage':
+            return redirect(url_for('auth.homepage'))
+        elif args == 'project-page':
+            title = request.args.get('title')
+            return redirect(url_for('project.project', username=username, title=title))
+    
+    flash('You have unfollowed {}'.format(username))
+    return redirect(url_for('main.profile', username=username))
 
 @bp.route('/block/<username>', methods=['GET', 'POST'])
 @login_required

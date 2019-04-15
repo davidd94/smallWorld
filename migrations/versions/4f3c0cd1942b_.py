@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ad600e672a11
+Revision ID: 4f3c0cd1942b
 Revises: 
-Create Date: 2019-04-07 21:23:00.119364
+Create Date: 2019-04-14 02:05:54.942001
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ad600e672a11'
+revision = '4f3c0cd1942b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,6 +30,9 @@ def upgrade():
     sa.Column('picture', sa.Text(length=500), nullable=True),
     sa.Column('verified', sa.Boolean(), nullable=True),
     sa.Column('max_failed_login', sa.Integer(), nullable=True),
+    sa.Column('msg_note', sa.Boolean(), nullable=True),
+    sa.Column('comment_note', sa.Boolean(), nullable=True),
+    sa.Column('reply_note', sa.Boolean(), nullable=True),
     sa.Column('token', sa.String(length=50), nullable=True),
     sa.Column('token_expiration', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
@@ -37,6 +40,12 @@ def upgrade():
     op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
     op.create_index(op.f('ix_user_token'), 'user', ['token'], unique=True)
     op.create_index(op.f('ix_user_username'), 'user', ['username'], unique=True)
+    op.create_table('blocked_users',
+    sa.Column('blocker_id', sa.Integer(), nullable=True),
+    sa.Column('blocked_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['blocked_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['blocker_id'], ['user.id'], )
+    )
     op.create_table('followers',
     sa.Column('follower_id', sa.Integer(), nullable=True),
     sa.Column('followed_id', sa.Integer(), nullable=True),
@@ -78,28 +87,57 @@ def upgrade():
     sa.Column('username', sa.String(length=64), nullable=True),
     sa.Column('title', sa.String(length=40), nullable=True),
     sa.Column('description', sa.String(length=300), nullable=True),
+    sa.Column('itemlist_enabled', sa.Boolean(), nullable=True),
     sa.Column('difficulty', sa.Integer(), nullable=True),
     sa.Column('cost', sa.Integer(), nullable=True),
     sa.Column('duration', sa.Integer(), nullable=True),
     sa.Column('tutorial', sa.Text(length=100000), nullable=True),
+    sa.Column('tutorial_enabled', sa.Boolean(), nullable=True),
     sa.Column('maintenance', sa.Text(length=100000), nullable=True),
+    sa.Column('maintenance_enabled', sa.Boolean(), nullable=True),
     sa.Column('video', sa.String(length=220), nullable=True),
     sa.Column('created_date', sa.DateTime(), nullable=True),
     sa.Column('last_edit', sa.DateTime(), nullable=True),
+    sa.Column('last_update_type', sa.String(), nullable=True),
     sa.Column('likes', sa.Integer(), nullable=True),
     sa.Column('private', sa.Boolean(), nullable=True),
+    sa.Column('aquariums', sa.Boolean(), nullable=True),
+    sa.Column('saltwater', sa.Boolean(), nullable=True),
+    sa.Column('freshwater', sa.Boolean(), nullable=True),
+    sa.Column('terrariums', sa.Boolean(), nullable=True),
+    sa.Column('enclosedtropical', sa.Boolean(), nullable=True),
+    sa.Column('opentropical', sa.Boolean(), nullable=True),
+    sa.Column('carnivorous', sa.Boolean(), nullable=True),
+    sa.Column('desert', sa.Boolean(), nullable=True),
+    sa.Column('reptiles', sa.Boolean(), nullable=True),
+    sa.Column('vivariumpaludarium', sa.Boolean(), nullable=True),
+    sa.Column('waterreptiles', sa.Boolean(), nullable=True),
+    sa.Column('plantsonly', sa.Boolean(), nullable=True),
     sa.Column('commentsAndReplies_last_read', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_index(op.f('ix_projects_aquariums'), 'projects', ['aquariums'], unique=False)
+    op.create_index(op.f('ix_projects_carnivorous'), 'projects', ['carnivorous'], unique=False)
     op.create_index(op.f('ix_projects_commentsAndReplies_last_read'), 'projects', ['commentsAndReplies_last_read'], unique=False)
     op.create_index(op.f('ix_projects_created_date'), 'projects', ['created_date'], unique=False)
     op.create_index(op.f('ix_projects_description'), 'projects', ['description'], unique=False)
+    op.create_index(op.f('ix_projects_desert'), 'projects', ['desert'], unique=False)
+    op.create_index(op.f('ix_projects_enclosedtropical'), 'projects', ['enclosedtropical'], unique=False)
+    op.create_index(op.f('ix_projects_freshwater'), 'projects', ['freshwater'], unique=False)
     op.create_index(op.f('ix_projects_last_edit'), 'projects', ['last_edit'], unique=False)
+    op.create_index(op.f('ix_projects_last_update_type'), 'projects', ['last_update_type'], unique=False)
+    op.create_index(op.f('ix_projects_opentropical'), 'projects', ['opentropical'], unique=False)
+    op.create_index(op.f('ix_projects_plantsonly'), 'projects', ['plantsonly'], unique=False)
     op.create_index(op.f('ix_projects_private'), 'projects', ['private'], unique=False)
+    op.create_index(op.f('ix_projects_reptiles'), 'projects', ['reptiles'], unique=False)
+    op.create_index(op.f('ix_projects_saltwater'), 'projects', ['saltwater'], unique=False)
+    op.create_index(op.f('ix_projects_terrariums'), 'projects', ['terrariums'], unique=False)
     op.create_index(op.f('ix_projects_title'), 'projects', ['title'], unique=False)
     op.create_index(op.f('ix_projects_username'), 'projects', ['username'], unique=False)
+    op.create_index(op.f('ix_projects_vivariumpaludarium'), 'projects', ['vivariumpaludarium'], unique=False)
+    op.create_index(op.f('ix_projects_waterreptiles'), 'projects', ['waterreptiles'], unique=False)
     op.create_table('FAQs',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=64), nullable=True),
@@ -162,11 +200,18 @@ def upgrade():
     op.create_index(op.f('ix_FAQs_question9'), 'FAQs', ['question9'], unique=False)
     op.create_index(op.f('ix_FAQs_title'), 'FAQs', ['title'], unique=False)
     op.create_index(op.f('ix_FAQs_username'), 'FAQs', ['username'], unique=False)
+    op.create_table('deleted_messages',
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('message_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['message_id'], ['messages.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], )
+    )
     op.create_table('itemlist',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=64), nullable=True),
     sa.Column('title', sa.String(length=40), nullable=True),
     sa.Column('itemname', sa.String(length=100), nullable=True),
+    sa.Column('itemlink', sa.String(length=300), nullable=True),
     sa.Column('itembrand', sa.String(length=30), nullable=True),
     sa.Column('quantity', sa.Integer(), nullable=True),
     sa.Column('notes', sa.String(length=250), nullable=True),
@@ -280,6 +325,7 @@ def downgrade():
     op.drop_index(op.f('ix_itemlist_username'), table_name='itemlist')
     op.drop_index(op.f('ix_itemlist_title'), table_name='itemlist')
     op.drop_table('itemlist')
+    op.drop_table('deleted_messages')
     op.drop_index(op.f('ix_FAQs_username'), table_name='FAQs')
     op.drop_index(op.f('ix_FAQs_title'), table_name='FAQs')
     op.drop_index(op.f('ix_FAQs_question9'), table_name='FAQs')
@@ -304,13 +350,26 @@ def downgrade():
     op.drop_index(op.f('ix_FAQs_answer10'), table_name='FAQs')
     op.drop_index(op.f('ix_FAQs_answer1'), table_name='FAQs')
     op.drop_table('FAQs')
+    op.drop_index(op.f('ix_projects_waterreptiles'), table_name='projects')
+    op.drop_index(op.f('ix_projects_vivariumpaludarium'), table_name='projects')
     op.drop_index(op.f('ix_projects_username'), table_name='projects')
     op.drop_index(op.f('ix_projects_title'), table_name='projects')
+    op.drop_index(op.f('ix_projects_terrariums'), table_name='projects')
+    op.drop_index(op.f('ix_projects_saltwater'), table_name='projects')
+    op.drop_index(op.f('ix_projects_reptiles'), table_name='projects')
     op.drop_index(op.f('ix_projects_private'), table_name='projects')
+    op.drop_index(op.f('ix_projects_plantsonly'), table_name='projects')
+    op.drop_index(op.f('ix_projects_opentropical'), table_name='projects')
+    op.drop_index(op.f('ix_projects_last_update_type'), table_name='projects')
     op.drop_index(op.f('ix_projects_last_edit'), table_name='projects')
+    op.drop_index(op.f('ix_projects_freshwater'), table_name='projects')
+    op.drop_index(op.f('ix_projects_enclosedtropical'), table_name='projects')
+    op.drop_index(op.f('ix_projects_desert'), table_name='projects')
     op.drop_index(op.f('ix_projects_description'), table_name='projects')
     op.drop_index(op.f('ix_projects_created_date'), table_name='projects')
     op.drop_index(op.f('ix_projects_commentsAndReplies_last_read'), table_name='projects')
+    op.drop_index(op.f('ix_projects_carnivorous'), table_name='projects')
+    op.drop_index(op.f('ix_projects_aquariums'), table_name='projects')
     op.drop_table('projects')
     op.drop_index(op.f('ix_notifications_username'), table_name='notifications')
     op.drop_index(op.f('ix_notifications_title'), table_name='notifications')
@@ -322,6 +381,7 @@ def downgrade():
     op.drop_index(op.f('ix_messages_message_read'), table_name='messages')
     op.drop_table('messages')
     op.drop_table('followers')
+    op.drop_table('blocked_users')
     op.drop_index(op.f('ix_user_username'), table_name='user')
     op.drop_index(op.f('ix_user_token'), table_name='user')
     op.drop_index(op.f('ix_user_email'), table_name='user')

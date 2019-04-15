@@ -1,3 +1,86 @@
+<style>
+.form-container {
+    width: 37.5em;
+    height: 100%;
+    max-width: 37.5em;
+    padding: 10px;
+    background-color: white;
+    position: relative;
+    z-index: 600;
+    opacity: 1;
+}
+
+/* Full-width input fields */
+.form-container input[type=text] {
+    width: 30%;
+    padding: 15px;
+    margin: 1.2em 0;
+    border: none;
+    background: #f1f1f1;
+    font-size: 0.75em;
+    float: left;
+}
+
+.form-container input[type=text2] {
+    width: 60%;
+    padding: 15px;
+    margin: 1.2em 0;
+    border: none;
+    background: #f1f1f1;
+    font-size: 0.75em;
+    float: right;
+}
+
+/* When the inputs get focus, do something */
+.form-container input:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+.message-popup-msg {
+    width: 100%;
+    height: 17em;
+    margin: 1.2em 0 2em 0;
+    resize: none;
+}
+
+/* Set a style for the submit/login button */
+.form-popup {
+  display: none;
+  position: fixed;
+  z-index: 500;
+  bottom: 0;
+  right: 15px;
+  border: 2px solid #bdbdbd;
+  background: white;
+}
+.form-container .btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 15%;
+  height: 3em;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+.form-container .send {
+  margin-left: 1.5em;
+  float: left;
+}
+
+.form-container .cancel {
+  background-color: red;
+  margin-right: 1.5em;
+  float: right;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+</style>
 <div class="form-popup" id="myForm">
   <div class="form-container">
     <h1 class="message-popup-heading">New Message</h1>
@@ -8,6 +91,97 @@
     {{ form.body(class="message-popup-msg", placeholder="Enter your message here..", autocomplete="off", maxlength="499") }}<br>
 
     {{ form.submit(id="send-new-msg-btn", class="btn send") }}
-    <button type="button" class="btn cancel msg-popup-closebtn" onclick="closeForm()">Close</button>
+    <button type="button" class="btn cancel msg-popup-closebtn">Close</button>
   </div>
 </div>
+<script>
+/* ****** SPECIAL NOTES ******
+1. PLEASE NOTE THAT YOU MUST HAVE JS ENABLED IN THE PARENT ELEMENT BEFORE USING THIS
+2. YOU ALSO NEED TO ASSIGN THE APPROPRIATE CLASS TO OPEN THE MESSAGE BOX AS SHOWN BELOW
+3. YOU NEED TO ASSIGN 'MessagesForm()' IN YOUR VIEW ROUTE
+4. OPTIONAL: ADD ALERT-MSGS AND AJUST STYLES ACCORDINGLY
+/* 
+
+/* MESSAGE BOX POPUP */
+$(function () {
+
+    // OPENS MSGS BOX - *** NEED TO COPY AND PASTE THIS INSIDE PARENT SCRIPT - DO NOT USE IT HERE!!!! ***
+    /* $( *INSERT CLASS NAME HERE* ).on('click', (event) => {
+        var username = "INSERT USERNAME HERE";
+        $('#myForm').css('display', 'block');
+        $('.new-msg-recip').prop('readonly', true);
+        $('.new-msg-recip')[0].value = username;
+    });
+    */
+
+    // CLOSES MSG BOX
+    $('.msg-popup-closebtn').on('click', (event) => {
+        $('#myForm').css('display', 'none');
+        $('.new-msg-recip')[0].value = "";
+        $('.new-msg-subject')[0].value = "";
+        $('.message-popup-msg')[0].value = "";
+    });
+
+/* SEND MSG DYNAMICALLY */
+$(function () {
+    $('#send-new-msg-btn').on('click', (event) => {
+        var new_msg_recip = $('.new-msg-recip')[0].value;
+        var new_msg_subject = $('.new-msg-subject')[0].value;
+        var new_msg_body = $('.message-popup-msg')[0].value;
+        var newmsg = {'recipient': new_msg_recip, 'subject': new_msg_subject, 'body': new_msg_body};
+        
+        var csrf_token = "{{ csrf_token() }}";
+        // Inject our CSRF token into our AJAX request.
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                }
+            }
+        });
+        event.preventDefault();
+        $.ajax({
+            url: "{{ url_for('main.send_message') }}",
+            type: 'POST',
+            data: JSON.stringify(newmsg),
+            contentType: 'application/json',
+            success: function(response) {
+                if (response == 'Message successfully sent!') {
+                    $('.form-popup').attr('style','display: none;');
+                    $(".new-msg-recip")[0].value = "";
+                    $(".new-msg-subject")[0].value = "";
+                    $(".message-popup-msg")[0].value = "";
+                    $('.message-success-msg')[0].textContent = response;
+
+                    $('.alert-success').attr('style','right: 16em;');
+                    setTimeout(function () {
+                        $('.alert-success').attr('style','right: -70em;');
+                    }, 4000);
+                } else if (response == "That user does not exist" || response == "You cannot message yourself") {
+                    $(".new-msg-recip")[0].value = "";
+                    $('.message-fail-msg')[0].textContent = response;
+                    $('.alert-secondary').attr('style','right: 16em;');
+                    setTimeout(function () {
+                        $('.alert-secondary').attr('style','right: -70em;');
+                    }, 4000);
+                } else if (response == 'Subject must be 5-50 characters long' || 
+                            response == 'Message: max of 500 characters long' || 
+                            response == 'User name must be a minimum of 5 characters long') {
+                    $('.message-fail-msg')[0].textContent = response;
+                    $('.alert-secondary').attr('style','right: 16em;');
+                    setTimeout(function () {
+                        $('.alert-secondary').attr('style','right: -70em;');
+                    }, 4000);
+                }
+            },
+            error: function(response) {
+                console.log(response);
+                console.log('Something went wrong with sending messages...');
+            }
+        });
+    });
+});
+
+});
+
+</script>

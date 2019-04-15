@@ -6,6 +6,7 @@ from app.models import User, Projects, Notifications
 from app.auth import bp
 from app.auth.forms import LoginForm, RegistrationForm, PasswordResetRequestForm, PasswordResetForm
 from app.main.forms import SearchForm, MessageForm
+from werkzeug.urls import url_parse
 
 
 @bp.route('/clear_flash_msgs')
@@ -40,21 +41,63 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.max_failed_login >= 10:
             flash('You have reached your maximum login attempts.')
+
+            # MAINTAINING REQUEST.ARGS AFTER FAILED LOGIN ATTEMPTS
+            if request.args.get('next') == 'project-page':
+                return redirect(url_for('auth.login',
+                                        next=request.args.get('next'),
+                                        title=request.args.get('title'),
+                                        username=request.args.get('username')))
+            elif request.args.get('next') == 'login-page':
+                return redirect(url_for('auth.login'))
+            # REDIRECTS FROM FAILED LOGIN ATTEMPTS IN HOMEPAGE
+            return redirect(url_for('auth.homepage'))
+
             return redirect(url_for('auth.homepage'))
         if user is None or not user.check_password(form.password.data):
             if user:
                 user.failed_login_counter()
             flash('Invalid user name and password combination.')
+
+            # MAINTAINING REQUEST.ARGS AFTER FAILED LOGIN ATTEMPTS
+            if request.args.get('next') == 'project-page':
+                return redirect(url_for('auth.login',
+                                        next=request.args.get('next'),
+                                        title=request.args.get('title'),
+                                        username=request.args.get('username')))
+            elif request.args.get('next') == 'login-page':
+                return redirect(url_for('auth.login'))
+            # REDIRECTS FROM FAILED LOGIN ATTEMPTS IN HOMEPAGE
             return redirect(url_for('auth.homepage'))
         if user.verified == False:
             flash('Please check your email to verify your account before logging in.')
+
+            # MAINTAINING REQUEST.ARGS AFTER FAILED LOGIN ATTEMPTS
+            if request.args.get('next') == 'project-page':
+                return redirect(url_for('auth.login',
+                                        next=request.args.get('next'),
+                                        title=request.args.get('title'),
+                                        username=request.args.get('username')))
+            elif request.args.get('next') == 'login-page':
+                return redirect(url_for('auth.login'))
+            # REDIRECTS FROM FAILED LOGIN ATTEMPTS IN HOMEPAGE
+            return redirect(url_for('auth.homepage'))
+
             return redirect(url_for('auth.homepage'))
         login_user(user, remember=form.remember_me.data)
         user.max_failed_login = 0
         db.session.commit()
-        # THIS PREVENTS USERS FROM REDIRECTING BACK TO THEIR MALICIOUS SITE AFTER LOGIN
+        
+        # THIS REDIRECT USERS TO THEIR PREVIOUS PAGE AFTER LOGIN
         next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
+        if next_page == 'project-page':
+            username = request.args.get('username')
+            title = request.args.get('title')
+            next_page = url_for('project.project', username=username, title=title)
+        # REDIRECTS TO HOMEPAGE AFTER LOGIN & PREVENTS USERS FROM REDIRECTING BACK TO THEIR MALICIOUS SITE AFTER LOGIN
+        elif not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('auth.homepage')
+        else:
             next_page = url_for('auth.homepage')
         return redirect(next_page)
     return render_template('login.html', form=form)

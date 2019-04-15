@@ -235,7 +235,13 @@
         </div>
 
         <div class="project-comments">
+            {% if current_user.is_authenticated %}
             {% include '/projects/_project-comments.html' %}
+            {% else %}
+            <div class="project-comment-login">
+                <p>You need to login to see the comments. <a href="{{ url_for('auth.login', next='project-page', username=project.username, title=project.title) }}">Login here</a></p>
+            </div>
+            {% endif %}
         </div>
 
         <div class="project-faq">
@@ -776,7 +782,7 @@ $(function () {
         
         if (commentID && (currentLike == '')) {
             $.ajax({
-                url: '/project/comment_like/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + commentID,
+                url: '/project/comment_like/' + '{{ project.id }}' + '/' + commentID,
                 type: 'GET',
                 success: function (response) {
                     if (response == 'Comment liked!') {
@@ -794,7 +800,7 @@ $(function () {
             });
         } else if (commentID && (currentLike != '')) {
             $.ajax({
-                url: '/project/comment_unlike/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + commentID,
+                url: '/project/comment_unlike/' + '{{ project.id }}' + '/' + commentID,
                 type: 'GET',
                 success: function (response) {
                     if (response == 'Comment unliked!') {
@@ -814,7 +820,7 @@ $(function () {
 
         if (replyID && (currentLike == '')) {
             $.ajax({
-                url: '/project/reply_like/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + replyID,
+                url: '/project/reply_like/' + '{{ project.id }}' + '/' + replyID,
                 type: 'GET',
                 success: function (response) {
                     if (response == 'Reply liked!') {
@@ -832,7 +838,7 @@ $(function () {
             });
         } else if (replyID && (currentLike != '')) {
             $.ajax({
-                url: '/project/reply_unlike/' + '{{ user.username }}' + '/' + '{{ project.title }}' + '/' + replyID,
+                url: '/project/reply_unlike/' + '{{ project.id }}' + '/' + replyID,
                 type: 'GET',
                 success: function (response) {
                     if (response == 'Reply unliked!') {
@@ -887,6 +893,7 @@ $(function () {
         });
     });
 });
+
 /* SHOW ALL USERS LIKED WHO LIKED REPLY */
 $(function () {
     $('.comment-root').on('click', '.reply-like-number', (event) => {

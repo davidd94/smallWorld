@@ -127,6 +127,11 @@ h2 {
 }
 
 /* MODAL POPUP */
+.main-pic-modal {
+    position: absolute;
+    top: 30%;
+    left: -5%;
+}
 .modal-content {
     height: 40em;
     width: 50em;

@@ -270,6 +270,46 @@
     width: 30%;
     margin: 0 0.5em;
 }
+.profile-followers-list {
+    grid-row: 1 / span 1;
+    grid-column: 4 / span 1;
+    justify-self: left;
+    align-self: center;
+}
+
+#modalDel {
+    top: 10em;
+}
+.modal-content {
+    width: 40em;
+}
+.modal-title {
+    width: 100%;
+    text-align: center;
+}
+.modal-body{
+    overflow: hidden;
+    background: linear-gradient(to right, #b3cae5 8%, #dbdde4 36%, #e4e3e4 80%, #f7ddbb 94%, #efcab2 100%);
+}
+.followers-modal-wrapper {
+    background: rgb(230, 230, 230);
+    border: 1px solid rgb(29, 29, 29);
+    width: 50%;
+    height: 25em;
+    margin: 0 auto;
+    border-radius: 1em;
+    overflow: scroll;
+    padding: 0.5em;
+}
+.followers-modal {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.followers-modal li {
+    text-align: center;
+    margin-bottom: 1em;
+}
 
 .profile-social-unfollow a {
     color: #03658c;
@@ -636,5 +676,24 @@
     border-radius: 0.75em;
     overflow: hidden;
     text-align: center;
-    
+}
+
+/* ALERT MESSAGE */
+.alert-box-wrapper {
+    position: absolute;
+    top: 9em;
+    right: -10em;
+    height: 1%;
+}
+
+#message-alert-box {
+    width: 15em;
+    height: 5em;
+    max-height: 6em;
+    padding: 0.8em;
+    text-align: center;
+    right: -70em;
+    top: 0;
+    transition: all 1500ms ease;
+    position: absolute;
 }

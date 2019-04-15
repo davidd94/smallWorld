@@ -43,6 +43,11 @@ db.Column('blocker_id', db.Integer, db.ForeignKey('user.id')),
 db.Column('blocked_id', db.Integer, db.ForeignKey('user.id'))
 )
 
+deleted_messages = db.Table('deleted_messages',
+db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+db.Column('message_id', db.Integer, db.ForeignKey('messages.id'))
+)
+
 class SearchableMixin(object):
     @classmethod
     def search(cls, expression, page, per_page):
@@ -142,6 +147,12 @@ class User(UserMixin, db.Model):
                                         backref=db.backref('blocker', lazy='dynamic'),
                                         lazy='dynamic',
                                         passive_deletes=True)
+    deleted_msgs = db.relationship('Messages', secondary=deleted_messages,
+                                        primaryjoin=(deleted_messages.c.user_id == id),
+                                        backref=db.backref('deleter', lazy='dynamic'),
+                                        lazy='dynamic',
+                                        passive_deletes=True)
+    
     # RELATIONSHIPS TABLES
     message_sent = db.relationship('Messages',
                                     foreign_keys='Messages.sender_id',
@@ -265,6 +276,28 @@ class User(UserMixin, db.Model):
         if self.is_liking_reply(project_reply):
             self.replies_liked.remove(project_reply)
 
+    def is_deleted(self, msg):
+        print(Messages.query \
+                        .join(deleted_messages) \
+                        .join(User) \
+                        .filter(deleted_messages.c.user_id == self.id) \
+                        .filter(deleted_messages.c.message_id == msg.id) \
+                        .all())
+        return Messages.query \
+                        .join(deleted_messages) \
+                        .join(User) \
+                        .filter(deleted_messages.c.user_id == self.id) \
+                        .filter(deleted_messages.c.message_id == msg.id) \
+                        .count() > 0
+
+    def delete_msg(self, msg):
+        if not self.is_deleted(msg):
+            self.deleted_msgs.append(msg)
+    
+    def undelete_msg(self, msg):
+        if self.is_deleted(msg):
+            self.deleted_msgs.remove(msg)
+
     def project_visits(self, project):
         if not (Projects.query.join(project_visitors).join(User).filter(project_visitors.c.user_id == self.id).filter(project_visitors.c.project_id == project.id).count() > 0):
             self.project_visited.append(project)
@@ -325,6 +358,13 @@ class Messages(db.Model):
     body = db.Column(db.String(500))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     message_read = db.Column(db.Boolean, index=True, default=False)
+    
+    # ASSOCIATION TABLE
+    deleted_msgs = db.relationship('User', secondary=deleted_messages,
+                                    primaryjoin=(deleted_messages.c.message_id == id),
+                                    backref=db.backref('message', lazy='dynamic'),
+                                    lazy='dynamic',
+                                    passive_deletes=True)
 
     def __repr__(self):
         return '<Message {}>'.format(self.subject)

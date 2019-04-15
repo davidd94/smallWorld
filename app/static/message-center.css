@@ -23,6 +23,7 @@
     align-self: center;
     justify-self: flex-start;
     margin-left: 0.4em;
+    min-width: 9em;
 }
 
 .message-list-new-msg {
@@ -37,6 +38,10 @@
     grid-row: 2 / span 1;
     grid-column: 1 / span 1;
     border-top: 0.0625em solid rgb(218, 218, 218);
+    display: none;
+}
+.is-active {
+    display: block;
 }
 
 #message-list-override li {
@@ -90,6 +95,14 @@
     justify-self: left;
     display: none;
 }
+.message-restore-msg {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    margin: auto 0 auto 14em;
+    justify-self: left;
+    display: none;
+    visibility: hidden;
+}
 
 .message-info-bar {
     text-align: center;
@@ -125,116 +138,6 @@
     right: -70em;
     position: absolute;
 }
-
-/* NEW MESSAGE POPUP BOX */
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box;}
-
-/* Button used to open the contact form - fixed at the bottom of the page --- NOT USED!!!
-.open-button {
-  background-color: #555;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  opacity: 0.8;
-  position: fixed;
-  bottom: 23px;
-  right: 28px;
-  width: 280px;
-}
-*/
-
-.message-popup-heading {
-    font-size: 1.4em;
-    text-align: center;
-}
-
-/* The popup form - hidden by default */
-.form-popup {
-  display: none;
-  position: fixed;
-  z-index: 500;
-  bottom: 0;
-  right: 15px;
-  border: 3px solid #f1f1f1;
-}
-
-/* Add styles to the form container */
-.form-container {
-    width: 37.5em;
-    height: 100%;
-    max-width: 37.5em;
-    padding: 10px;
-    background-color: white;
-    position: relative;
-    z-index: 600;
-    opacity: 1;
-}
-
-/* Full-width input fields */
-.form-container input[type=text] {
-    width: 30%;
-    padding: 15px;
-    margin: 1.2em 0;
-    border: none;
-    background: #f1f1f1;
-    font-size: 0.75em;
-    float: left;
-}
-
-.form-container input[type=text2] {
-    width: 60%;
-    padding: 15px;
-    margin: 1.2em 0;
-    border: none;
-    background: #f1f1f1;
-    font-size: 0.75em;
-    float: right;
-}
-
-/* When the inputs get focus, do something */
-.form-container input:focus {
-  background-color: #ddd;
-  outline: none;
-}
-
-.message-popup-msg {
-    width: 100%;
-    height: 17em;
-    margin: 1.2em 0 2em 0;
-    resize: none;
-}
-
-/* Set a style for the submit/login button */
-.form-container .btn {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  width: 15%;
-  height: 3em;
-  margin-bottom: 10px;
-  opacity: 0.8;
-}
-
-.form-container .send {
-  margin-left: 1.5em;
-  float: left;
-}
-
-.form-container .cancel {
-  background-color: red;
-  margin-right: 1.5em;
-  float: right;
-}
-
-/* Add some hover effects to buttons */
-.form-container .btn:hover, .open-button:hover {
-  opacity: 1;
-}
-
-
 
 
 /* MESSAGE PREVIEW BOX STYLES */
