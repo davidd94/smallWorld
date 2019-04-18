@@ -6,7 +6,8 @@
 {% endblock css %}
 
 {% block bodycontent %}
-<h2>Add/Remove Photos</h2><button type="button" class="btn btn-info edit-photo-back-btn" onclick="window.history.back();">Back to Project</button>
+<h2>Add/Remove Photos</h2>
+<a class="edit-photo-back" href="{{ url_for('project.project', title=project.title, username=user.username) }}"><button type="button" class="btn btn-info">Back to Project</button></a>
 <form id="file_box_input" class="box" method="POST" action="" enctype="multipart/form-data">
   <svg class="box__icon" xmlns="http://www.w3.org/2000/svg" width="150" viewBox="0 0 50 43"><path d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z"></path></svg>
   <div id="file_input" class="box__input input-div">  
@@ -22,8 +23,6 @@
   <div class="box__error input-div">Error! <span class="error_msg"></span> <a href="" class="box__restart" role="button">Try again!</a></div>
 </form>
 
-            
-
 <div class="container">
 
     <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Photo Gallery</h1>
@@ -33,7 +32,7 @@
     <div id="main-gallery-frame" class="row text-center text-lg-left">
         {% if project_gallery %}
         {% if project_gallery.photoOne %}
-        <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoOne }}">
+        <div id="main-box" class="col-lg-3 col-md-4 col-6 gradient-border" name="{{ project_gallery.photoOne }}">
             <a href="#_" id="image-box" class="d-block mb-4 h-100">
                 <div class="remove-centering">
                     <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
@@ -46,7 +45,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <p>{{ project_gallery.photoOne }}</p>
+                    <p><span class="main-photo-text">PRIMARY PHOTO</span>{{ project_gallery.photoOne }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -77,6 +76,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoTwo) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
                     <p>{{ project_gallery.photoTwo }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -108,6 +108,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoThree) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
                     <p>{{ project_gallery.photoThree }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -139,6 +140,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoFour) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
                     <p>{{ project_gallery.photoFour }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -170,6 +172,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoFive) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
                     <p>{{ project_gallery.photoFive }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -201,6 +204,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoSix) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
                     <p>{{ project_gallery.photoSix }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -232,6 +236,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoSeven) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
                     <p>{{ project_gallery.photoSeven }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -263,6 +268,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoEight) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
                     <p>{{ project_gallery.photoEight }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -294,6 +300,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoNine) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
                     <p>{{ project_gallery.photoNine }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -325,6 +332,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoTen) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
                     <p>{{ project_gallery.photoTen }}</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -349,6 +357,7 @@
 
 {% block scripts %}
 {{ super() }}
+
 <script>
 /* DRAG AND DROP (via FormData, DataTransfer, and FileReader Web-API) FEATURE DETECTION IN USERS' BROWERS */
 var isAdvancedUpload = function() {
@@ -572,7 +581,6 @@ $(function () {
         });
     });
 });
-
 
 </script>
 {% endblock scripts %}

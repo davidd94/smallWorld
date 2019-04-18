@@ -5,13 +5,17 @@ from flask_moment import Moment
 from datetime import datetime
 from sqlalchemy import update
 from app import db, moment
+from app.tasks import test_export
 from app.email import send_notification_email
 from app.models import User, Projects, PhotoGallery, Itemlist, ProjectComments, CommentReplies, Notifications, FAQs, comment_likers, reply_likers, project_likers
 from app.project import bp
 from app.project.forms import ProjectForm, EditProjectForm, FAQForm
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
+from bs4 import BeautifulSoup
 import os, shutil
+import pdfkit
+config = pdfkit.configuration(wkhtmltopdf="/usr/local/bin/wkhtmltopdf")
 
 
 @bp.route('/new_project', methods=['GET', 'POST'])
@@ -264,6 +268,68 @@ def edit_tutorial_toggle(title):
         return jsonify('toggle saved')
     return redirect(url_for('project.project', username=current_user.username, title=project.title))
 
+@bp.route('/project/export_tutorial/<username>/<title>', methods=['GET'])
+def export_tutorial(username, title):
+    user = User.query.filter_by(username=username).first()
+    project = Projects.query \
+                    .filter_by(username=username) \
+                    .filter_by(title=title) \
+                    .first()
+    if user and project and project.tutorial:
+        file_path = current_app.config['PHOTO_UPLOAD_DIR']
+        full_file_path = file_path + '/' + current_user.username + '/' + title
+        html = project.tutorial
+        # COMPLETES THE UNFINISHED HTML
+        soup = BeautifulSoup(html, "lxml")
+        # TAKES COMPLETED HTML AND SAVES INTO FILE
+        Html_file = open(full_file_path + "/tutorial.html","w")
+        Html_file.write(str(soup))
+        Html_file.close()
+        # CONVERTS HTML FILE TO PDF
+        pdf = pdfkit.from_file(full_file_path + "/tutorial.html", full_file_path + "/tutorial.pdf", configuration=config)
+        
+
+        #print(soup.get_text(" "))
+    return render_template('/projects/edit_tutorial.html', project=project)
+
+
+@bp.route('/project/export_celery_test/<username>/<title>', methods=['POST'])
+@login_required
+def export_celery_test(username, title):
+    task = test_export.apply_async()
+    return jsonify({}), 202, {'Location': url_for('project.exportstatus', task_id=task.id)}
+
+@bp.route('/exportstatus/<task_id>')
+@login_required
+def exportstatus(task_id):
+    task = test_export.AsyncResult(task_id)
+    if task.state == 'PENDING':
+        # job did not start yet
+        response = {
+            'state': task.state,
+            'current': 0,
+            'total': 1,
+            'status': 'Pending...'
+        }
+    elif task.state != 'FAILURE':
+        response = {
+            'state': task.state,
+            'current': task.info.get('current', 0),
+            'total': task.info.get('total', 1),
+            'status': task.info.get('status', '')
+        }
+        if 'result' in task.info:
+            response['result'] = task.info['result']
+    else:
+        # something went wrong in the background job
+        response = {
+            'state': task.state,
+            'current': 1,
+            'total': 1,
+            'status': str(task.info),  # this is the exception raised
+        }
+    return jsonify(response)
+
 
 @bp.route('/project/edit_maintenance/<title>')
 @login_required
@@ -476,6 +542,28 @@ def delete_photos(title, img_name):
                 db.session.commit()
                 return jsonify('successfully deleted db image!')
     return jsonify('An error occurred...')
+
+@bp.route('/project/primary_photo/<title>/<img_name>')
+@login_required
+def primary_photo(title, img_name):
+    project = Projects.query.filter_by(title=title).filter_by(user_id=current_user.id).first()
+    photo_gallery = project.photo_gallery.filter_by(project_id=project.id).first()
+    if project and photo_gallery:
+        rows = photo_gallery.__dict__
+        old_primary = photo_gallery.photoOne
+        old_row = ""
+        # UPDATES THE PROJECT LAST EDIT DATE
+        Projects.last_edit = datetime.utcnow()
+        for row in rows:
+            if rows[row] == img_name:
+                old_row = row
+                # SETS NEW PRIMARY PHOTO
+                photo_gallery.photoOne = img_name
+                # DE-SELECTS OLD PRIMARY PHOTO
+                setattr(photo_gallery, old_row, old_primary)
+                db.session.commit()
+                return redirect(url_for('project.edit_photos', title=title))  
+    return redirect(url_for('project.edit_photos', title=title))
 
 @bp.route('/project/new_comment/<username>/<project_id>', methods=['POST'])
 @login_required

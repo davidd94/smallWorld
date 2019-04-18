@@ -19,6 +19,7 @@ class Config(object):
     MAIL_USE_SSL = True
     MAIL_USERNAME = 'smallWorld949@gmail.com'
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_DEFAULT_SENDER = 'smallWorld949@gmail.com'
     ADMIN = 'smallWorld949@gmail.com'
 
     MESSAGES_PER_PAGE = 30
@@ -31,3 +32,7 @@ class Config(object):
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024
 
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
+
+    REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

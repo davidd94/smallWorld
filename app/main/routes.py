@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from urllib.parse import urlparse
 from math import sqrt
 from hashlib import md5
-from app import db
+from app import db, mail
 from app.models import User, Messages, Projects, PhotoGallery, Notifications, project_visitors, followers, deleted_messages
 from app.main import bp
 from app.main.forms import EditProfileForm, MessageForm, SearchForm
@@ -19,6 +19,10 @@ from werkzeug.exceptions import RequestEntityTooLarge
 import os, shutil
 import json
 import time
+
+import celery
+from flask_mail import Message
+
 
 @bp.before_app_request
 def before_request():
@@ -605,6 +609,48 @@ def unblock(username):
         return jsonify('Successfully unblocked user!')
 
     return redirect(url_for('auth.homepage'))
+
+
+
+
+
+# WORKER VIEW FUNCTIONS
+@bp.route('/longtask', methods=['POST'])
+def longtask():
+    task = long_task.apply_async()
+    return jsonify({}), 202, {'Location': url_for('taskstatus', task_id=task.id)}
+
+@bp.route('/status/<task_id>')
+def taskstatus(task_id):
+    task = long_task.AsyncResult(task_id)
+    if task.state == 'PENDING':
+        # job did not start yet
+        response = {
+            'state': task.state,
+            'current': 0,
+            'total': 1,
+            'status': 'Pending...'
+        }
+    elif task.state != 'FAILURE':
+        response = {
+            'state': task.state,
+            'current': task.info.get('current', 0),
+            'total': task.info.get('total', 1),
+            'status': task.info.get('status', '')
+        }
+        if 'result' in task.info:
+            response['result'] = task.info['result']
+    else:
+        # something went wrong in the background job
+        response = {
+            'state': task.state,
+            'current': 1,
+            'total': 1,
+            'status': str(task.info),  # this is the exception raised
+        }
+    return jsonify(response)
+
+
 
 
 def allowed_file(filename):

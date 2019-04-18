@@ -9,6 +9,8 @@ from flask_babel import Babel, lazy_gettext as _l
 from flask_mail import Mail
 from flask_moment import Moment
 from elasticsearch import Elasticsearch
+from redis import Redis
+from celery import Celery
 
 
 db = SQLAlchemy()
@@ -22,6 +24,9 @@ mail = Mail()
 csrf = CSRFProtect()
 moment = Moment()
 
+# NEEDS TO BE OUTSIDE THE BP FACTORY TO BE CREATED OUTSIDE THE CLIENT'S FLASK APP AS ITS OWN WORKER APP
+celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
+
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -34,6 +39,9 @@ def create_app(config_class=Config):
     mail.init_app(app)
     csrf.init_app(app)
     moment.init_app(app)
+
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    celery.conf.update(app.config)
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
