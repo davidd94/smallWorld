@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from urllib.parse import urlparse
 from math import sqrt
 from hashlib import md5
-from app import db, mail
+from app import db, mail, socketio
 from app.models import User, Messages, Projects, PhotoGallery, Notifications, project_visitors, followers, deleted_messages
 from app.main import bp
 from app.main.forms import EditProfileForm, MessageForm, SearchForm
@@ -16,12 +16,13 @@ from werkzeug.urls import url_parse
 from werkzeug.datastructures import MultiDict
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
+from flask_mail import Message
+from flask_socketio import send, emit, disconnect
 import os, shutil
 import json
 import time
-
 import celery
-from flask_mail import Message
+import functools
 
 
 @bp.before_app_request
@@ -31,6 +32,16 @@ def before_request():
         db.session.commit()
     g.search_form = SearchForm()
     g.locale = str(get_locale())
+
+# SOCKETIO HELPER FUNCTION TO VERIFY IF USER IS LOGGED IN
+def authenticated_only(f):
+    @functools.wraps(f)
+    def wrapped(*args, **kwargs):
+        if not current_user.is_authenticated:
+            disconnect()
+        else:
+            return f(*args, **kwargs)
+    return wrapped
 
 
 @bp.route('/profile/<username>', methods=['GET', 'POST'])
@@ -612,8 +623,6 @@ def unblock(username):
 
 
 
-
-
 # WORKER VIEW FUNCTIONS
 @bp.route('/longtask', methods=['POST'])
 def longtask():
@@ -651,6 +660,23 @@ def taskstatus(task_id):
     return jsonify(response)
 
 
+# WEB SOCKETIO FUNCTIONS
+@socketio.on('chatlist')
+@authenticated_only
+def chatlist(userlist):
+    if current_user.is_authenticated:
+        if userlist != session['chatlist']:
+            print('there was a change in the list')
+        emit('chatlist', session['chatlist'])
+
+@socketio.on('message')
+@authenticated_only
+def message(msg):
+    if current_user.is_authenticated:
+        """Sent by a client when the user entered a new message.
+        The message is sent to all people in the room."""
+        room = session.get('room')
+        emit('message', {'msg': session.get('name') + ':' + msg['msg']}, room=room)
 
 
 def allowed_file(filename):

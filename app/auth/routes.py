@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, request, flash, session
 from flask_login import current_user, login_user, logout_user
 from app import db
 from app.email import send_email, send_confirmation_email, send_password_reset_email
-from app.models import User, Projects, Notifications
+from app.models import User, Projects, Notifications, followers
 from app.auth import bp
 from app.auth.forms import LoginForm, RegistrationForm, PasswordResetRequestForm, PasswordResetForm
 from app.main.forms import SearchForm, MessageForm
@@ -87,6 +87,24 @@ def login():
         login_user(user, remember=form.remember_me.data)
         user.max_failed_login = 0
         db.session.commit()
+        # CACHES IN SESSION THE APPROVED FOLLOWERS FOR CHAT LIST
+        all_followers = db.session.query(User, followers) \
+                    .filter(followers.c.followed_id == current_user.id) \
+                    .all()
+        if all_followers:
+            filtered_followers = []
+            for follower in all_followers:
+                filtered_followers.append(follower[0])
+            all_followed = current_user.followed.all()
+            approved_users = list(set.intersection(set(filtered_followers), set(all_followed)))
+            approved_usernames = []
+            for user in approved_users:
+                userinfo = {}
+                userinfo['username'] = user.username
+                userinfo['avatar'] = user.picture
+                approved_usernames.append(userinfo)
+            print(approved_usernames)
+            session['chatlist'] = approved_usernames
         
         # THIS REDIRECT USERS TO THEIR PREVIOUS PAGE AFTER LOGIN
         next_page = request.args.get('next')

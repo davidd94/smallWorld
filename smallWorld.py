@@ -1,4 +1,4 @@
-from app import create_app, cli, db
+from app import create_app, cli, db, socketio
 from app.models import User, Messages, Projects, PhotoGallery, ProjectComments, CommentReplies, Notifications
 
 
@@ -15,4 +15,4 @@ def make_shell_context():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True)

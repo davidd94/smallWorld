@@ -4,6 +4,7 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_session import Session
 from flask_bootstrap import Bootstrap
 from flask_babel import Babel, lazy_gettext as _l
 from flask_mail import Mail
@@ -11,6 +12,7 @@ from flask_moment import Moment
 from elasticsearch import Elasticsearch
 from redis import Redis
 from celery import Celery
+from flask_socketio import SocketIO
 
 
 db = SQLAlchemy()
@@ -23,6 +25,9 @@ babel = Babel()
 mail = Mail()
 csrf = CSRFProtect()
 moment = Moment()
+socketio = SocketIO()
+session = Session()
+
 
 # NEEDS TO BE OUTSIDE THE BP FACTORY TO BE CREATED OUTSIDE THE CLIENT'S FLASK APP AS ITS OWN WORKER APP
 celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
@@ -39,6 +44,8 @@ def create_app(config_class=Config):
     mail.init_app(app)
     csrf.init_app(app)
     moment.init_app(app)
+    socketio.init_app(app, manage_session=False)
+    session.init_app(app)
 
     app.redis = Redis.from_url(app.config['REDIS_URL'])
     celery.conf.update(app.config)

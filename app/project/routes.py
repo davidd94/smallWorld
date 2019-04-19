@@ -16,6 +16,7 @@ from bs4 import BeautifulSoup
 import os, shutil
 import pdfkit
 config = pdfkit.configuration(wkhtmltopdf="/usr/local/bin/wkhtmltopdf")
+import time
 
 
 @bp.route('/new_project', methods=['GET', 'POST'])
