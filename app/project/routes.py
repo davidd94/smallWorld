@@ -1,10 +1,9 @@
 from flask import render_template, redirect, url_for, request, flash, g, current_app, jsonify, Response, send_from_directory
 from flask_login import current_user, login_required
 from flask_babel import get_locale, _
-from flask_moment import Moment
 from datetime import datetime
 from sqlalchemy import update
-from app import db, moment
+from app import db
 from app.tasks import test_export
 from app.email import send_notification_email
 from app.models import User, Projects, PhotoGallery, Itemlist, ProjectComments, CommentReplies, Notifications, FAQs, comment_likers, reply_likers, project_likers
@@ -979,7 +978,6 @@ def tagsearch():
         all_cost = request.form.getlist('cost')
         all_difficulty = request.form.getlist('difficulty')
         saved_tags = all_tags + all_cost + all_difficulty
-        print(saved_tags)
         kwargs = {}
 
         # IF USER'S FILTER CONTAINS ANY TYPES.... APPEND TO A QUERY OBJECT
@@ -1150,6 +1148,7 @@ def tagsearch():
         elif all_difficulty:
             projects = projectsby_difficulty
         
+
         # CONVERT SET BACK TO LIST
         try:
             projects = list(project_intersection)

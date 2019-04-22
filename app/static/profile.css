@@ -194,6 +194,10 @@
 
 .profile-image-box {
     border-radius: 50%;
+    width: 4.5em;
+    height: auto;
+    max-width: 4.5em;
+    max-height: auto;
 }
 
 .profile-user-name {

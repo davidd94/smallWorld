@@ -6,23 +6,21 @@ from urllib.parse import urlparse
 from math import sqrt
 from hashlib import md5
 from app import db, mail, socketio
-from app.models import User, Messages, Projects, PhotoGallery, Notifications, project_visitors, followers, deleted_messages
+from app.models import User, Messages, ChatMessages, Projects, PhotoGallery, Notifications, project_visitors, followers, deleted_messages
 from app.main import bp
 from app.main.forms import EditProfileForm, MessageForm, SearchForm
 from app.project.forms import ProjectForm
 from app.email import send_notification_email, send_email
-from sqlalchemy import and_, or_
+from sqlalchemy import and_
 from werkzeug.urls import url_parse
 from werkzeug.datastructures import MultiDict
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 from flask_mail import Message
-from flask_socketio import send, emit, disconnect
-import os, shutil
+from flask_socketio import send, emit, disconnect, join_room, leave_room
+import os, shutil, time, random, functools
 import json
-import time
 import celery
-import functools
 
 
 @bp.before_app_request
@@ -33,15 +31,6 @@ def before_request():
     g.search_form = SearchForm()
     g.locale = str(get_locale())
 
-# SOCKETIO HELPER FUNCTION TO VERIFY IF USER IS LOGGED IN
-def authenticated_only(f):
-    @functools.wraps(f)
-    def wrapped(*args, **kwargs):
-        if not current_user.is_authenticated:
-            disconnect()
-        else:
-            return f(*args, **kwargs)
-    return wrapped
 
 
 @bp.route('/profile/<username>', methods=['GET', 'POST'])
@@ -68,7 +57,6 @@ def edit_profile():
     form = EditProfileForm(original_email=current_user.email)
     form.username.data = current_user.username
     if form.validate_on_submit():
-        print(form.picture.data)
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
         current_user.email = form.email.data
@@ -82,8 +70,14 @@ def edit_profile():
             if check_link.scheme and check_link.netloc:
                 current_user.picture = form.picture.data
         if form.randomavatar.data == True:
-            # IF USER LEAVES PIC FORM EMPTY, PROVIDE GRAVATAR GENERATED IMG
-            digest = md5(current_user.email.lower().encode('utf-8')).hexdigest()
+            i=0
+            randomWords=""
+            while i<100:
+                i+=1    
+                liste = [random.randint(97, 122) for i in range(8)]
+                osman=''.join(chr(x) for x in liste)
+                randomWords+=osman+" "
+            digest = md5(randomWords.lower().encode('utf-8')).hexdigest()
             current_user.picture = 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, 70)
         elif form.picture.data == '':
             current_user.picture = ''
@@ -532,6 +526,13 @@ def follow(username):
     current_user.follow(user)
     db.session.commit()
 
+    # ADD USER INFO INTO SESSION CHATLIST BUT NEED TO CHECK IF OTHER USER IS FOLLOWING BACK BEFORE ADDING
+    check_follower = user.is_following(current_user)
+    if check_follower:
+        chatlist = session['chatlist']
+        new_follower = {'username': user.username, 'avatar': user.avatar(70), 'id': user.id}
+        chatlist.append(new_follower)
+
     if request.args:
         args = request.args.get('redirect')
         if args == 'homepage':
@@ -556,6 +557,15 @@ def unfollow(username):
     
     current_user.unfollow(user)
     db.session.commit()
+
+    # REMOVING USER INFO FROM SESSION CHATLIST
+    chatlist = session['chatlist']
+    chatlist_length = len(chatlist)
+    for i in range(chatlist_length):
+        if chatlist[i]['username'] == user.username:
+            chatlist[i].pop('username')
+            chatlist[i].pop('avatar')
+            chatlist[i].pop('id')
 
     if request.args:
         args = request.args.get('redirect')
@@ -660,23 +670,6 @@ def taskstatus(task_id):
     return jsonify(response)
 
 
-# WEB SOCKETIO FUNCTIONS
-@socketio.on('chatlist')
-@authenticated_only
-def chatlist(userlist):
-    if current_user.is_authenticated:
-        if userlist != session['chatlist']:
-            print('there was a change in the list')
-        emit('chatlist', session['chatlist'])
-
-@socketio.on('message')
-@authenticated_only
-def message(msg):
-    if current_user.is_authenticated:
-        """Sent by a client when the user entered a new message.
-        The message is sent to all people in the room."""
-        room = session.get('room')
-        emit('message', {'msg': session.get('name') + ':' + msg['msg']}, room=room)
 
 
 def allowed_file(filename):

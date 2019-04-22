@@ -115,6 +115,8 @@ class User(UserMixin, db.Model):
     # TOKEN VARIABLES FOR APIs ONLY
     token = db.Column(db.String(50), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
+    # FOR CHAT FEATURE
+    online = db.Column(db.Boolean, default=True)
 
     # ASSOCIATION TABLES
     followed = db.relationship('User', secondary=followers,
@@ -192,7 +194,7 @@ class User(UserMixin, db.Model):
         db.session.commit()
 
     def avatar(self, size):
-        if (self.picture == None):
+        if (self.picture == None or self.picture == ''):
             digest = md5(self.email.lower().encode('utf-8')).hexdigest()
             return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
         return self.picture.format(size)
@@ -371,6 +373,19 @@ class Messages(db.Model):
     def __repr__(self):
         return '<Message {}>'.format(self.subject)
 
+
+class ChatMessages(db.Model):
+    __tablename__ = 'chat_history'
+    id = db.Column(db.Integer, primary_key=True)
+    room = db.Column(db.String(10), index=True)
+    username = db.Column(db.String(64), index=True)
+    avatar = db.Column(db.String(200))
+    message = db.Column(db.String(500))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    message_read = db.Column(db.Boolean, index=True, default=False)
+
+    def __repr__(self):
+        return '<Chat Message {}>'.format(self.message)
 
 class Projects(SearchableMixin, db.Model):
     __searchable__ = ['title', 'description', 'tutorial']

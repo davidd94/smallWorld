@@ -68,7 +68,7 @@
                 </ul>
             </li>
             <li>
-                <input type="checkbox" name="none" id="short">
+                <input type="checkbox" class="checked-cost" id="short">
                 <label class="main-li-label" for="short">Cost</label>
                 <ul style="list-style: none;">
                     <li>
@@ -94,7 +94,7 @@
                 </ul>
             </li>
             <li>
-                <input type="checkbox" name="none" id="short">
+                <input type="checkbox" class="checked-difficulty" id="short">
                 <label class="main-li-label" for="short">Difficulty</label>
                 <ul style="list-style: none;">
                     <li>
@@ -270,15 +270,24 @@ $(function() {
     for (i=0; i < existingChecks.length; i++) {
         var checkeditem = existingChecks[i];
         
+        if (checkeditem == 'easy' || checkeditem == 'medium' || checkeditem == 'hard') {
+            $('.checked-difficulty').attr('checked', true);
+        };
+
         if (checkeditem == '$') {
+            $('.checked-cost').attr('checked', true);
             $('.checked-1').attr('checked', true);
         } else if (checkeditem == '$$') {
+            $('.checked-cost').attr('checked', true);
             $('.checked-2').attr('checked', true);
         } else if (checkeditem == '$$$') {
+            $('.checked-cost').attr('checked', true);
             $('.checked-3').attr('checked', true);
         } else if (checkeditem == '$$$$') {
+            $('.checked-cost').attr('checked', true);
             $('.checked-4').attr('checked', true);
         } else if (checkeditem == '$$$$$') {
+            $('.checked-cost').attr('checked', true);
             $('.checked-5').attr('checked', true);
         } else {
             $('.checked-' + checkeditem).attr('checked', true);

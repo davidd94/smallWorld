@@ -1,85 +1,8 @@
-<style>
-.chatbox-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60vh;
-  background-color: #b3d4fc;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-}
+<link rel="stylesheet" href="{{ url_for('static', filename='_chatbox.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700">
 
-.users-list-card {
-  margin: 10px;
-  height: 97%;
-  max-width: 448px;
-}
-
-.users-list-card > .mdl-list {
-  margin: 0;
-  padding: 0 32px;
-}
-
-.mdl-card__title-text {
-    padding: 0 5em;
-    width: 100%;
-}
-
-.users-list-card > .mdl-list > .mdl-list__item {
-  padding: 0;
-}
-
-.users-list-card > .mdl-list > .mdl-list__item .mdl-textfield {
-  padding: 0;
-}
-
-.users-list-card > .mdl-list > .mdl-list__item .mdl-textfield .mdl-textfield__input {
-  border: none;
-  top: 0;
-}
-
-.users-list-card > .mdl-card__supporting-text > .mdl-list {
-  margin: 0;
-  padding: 0;
-}
-
-.mdl-card__supporting-text {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    overflow-y: scroll !important;
-}
-
-.mdl-list__item-avatar {
-  background: url("https://unsplash.it/200?random") no-repeat center center;
-  background-size: cover;
-}
-
-.expand-icons {
-    height: auto;
-    width: 1.7em;
-    text-align: center;
-    cursor: pointer;
-}
-
-.favorite,
-.nonfavorite {
-    margin-right: 32px;
-}
-
-.mdl-button:focus {
-    outline: none;
-}
-
-.chatbox-expand-btn {
-    height: 2;
-    width: auto;
-    cursor: pointer;
-}
-</style>
-
-<div class="chatbox-wrapper">
+<!-- CHATLIST BOX -->
+<div class="chatlist-wrapper">
     <div class="users-list-card mdl-card mdl-shadow--2dp">
         <div class="mdl-card__title">
         <p class="mdl-card__title-text">Users</p>
@@ -87,110 +10,458 @@
         <div class="mdl-card__menu">
         <a class="chatbox-expand-btn" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             <img class="expand-icons" src="{{ url_for('static', filename='dots-expand.png') }}">
-            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 42px, 0px);">
-                <a class="dropdown-item" href="#">Minimize</a>
-                <a class="dropdown-item" href="#">Go offline</a>
+            <div class="dropdown-menu chat-dropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: -30px; transform: translate3d(0px, 42px, 0px);">
+                <a class="dropdown-item dropdown-minimize" href="#">Minimize</a>
+                <a class="dropdown-item dropdown-offline" href="#">Go offline</a>
             </div>
         </a>
         </div>
         <div class="mdl-menu__item--full-bleed-divider"></div>
         <ul class="mdl-list">
-        <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-            <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input search" type="text" id="sample1" placeholder="Search a user...">
-                </div>
-            </span>
-        </li>
+            <li class="mdl-list__item">
+                <span class="mdl-list__item-primary-content">
+                <div class="mdl-textfield mdl-js-textfield">
+                    <input class="mdl-textfield__input search" type="text" id="sample1" placeholder="Search a user...">
+                    </div>
+                </span>
+            </li>
         </ul>
         <div class="mdl-menu__item--full-bleed-divider"></div>
         <div class="mdl-card__supporting-text">
-        <ul class="mdl-list">
-            <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-                <i class="fas fa-star favorite"></i>
-                <i class="mdl-list__item-avatar"></i>
-                Garrett Gutierrez
-            </span>
-            </li>
-            <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-                <i class="fas fa-star favorite"></i>
-                <i class="mdl-list__item-avatar"></i>
-                Marc Graves
-            </span>
+        <ul class="mdl-list fav-chatlist">
+            <!-- DYNAMIC USERS ADDED HERE -->
         </ul>
-        <ul class="mdl-list">
-            <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-                <i class="far fa-star nonfavorite"></i>
-                <i class="mdl-list__item-avatar"></i>
-                Aaron Bennett
-            </span>
-            </li>
-            <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-                <i class="far fa-star nonfavorite"></i>
-                <i class="mdl-list__item-avatar"></i>
-                Abbey Christensen
-            </span>
-            </li>
-            <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-                <i class="far fa-star nonfavorite"></i>
-                <i class="mdl-list__item-avatar"></i>
-                Ali Connors
-            </span>
-            </li>
-            <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-                <i class="far fa-star nonfavorite"></i>
-                <i class="mdl-list__item-avatar"></i>
-                Alex Nelson
-            </span>
-            </li>
-            <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-                <i class="far fa-star nonfavorite"></i>
-                <i class="mdl-list__item-avatar"></i>
-                Anthony Stevens
-            </span>
-            </li>
+        <ul class="mdl-list unfav-chatlist">
+            <!-- DYNAMIC USERS ADDED HERE -->
         </ul>
         </div>
     </div>
 </div>
 
-<!-- SOCKETIO -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
-<!-- Chat Box JS -->
-<script src="https://code.getmdl.io/1.1.2/material.min.js"></script>
+<!-- MINIMIZED CHATLIST -->
+<div class="chatbox-minimized-container">
+    <div class="online-wrapper">
+        <span class="minimized-online-icon" style="background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px;"></span>
+        <span class="minimized-online-text">Online</span>
+    </div>
+    <div class="offline-wrapper">
+        <img class="minimized-offline-icon" style="background: rgb(179, 179, 179); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px;">
+        <span class="minimized-offline-text">Offline</span>
+    </div>
+</div>
 
+<!-- CHAT MSG BOX -->
+<div id="live-chat">
+        <header class="clearfix">
+            <a href="#" class="chat-close">x</a>
+            <h4 class="chat-message-username-title"></h4>
+            <span class="chatbox-active-icon"></span>
+            <span class="chat-message-counter">3</span>
+        </header>
+
+        <div class="chat">
+            <div class="chat-history">
+                <!-- DYNAMICALLY ADD CHAT MSGS HERE -->
+            </div> <!-- end chat-history -->
+
+            <p class="chat-feedback"></p>
+            <div class="chat-input-wrapper">
+                <input class="chat-message-input" type="text" maxlength="200" placeholder="Type your message…" autofocus>
+            </div>
+        </div> <!-- end chat -->
+</div> <!-- end live-chat -->
+
+<!-- SOCKETIO -->
+<script src='{{ url_for("static", filename="plugins/socket.io.js") }}'></script>
+<!-- Chat Box JS -->
+<script src='{{ url_for("static", filename="plugins/material.min.js") }}'></script>
+<!-- Moment JS -->
+<script src='{{ url_for("static", filename="plugins/moment-js.min.js") }}'></script>
+<!-- When locally JS fails, load CDN -->
+<script>
+    if (!window.moment) { document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"><\/script>'); }
+</script>
+<script>
+    if (!window.moment) { document.write('<script src="https://code.getmdl.io/1.1.2/material.min.js"><\/script>'); }
+</script>
+<script>
+    if (!window.moment) { document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"><\/script>'); }
+</script>
 
 <script type="text/javascript">
+/* SOCKETIO SCRIPTS */
 $(document).ready(function() {
-    // NEED TO CHANGE THIS WHEN IN PRODUCTION
+    // DETERMINES USER SETTING IS OFFLINE OR ONLINE
     var socket = io.connect('http://localhost:5000');
-
-    socket.on('connect', function() {
-        console.log('User connected to chat!');
-        socket.emit('chatlist', '');
+    var chatRequest;
+    
+    // CONNECTS USER WITH SERVER VIA WEBSOCKET IF USER IS AUTHENTICATED
+    socket.on('connect', function(status) {
+        if (status == 'online') {
+            socket.emit('chatlist', []);
+        };
     });
+    // LISTENS TO SERVER FOR ESTABLISHED CONNECTION AND LOADS CHAT LIST
+    socket.on('chatlist', function(userslist) {
+        console.log(socket.connected);
+        var existing_list = [];
+        for (i=0; i < userslist.length; i++) {
+            var username = userslist[i]['username'];
+            var avatar = userslist[i]['avatar'];
+            var userid = userslist[i]['id'];
+            var condition = userslist[i]['condition'];
+            var online_status = String(userslist[i]['online']);
+            if (condition == 'add') {
+                var newuser = {'username': username, 'avatar': avatar, 'id': userid}
+                existing_list.push(newuser);
+                // SETTING DEFAULT AVATAR IMG WITHOUT COMPROMISING WEBSOCKET CONFIG
+                if (online_status == 'true') {
+                    $('.unfav-chatlist').append($('<li>')
+                    .prop('class', 'mdl-list__item')
+                    .prop('id', 'userlist-' + userid)
+                    .append($('<span>')
+                        .prop('class', 'mdl-list__item-primary-content')
+                        .css('position', 'relative')
+                        .append($('<i>')
+                            .prop('class', 'far fa-star unfavorite'))
+                        .append($('<img>')
+                            .prop('class', 'chatlist-avatar')
+                            .attr('src', avatar))
+                        .append($('<span>')
+                            .text(username)
+                            .prop('class', 'chatlist-username chatlist-username-' + userid)
+                            .attr('data-userid', userid)
+                            .attr('data-username', username))
+                        .append($('<span>')
+                            .attr('class', 'chat-message-counter chatlist-message-counter-' + userid)
+                            .text(3))
+                        .append($('<span>')
+                            .prop('class', 'chatlist-active-icon chatlist-active-icon-' + userid)
+                            .attr('style', 'background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px; position: absolute; right: -1em; top: 0.85em;')
+                            .attr('data-online', 'true'))
+                    )
+                )
+                } else {
+                    $('.unfav-chatlist').append($('<li>')
+                    .prop('class', 'mdl-list__item')
+                    .prop('id', 'userlist-' + userid)
+                    .append($('<span>')
+                        .prop('class', 'mdl-list__item-primary-content')
+                        .css('position', 'relative')
+                        .append($('<i>')
+                            .prop('class', 'far fa-star unfavorite'))
+                        .append($('<img>')
+                            .prop('class', 'chatlist-avatar')
+                            .attr('src', avatar))
+                        .append($('<span>')
+                            .text(username)
+                            .prop('class', 'chatlist-username chatlist-username-' + userid)
+                            .attr('data-userid', userid)
+                            .attr('data-username', username)
+                            .css('font-style', 'italic')
+                            .css('color', 'rgb(168, 168, 168)'))
+                        .append($('<span>')
+                            .attr('class', 'chat-message-counter chatlist-message-counter-' + userid)
+                            .text(3))
+                        .append($('<span>')
+                            .prop('class', 'chatlist-active-icon chatlist-active-icon-' + userid)
+                            .attr('style', 'background: rgb(168, 168, 168); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px; position: absolute; right: -1em; top: 0.85em;')
+                            .attr('data-online', 'false'))
+                        )
+                    )
+                };
+            } else if (condition == 'remove') {
+                var userlistid = '#userlist-' + userid;
+                // BINDS & UNBINDS EVENT LISTENER TO REMOVE DYNAMIC USERS
+                $(document).mousemove(userlistid, () => {
+                    $(userlistid).remove();
+                    $(document).unbind("mousemove");
+                });
+            } else if (condition == 'none') {
+                var olduser = {'username': username, 'avatar': avatar, 'id': userid};
+                existing_list.push(olduser);
 
-    socket.on('chatlist', function(users) {
-        for (i=0; i < users.length; i++) {
-            console.log(users[i]['username']);
+                // ATTACHING ONLINE STATUS VALUES
+                if (online_status == 'false') {
+                    $('.chatlist-username-' + userid).css('font-style', 'italic').css('color', 'rgb(168, 168, 168)');
+                    $('.chatlist-active-icon-' + userid).css('background', 'rgb(168, 168, 168)');
+                    $('.chatlist-active-icon-' + userid).attr('data-online', 'false');
+                } else {
+                    $('.chatlist-username-' + userid).css('font-style', 'normal').css('color', 'black');
+                    $('.chatlist-active-icon-' + userid).css('background', 'rgb(66, 183, 42)');
+                    $('.chatlist-active-icon-' + userid).attr('data-online', 'true');
+                }
+            }
         }
-        setTimeout(function(){ socket.emit('chatlist', users); }, 1000);
+        chatRequest = setTimeout(function(){ socket.emit('chatlist', existing_list); }, 5000);
     });
 
-    socket.on('message', function(msg) {
-        $('#messages').append($('<li>').text(msg));
-        console.log('Received message');
+    
+    // OPENS CHATBOX AND CONNECTS WITH USER
+    $('.mdl-list').on('click', '.chatlist-username', (event) => {
+        var username = event.currentTarget.dataset.username;
+        var userid = parseInt(event.currentTarget.dataset.userid);
+        var current_userid = parseInt("{{ current_user.id }}");
+        var sorted_combined_ids = [userid, current_userid].sort(function(a, b){return a-b});
+        var room = sorted_combined_ids[0] + '-' + sorted_combined_ids[1];
+        $('.chat-msg-container').css('display', 'block');
+        $('.chat-message-username-title').text(username);
+        $("#live-chat").fadeOut(300);
+        $('.chat-history').empty();
+        $('.chat-message-input').val('');
+        $('.chat-message-input').attr('data-userid', userid);
+        $('.chat-message-input').attr('data-username', username);
+        // TRANSFER DATA TO CHATBOX TO BE USED LOCALLY
+        $('.chat-close').attr('data-userid', userid);
+        $('.chat-close').attr('data-username', username);
+        var online_status = $('.chatlist-active-icon-' + userid)[0].dataset.online;
+        if (online_status == 'false') {
+            $('#live-chat .chatbox-active-icon').addClass('icon-offline');
+        };
+
+        var data = {'username': username, 'userid': userid, 'room': room};
+        socket.emit('join', data);
+    });
+    // LISTENS TO SERVER TO POPULATE ALL CHAT LOGS
+    socket.on('join', function(chat_data) {
+        var logLength = (chat_data).length;
+        var datetime = null, date = null;
+        $("#live-chat").fadeIn(300);
+
+        /* UNNECESSARY AUTO UPDATE TIMESTAMP ON EACH CHAT MSGS. MAY SLOW DOWN CLIENT EXP
+        var update = function () {
+            date = moment(timestamp);
+           (date.format('dddd, MMMM Do YYYY, h:mm:ss a'));
+        };
+
+        $(document).ready(function(){
+            datetime = $('#datetime')
+            update();
+            setInterval(update, 60000);
+        });
+        */
+        
+        for (i=0; i < logLength; i++) {
+            var username = chat_data[i]['username'];
+            var avatar = chat_data[i]['avatar'];
+            var message = chat_data[i]['message'];
+            var raw_timestamp = chat_data[i]['timestamp'];
+            var timestamp = moment(raw_timestamp).calendar('');
+            var current_user = '{{ current_user.username }}';
+            if (username == current_user) {
+                $('.chat-history')
+                .prepend($('<div>')
+                    .prop('class', 'chat-message clearfix')
+                    .append($('<img>')
+                        .prop('class', 'chat-message-avatar')
+                        .attr('src', avatar)
+                        .attr('width', '32')
+                        .attr('height', '32'))
+                    .append($('<div>')
+                        .prop('class', 'chat-message-content-container clearfix')
+                        .append($('<span>')
+                            .prop('class', 'chat-time')
+                            .text(timestamp))
+                        .append($('<p>')
+                            .prop('class', 'chat-message-username')
+                            .text(username))
+                        .append($('<p>')
+                            .prop('class', 'chat-message-content')
+                            .css('font-style', 'italic')
+                            .text(message)))
+                    .append($('<hr>')))
+            } else if (username != current_user) {
+                $('.chat-history')
+                .prepend($('<div>')
+                    .prop('class', 'chat-message clearfix')
+                    .append($('<img>')
+                        .prop('class', 'chat-message-avatar')
+                        .attr('src', avatar)
+                        .attr('width', '32')
+                        .attr('height', '32'))
+                    .append($('<div>')
+                        .prop('class', 'chat-message-content-container clearfix')
+                        .append($('<span>')
+                            .prop('class', 'chat-time')
+                            .text(timestamp))
+                        .append($('<h5>')
+                            .prop('class', 'chat-message-username')
+                            .text(username))
+                        .append($('<p>')
+                            .prop('class', 'chat-message-content')
+                            .css('font-style', 'italic')
+                            .text(message)))
+                    .append($('<hr>'))
+                )
+            }    
+        };
+        // AUTO SCROLLS TO BOTTOM (LATEST MSG)
+        $('.chat-history').animate({
+            scrollTop: $('.chat-history').get(0).scrollHeight
+        }, 500);
     });
 
-    $('.chatbox-expand-btn').on('click', function() {
-        socket.emit('chatlist');
+    // CLOSES CHATBOX AND DISCONNECTS SESSION WITH USER
+    $('.chat-close').on('click', function(event) {
+        var username = event.currentTarget.dataset.username;
+        var userid = parseInt(event.currentTarget.dataset.userid);
+        var current_userid = parseInt("{{ current_user.id }}");
+        var sorted_combined_ids = [userid, current_userid].sort(function(a, b){return a-b});
+        var room = sorted_combined_ids[0] + '-' + sorted_combined_ids[1];
+        
+        $(".chat").slideToggle(300, "swing");
+        $(".chat-message-counter").fadeToggle(300, "swing");
+        $("#live-chat").fadeOut(300);
+        $('.chat-history').empty();
+        $('.chat-message-input').val('');
+        var data = {'username': username, 'userid': userid, 'room': room};
+        socket.emit('leave', data);
+    });
+
+    // SEND MESSAGE TO ROOM/CLIENT
+    $('.chat-message-input').on('keyup', (event) => {
+        var message = $('.chat-message-input').val();
+        var message_length = message.length;
+        if (event.which == 13 && message_length > 0) {
+            var userid = event.currentTarget.dataset.userid;
+            var current_userid = parseInt("{{ current_user.id }}");
+            var sorted_combined_ids = [userid, current_userid].sort(function(a, b){return a-b});
+            var room = sorted_combined_ids[0] + '-' + sorted_combined_ids[1];
+            var message_data = {'message': message, 'room': room};
+            $('.chat-message-input').val('');
+            
+            socket.emit('message', message_data);
+        }
+    });
+    // LISTENS FOR SERVER INPUT AND LOADS THE SENT MSG
+    socket.on('message', function(data) {
+        var username = data['username'];
+        var userAvatar = data['avatar'];
+        var message = data['message'];
+        var raw_timestamp = data['timestamp'];
+        var timestamp = moment(raw_timestamp).calendar('');
+        var current_username = '{{ current_user.username }}';
+        if (username == current_username) {
+            $('.chat-history')
+            .append($('<div>')
+                .prop('class', 'chat-message clearfix')
+                .append($('<img>')
+                    .prop('class', 'chat-message-avatar')
+                    .attr('src', userAvatar)
+                    .attr('width', '32')
+                    .attr('height', '32'))
+                .append($('<div>')
+                    .prop('class', 'chat-message-content-container clearfix')
+                    .append($('<span>')
+                        .prop('class', 'chat-time')
+                        .text(timestamp))
+                    .append($('<p>')
+                        .prop('class', 'chat-message-username')
+                        .text(username))
+                    .append($('<p>')
+                        .prop('class', 'chat-message-content')
+                        .text(message)
+                        .css('color', 'black')))
+                .append($('<hr>')))
+        } else if (username != current_username) {
+            $('.chat-history')
+            .append($('<div>')
+                .prop('class', 'chat-message clearfix')
+                .append($('<img>')
+                    .prop('class', 'chat-message-avatar')
+                    .attr('src', userAvatar)
+                    .attr('width', '32')
+                    .attr('height', '32'))
+                .append($('<div>')
+                    .prop('class', 'chat-message-content-container clearfix')
+                    .append($('<span>')
+                        .prop('class', 'chat-time')
+                        .text(timestamp))
+                    .append($('<h5>')
+                        .prop('class', 'chat-message-username')
+                        .text(username))
+                    .append($('<p>')
+                        .prop('class', 'chat-message-content')
+                        .text(message)
+                        .css('color', 'black')))
+                .append($('<hr>')))
+        }
+        // AUTO SCROLLS TO BOTTOM (LATEST MSG)
+        $('.chat-history').animate({
+            scrollTop: $('.chat-history').get(0).scrollHeight
+        }, 500);
+    });
+
+    // NOTIFIES OTHER USER THAT YOU ARE TYPING
+    $('.chat-message-input').on('keypress', (event) => {
+        var userid = event.currentTarget.dataset.userid;
+        var username = event.currentTarget.dataset.username;
+        var current_userid = parseInt("{{ current_user.id }}");
+        var sorted_combined_ids = [userid, current_userid].sort(function(a, b){return a-b});
+        var room = sorted_combined_ids[0] + '-' + sorted_combined_ids[1];
+        var data = {'username': username, 'room': room};
+        
+        socket.emit('chat_typing', data);
+    });
+    // LISTENS FOR TYPING NOTIFICATION
+    socket.on('chat_typing', function(data) {
+        var username = data['username'];
+        var current_username = '{{ current_user.username }}';
+        var notification = data['note'];
+        var timeout;
+        if (username != current_username) {
+            var feedbackValue = $('.chat-feedback').text();
+            var feedbackLength = (feedbackValue).length;
+            $('.chat-feedback').text(notification);
+            if (feedbackValue == '' || feedbackLength == 0) {
+                timeout = setInterval(function() {
+                    $('.chat-feedback').text('');
+                }, 10000);
+            }
+            else if (feedbackValue != '' && feedbackLength != 0) {
+                clearInterval(timeout);
+            };
+        };
+    });
+
+    // MINIMIZES CHATLIST & GO OFFLINE
+    $('.dropdown-offline').on('click', function() {
+        $('.chatlist-wrapper').css('display', 'none');
+        $('.chatbox-minimized-container').css('display', 'block');
+        $('.online-wrapper').css('display', 'none');
+        $('.offline-wrapper').css('display', 'block');
+
+        clearTimeout(socket);
+        socket.emit('offline');
     });
 });
+</script>
+
+<script>
+/* CHAT MESSAGE BOX */
+$(function() {
+    // MINIMIZE-MAXIMIZE CHAT MSG BOX
+    $("#live-chat header").on("click", function() {
+        $(".chat").slideToggle(300, "swing");
+        $(".chat-message-counter").fadeToggle(300, "swing");
+    });
+
+    // MINIMIZES CHATLIST
+    $('.dropdown-minimize').on('click', function() {
+        $('.chatlist-wrapper').css('display', 'none');
+        $('.chatbox-minimized-container').css('display', 'block');
+        $('.online-wrapper').css('display', 'block');
+        $('.offline-wrapper').css('display', 'none');
+    });
+
+    // MAXIMIZES CHATLIST
+    $('.chatbox-minimized-container').on('click', () => {
+        $('.chatlist-wrapper').css('display', 'block');
+        $('.chatbox-minimized-container').css('display', 'none');
+        $('.online-wrapper').css('display', 'none');
+        $('.offline-wrapper').css('display', 'none');
+    });
+
+});
+
 </script>

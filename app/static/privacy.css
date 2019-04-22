@@ -143,7 +143,11 @@ h1 {
   margin-left: 2px;
 }
 
-p {
+.profile .personal-info,
+.payment .payment-info,
+.subscription .subscription-info,
+.privacy .privacy-info,
+.settings .settings-info {
   border-width: 1px;
   border-style: solid;
   border-image: linear-gradient(to right, #3fb6a8, rgba(126, 211, 134, 0.5)) 1 0%;
@@ -153,11 +157,6 @@ p {
   font-size: 0.7em;
   padding: 7px 0;
   color: #070707;
-}
-
-span {
-  font-size: 0.5em;
-  color: #777777;
 }
 
 .privacy-btn {

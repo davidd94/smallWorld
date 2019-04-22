@@ -8,7 +8,7 @@
 .animated-plants-container {
     width: 50em;
     height: 35em;
-    position: absolute;
+    position: fixed;
     bottom: -10em;
     right: 0;
     transform: scale(0.4, 0.4);

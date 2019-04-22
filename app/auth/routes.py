@@ -86,25 +86,10 @@ def login():
             return redirect(url_for('auth.homepage'))
         login_user(user, remember=form.remember_me.data)
         user.max_failed_login = 0
+        # NEED TO UPDATE LOGIN STATUS FOR CHAT FEATURE
+        user.online = True
+        session['chat_status'] = 'online'
         db.session.commit()
-        # CACHES IN SESSION THE APPROVED FOLLOWERS FOR CHAT LIST
-        all_followers = db.session.query(User, followers) \
-                    .filter(followers.c.followed_id == current_user.id) \
-                    .all()
-        if all_followers:
-            filtered_followers = []
-            for follower in all_followers:
-                filtered_followers.append(follower[0])
-            all_followed = current_user.followed.all()
-            approved_users = list(set.intersection(set(filtered_followers), set(all_followed)))
-            approved_usernames = []
-            for user in approved_users:
-                userinfo = {}
-                userinfo['username'] = user.username
-                userinfo['avatar'] = user.picture
-                approved_usernames.append(userinfo)
-            print(approved_usernames)
-            session['chatlist'] = approved_usernames
         
         # THIS REDIRECT USERS TO THEIR PREVIOUS PAGE AFTER LOGIN
         next_page = request.args.get('next')
@@ -122,6 +107,11 @@ def login():
 
 @bp.route('/logout', methods=['GET', 'POST'])
 def logout():
+    # NEED TO UPDATE LOGIN STATUS FOR CHAT FEATURE
+    current_user.online = False
+    db.session.commit()
+
+    session.clear()
     logout_user()
     return redirect(url_for('auth.clear_flash_msgs'))
 

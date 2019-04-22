@@ -62,6 +62,9 @@ def create_app(config_class=Config):
     from app.errors import bp as error_bp
     app.register_blueprint(error_bp)
 
+    from app.socketio import bp as socketio_bp
+    app.register_blueprint(socketio_bp)
+
     app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
         if app.config['ELASTICSEARCH_URL'] else None
 

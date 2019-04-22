@@ -51,6 +51,9 @@
         </div>
         {% endfor %}
         
+        <p class="gravatar-note">*Note: If your account email matches your gravatar account, it will use your gravatar 
+            picture automatically UNLESS you manually insert a new image link or randomize below.</p>
+
         {{ form.password.label(class="password-label") }}
         {{ form.password(id="passwordinput", class="form-control form-password", type="text", placeholder="New Password") }}
         {% for error in form.password.errors %}
@@ -68,7 +71,7 @@
         {% endfor %}
         
         {{ form.picture.label(class="avatar-label") }}
-        {{ form.picture(id="profilepic", class="form-control form-avatar", type="text", placeholder="Insert Gravatar link here") }}
+        {{ form.picture(id="profilepic", class="form-control form-avatar", type="text", placeholder="Insert image link here") }}
         
         {{ form.randomavatar(type="checkbox", class="custom-gravatar-checkbox") }}
         {{ form.randomavatar.label(class="random-gravatar-label") }}
