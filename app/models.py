@@ -50,6 +50,11 @@ db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
 db.Column('message_id', db.Integer, db.ForeignKey('messages.id'))
 )
 
+chatlist_favorites = db.Table('chatlist_favorites',
+db.Column('fav_id', db.Integer, db.ForeignKey('user.id')),
+db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+)
+
 class SearchableMixin(object):
     @classmethod
     def search(cls, expression, page, per_page):
@@ -156,6 +161,12 @@ class User(UserMixin, db.Model):
                                         backref=db.backref('deleter', lazy='dynamic'),
                                         lazy='dynamic',
                                         passive_deletes=True)
+    favored = db.relationship('User', secondary=chatlist_favorites,
+                                        primaryjoin=(chatlist_favorites.c.fav_id == id),
+                                        secondaryjoin=(chatlist_favorites.c.user_id == id),
+                                        backref=db.backref('favorer', lazy='dynamic'),
+                                        lazy='dynamic',
+                                        passive_deletes=True)
     
     # RELATIONSHIPS TABLES
     message_sent = db.relationship('Messages',
@@ -231,10 +242,6 @@ class User(UserMixin, db.Model):
     def unfollow(self, user):
         if self.is_following(user):
             self.followed.remove(user)
-    
-    def followed_projects(self):
-        # NEED TO ADD MORE TO THIS IN THE FUTURE
-        return
 
     def is_blocking(self, user):
         return self.blocked.filter(blocked_users.c.blocked_id == user.id).count() > 0
@@ -301,6 +308,17 @@ class User(UserMixin, db.Model):
     def undelete_msg(self, msg):
         if self.is_deleted(msg):
             self.deleted_msgs.remove(msg)
+
+    def is_favoring(self, user):
+        return self.favored.filter(chatlist_favorites.c.user_id == user.id).count() > 0
+
+    def favor(self, user):
+        if not self.is_favoring(user):
+            self.favored.append(user)
+    
+    def unfavor(self, user):
+        if self.is_favoring(user):
+            self.favored.remove(user)
 
     def project_visits(self, project):
         if not (Projects.query.join(project_visitors).join(User).filter(project_visitors.c.user_id == self.id).filter(project_visitors.c.project_id == project.id).count() > 0):

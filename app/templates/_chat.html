@@ -40,11 +40,11 @@
 
 <!-- MINIMIZED CHATLIST -->
 <div class="chatbox-minimized-container">
-    <div class="online-wrapper">
-        <span class="minimized-online-icon" style="background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px;"></span>
+    <div class="online-wrapper" style="{% if current_user.online == True %}display: block;{% else %}display: none;{% endif %}">
+        <span class="minimized-online-icon" style="background: rgb(66, 183, 42); border-radius: 50%; height: 10px; margin-left: 10px; width: 10px; display: inline-block"></span>
         <span class="minimized-online-text">Online</span>
     </div>
-    <div class="offline-wrapper">
+    <div class="offline-wrapper" style="{% if current_user.online == False %}display: block;{% else %}display: none;{% endif %}">
         <img class="minimized-offline-icon" style="background: rgb(179, 179, 179); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px;">
         <span class="minimized-offline-text">Offline</span>
     </div>
@@ -56,7 +56,6 @@
             <a href="#" class="chat-close">x</a>
             <h4 class="chat-message-username-title"></h4>
             <span class="chatbox-active-icon"></span>
-            <span class="chat-message-counter">3</span>
         </header>
 
         <div class="chat">
@@ -91,19 +90,23 @@
 <script type="text/javascript">
 /* SOCKETIO SCRIPTS */
 $(document).ready(function() {
-    // DETERMINES USER SETTING IS OFFLINE OR ONLINE
     var socket = io.connect('http://localhost:5000');
     var chatRequest;
     
-    // CONNECTS USER WITH SERVER VIA WEBSOCKET IF USER IS AUTHENTICATED
+    // LISTENS TO SERVER TO DETERMINE USER'S CHAT STATUS
     socket.on('connect', function(status) {
         if (status == 'online') {
             socket.emit('chatlist', []);
-        };
+        } else if (status == 'offline') {
+            console.log('cannot access chatlist because you are offline');
+        } else if (status == 'ghost') {
+            socket.emit('chatlist', []);
+            socket.emit('fav_users');
+            console.log('GHOST MODE!!');
+        }
     });
     // LISTENS TO SERVER FOR ESTABLISHED CONNECTION AND LOADS CHAT LIST
     socket.on('chatlist', function(userslist) {
-        console.log(socket.connected);
         var existing_list = [];
         for (i=0; i < userslist.length; i++) {
             var username = userslist[i]['username'];
@@ -111,64 +114,132 @@ $(document).ready(function() {
             var userid = userslist[i]['id'];
             var condition = userslist[i]['condition'];
             var online_status = String(userslist[i]['online']);
+            var unread_ct = userslist[i]['unread_msg_ct'];
+            var favorite = userslist[i]['favorite'];
             if (condition == 'add') {
                 var newuser = {'username': username, 'avatar': avatar, 'id': userid}
                 existing_list.push(newuser);
                 // SETTING DEFAULT AVATAR IMG WITHOUT COMPROMISING WEBSOCKET CONFIG
                 if (online_status == 'true') {
-                    $('.unfav-chatlist').append($('<li>')
-                    .prop('class', 'mdl-list__item')
-                    .prop('id', 'userlist-' + userid)
-                    .append($('<span>')
-                        .prop('class', 'mdl-list__item-primary-content')
-                        .css('position', 'relative')
-                        .append($('<i>')
-                            .prop('class', 'far fa-star unfavorite'))
-                        .append($('<img>')
-                            .prop('class', 'chatlist-avatar')
-                            .attr('src', avatar))
+                    if (favorite == true) {
+                        $('.fav-chatlist').append($('<li>')
+                        .prop('class', 'mdl-list__item')
+                        .prop('id', 'userlist-' + userid)
                         .append($('<span>')
-                            .text(username)
-                            .prop('class', 'chatlist-username chatlist-username-' + userid)
-                            .attr('data-userid', userid)
-                            .attr('data-username', username))
+                            .prop('class', 'mdl-list__item-primary-content')
+                            .css('position', 'relative')
+                            .append($('<i>')
+                                .prop('class', 'fas fa-star favorite favorite-' + userid)
+                                .attr('data-userid', userid)
+                                .attr('data-fav', true))
+                            .append($('<img>')
+                                .prop('class', 'chatlist-avatar')
+                                .attr('src', avatar))
+                            .append($('<span>')
+                                .text(username)
+                                .prop('class', 'chatlist-username chatlist-username-' + userid)
+                                .attr('data-userid', userid)
+                                .attr('data-username', username))
+                            .append($('<i>')
+                                .prop('class', 'far fa-comment fa-2x chatlist-bubble chatlist-bubble-' + userid)
+                                .append($('<span>')
+                                    .prop('class', 'chatlist-counter chatlist-counter-' + userid)
+                                    .text(unread_ct)))
+                            .append($('<span>')
+                                .prop('class', 'chatlist-active-icon chatlist-active-icon-' + userid)
+                                .attr('style', 'background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px; position: absolute; right: -1em; top: 0.85em;')
+                                .attr('data-online', 'true'))))
+                    } else {
+                        $('.unfav-chatlist').append($('<li>')
+                        .prop('class', 'mdl-list__item')
+                        .prop('id', 'userlist-' + userid)
                         .append($('<span>')
-                            .attr('class', 'chat-message-counter chatlist-message-counter-' + userid)
-                            .text(3))
-                        .append($('<span>')
-                            .prop('class', 'chatlist-active-icon chatlist-active-icon-' + userid)
-                            .attr('style', 'background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px; position: absolute; right: -1em; top: 0.85em;')
-                            .attr('data-online', 'true'))
-                    )
-                )
+                            .prop('class', 'mdl-list__item-primary-content')
+                            .css('position', 'relative')
+                            .append($('<i>')
+                                .prop('class', 'far fa-star favorite favorite-' + userid)
+                                .attr('data-userid', userid)
+                                .attr('data-fav', false))
+                            .append($('<img>')
+                                .prop('class', 'chatlist-avatar')
+                                .attr('src', avatar))
+                            .append($('<span>')
+                                .text(username)
+                                .prop('class', 'chatlist-username chatlist-username-' + userid)
+                                .attr('data-userid', userid)
+                                .attr('data-username', username))
+                            .append($('<i>')
+                                .prop('class', 'far fa-comment fa-2x chatlist-bubble chatlist-bubble-' + userid)
+                                .append($('<span>')
+                                    .prop('class', 'chatlist-counter chatlist-counter-' + userid)
+                                    .text(unread_ct)))
+                            .append($('<span>')
+                                .prop('class', 'chatlist-active-icon chatlist-active-icon-' + userid)
+                                .attr('style', 'background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px; position: absolute; right: -1em; top: 0.85em;')
+                                .attr('data-online', 'true'))))
+                    }
                 } else {
-                    $('.unfav-chatlist').append($('<li>')
-                    .prop('class', 'mdl-list__item')
-                    .prop('id', 'userlist-' + userid)
-                    .append($('<span>')
-                        .prop('class', 'mdl-list__item-primary-content')
-                        .css('position', 'relative')
-                        .append($('<i>')
-                            .prop('class', 'far fa-star unfavorite'))
-                        .append($('<img>')
-                            .prop('class', 'chatlist-avatar')
-                            .attr('src', avatar))
+                    if (favorite == true) {
+                        $('.fav-chatlist').append($('<li>')
+                        .prop('class', 'mdl-list__item')
+                        .prop('id', 'userlist-' + userid)
                         .append($('<span>')
-                            .text(username)
-                            .prop('class', 'chatlist-username chatlist-username-' + userid)
-                            .attr('data-userid', userid)
-                            .attr('data-username', username)
-                            .css('font-style', 'italic')
-                            .css('color', 'rgb(168, 168, 168)'))
+                            .prop('class', 'mdl-list__item-primary-content')
+                            .css('position', 'relative')
+                            .append($('<i>')
+                                .prop('class', 'fas fa-star favorite favorite-' + userid)
+                                .attr('data-userid', userid)
+                                .attr('data-fav', true))
+                            .append($('<img>')
+                                .prop('class', 'chatlist-avatar')
+                                .attr('src', avatar))
+                            .append($('<span>')
+                                .text(username)
+                                .prop('class', 'chatlist-username chatlist-username-' + userid)
+                                .attr('data-userid', userid)
+                                .attr('data-username', username)
+                                .css('font-style', 'italic')
+                                .css('color', 'rgb(168, 168, 168)'))
+                            .append($('<i>')
+                                .prop('class', 'far fa-comment fa-2x chatlist-bubble chatlist-bubble-' + userid)
+                                .append($('<span>')
+                                    .prop('class', 'chatlist-counter chatlist-counter-' + userid)
+                                    .text(unread_ct)))
+                            .append($('<span>')
+                                .prop('class', 'chatlist-active-icon chatlist-active-icon-' + userid)
+                                .attr('style', 'background: rgb(168, 168, 168); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px; position: absolute; right: -1em; top: 0.85em;')
+                                .attr('data-online', 'true'))))
+                    } else {
+                         $('.unfav-chatlist').append($('<li>')
+                        .prop('class', 'mdl-list__item')
+                        .prop('id', 'userlist-' + userid)
                         .append($('<span>')
-                            .attr('class', 'chat-message-counter chatlist-message-counter-' + userid)
-                            .text(3))
-                        .append($('<span>')
-                            .prop('class', 'chatlist-active-icon chatlist-active-icon-' + userid)
-                            .attr('style', 'background: rgb(168, 168, 168); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px; position: absolute; right: -1em; top: 0.85em;')
-                            .attr('data-online', 'false'))
-                        )
-                    )
+                            .prop('class', 'mdl-list__item-primary-content')
+                            .css('position', 'relative')
+                            .append($('<i>')
+                                .prop('class', 'far fa-star favorite favorite-' + userid)
+                                .attr('data-userid', userid)
+                                .attr('data-fav', false))
+                            .append($('<img>')
+                                .prop('class', 'chatlist-avatar')
+                                .attr('src', avatar))
+                            .append($('<span>')
+                                .text(username)
+                                .prop('class', 'chatlist-username chatlist-username-' + userid)
+                                .attr('data-userid', userid)
+                                .attr('data-username', username)
+                                .css('font-style', 'italic')
+                                .css('color', 'rgb(168, 168, 168)'))
+                            .append($('<i>')
+                                .prop('class', 'far fa-comment fa-2x chatlist-bubble chatlist-bubble-' + userid)
+                                .append($('<span>')
+                                    .prop('class', 'chatlist-counter chatlist-counter-' + userid)
+                                    .text(unread_ct)))
+                            .append($('<span>')
+                                .prop('class', 'chatlist-active-icon chatlist-active-icon-' + userid)
+                                .attr('style', 'background: rgb(168, 168, 168); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px; position: absolute; right: -1em; top: 0.85em;')
+                                .attr('data-online', 'false'))))
+                    }
                 };
             } else if (condition == 'remove') {
                 var userlistid = '#userlist-' + userid;
@@ -181,7 +252,7 @@ $(document).ready(function() {
                 var olduser = {'username': username, 'avatar': avatar, 'id': userid};
                 existing_list.push(olduser);
 
-                // ATTACHING ONLINE STATUS VALUES
+                // DYNAMICALLY UPDATING STATUS ICON
                 if (online_status == 'false') {
                     $('.chatlist-username-' + userid).css('font-style', 'italic').css('color', 'rgb(168, 168, 168)');
                     $('.chatlist-active-icon-' + userid).css('background', 'rgb(168, 168, 168)');
@@ -191,11 +262,17 @@ $(document).ready(function() {
                     $('.chatlist-active-icon-' + userid).css('background', 'rgb(66, 183, 42)');
                     $('.chatlist-active-icon-' + userid).attr('data-online', 'true');
                 }
+            };
+            // DYNAMICALLY ADD NOTIFICATION COUNTER FOR UNREAD MSGS
+            if (unread_ct > 0) {
+                $('.chatlist-bubble-' + userid).css('display', 'block');
+                $('.chatlist-counter-' + userid).text(unread_ct);
             }
         }
+        
         chatRequest = setTimeout(function(){ socket.emit('chatlist', existing_list); }, 5000);
     });
-
+    
     
     // OPENS CHATBOX AND CONNECTS WITH USER
     $('.mdl-list').on('click', '.chatlist-username', (event) => {
@@ -204,21 +281,27 @@ $(document).ready(function() {
         var current_userid = parseInt("{{ current_user.id }}");
         var sorted_combined_ids = [userid, current_userid].sort(function(a, b){return a-b});
         var room = sorted_combined_ids[0] + '-' + sorted_combined_ids[1];
+        // DISPLAYS CHAT BOX
         $('.chat-msg-container').css('display', 'block');
         $('.chat-message-username-title').text(username);
         $("#live-chat").fadeOut(300);
+        // CLEARS ALL PREVIOUS MSGS AND INPUT
         $('.chat-history').empty();
         $('.chat-message-input').val('');
+        // TRANSFER DATA TO CHATBOX TO BE USED LOCALLY
         $('.chat-message-input').attr('data-userid', userid);
         $('.chat-message-input').attr('data-username', username);
-        // TRANSFER DATA TO CHATBOX TO BE USED LOCALLY
         $('.chat-close').attr('data-userid', userid);
         $('.chat-close').attr('data-username', username);
+        // HIDES THE UNREAD MSGS BUBBLE
+        $('.chatlist-bubble-' + userid).css('display', 'none');
+        
         var online_status = $('.chatlist-active-icon-' + userid)[0].dataset.online;
         if (online_status == 'false') {
             $('#live-chat .chatbox-active-icon').addClass('icon-offline');
         };
 
+        // PREPARES DATA TO JOIN THE ROOM
         var data = {'username': username, 'userid': userid, 'room': room};
         socket.emit('join', data);
     });
@@ -301,6 +384,29 @@ $(document).ready(function() {
         }, 500);
     });
 
+    // USER FAVORITE FEATURE
+    $('.unfav-chatlist, .fav-chatlist').on('click', '.favorite', (event) => {
+        var userid = event.currentTarget.dataset.userid;
+        var favtype = event.currentTarget.dataset.fav;
+        if (favtype == 'true') {
+            socket.emit('unfavorite', userid);
+        } else if (favtype == 'false') {
+            socket.emit('favorite', userid);
+        }
+    });
+    // LISTENS TO SERVER FOR FAVORITE SUCCESS
+    socket.on('favorite', function(userid) {
+        $('.favorite-' + userid).removeClass('far fa-star');
+        $('.favorite-' + userid).addClass("fas fa-star");
+        $('.favorite-' + userid).attr('data-fav', 'true');
+    });
+    // LISTENS TO SERVER FOR UNFAVORITE SUCCESS
+    socket.on('unfavorite', function(userid) {
+        $('.favorite-' + userid).removeClass('fas fa-star');
+        $('.favorite-' + userid).addClass("far fa-star");
+        $('.favorite-' + userid).attr('data-fav', 'false');
+    });
+
     // CLOSES CHATBOX AND DISCONNECTS SESSION WITH USER
     $('.chat-close').on('click', function(event) {
         var username = event.currentTarget.dataset.username;
@@ -327,7 +433,7 @@ $(document).ready(function() {
             var current_userid = parseInt("{{ current_user.id }}");
             var sorted_combined_ids = [userid, current_userid].sort(function(a, b){return a-b});
             var room = sorted_combined_ids[0] + '-' + sorted_combined_ids[1];
-            var message_data = {'message': message, 'room': room};
+            var message_data = {'message': message, 'room': room, 'userid': userid};
             $('.chat-message-input').val('');
             
             socket.emit('message', message_data);
@@ -431,8 +537,20 @@ $(document).ready(function() {
         $('.online-wrapper').css('display', 'none');
         $('.offline-wrapper').css('display', 'block');
 
-        clearTimeout(socket);
+        // CLEARS CHATLIST
+        $('.fav-chatlist, .unfav-chatlist').empty();
+        clearTimeout(chatRequest);
         socket.emit('offline');
+    });
+
+    // MAXIMIZES OFFLINE CHATLIST & GO ONLINE
+    $('.offline-wrapper').on('click', () => {
+        $('.chatlist-wrapper').css('display', 'block');
+        $('.chatbox-minimized-container').css('display', 'none');
+        $('.online-wrapper').css('display', 'none');
+        $('.offline-wrapper').css('display', 'none');
+
+        socket.emit('online');
     });
 });
 </script>
@@ -454,14 +572,13 @@ $(function() {
         $('.offline-wrapper').css('display', 'none');
     });
 
-    // MAXIMIZES CHATLIST
-    $('.chatbox-minimized-container').on('click', () => {
+    // MAXIMIZES ONLINE CHATLIST
+    $('.online-wrapper').on('click', () => {
         $('.chatlist-wrapper').css('display', 'block');
         $('.chatbox-minimized-container').css('display', 'none');
         $('.online-wrapper').css('display', 'none');
         $('.offline-wrapper').css('display', 'none');
     });
-
 });
 
 </script>
