@@ -5,29 +5,6 @@
     height: auto;
 }
 
-.animated-plants-container {
-    width: 50em;
-    height: 35em;
-    position: fixed;
-    bottom: -10em;
-    right: 0;
-    transform: scale(0.4, 0.4);
-}
-.animated-plant-text {
-    position: absolute;
-    cursor: pointer;
-    font-size: 2em;
-    font-family: "Comic Sans MS", helvetica, sans-serif;
-    bottom: 0;
-    right: -20em;
-    width: 15em;
-    height: auto;
-    color: rgb(22, 160, 22);
-}
-.animated-plant-text:hover {
-    color: rgb(204, 153, 58);
-}
-
 /* OVERRIDING BOOTSTRAP STYLES - ANONYMOUS USERS */
 .homepage-container {
     display: grid;
@@ -38,6 +15,13 @@
     align-items: center;
     padding: 1em;
     grid-gap: 15px;
+    position: relative;
+    z-index: 15;
+    background-image: url('homepage-background.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 .homepage-login-container {
     grid-row: 1 / span 1;
@@ -47,8 +31,14 @@
     margin: 1em 4em 3em 0.5em;
     overflow: visible;
     border-radius: 0.6em;
-    background-color: #f7f7f9;
+    background-color: rgb(230, 230, 230);
     position: relative;
+    z-index: 500;
+    opacity: 0.8;
+    transition: all 600ms ease;
+}
+.homepage-login-container:active, .homepage-login-container:hover {
+    opacity: 1;
 }
 #carouselExampleIndicators {
     grid-row: 1 / span 1;
@@ -60,6 +50,13 @@
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     display: block;
     transition: all 500ms ease;
+    position: relative;
+    z-index: 500;
+    opacity: 0.75;
+    border-radius: 1.5em;
+}
+#carouselExampleIndicators:hover {
+    opacity: 0.98;
 }
 .carousel-inner {
     height: 100%;
@@ -86,10 +83,10 @@
     width: 12em;
     height: 10em;
     text-align: center;
-    opacity: 0.75;
+    opacity: 0;
     transition: all 1200ms ease;
 }
-.carousel-item-zen:hover .zen-text {
+#carouselExampleIndicators:hover .zen-text {
     opacity: 1;
     color: rgb(206, 139, 14);
     background-color: rgba(78, 78, 78, 0.781);
@@ -114,21 +111,23 @@
     left: -1em;
     position: absolute;
     width: auto;
-    height: 52em;
+    height: auto;
     margin: auto auto;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     border: 2px solid rgb(187, 187, 187);
     transform: scale(0.80, 0.80);
     display: none;
     overflow: hidden;
+    z-index: 500;
 }
 .create-terrarium-text {
     position: absolute;
     cursor: pointer;
     font-size: 1em;
     font-family: "Comic Sans MS", helvetica, sans-serif;
-    top: 4.4em;
-    left: 20em;
+    top: -5%;
+    left: 50%;
+    transform: translateX(-50%);
     width: 23em;
     height: auto;
     color: rgb(22, 160, 22);
@@ -280,6 +279,7 @@ main {
 .frame {
   position: absolute;
   top: 0;
+  left: 0;
   z-index: 300;
   pointer-events: none;
 }
@@ -387,6 +387,7 @@ main {
 }
 
 .shrink .terr-wrap {
+    position: absolute;
   width: 100%;
   bottom: initial;
   top: 50%;
@@ -451,6 +452,13 @@ main {
     width: 100%;
     align-items: center;
     grid-gap: 15px;
+    position: relative;
+    z-index: 15;
+    background-image: url('homepage-background2.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 .followed-feed-container {
     grid-row: 1 / span 2;
@@ -458,12 +466,19 @@ main {
     height: 100%;
     padding: 1em;
     overflow: hidden;
-    background-color: #f7f7f9;
+    background-color: rgb(233, 233, 233);
     border-radius: 0.6em;
+    opacity: 0.9;
+    transition: all 500ms ease;
+}
+.followed-feed-container:hover {
+    opacity: 1;
 }
 .followed-feed-title {
     text-align: center;
     font-weight: 800;
+    border-bottom: 1px solid black;
+    padding-bottom: 0.5em;
 }
 .followed-update-list {
     list-style: none;
@@ -565,19 +580,30 @@ main {
     color: rgb(67, 67, 197);
 }
 
-.notification-feed-container {
+.dropdown-follower-feed {
+    left: -10em !important;
+}
+
+.news-feed-container {
     grid-row: 1 / span 1;
     grid-column: 2 / span 1;
     height: 100%;
     padding: 1em;
     overflow-y: scroll;
     overflow-x: hidden;
-    background-color: #f7f7f9;
+    background-color: rgb(233, 233, 233);
     border-radius: 0.6em;
+    opacity: 0.9;
+    transition: all 500ms ease;
+    position: relative;
+}
+.news-feed-container:hover {
+    opacity: 1;
 }
 .followed-note-title {
     text-align: center;
     font-weight: 800;
+    border-bottom: 1px solid black;
 }
 .followed-note-list {
     list-style: none;
@@ -616,9 +642,34 @@ main {
 }
 
 /* ANIMATED PLANTS */
-svg {
-  height: 99vh;
-  max-height: 100vw;
+.animated-plants-container {
+    position: absolute;
+    height: auto;
+    width: auto;
+    bottom: -10%;
+    right: 0%;
+    z-index: 500;
+    opacity: 1;
+}
+.animated-plant-text {
+    position: absolute;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-family: "Comic Sans MS", helvetica, sans-serif;
+    bottom: 25%;
+    left: -15%;
+    width: 15em;
+    height: auto;
+    color: rgb(204, 153, 58);
+}
+.animated-plant-text:hover {
+    color: rgb(22, 160, 22);
+}
+
+svg,
+.animated-plants {
+    height: 38vh;
+    max-height: 38vh;
 }
 .no-fill, .cactus-prickle {
   fill: none;
@@ -709,14 +760,14 @@ svg {
 
 .alert-box-wrapper {
     position: absolute;
-    top: 9em;
+    top: 7%;
     right: -10em;
     height: 1%;
 }
 
 #message-alert-box {
     width: 15em;
-    height: 5em;
+    height: auto;
     max-height: 6em;
     padding: 0.8em;
     text-align: center;
@@ -724,4 +775,21 @@ svg {
     top: 0;
     transition: all 1500ms ease;
     position: absolute;
+}
+
+
+/* PLANT GENERATOR */
+
+#canvas_container_div {
+  position: absolute;
+  bottom: 27%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+#canvas {
+  width: 100%;
+  height: 100%;
+    transform: scale(1.5);
 }

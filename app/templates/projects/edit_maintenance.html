@@ -2,6 +2,8 @@
 
 {% block css %}
 <!--  PLACED BOOTSTRAP CSS FIRST TO BE OVERRIDDEN BY OTHERS AFTER  -->
+<link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='perfect-scrollbar.css') }}">
 <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -10,24 +12,13 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='edit-maintenance.css') }}">
 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
 {% endblock css %}
-
-<!--
-    BORDER EFFECTS FOR FUTURE IMPLEMENTATION
-<div class="svg-wrapper">
-    <svg class='svg' height="470" width="300" xmlns="http://www.w3.org/2000/svg">
-        <rect class="shape one" height="470" width="300" />
-        <rect class="shape two" height="470" width="300" />
-        <div class="text"></div>
-        <div class="subtext">
-        <div class="first">2014</div>
-        </div>
-    </svg>
-</div>
--->
 
 {% block bodycontent %}
 <h1 class="edit-maintenance-title" style="text-align: center;">Edit maintenance</h1>
+<div id="statuscontainer" class="export-status-container"><span class="status-cancel">cancel</span><span class="status-close">close</span></div>
+
 <p style="font-size: 0.8em; font-style: italic; color: lightgrey; opacity: 0.9; text-align: center; margin: 0; padding: 0;">You may drag and drop TEXT or IMAGES</p>
 <div class="maintenance-container">
     <div class="toggle-wrapper">
@@ -38,12 +29,12 @@
         <a class="edit-maintenance-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}">Back to project</a>
         <div id="maintenance-dropdown-override" class="maintenance-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; transform: translate3d(0px, 42px, 0px);">
             <a class="dropdown-item dropdown-add-paragraph" onclick="addParagraph();" data-toggle="tooltip" href="#">Edit</a>
-            <a class="dropdown-item dropdown-add-image" href="#">Export</a>
-            <a class="dropdown-item dropdown-add-imagecap" href="#">Share</a>
+            <a class="dropdown-item dropdown-export" href="#">Export</a>
+            <a class="dropdown-item dropdown-share" href="#">Share</a>
         </div>
     </div>
-    <div class="maintenance-container-text">
-        <form class="maintenance-form" method="POST">
+    <div class="maintenance-container-text custom-scrollbar-s3">
+        <form class="maintenance-form custom-scrollbar-s3" method="POST">
             <div id="summernote"></div>
         </form>
     </div>
@@ -56,9 +47,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
-<!--
-<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
--->
+<script src="https://cdn.rawgit.com/kimmobrunfeldt/progressbar.js/1.0.1/dist/progressbar.min.js"></script>
+<!-- PERFECT SCROLLBAR JS -->
+<script src="{{ url_for('static', filename='plugins/perfect-scrollbar.min.js') }}"></script>
 
 <script>
 /* SUMMERNOTE TEXT EDITOR LOADS WHEN DOCUMENT IS READY */
@@ -146,6 +137,8 @@ $(document).ready(function() {
     // MANUALLY INJECTING CSS VALUES FOR SUMMERNOTE TEXT EDITOR - MAX CHAR LENGTH FOR LINKS
     $('.note-link-text').attr('maxlength', 150);
     $('.note-link-url').attr('maxlength', 2000);
+    $('.note-editable').addClass('custom-scrollbar-s3');
+    scrollbar();
 
     // LOADS DATABASE MAINTENANCE CONTENT INTO EDITOR ON PAGE RENDERING - 'TOJSON' USED DUE TO SINGLE&DOUBLE QUOTE OVERLAPPING
     var contents = '{{ project.maintenance|tojson }}';
@@ -319,6 +312,8 @@ function addParagraph() {
             // MANUALLY INJECTING CSS VALUES FOR SUMMERNOTE TEXT EDITOR - MAX CHAR LENGTH FOR LINKS
             $('.note-link-text').attr('maxlength', 150);
             $('.note-link-url').attr('maxlength', 2000);
+            $('.note-editable').addClass('custom-scrollbar-s3');
+            scrollbar();
 
             // LOADS SAVED maintenance DYNAMICALLY
             $('#summernote').summernote('code', response);
@@ -421,57 +416,201 @@ $(function() {
 
 });
 
+// NEED TO GLOBALLY SET THIS TO CLEAR TIMEOUT or STOP REQUESTING UPDATES AFTER USER CANCELS
+var updateTimer;
+var statusbar;
+/* INITIALIZES CELERY WORKER FOR EXPORTING */
+$(function() {
+    // STARTS EXPORTING ON CLICK
+    $('.dropdown-export').on('click', () => {
+        $('.export-status-container').css('display', 'block');
+        $('.status-cancel').css('display', 'block');
+        $('.status-close').css('display', 'none');
+        
+        /* JS Progress Bar 1.0 */
+        statusbar = new ProgressBar.SemiCircle(statuscontainer, {
+            strokeWidth: 6,
+            color: '#FFEA82',
+            trailColor: '#eee',
+            trailWidth: 1,
+            easing: 'easeInOut',
+            duration: 1400,
+            svgStyle: null,
+            text: {
+                value: '',
+                alignToBottom: false
+            },
+            from: {color: '#FFEA82'},
+            to: {color: '#ED6A5A'},
+            // Set default step function for all animate calls
+            step: (state, bar) => {
+                bar.path.setAttribute('stroke', state.color);
+                var value = Math.round(bar.value() * 100);
+                if (value === 0) {
+                bar.setText('');
+                } else {
+                bar.setText(value);
+                }
+
+                bar.text.style.color = state.color;
+            }
+            });
+        statusbar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+        statusbar.text.style.fontSize = '2rem';
+
+        var csrf_token = "{{ csrf_token() }}";
+        // Inject our CSRF token into our AJAX request.
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                }
+            }
+        });
+        $.ajax({
+            url: '/project/export_celery_test/' + '{{ project.username }}' + '/' + '{{ project.title }}',
+            type: 'POST',
+            success: function(data, status, request) {
+                status_url = request.getResponseHeader('Location');
+                update_progress(status_url, statusbar);
+            },
+        });
+    });
+});
+
+/* GET STATUS UPDATED FROM CELERY WORKER */
+function update_progress(status_url, progressbar) {
+    // send GET request to status URL
+    $.getJSON(status_url, function(data) {
+        // update UI
+        var percent = parseInt(data['current'] * 100 / data['total']);
+        var animationNum = parseFloat(data['current'] / data['total']);
+        progressbar.animate(animationNum);
+        progressbar.setText(percent);
+        if (animationNum == 1) {
+            $('.status-cancel').css('display', 'none');
+            $('.status-close').css('display', 'block');
+        }
+        
+        if (data['state'] != 'PENDING' && data['state'] != 'PROGRESS') {
+            if ('result' in data) {
+                // show error result
+                progressbar.setText('Result: ' + data['result']);
+            }
+            else {
+                // something unexpected happened
+                progressbar.setText('Result: ' + data['state']);
+            }
+        }
+        else {
+            // rerun in 2 seconds
+            updateTimer = setTimeout(function() {
+                update_progress(status_url, progressbar);
+            }, 3000);
+        }
+    });
+};
+
+/* CANCEL EXPORT WORKER */
+$(function() {
+    // DESTROYS EXISTING PROGRESS BAR ON CLOSE
+    $('.status-cancel').on('click', () => {
+        if (statusbar) {
+            statusbar.stop();
+            // STOPS REQUESTING UPDATES FROM WORKER (WORKER STILL CONTINUES UNTIL COMPLETE)
+            clearTimeout(updateTimer);
+            $('.status-cancel').css('display', 'none');
+            $('.status-close').css('display', 'block');
+        };
+    });
+    $('.status-close').on('click', () => {
+        if (statusbar) {
+            statusbar.destroy();
+            $('.status-cancel').css('display', 'none');
+            $('.status-close').css('display', 'none');
+            $('.export-status-container').css('display', 'none');
+        };
+    });
+});
+
 </script>
-<!--
-    BORDER EFFECTS FOR FUTURE IMPLEMENTATION
+
 <script>
-/* BORDER EFFECTS */
-var si = document.querySelectorAll(".one"),
-    to = document.querySelectorAll(".two"),
-    te = document.querySelectorAll(".text");
+/* CUSTOM FUNCTIONS TO BE USED ON DYNAMICALLY ADDED ELEMENTS WHEREAS BELOW THIS ONLY LOADS ONCE WHEN DOC COMPLETES */
+function scrollbar() {
+    $('.custom-scrollbar').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 0.25,
+            suppressScrollX: true,
+        });
+    });
 
-for(var i = 0, j = si.length; i < j; i++) {
-  applyEverything(si[i], to[i], te[i]);
-}
+    $('.custom-scrollbar-s1').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: .50,
+            suppressScrollX: true,
+        });
+    });
 
-function applyEverything(sides, topbottom, text) {
-  var gparent = sides.parentNode.parentNode;
-  
-  gparent.onmouseenter = function() {
-    sides.style.fill = "rgb(20,20,20)";
-    text.style.color = "white";
-    console.log("over");
-    
-    // Originally these made sense... Then reality happened
-    TweenLite.to(topbottom, .8, {strokeDasharray:"-130 900 -130 900", strokeDashoffset:20, ease:Power2.linear});
-    TweenLite.to(topbottom, .6, {strokeDasharray:"470 300 470 300", strokeDashoffset:470, delay:.3, ease:Power2.linear});
-    
-    TweenLite.to(sides, .8, {strokeDasharray:"-200 1070 -200 1000", strokeDashoffset:640, ease:Power2.linear});
-    TweenLite.to(sides, .6, {strokeDasharray:"300 470 300 470", strokeDashoffset:770, delay:.3, ease:Power2.linear});
-    
-    setTimeout(function() { // Delay fade when leaving hover
-      sides.style.transition = "fill .6s .6s";
-      text.style.transition = "color .6s .6s";
-    }, 10);
-  }  
-  
-  gparent.onmouseleave = function() {
-    sides.style.fill = "transparent";
-    text.style.color = "rgb(20,20,20)";
-    console.log("out");
-    setTimeout(function() {
-      sides.style.transition = "fill .6s"; // Reset fade for next hover
-      text.style.transition = "color .6s";
-    }, 10);
-    
-    // Originally these made sense... Then reality happened
-    TweenLite.to(topbottom, .8, {strokeDasharray:"-130 1050 -130 900", strokeDashoffset:20, ease:Power2.linear});
-    TweenLite.to(topbottom, .6, {strokeDasharray:"300 470 300 470", strokeDashoffset:0, delay:.4, ease:Power2.linear});
-    
-    TweenLite.to(sides, .8, {strokeDasharray:"-200 1335 -200 1000", strokeDashoffset:640, ease:Power2.linear});
-    TweenLite.to(sides, .6, {strokeDasharray:"470 300 470 300", strokeDashoffset:470, delay:.4, ease:Power2.linear});
-  }
-}
+    $('.custom-scrollbar-s2').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 1,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s3').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 1.5,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s4').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 2,
+            suppressScrollX: true,
+        });
+    });
+};
+$(document).ready(function() {
+    /* CUSTOM SCROLL BAR - MUST ADD THE SPECIFIED CLASS TO EACH DIV */
+    $('.custom-scrollbar').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 0.25,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s1').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: .50,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s2').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 1,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s3').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 1.5,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s4').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 2,
+            suppressScrollX: true,
+        });
+    });
+});
+
 </script>
--->
+
 {% endblock scripts %}

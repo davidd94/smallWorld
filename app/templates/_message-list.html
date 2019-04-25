@@ -15,7 +15,8 @@
     </div>
 
     <!----- MSGS RECEIVED ----->
-    <ul id="message-list-override" class="list-group message-list message-list-received is-active">
+    <div class="receive-wrapper">
+    <ul id="message-list-override" class="list-group message-list message-list-received custom-scrollbar-s3 is-active">
         {% for message in messages %}
         <li id="message-list-{{ message.id }}" class="list-group-item d-flex justify-content-between align-items-center" data-msg-id="{{ message.id }}" data-msg-sub="{{ message.subject }}">
             {% if (message.message_read == False) and (message.recipient_id == current_user.id) %}
@@ -30,14 +31,15 @@
         </li>
         {% endfor %}
     </ul>
+    </div>
 
     <!----- MSGS SENT ----->
-    <div id="message-list-override" class="list-group message-list message-list-sent">
+    <div id="message-list-override" class="list-group message-list message-list-sent custom-scrollbar-s3">
         <p style="text-align: center; margin-top: 15em; font-weight: 600; font-style: italic;">Feature coming soon...</p>
     </div>
 
     <!----- MSGS DELETED ----->
-    <ul id="message-list-override" class="list-group message-list message-list-deleted">
+    <ul id="message-list-override" class="list-group message-list message-list-deleted custom-scrollbar-s3">
         {% for message in del_messages %}
         <li id="message-list-{{ message.id }}" class="list-group-item d-flex justify-content-between align-items-center" data-msg-id="{{ message.id }}" data-msg-sub="{{ message.subject }}">
             {% if (message.message_read == False) and (message.recipient_id == current_user.id) %}

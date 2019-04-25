@@ -6,7 +6,7 @@
 {% endblock css %}
 
 {% block bodycontent %}
-<form class="project-container" action="{{ url_for('project.new_project') }}" method="POST" enctype="multipart/form-data">
+<form class="project-container custom-scrollbar" action="{{ url_for('project.new_project') }}" method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <legend class="new-project-header">Create New Project</legend><br>
     

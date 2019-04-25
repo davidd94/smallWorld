@@ -1,5 +1,5 @@
 <div class="message-viewer-box">
-    <a class="message-reply-msg" href="#" onclick="openReplyForm()"><span class="badge badge-info">Reply</span></a>
+    <a class="message-reply-msg" href="#"><span class="badge badge-info">Reply</span></a>
     <a class="message-del-msg" href="#"><span class="badge badge-pill badge-secondary">Delete</span></a>
     <a class="message-restore-msg" href="#"><span class="badge badge-pill badge-secondary">Restore</span></a>
     
@@ -27,8 +27,8 @@
             </div>
             <div id="message-reply-box" class="type_msg">
                 <div class="input_msg_write">
-                    <input type="text" id="reply_msg" class="write_msg" name="replymsg" autocomplete="off" placeholder="Type a message" >
-                    <button id="message-reply-close-box" type="button" class="close" data-dismiss="alert" onclick="closeReplyForm()">&times;</button>
+                    <input type="text" id="reply_msg" class="write_msg" name="replymsg" autocomplete="off" placeholder="Type a message" maxlength="1495">
+                    <button id="message-reply-close-box" type="button" class="close">&times;</button>
                 </div>
             </div>
         </div>

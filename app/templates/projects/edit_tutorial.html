@@ -2,6 +2,8 @@
 
 {% block css %}
 <!--  PLACED BOOTSTRAP CSS FIRST TO BE OVERRIDDEN BY OTHERS AFTER  -->
+<link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='perfect-scrollbar.css') }}">
 <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link href="{{ url_for('static', filename='base.css') }}" rel="stylesheet">
@@ -17,6 +19,7 @@
 <h1 class="edit-tutorial-title" style="text-align: center;">Edit Tutorial</h1>
 <div id="statuscontainer" class="export-status-container"><span class="status-cancel">cancel</span><span class="status-close">close</span></div>
 
+<p style="font-size: 0.8em; font-style: italic; color: lightgrey; opacity: 0.9; text-align: center; margin: 0; padding: 0;">You may drag and drop TEXT or IMAGES</p>
 <div class="tutorial-container">
     <div class="toggle-wrapper">
         <input id="chkToggle" type="checkbox" class="toggle-tutorial" data-toggle="toggle">
@@ -30,8 +33,8 @@
             <a class="dropdown-item dropdown-share" href="#">Share</a>
         </div>
     </div>
-    <div class="tutorial-container-text">
-        <form class="tutorial-form" method="POST">
+    <div class="tutorial-container-text custom-scrollbar-s3">
+        <form class="tutorial-form custom-scrollbar-s3" method="POST">
             <div id="summernote"></div>
         </form>
     </div>
@@ -45,7 +48,8 @@
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 <script src="https://cdn.rawgit.com/kimmobrunfeldt/progressbar.js/1.0.1/dist/progressbar.min.js"></script>
-
+<!-- PERFECT SCROLLBAR JS -->
+<script src="{{ url_for('static', filename='plugins/perfect-scrollbar.min.js') }}"></script>
 <!--
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
 -->
@@ -136,6 +140,7 @@ $(document).ready(function() {
     // MANUALLY INJECTING CSS VALUES FOR SUMMERNOTE TEXT EDITOR - MAX CHAR LENGTH FOR LINKS
     $('.note-link-text').attr('maxlength', 150);
     $('.note-link-url').attr('maxlength', 2000);
+    $('.note-editable').addClass('custom-scrollbar-s3');
 
     // LOADS DATABASE TUTORIAL CONTENT INTO EDITOR ON PAGE RENDERING - 'TOJSON' USED DUE TO SINGLE&DOUBLE QUOTE OVERLAPPING
     var contents = '{{ project.tutorial|tojson }}';
@@ -213,8 +218,9 @@ function sendFile(pictures, that) {
             for (i = 0; i < response.length; i++) {
                 var filePath = 'users/' + '{{ project.username }}' + '/' + '{{ project.title }}' + '/tutorialpics/';
                 // MUST CHANGE THE IMAGE PATH WHEN IN PRODUCTION MODE
+                console.log('uploading to summer..')
                 $(that).summernote('insertImage',
-                            'http://localhost:5000/static/' + filePath + response[i],
+                            'http://192.168.0.19:5000/static/' + filePath + response[i],
                             ''
                 );
             };
@@ -310,6 +316,8 @@ function addParagraph() {
             // MANUALLY INJECTING CSS VALUES FOR SUMMERNOTE TEXT EDITOR - MAX CHAR LENGTH FOR LINKS
             $('.note-link-text').attr('maxlength', 150);
             $('.note-link-url').attr('maxlength', 2000);
+            $('.note-editable').addClass('custom-scrollbar-s3');
+            scrollbar();
 
             // LOADS SAVED TUTORIAL DYNAMICALLY
             $('#summernote').summernote('code', response);
@@ -410,7 +418,6 @@ $(function() {
 
 });
 
-
 // NEED TO GLOBALLY SET THIS TO CLEAR TIMEOUT or STOP REQUESTING UPDATES AFTER USER CANCELS
 var updateTimer;
 var statusbar;
@@ -483,7 +490,8 @@ function update_progress(status_url, progressbar) {
         progressbar.animate(animationNum);
         progressbar.setText(percent);
         if (animationNum == 1) {
-            $('.status-close').text('Close');
+            $('.status-cancel').css('display', 'none');
+            $('.status-close').css('display', 'block');
         }
         
         if (data['state'] != 'PENDING' && data['state'] != 'PROGRESS') {
@@ -505,6 +513,7 @@ function update_progress(status_url, progressbar) {
     });
 };
 
+/* CANCEL EXPORT WORKER */
 $(function() {
     // DESTROYS EXISTING PROGRESS BAR ON CLOSE
     $('.status-cancel').on('click', () => {
@@ -523,6 +532,85 @@ $(function() {
             $('.status-close').css('display', 'none');
             $('.export-status-container').css('display', 'none');
         };
+    });
+});
+
+</script>
+
+<script>
+/* CUSTOM FUNCTIONS TO BE USED ON DYNAMICALLY ADDED ELEMENTS WHEREAS BELOW THIS ONLY LOADS ONCE WHEN DOC COMPLETES */
+function scrollbar() {
+    $('.custom-scrollbar').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 0.25,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s1').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: .50,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s2').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 1,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s3').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 1.5,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s4').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 2,
+            suppressScrollX: true,
+        });
+    });
+};
+
+$(document).ready(function() {
+    /* CUSTOM SCROLL BAR - MUST ADD THE SPECIFIED CLASS TO EACH DIV */
+    $('.custom-scrollbar').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 0.25,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s1').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: .50,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s2').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 1,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s3').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 1.5,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s4').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 2,
+            suppressScrollX: true,
+        });
     });
 });
 

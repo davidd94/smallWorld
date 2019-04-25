@@ -41,6 +41,7 @@
     width: 100%;
     height: 17em;
     margin: 1.2em 0 2em 0;
+    padding: 0.5em;
     resize: none;
 }
 
@@ -121,6 +122,7 @@ $(function () {
         $('.new-msg-subject')[0].value = "";
         $('.message-popup-msg')[0].value = "";
     });
+});
 
 /* SEND MSG DYNAMICALLY */
 $(function () {
@@ -153,14 +155,14 @@ $(function () {
                     $(".message-popup-msg")[0].value = "";
                     $('.message-success-msg')[0].textContent = response;
 
-                    $('.alert-success').attr('style','right: 16em;');
+                    $('.alert-success').attr('style','right: 13em;');
                     setTimeout(function () {
                         $('.alert-success').attr('style','right: -70em;');
                     }, 4000);
                 } else if (response == "That user does not exist" || response == "You cannot message yourself") {
                     $(".new-msg-recip")[0].value = "";
                     $('.message-fail-msg')[0].textContent = response;
-                    $('.alert-secondary').attr('style','right: 16em;');
+                    $('.alert-secondary').attr('style','right: 13em;');
                     setTimeout(function () {
                         $('.alert-secondary').attr('style','right: -70em;');
                     }, 4000);
@@ -168,7 +170,7 @@ $(function () {
                             response == 'Message: max of 500 characters long' || 
                             response == 'User name must be a minimum of 5 characters long') {
                     $('.message-fail-msg')[0].textContent = response;
-                    $('.alert-secondary').attr('style','right: 16em;');
+                    $('.alert-secondary').attr('style','right: 13em;');
                     setTimeout(function () {
                         $('.alert-secondary').attr('style','right: -70em;');
                     }, 4000);
@@ -182,6 +184,5 @@ $(function () {
     });
 });
 
-});
 
 </script>

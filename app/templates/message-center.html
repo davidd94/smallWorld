@@ -16,17 +16,6 @@
 {% block scripts %}
 {{ super() }}
 <script>
-function openReplyForm() {
-  document.getElementById("message-reply-box").style.display = "block";
-  document.getElementById("message-reply-box").style.bottom = "2em";
-};
-function closeReplyForm() {
-  document.getElementById("message-reply-box").style.display = "visible";
-  document.getElementById("message-reply-box").style.bottom = "-10em";
-};
-</script>
-
-<script>
 /* MESSAGES LIST */
 $(function() {
     // SHOWS ALL RECEIVED MSGS
@@ -127,7 +116,6 @@ $(function() {
                 $('.message-restore-msg').css('display', 'block');
 
                 /* REMOVES EXISTING REPLY TEXT AND BOX BETWEEN MSG CHANGE */
-                document.getElementById("message-reply-box").style.bottom = "-10em";
                 $("#reply_msg")[0].value = "";
                 
                 /* LOOPS TO ADD EACH INDIVIDUAL MSGS PER SUBJECT */
@@ -183,6 +171,24 @@ $(function() {
     });
 });
 
+/* CLOSE REPLY BOX */
+$(function() {
+    $('#message-reply-close-box').on('click', () => {
+        $('#message-reply-box').slideToggle(300, function() {
+            $('#reply_msg').val('');
+        });
+    });
+});
+
+/* OPEN REPLY BOX */
+$(function() {
+    $('.message-reply-msg').on('click', () => {
+        $('#message-reply-box').slideToggle(300, function() {
+            $('#reply_msg').val('');
+        });
+    });
+})
+
 /* MSG REPLY FEATURE */
 $(function() {
     /* NEED TO FIGURE OUT HOW TO SEND REPLY MSGS DYNAMICALLY. MAYBE REMOVE THE REPLY BOX AND ADD NEW ONE UPON CLICK ? */
@@ -210,11 +216,11 @@ $(function() {
                 type: 'POST',
                 contentType: 'application/json',
                 success: function(response) {
-                    document.getElementById("message-reply-box").style.bottom = "-10em";
+                    // document.getElementById("message-reply-box").style.bottom = "-10em";
                     $("#reply_msg")[0].value = "";
 
                     $('.message-success-msg')[0].textContent = response;
-                    $('.alert-success').attr('style','right: 3em;');
+                    $('.alert-success').attr('style','right: 13em;');
                     setTimeout(function () {
                         $('.alert-success').attr('style','right: -70em;');
                     }, 4000);

@@ -168,7 +168,7 @@ $(function () {
                 )
             )
         )
-        
+        scrollbar();
     });
 });
 
@@ -184,7 +184,7 @@ $(function () {
 $(function () {
     var timeoutmsg;
     $('.item-save-btn').on('click', (event) => {
-        var totalitems = ($('.item-list')[0].childElementCount);
+        var totalitems = parseInt($('.item-list')[0].childElementCount);
         var emptyFields = false;
         $('.item-name-value').css('border', '1px solid #ced4da');
         $('.brand-name-value').css('border', '1px solid #ced4da');

@@ -10,10 +10,11 @@
     height: auto;
     max-height: 90%;
     margin: 0 13em;
-    padding: 1em;
+    padding: 0;
     border: 1px solid black;
     overflow-y: scroll;
     overflow-x: hidden;
+    position: relative;
 }
 .toggle-wrapper {
     position: absolute;
@@ -83,11 +84,12 @@
     height: 90%;
     overflow-y: scroll;
     overflow-x: hidden;
+    position: relative;
 }
 
 /* SUMMERNOTE'S TEXTBOX */
 .note-toolbar {
-    background-color: rgb(230, 230, 230);
+    background-color: rgb(240, 153, 83);
     max-height: 3em;
 }
 .note-editor {
@@ -95,6 +97,7 @@
     height: 100%;
     overflow: hidden;
     margin: 0 auto;
+    position: relative;
 }
 .note-editing-area {
     width: 100%;
@@ -325,3 +328,24 @@
   text-align:left;
 }
 .first { margin-bottom:30px; }
+
+
+/* EXPORT STATUS BAR */
+#statuscontainer {
+    margin: 20px auto;
+    width: 200px;
+    height: 100px;
+    display: none;
+}
+.status-close,
+.status-cancel {
+    position: absolute;
+    top: -0.2em;
+    right: -5em;
+    font-size: 0.7em;
+    cursor: pointer;
+    display: none;
+}
+.progressbar-text {
+    font-size: 0.8em;
+}

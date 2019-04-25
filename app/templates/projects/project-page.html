@@ -32,7 +32,7 @@
                 </div>
                 {% endif %}
             <div class="project-social-message">
-                <a href="{{ url_for('main.message_inbox') }}">Message</a>
+                <a class="project-message" href="#">Message</a>
             </div>
             {% else %}
             <div class="project-avatar-box" style="grid-column: 1 / span 3">
@@ -57,7 +57,7 @@
     </div>
 
     <div class="project-card-box">
-        <div class="project-descrip-box">
+        <div class="project-descrip-box custom-scrollbar">
             <i class="project-like-number project-like-number-{{ project.id }}">{{ project.likes }}</i>
             <strong class="project-like-text">Likes</strong>
             {% if current_user.is_authenticated %}
@@ -66,8 +66,8 @@
             {% endif %}
             {% endif %}
             <p class="project-descrip-title">Description</p>
-            <p class="project-descrip">{{ project.description }}</p>
-            <p class="project-tags">Tags:
+            <p class="project-descrip custom-scrollbar">{{ project.description }}</p>
+            <p class="project-tags custom-scrollbar">Tags:
                 {% if project.aquariums == True %}<a href="{{ url_for('project.tagsearch', tag='aquariums') }}"> Aquariums</a>,{% endif %}
                 {% if project.saltwater == True %}<a href="{{ url_for('project.tagsearch', tag='saltwater') }}"> Saltwater</a>,{% endif %}
                 {% if project.freshwater == True %}<a href="{{ url_for('project.tagsearch', tag='freshwater') }}"> Freshwater</a>,{% endif %}
@@ -84,7 +84,7 @@
                 {% if project.cost < 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$') }}"> $</a>,{% elif project.cost > 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$') }}"> $$</a>,{% elif project.cost > 300 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$') }}"> $$$</a>,{% elif project.cost > 600 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$') }}"> $$$$</a>,{% elif project.cost > 1000 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$$') }}"> $$$$$</a>,{% endif %}
             </p>
         </div>
-        <div class="project-difficulty-box">
+        <div class="project-difficulty-box custom-scrollbar">
             <div class="wrapper">
                 <div class="loader">
                     <div class="inner inner{{ project.difficulty }}"></div>
@@ -97,7 +97,7 @@
             {% else %}<span style="font-weight: 800">N/A</span>
             {% endif %}
         </div>
-        <div class="project-cost-box">
+        <div class="project-cost-box custom-scrollbar">
             <p class="project-cost-title">Cost</p>
             <div class="project-cost-bar">
                 <span class="cost-bar-boxes">$</span>
@@ -127,7 +127,7 @@
             </div>
             <p class="project-cost-value-box">$ <span class="project-cost-value" type="number">{{ project.cost }}</span>.00</p>
         </div>
-        <div class="project-duration-box">
+        <div class="project-duration-box custom-scrollbar">
             <p class="project-duration-title">Start to Finish</p>
             <i class="fas fa-calendar duration-img"></i><span class="project-duration-text">{{ project.duration }}</span><span class="project-duration-text2">Hours</span>
             {% if current_user == user %}
@@ -136,8 +136,8 @@
         </div>
     </div>
 
-    <div class="project-nav-list">
-        <div class="navlist-title-container">
+    <div class="project-nav-list custom-scrollbar">
+        <div class="navlist-title-container custom-scrollbar">
             <p class="navlist-title">{{ project.title }}</p>
         </div>
         <ul class="project-nav-ul">
@@ -158,8 +158,8 @@
         <p class="project-last-update">Last updated: {{ moment(project.last_edit).format('L') }}</p>
     </div>
 
-    <div class="project-viewer-box">
-        <div class="project-view-homepic">
+    <div class="project-viewer-box custom-scrollbar">
+        <div class="project-view-homepic custom-scrollbar">
             {% if project_gallery.photoOne %}
             <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoOne) }}">
             {% elif project_gallery.photoTwo %}
@@ -190,7 +190,7 @@
             {% if project.tutorial_enabled == False %}
                 <h3 class="tutorial-title-disabled"><strong>Sorry! </strong> Tutorial guide has been disabled by the creator</h3>
             {% endif %}
-            <div class="project-tutorial-textarea">
+            <div class="project-tutorial-textarea custom-scrollbar-s3">
             <!--  DYNAMICALLY INSERTING TUTORIAL DATA HERE WITH JQUERY  -->
             </div>
         </div>
@@ -202,7 +202,7 @@
             {% if project.maintenance_enabled == False %}
                 <h3 class="maintenance-title-disabled"><strong>Sorry! </strong> Maintenance guide has been disabled by the creator</h3>
             {% endif %}
-            <div class="project-maintenance-textarea">
+            <div class="project-maintenance-textarea custom-scrollbar-s3">
                 <!--  DYNAMICALLY INSERTING TUTORIAL DATA HERE WITH JQUERY  -->
             </div>
         </div>
@@ -213,7 +213,7 @@
             {% endif %}
             <div class="item-list-container">
             {% if itemlist and project.itemlist_enabled == True %}
-                <ul class="item-list">
+                <ul class="item-list custom-scrollbar-s2">
                     {% for eachitem in itemlist %}
                     <li class="item-sublist">
                         <p class="item-name"><a class="item-link" href="{{ eachitem.itemlink }}" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container popover-container-{{ eachitem.id }}'><p class='popover-notes-title'>Notes</p><p class='popover-notes'>{{ eachitem.notes }}</p></div>">{{ eachitem.itemname }}</a><span class="item-qty">Qty: {{ eachitem.quantity }}</span></p>
@@ -239,7 +239,8 @@
             {% include '/projects/_project-comments.html' %}
             {% else %}
             <div class="project-comment-login">
-                <p>You need to login to see the comments. <a href="{{ url_for('auth.login', next='project-page', username=project.username, title=project.title) }}">Login here</a></p>
+                <p>You need to login to see the comments.<br><br>
+                <a href="{{ url_for('auth.login', next='project-page', username=project.username, title=project.title) }}">Login here</a></p>
             </div>
             {% endif %}
         </div>
@@ -252,7 +253,7 @@
             <h3 class="faq-title-disabled"><strong>Sorry! </strong> Frequently Asked Questions has been disabled by the owner.</h3>
             {% else %}
             <div class="faq-question-container">
-                <div class="faq-question-wrapper">
+                <div class="faq-question-wrapper custom-scrollbar-s2">
                 {% if project_faqs.enabled1 == True %}
                 <p class="faq-question">{{ project_faqs.question1 }}</p>
                 <p class="faq-answer">{{ project_faqs.answer1 }}</p>
@@ -324,6 +325,19 @@
     </div>
   </div>
 </div>
+
+<!----- MESSAGE POP UP & ALERT MESSAGES ----->
+<div class="alert-box-wrapper">
+    <div id="message-alert-box" class="alert alert-dismissible alert-success">
+        <strong class="message-success-msg"></strong>
+    </div>
+
+    <div id="message-alert-box" class="alert alert-dismissible alert-secondary">
+        <strong class="message-fail-msg"></strong>
+    </div>
+</div>
+{% include "_message-popup.html" %}
+
 {% endblock bodycontent %}
 
 {% block scripts %}
@@ -421,7 +435,6 @@ $(function () {
         $('.project-maintenance').css('display', 'none');
         $('.project-faq').css('display', 'none');
         $('.project-itemslist').css('display', 'block');
-
     });
 
     $('.navlist-photos').on('click', (event) => {
@@ -509,6 +522,14 @@ $(function() {
     $('.project-itemslist, .item-list, .item-list-container').on('mouseenter', () => {
         $('.item-link').popover('hide');
     });
+});
+
+/* OPENS MSG BOX */
+$('.project-message').on('click', (event) => {
+    var username = "{{ user.username }}";
+    $('#myForm').css('display', 'block');
+    $('.new-msg-recip').prop('readonly', true);
+    $('.new-msg-recip')[0].value = username;
 });
 
 </script>
@@ -603,6 +624,7 @@ $(function () {
                 .append($('<textarea>')
                     .attr('class', 'form-control z-depth-1 reply-text' + commentID)
                     .attr('id', 'exampleFormControlTextarea6')
+                    .attr('data-commentid', commentID)
                     .attr('rows', '3')
                     .attr('placeholder', 'Reply here...')
                     .css('resize', 'none')
@@ -625,13 +647,12 @@ $(function () {
                 )
             );
 
-            let ReplyBox = event.currentTarget.parentElement.parentElement.parentElement.parentElement.lastElementChild.classList[1];
-            if (ReplyBox) {
-                $('.' + ReplyBox)[0].scrollIntoView({
-                    behavior: "smooth", // "smooth" or "auto" or "instant"
-                    block: "end" // "start" or "end"
-                });
-            }
+            $('.comments-container').animate({
+                scrollTop: ($('.reply-text' + commentID).offset().top - $('.comments-container').height() - $('.reply-text' + commentID).height())
+            }, 500);
+            /*
+            $('.reply-text'+ commentID)[0].scrollIntoView(true);*/
+            
         } else if ($('.shadow-textarea' + commentID).length != 0) {
             $('.' + replyTarget).css('color', '#A6A6A6');
             $('.shadow-textarea' + commentID).remove();

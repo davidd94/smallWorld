@@ -5,14 +5,16 @@
 <div class="chatlist-wrapper">
     <div class="users-list-card mdl-card mdl-shadow--2dp">
         <div class="mdl-card__title">
-        <p class="mdl-card__title-text">Users</p>
+        <p class="mdl-card__title-text chatlist-title">Users</p><i class="far fa-question-circle chatlist-info" style="position: absolute; top: 1.4em; right: 3em; cursor: pointer;" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container' style='padding: 1em;'><p class='popover-description' style='font-size: 0.8em; font-weight: 600;'>Chat list users are automatically added if both users are following each other or removed if one or the other unfollows. Otherwise if one or the other is only following, both users will not appear in their respective list.</p></div>"></i>
         </div>
         <div class="mdl-card__menu">
         <a class="chatbox-expand-btn" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             <img class="expand-icons" src="{{ url_for('static', filename='dots-expand.png') }}">
-            <div class="dropdown-menu chat-dropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: -30px; transform: translate3d(0px, 42px, 0px);">
+            <div class="dropdown-menu chat-dropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 42px, 0px);">
                 <a class="dropdown-item dropdown-minimize" href="#">Minimize</a>
                 <a class="dropdown-item dropdown-offline" href="#">Go offline</a>
+                <a class="dropdown-item dropdown-online" href="#">Go online</a>
+                <a class="dropdown-item dropdown-invisible" href="#">Invisible<i class="far fa-question-circle invisible-info" style="position: absolute; cursor: pointer;" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container' style='padding: 1em;'><p class='popover-description' style='font-size: 0.8em; font-weight: 600;'>While in Invisible Mode, you may see others online while others cannot see you online. All the chat features are still available. If you are experience any issues or bugs, please let the me know :)</p></div>"></i></a>
             </div>
         </a>
         </div>
@@ -27,7 +29,7 @@
             </li>
         </ul>
         <div class="mdl-menu__item--full-bleed-divider"></div>
-        <div class="mdl-card__supporting-text">
+        <div class="mdl-card__supporting-text custom-scrollbar">
         <ul class="mdl-list fav-chatlist">
             <!-- DYNAMIC USERS ADDED HERE -->
         </ul>
@@ -41,12 +43,16 @@
 <!-- MINIMIZED CHATLIST -->
 <div class="chatbox-minimized-container">
     <div class="online-wrapper" style="{% if current_user.online == True %}display: block;{% else %}display: none;{% endif %}">
-        <span class="minimized-online-icon" style="background: rgb(66, 183, 42); border-radius: 50%; height: 10px; margin-left: 10px; width: 10px; display: inline-block"></span>
+        <span class="minimized-online-icon" style="background: rgb(66, 183, 42); border-radius: 50%; height: 10px; width: 10px; display: block; position: absolute; top: 50%; left: 8%; transform: translate(-50%, -50%);"></span>
         <span class="minimized-online-text">Online</span>
     </div>
     <div class="offline-wrapper" style="{% if current_user.online == False %}display: block;{% else %}display: none;{% endif %}">
-        <img class="minimized-offline-icon" style="background: rgb(179, 179, 179); border-radius: 50%; display: inline-block; height: 10px; margin-left: 10px; width: 10px;">
+        <img class="minimized-offline-icon" style="background: rgb(179, 179, 179); border-radius: 50%; display: block; position: absolute; height: 10px; width: 10px; top: 50%; left: 8%; transform: translate(-50%, -50%);">
         <span class="minimized-offline-text">Offline</span>
+    </div>
+    <div class="invisible-wrapper" style="{% if current_user.online == False %}display: block;{% else %}display: none;{% endif %}">
+        <i class="fas fa-ghost minimized-invisible-icon" style="display: block; color: rgb(75, 75, 75); height: 10px; width: 10px; position: absolute; top: 50%; left: 8%; transform: translate(-50%, -50%);"></i>
+        <span class="minimized-invisible-text">Invisible Mode</span>
     </div>
 </div>
 
@@ -78,31 +84,48 @@
 <script src='{{ url_for("static", filename="plugins/moment-js.min.js") }}'></script>
 <!-- When locally JS fails, load CDN -->
 <script>
-    if (!window.moment) { document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"><\/script>'); }
-</script>
-<script>
-    if (!window.moment) { document.write('<script src="https://code.getmdl.io/1.1.2/material.min.js"><\/script>'); }
-</script>
-<script>
     if (!window.moment) { document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"><\/script>'); }
 </script>
 
 <script type="text/javascript">
 /* SOCKETIO SCRIPTS */
 $(document).ready(function() {
-    var socket = io.connect('http://localhost:5000');
+    var socket = io.connect('192.168.0.19:5000');
     var chatRequest;
     
     // LISTENS TO SERVER TO DETERMINE USER'S CHAT STATUS
     socket.on('connect', function(status) {
         if (status == 'online') {
+            // DISPLAYS MINIMIZED CHATBOX AS ONLINE
+            $('.chatlist-title').css('font-style', 'normal').css('font-weight', '400').css('padding', '0 5em').css('color', 'black').css('opacity', '1');
+            $('.chatlist-title').text('Users');
+            $('.chatlist-wrapper').css('display', 'none');
+            $('.chatbox-minimized-container').css('display', 'block');
+            $('.online-wrapper').css('display', 'block');
+            $('.offline-wrapper').css('display', 'none');
+            $('.invisible-wrapper').css('display', 'none');
+
             socket.emit('chatlist', []);
         } else if (status == 'offline') {
-            console.log('cannot access chatlist because you are offline');
-        } else if (status == 'ghost') {
+            $('.chatlist-wrapper').css('display', 'none');
+            $('.chatbox-minimized-container').css('display', 'block');
+            $('.online-wrapper').css('display', 'none');
+            $('.offline-wrapper').css('display', 'block');
+            $('.invisible-wrapper').css('display', 'none');
+        } else if (status == 'invisible') {
+            $('.chatlist-title').css('font-style', 'italic').css('font-weight', '600').css('padding', '0 2.5em').css('color', 'lightgrey').css('opacity', '0.75');
+            $('.chatlist-title').text('Invisible Mode');
+            $('.chatlist-wrapper').css('display', 'none');
+            $('.chatbox-minimized-container').css('display', 'block');
+            $('.online-wrapper').css('display', 'none');
+            $('.offline-wrapper').css('display', 'none');
+            $('.invisible-wrapper').css('display', 'block');
+            $('.dropdown-invisible').css('display', 'none');
+            $('.dropdown-offline').css('display', 'none');
+            $('.dropdown-online').css('display', 'block');
+
             socket.emit('chatlist', []);
             socket.emit('fav_users');
-            console.log('GHOST MODE!!');
         }
     });
     // LISTENS TO SERVER FOR ESTABLISHED CONNECTION AND LOADS CHAT LIST
@@ -351,6 +374,7 @@ $(document).ready(function() {
                         .append($('<p>')
                             .prop('class', 'chat-message-content')
                             .css('font-style', 'italic')
+                            .css('color', 'lightgrey')
                             .text(message)))
                     .append($('<hr>')))
             } else if (username != current_user) {
@@ -372,6 +396,7 @@ $(document).ready(function() {
                             .text(username))
                         .append($('<p>')
                             .prop('class', 'chat-message-content')
+                            .css('color', 'lightgrey')
                             .css('font-style', 'italic')
                             .text(message)))
                     .append($('<hr>'))
@@ -549,9 +574,33 @@ $(document).ready(function() {
         $('.chatbox-minimized-container').css('display', 'none');
         $('.online-wrapper').css('display', 'none');
         $('.offline-wrapper').css('display', 'none');
+        $('.invisible-wrapper').css('display', 'none');
 
         socket.emit('online');
     });
+
+    // GO INVISIBLE MODE
+    $('.dropdown-invisible').on('click', () => {
+        $('.chatlist-title').text('Invisible Mode');
+        $('.chatlist-title').css('font-style', 'italic').css('font-weight', '600').css('padding', '0 2.5em').css('color', 'lightgrey').css('opacity', '0.75');
+        $('.dropdown-offline').css('display', 'none');
+        $('.dropdown-online').css('display', 'block');
+        $('.dropdown-invisible').css('display', 'none');
+
+        socket.emit('invisible');
+    });
+
+    // SWITCH TO ONLINE MODE FROM INVISIBLE
+    $('.dropdown-online').on('click', () => {
+        $('.chatlist-title').text('Users');
+        $('.chatlist-title').css('font-style', 'normal').css('font-weight', '400').css('padding', '0 5em').css('color', 'black').css('opacity', '1');
+        $('.dropdown-offline').css('display', 'block');
+        $('.dropdown-invisible').css('display', 'block');
+        $('.dropdown-online').css('display', 'none');
+
+        socket.emit('online');
+    });
+
 });
 </script>
 
@@ -564,21 +613,79 @@ $(function() {
         $(".chat-message-counter").fadeToggle(300, "swing");
     });
 
-    // MINIMIZES CHATLIST
+    // MINIMIZES CHATLIST WHILE ONLINE OR INVISIBLE MODE
     $('.dropdown-minimize').on('click', function() {
-        $('.chatlist-wrapper').css('display', 'none');
-        $('.chatbox-minimized-container').css('display', 'block');
-        $('.online-wrapper').css('display', 'block');
-        $('.offline-wrapper').css('display', 'none');
+        var chatmode = $('.chatlist-title').text();
+        if (chatmode == 'Users') {
+            $('.chatlist-wrapper').css('display', 'none');
+            $('.chatbox-minimized-container').css('display', 'block');
+            $('.online-wrapper').css('display', 'block');
+            $('.offline-wrapper').css('display', 'none');
+            $('.invisible-wrapper').css('display', 'none');
+        } else {
+            $('.chatlist-wrapper').css('display', 'none');
+            $('.chatbox-minimized-container').css('display', 'block');
+            $('.online-wrapper').css('display', 'none');
+            $('.offline-wrapper').css('display', 'none');
+            $('.invisible-wrapper').css('display', 'block');
+        }
     });
 
-    // MAXIMIZES ONLINE CHATLIST
+    // MAXIMIZES CHATLIST WHILE ONLINE
     $('.online-wrapper').on('click', () => {
         $('.chatlist-wrapper').css('display', 'block');
         $('.chatbox-minimized-container').css('display', 'none');
         $('.online-wrapper').css('display', 'none');
         $('.offline-wrapper').css('display', 'none');
+        $('.invisible-wrapper').css('display', 'none');
     });
+
+    // MAXIMIZES CHATLIST WHILE INVISIBLE
+    $('.invisible-wrapper').on('click', () => {
+        $('.chatlist-wrapper').css('display', 'block');
+        $('.chatbox-minimized-container').css('display', 'none');
+        $('.online-wrapper').css('display', 'none');
+        $('.offline-wrapper').css('display', 'none');
+        $('.invisible-wrapper').css('display', 'none');
+    });
+
+});
+
+/* POPOVER EFFECTS - INVISIBLE MODE */
+$(function() {
+    // SETTING CLEAR TIMEOUT VARIABLE GLOBALLY
+    var popoverShow;
+    $("[data-toggle=popover]").each(function(i, obj) {
+        $(this)
+            .popover({
+                html: true,
+                container: 'body',
+                viewport: {selector: '.chatlist-wrapper'},
+                selector: '[data-popover]',
+                trigger: 'hover',
+                placement: 'left',
+            })
+            .on("mouseenter", function() {
+                var _this = this;
+                // SETTING 'SHOW' ON POPOVER AS VARIABLE AND TRIGGER
+                popoverShow = setTimeout(function() {
+                    $(_this).popover("show");
+                }, 600);
+                $(".popover").on("mouseleave", function() {
+                    $(_this).popover("hide");
+                });
+            })
+            .on("mouseleave", function() {
+                var _this = this;
+                // CLEARS ANY EXISTING POPOVER 'SHOW' TIMEOUT TO PREVENT UNWANTED POPOVER DISPLAYS
+                clearTimeout(popoverShow);
+                setTimeout(function() {
+                    if (!$(".popover:hover").length) {
+                    $(_this).popover("hide");
+                    }
+                }, 400);
+            });
+        });
 });
 
 </script>

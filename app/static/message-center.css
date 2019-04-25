@@ -34,11 +34,21 @@
     margin-right: 0.4em;
 }
 
+.receive-wrapper {
+    height: 84vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
 .message-list {
     grid-row: 2 / span 1;
     grid-column: 1 / span 1;
     border-top: 0.0625em solid rgb(218, 218, 218);
     display: none;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    position: relative;
+    height: 100%;
 }
 .is-active {
     display: block;
@@ -119,23 +129,23 @@
     border-top: 0.0625em solid rgb(207, 207, 207);
 }
 
+/* ALERT MESSAGE */
 .alert-box-wrapper {
-    position: relative;
+    position: absolute;
+    top: 7%;
+    right: -10em;
     height: 1%;
 }
 
 #message-alert-box {
-    grid-row: 2 / span 1;
-    grid-column: 1 / span 1;
-    width: 25%;
+    width: 15em;
+    height: auto;
     max-height: 6em;
-    margin-top: 1em;
-    padding: 1em 0.7em;
-    justify-self: flex-end;
-    align-self: center;
+    padding: 0.8em;
     text-align: center;
-    transition: all 900ms ease;
     right: -70em;
+    top: 0;
+    transition: all 1500ms ease;
     position: absolute;
 }
 
@@ -221,6 +231,7 @@ img{ max-width:100%;}
   margin: 0;
   padding: 5px 10px 5px 12px;
   width: 100%;
+  word-break: break-all;
 }
 .time_date {
   color: #747474;
@@ -236,6 +247,15 @@ img{ max-width:100%;}
   float: left;
   padding: 0.2em 15px 0 25px;
   width: 100%;
+  height: 100%;
+  position: relative;
+}
+.msg_history {
+    position: relative;
+    z-index: 100;
+  height: 85vh;
+  padding: 0;
+  overflow-y: auto;
 }
 
  .sent_msg p {
@@ -246,6 +266,7 @@ img{ max-width:100%;}
   padding: 5px 10px 5px 12px;
   width:100%;
   float: right;
+  word-break: break-all;
 }
 .outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
 .sent_msg {
@@ -256,10 +277,13 @@ img{ max-width:100%;}
     float: right;
 }
 .input_msg_write {
+    position: relative;
     background: white;
+    padding: 0 1em;
     opacity: 1;
 }
-.input_msg_write input {
+
+.write_msg {
   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
   border: medium none;
   color: #4c4c4c;
@@ -267,11 +291,16 @@ img{ max-width:100%;}
   min-height: 3em;
   width: 100%;
 }
+.write_msg:focus {
+    outline: none;
+}
 #message-reply-box {
-    display: visible;
-    position: relative;
-    transition: all 300ms ease;
-    bottom: -10em;
+    display: none;
+    position: absolute;
+    z-index: 500;
+    width: 100%;
+    bottom: 0;
+    left: 0;
 }
 
 .type_msg {border-top: 1px solid #c4c4c4;position: relative;}
@@ -290,13 +319,12 @@ img{ max-width:100%;}
 }
 .messaging { 
     padding: 0 0 0 0;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 }
-.msg_history {
-  height: 78vh;
-  padding: 0;
-  overflow-y: auto;
-}
 #message-reply-close-box {
-    margin-top: -1.6em;
+    position: absolute;
+    top: 0.05em;
+    right: 0.2em;
 }

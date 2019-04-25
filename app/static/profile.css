@@ -17,6 +17,7 @@
     background-color: rgb(247, 247, 247);
     border-radius: 0.75em;
     overflow: scroll;
+    position: relative;
 }
 .filter-box-title {
     font-size: 1em;
@@ -59,6 +60,7 @@
     border-radius: 0.75em;
     overflow-x: hidden;
     overflow-y: scroll;
+    position: relative;
 }
 .profile-project-list-create {
     font-size: 1.4em;
@@ -213,6 +215,7 @@
     font-size: 0.75em;
     border: 1px solid black;
     padding: 0.5em;
+    position: relative;
 }
 
 .profile-social-edit {
@@ -354,6 +357,7 @@
     overflow: scroll;
     border-right: 1px solid black;
     padding: 0.3em;
+    position: relative;
 }
 .project-descrip-title {
     grid-row: 1 / span 1;

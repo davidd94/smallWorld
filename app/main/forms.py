@@ -44,7 +44,7 @@ class EditProfileForm(FlaskForm):
 class MessageForm(FlaskForm):
     recipient = StringField('User Name', validators=[DataRequired(), Length(min=5, message="User name must be a minimum of 5 characters long")])
     subject = StringField('Subject', validators=[Length(min=3, max=50, message="Subject must be 5-50 characters long")])
-    body = TextAreaField('Message', validators=[Length(max=499, message='Message: max of 500 characters long')])
+    body = TextAreaField('Message', validators=[Length(max=1499, message='Message: max of 500 characters long')])
     submit = SubmitField('Send')
 
     

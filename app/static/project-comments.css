@@ -43,6 +43,7 @@ h1 {
     height: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
+    position: relative;
 }
 
 .comments-container h1 {
@@ -247,7 +248,7 @@ h1 {
 	transition: color 0.3s ease;
 }
 .comment-like-number, .reply-like-number {
-    margin-top: -0.2em;
+    margin-top: -0.4em;
 }
 
 .reply-comment-box .comment-head i {
@@ -401,6 +402,7 @@ h1 {
     overflow: scroll;
     resize: none;
     display: inline-block;
+    position: relative;
 }
 .comment-btn-centering {
     height: 100%;
@@ -463,6 +465,7 @@ h1 {
  ========================*/
 @media only screen and (max-width: 766px) {
 	.comments-container {
+        position: relative;
 		width: 480px;
 	}
 

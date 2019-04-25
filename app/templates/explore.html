@@ -10,12 +10,12 @@
     <div class="row">
         <!----- MOST POPULAR CARD ----->
         <div class="col-md-4">
-            <div class="card">
+            <div class="card" data-zoomed="false">
                 <div class="card-content">
                     <div class="card-header-most-popular">
                         <h1 class="card-heading">Most Popular</h1>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body custom-scrollbar-s3">
                         <div class="card-p">
                             {% if most_popular_projects %}
                             <ul class="card-ul">
@@ -51,12 +51,12 @@
         </div>
         <!----- TRENDING NOW CARD ----->
         <div class="col-md-4">
-        	<div class="card">
+        	<div class="card" data-zoomed="false">
                     <div class="card-content">
                     	<div class="card-header-trending-now">
                            <h1 class="card-heading">Trending Now</h1>
                        	</div>
-                       	<div class="card-body">
+                       	<div class="card-body custom-scrollbar-s3">
                      	    <div class="card-p">
                                 {% if trending_projects %}
                                 <ul class="card-ul">
@@ -92,12 +92,12 @@
         </div>
         <!----- NEWEST PROJECT CARD ----->
         <div class="col-md-4">
-        	<div class="card">
+        	<div class="card" data-zoomed="false">
                     <div class="card-content">
-                    	<div class="card-header card-header-new-projects">
+                    	<div class="card-header-new-projects">
                            <h1 class="card-heading">Newest Projects</h1>
                        	</div>
-                       	<div class="card-body">
+                       	<div class="card-body custom-scrollbar-s3">
                      	    <div class="card-p">
                                 {% if new_projects %}
                                 <ul class="card-ul">
@@ -187,6 +187,7 @@ $(function() {
         $('.project-title-link').popover('hide');
     });
 });
+
 
 </script>
 {% endblock scripts %}

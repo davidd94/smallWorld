@@ -8,6 +8,7 @@ from app.tasks import test_export
 from app.email import send_notification_email
 from app.models import User, Projects, PhotoGallery, Itemlist, ProjectComments, CommentReplies, Notifications, FAQs, comment_likers, reply_likers, project_likers
 from app.project import bp
+from app.main.forms import MessageForm
 from app.project.forms import ProjectForm, EditProjectForm, FAQForm
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
@@ -93,6 +94,7 @@ def project(username, title):
 
         # LOADS CERTAIN FEATURES FOR LOGGED IN USERS, SPECIFICALLY COMMENT/REPLY SYSTEM
         if current_user.is_authenticated:
+            form = MessageForm()
             project_likes = Projects.query \
                                     .join(project_likers) \
                                     .join(User) \
@@ -132,7 +134,8 @@ def project(username, title):
                                     project_reply_likes=project_reply_likes,
                                     tutorial_text=project.tutorial,
                                     maintenance_text=project.maintenance,
-                                    project_faqs=project_faqs)
+                                    project_faqs=project_faqs,
+                                    form=form)
         return render_template('/projects/project-page.html',
                                 user=user,
                                 project=project,
@@ -369,7 +372,6 @@ def edit_maintenance_photo(title):
 @login_required
 def edit_maintenance_save(title):
     html_content = request.data.decode('utf-8')
-    print(html_content)
     project = Projects.single_project(current_user.id, title)
     if project:
         project.maintenance = html_content

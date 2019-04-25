@@ -6,7 +6,7 @@
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-        <div id="login-alert-container" class="alert alert-dismissible alert-secondary" style="width: auto; height: auto; max-height: 6em; max-width: 25%; position: absolute; top: 14%; left: 38%; text-align: center;">
+        <div id="login-alert-container" class="alert alert-dismissible alert-secondary" style="width: auto; height: auto; max-height: 6em; max-width: 25%; position: absolute; top: 12%; left: 38%; text-align: center;">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             {% if message == "Please check your email to verify your account before logging in." %}
             <strong>{{ message }}</strong> <a href="{{ url_for('auth.confirm_acct_request') }}" id="homepage-forgotpass-link" class="alert-link">Send new verification link</a>?
@@ -29,6 +29,8 @@
             {% set title = request.args.get('title') %}
             {% set username = request.args.get('username') %}
                 <form action="{{ url_for('auth.login', next=next, title=title, username=username) }}" method="POST">
+            {% else %}
+                <form action="{{ url_for('auth.login', next='login-page') }}" method="POST">
             {% endif %}
         {% else %}
         <form action="{{ url_for('auth.login', next='login-page') }}" method="POST">

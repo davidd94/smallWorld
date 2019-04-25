@@ -2,13 +2,17 @@
     /* 100% = 16px font size. 62.5% = 10px font size. */
   font-size: 100%;
 }
+x
+html {
+    scroll-behavior: smooth;
+}
 
 body {
     height: 100vh;
     width: 100%;
     position: relative;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 /* OVERRIDING BOOTSTRAP STYLES */
@@ -18,6 +22,10 @@ body {
     margin-right: 20px;
     border: 1px solid black;
     cursor: pointer;
+}
+
+.navbar {
+    z-index: 1000;
 }
 
 /* NOTIFICATION */
@@ -49,9 +57,10 @@ body {
 }
 .notification-dropdown {
     width: 27em;
-    height: 30em;
+    height: 28em;
     overflow: hidden;
     list-style: none;
+    position: relative;
 }
 .clear-wrapper {
     position: absolute;
@@ -59,10 +68,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    padding: 0.4em;
-    padding-bottom: 2.5em;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    padding: 0.4em 0.4em 2.5em 0.4em;
+    overflow: hidden;
     z-index: 1;
 }
 .dropdown-clear {
@@ -88,13 +95,20 @@ body {
     border-radius: 0.5em;
     margin-bottom: 0.75em;
 }
+.noteicon {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+    width: 100%;
+}
 .dropdown-type {
     grid-row: 1 / span 1;
-    grid-column: 1 / span 3;
+    grid-column: 2 / span 2;
     margin: 0;
     align-self: center;
     text-align: left;
-    border-bottom: 0.5px solid rgb(184, 184, 184);
     font-size: 0.9em;
     color: rgb(41, 41, 41);
     font-weight: 800;
@@ -110,13 +124,15 @@ body {
     grid-row: 2 / span 1;
     grid-column: 1 / span 3;
     margin: 0;
+    padding: 1em 0.5em;
+    border-top: 0.5px solid rgb(184, 184, 184);
     align-self: center;
     text-align: left;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     color: rgb(58, 58, 58);
-    font-size: 0.9em;
+    font-size: 1em;
     font-weight: 600;
 }
 .dropdown-title-value {
@@ -128,11 +144,13 @@ body {
     grid-row: 3 / span 1;
     grid-column: 1 / span 3;
     margin: 0;
+    padding: 0 0.5em;
     align-self: center;
     text-align: left;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-style: italic;
 }
 .dropdown-timestamp {
     grid-row: 1 / span 1;

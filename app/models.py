@@ -377,7 +377,7 @@ class Messages(db.Model):
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     subject = db.Column(db.String(50), index=True)
-    body = db.Column(db.String(500))
+    body = db.Column(db.String(1500))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     message_read = db.Column(db.Boolean, index=True, default=False)
     

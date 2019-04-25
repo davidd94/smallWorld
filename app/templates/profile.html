@@ -7,7 +7,7 @@
 
 {% block bodycontent %}
 <div class="profile-main-container">
-    <div id="profile-filter-box">
+    <div id="profile-filter-box" class="custom-scrollbar-s1">
         <div class="filter-box-title">
             <span>Filter</span>
         </div>
@@ -71,7 +71,7 @@
             <button type="submit" class="btn btn-primary filter-btn">Apply</button>
         </div>
     </div>
-    <div id="profile-project-list-box">
+    <div id="profile-project-list-box" class="custom-scrollbar">
         <div class="profile-project-list-create">
             <span class="profile-project-list-title">Project list</span>
             {% if (current_user.is_authenticated and current_user == user) %}
@@ -105,7 +105,7 @@
         <div class="profile-user-name">
             <a class="profile-username-link" href="{{ url_for('main.profile', username=user.username) }}"><p class="profile-user-name">{{ user.username }}</p></a>
         </div>
-        <div class="profile-social-bio">
+        <div class="profile-social-bio custom-scrollbar">
             <p>{{ user.bio }}</p>
         </div>
         {% if current_user.is_authenticated %}
@@ -143,7 +143,7 @@
         </div>
     </div>
     <div class="profile-card-box">
-        <div class="project-descrip-box">
+        <div class="project-descrip-box custom-scrollbar">
             <p class="project-descrip-title">Quick Description</p>
             <p class="project-descrip"></p>
         </div>
@@ -188,7 +188,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="followers-modal-wrapper">
+                <div class="followers-modal-wrapper custom-scrollbar">
                 <ul class="followers-modal">
                     {% if followers %}
                     {% for follower in followers %}
@@ -207,7 +207,7 @@
         </div>
     </div>
 
-    <!----- ALERT MESSAGES ----->
+    <!----- MESSAGE POP UP & ALERT MESSAGES ----->
     <div class="alert-box-wrapper">
         <div id="message-alert-box" class="alert alert-dismissible alert-success">
             <strong class="message-success-msg"></strong>
@@ -425,5 +425,6 @@ $('.profile-message-link').on('click', (event) => {
     $('.new-msg-recip').prop('readonly', true);
     $('.new-msg-recip')[0].value = username;
 });
+
 </script>
 {% endblock scripts %}

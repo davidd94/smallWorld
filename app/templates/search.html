@@ -12,17 +12,34 @@
             <div class="card-header card-header-search">
                 <h1 class="card-heading">Search Results</h1>
             </div>
-            <div class="card-body">
+            <div class="card-body custom-scrollbar">
                 <div class="card-p">
                     {% if projects %}
                     <ul class="card-ul">
                         {% for project in projects %}
                         {% if project.private != True %}
+                        {% set created = moment(project.created_date).format('LL') %}
                         <li>
-                            <p class="project-title"><a class="project-title-link project-title-link-{{ project.id }}" href="{{ url_for('project.project', username=project.username, title=project.title) }}" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container popover-container-{{ project.id }}'><img class='popover-avatar' src='{{ project.author.avatar(40) }}'><a class='popover-userlink' href='{{ url_for('main.profile', username=project.username) }}' target='blank'>{{ project.username }}</a><p class='popover-description'>{{ project.description }}</p></div>">{{ project.title }}</a></p>
-                            <span class="project-likes">{{ project.likes }} Likes</span>
-                            <p class="project-description">{{ project.description }}</p>
-                            <p class="project-tags">Tags: Aquarium, Vivarium, $$$, Difficulty: Hard</p>
+                            <p class="project-title"><a class="project-title-link project-title-link-{{ project.id }}" href="{{ url_for('project.project', username=project.username, title=project.title) }}" data-toggle="popover" data-popover="true" data-html="true" data-content='<div class="popover-container popover-container-{{ project.id }}"><span class="popover-created-date"><strong>Created on: </strong></span><img class="popover-avatar" src="{{ project.author.avatar(40) }}"><a class="popover-userlink" href="{{ url_for("main.profile", username=project.username) }}" target="blank">{{ project.username }}</a><p class="popover-description">{{ project.description }}</p></div>'>{{ project.title }}</a></p>
+                            <span class="project-created-date"><strong>Created on : </strong> {{ created }}</span>
+                            <span class="project-likes"><strong>{{ project.likes }} </strong> Likes</span>
+                            <p class="project-description custom-scrollbar">{{ project.description }}</p>
+                            <p class="project-tags custom-scrollbar">Tags: 
+                                {% if project.aquariums == True %}<a href="{{ url_for('project.tagsearch', tag='aquariums') }}"> Aquariums</a>,{% endif %}
+                                {% if project.saltwater == True %}<a href="{{ url_for('project.tagsearch', tag='saltwater') }}"> Saltwater</a>,{% endif %}
+                                {% if project.freshwater == True %}<a href="{{ url_for('project.tagsearch', tag='freshwater') }}"> Freshwater</a>,{% endif %}
+                                {% if project.terrariums == True %}<a href="{{ url_for('project.tagsearch', tag='terrariums') }}"> Terrariums</a>,{% endif %}
+                                {% if project.enclosedtropical == True %}<a href="{{ url_for('project.tagsearch', tag='enclosedtropical') }}"> Enclosed Tropical</a>,{% endif %}
+                                {% if project.opentropical == True %}<a href="{{ url_for('project.tagsearch', tag='opentropical') }}"> Open Tropical</a>,{% endif %}
+                                {% if project.carnivorous == True %}<a href="{{ url_for('project.tagsearch', tag='carnivorous') }}"> Carnivorous</a>,{% endif %}
+                                {% if project.desert == True %}<a href="{{ url_for('project.tagsearch', tag='desert') }}"> Desert</a>,{% endif %}
+                                {% if project.reptiles == True %}<a href="{{ url_for('project.tagsearch', tag='reptiles') }}"> Reptiles</a>,{% endif %}
+                                {% if project.vivariumpaludarium == True %}<a href="{{ url_for('project.tagsearch', tag='vivariumpaludarium') }}"> Vivarium/Paludarium</a>,{% endif %}
+                                {% if project.waterreptiles == True %}<a href="{{ url_for('project.tagsearch', tag='waterreptiles') }}"> Water Reptiles</a>,{% endif %}
+                                {% if project.plantsonly == True %}<a href="{{ url_for('project.tagsearch', tag='plantsonly') }}"> Plants only</a>,{% endif %}
+                                {% if project.difficulty < 4 %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='easy') }}"> Easy</a>,{% elif project.difficulty > 7 %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='hard') }}"> Hard</a>,{% else %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='medium') }}"> Medium</a>,{% endif %}
+                                {% if project.cost < 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$') }}"> $</a>,{% elif project.cost > 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$') }}"> $$</a>,{% elif project.cost > 300 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$') }}"> $$$</a>,{% elif project.cost > 600 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$') }}"> $$$$</a>,{% elif project.cost > 1000 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$$') }}"> $$$$$</a>,{% endif %}
+                            </p>
                         </li>
                         {% endif %}
                         {% endfor %}

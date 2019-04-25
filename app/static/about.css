@@ -1,13 +1,15 @@
 @import url("https://fonts.googleapis.com/css?family=Hind:400,700");
-html, body {
-  font-family: 'Hind', sans-serif;
-  margin: 0;
-  padding: 0;
-    background-image: url('/static/about-background.jpg');
+
+.aboutme-container {
+    width: 100%;
+    height: 93vh;
+    position: relative;
+    z-index: 15;
+    background-image: url('bio-aquarium-background2.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     background-size: cover;
-    min-height: 100%;
-  width: 100%;
-  height: 100%;
 }
 
 h3 {
@@ -24,7 +26,7 @@ h3 {
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 0.95;
+  opacity: 0.90;
   overflow: hidden;
 }
 .carousel-wrapper .carousel {
@@ -38,11 +40,11 @@ h3 {
   padding: 10px;
   background-color: #FFFFFF;
   width: 50%;
-  height: 33em;
+  height: 31em;
   min-width: 120px;
   margin: 0 20px;
   transition: transform 500ms ease;
-  border-radius: 0.5em;
+  border-radius: 1.5em;
 }
 .carousel-wrapper .carousel .carousel-cell .more {
   display: block;
@@ -108,12 +110,22 @@ h3 {
 .bio-avatar {
     margin: 0 auto;
 }
-.bio-box, .smallworld-box, .others-box {
+.bio-box,
+.smallworld-box {
     width: auto;
     height: auto;
-    max-height: 25em;
+    max-height: 21em;
     padding: 0.5em;
-    overflow: scroll;
+    overflow: hidden;
+    position: relative;
+}
+.others-box {
+    width: auto;
+    height: auto;
+    max-height: 26em;
+    padding: 0.5em;
+    overflow: hidden;
+    position: relative;
 }
 .bio-box p {
     color: rgb(39, 39, 39);

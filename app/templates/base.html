@@ -6,6 +6,7 @@
         <!-- THIS IS FOR ONLY THE CHAT BOX DESIGN -->
         <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
 
+        <link rel="stylesheet" href="{{ url_for('static', filename='perfect-scrollbar.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='bootstrapcss/bootstrap-bootswatch-minty.min.css') }}" integrity="sha384-9NlqO4dP5KfioUGS568UFwM3lbWf3Uj3Qb7FBHuIuhLoDp3ZgAqPE1/MYLEBPZYM" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -57,7 +58,7 @@
                         </div>
                     </a>
                     <ul class="notification-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: -10em; transform: translate3d(0px, 42px, 0px);">
-                        <div class="clear-wrapper">
+                        <div class="clear-wrapper custom-scrollbar-s3">
                             <!-- DYNAMIC NOTIFICATIONS INSERTED HERE -->
                         </div>
                         <a class="dropdown-clear dropdown-item" href="#">Clear Notifications</a>
@@ -104,6 +105,9 @@
 
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+<!-- PERFECT SCROLLBAR JS -->
+<script src="{{ url_for('static', filename='plugins/perfect-scrollbar.min.js') }}"></script>
 
 <script>
 /* AUTO SCROLLS DOWN TO LOGIN BOX */
@@ -158,25 +162,40 @@ $(function () {
                         let title = notifications[i].Title;
                         let data = notifications[i].Data;
                         let timestamp = moment(notifications[i].Timestamp).startOf('hour').fromNow();
+                        let noteIcon;
+                        if (type == 'message') {
+                            noteIcon = 'noteicon fas fa-envelope fa-lg';
+                        } else if (type == 'message reply') {
+                            noteIcon = 'noteicon fab fa-replyd fa-lg';
+                        } else if (type == 'comment') {
+                            noteIcon = 'noteicon fas fa-comment fa-lg';
+                        } else if (type == 'comment reply') {
+                            noteIcon = 'noteicon fas fa-comment-dots fa-lg';
+                        } else if (type == 'chat message') {
+                            noteIcon = 'noteicon fas fa-sms fa-lg';
+                        }
 
                         $('.clear-wrapper').prepend($('<li>')
                         .attr('class', 'notif-dropdown-item')
+                        .append($('<i>')
+                                .prop('class', noteIcon))
                         .append($('<p>')
                             .attr('class', 'dropdown-type')
                             .text('New ')
                             .append($('<a>')
                                 .attr('class', 'dropdown-type-value')
-                                .attr('href', type == 'message' ? '{{ url_for("main.message_inbox") }}' : '/project/' + username + '/' + title)
+                                .attr('href', (type == 'message' || type == 'message reply') ? '{{ url_for("main.message_inbox") }}' : '/project/' + username + '/' + title)
                                 .text(type))
                             .append($('<span>')
                                 .text(' from ')
                                 .css('font-weight', '400')
-                                .css('font-size', '0.5em')
+                                .css('font-size', '0.7em')
                                 .css('margin', '0 0.5em'))
                             .append($('<a>')
                                 .attr('class', 'dropdown-user-link')
                                 .attr('href', '/profile/' + username)
                                 .text(username)))
+                        .append($('<hr>'))
                         .append($('<p>')
                             .attr('class', 'dropdown-title')
                             .text('Title: ')
@@ -225,6 +244,83 @@ $(function () {
         });
     })
     {% endif %}
+});
+
+</script>
+
+<script>
+/* CUSTOM FUNCTIONS TO BE USED ON DYNAMICALLY ADDED ELEMENTS WHEREAS BELOW THIS ONLY LOADS ONCE WHEN DOC COMPLETES */
+function scrollbar() {
+    $('.custom-scrollbar').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 0.25,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s1').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: .50,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s2').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 1,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s3').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 1.5,
+            suppressScrollX: true,
+        });
+    });
+
+    $('.custom-scrollbar-s4').each(function() {
+        const ps = new PerfectScrollbar($(this)[0], {
+            wheelSpeed: 2,
+            suppressScrollX: true,
+        });
+    });
+};
+
+/* CUSTOM SCROLL BAR - MUST ADD THE SPECIFIED CLASS TO EACH DIV */
+$('.custom-scrollbar').each(function() {
+    const ps = new PerfectScrollbar($(this)[0], {
+        wheelSpeed: 0.25,
+        suppressScrollX: true,
+    });
+});
+
+$('.custom-scrollbar-s1').each(function() {
+    const ps = new PerfectScrollbar($(this)[0], {
+        wheelSpeed: .50,
+        suppressScrollX: true,
+    });
+});
+
+$('.custom-scrollbar-s2').each(function() {
+    const ps = new PerfectScrollbar($(this)[0], {
+        wheelSpeed: 1,
+        suppressScrollX: true,
+    });
+});
+
+$('.custom-scrollbar-s3').each(function() {
+    const ps = new PerfectScrollbar($(this)[0], {
+        wheelSpeed: 1.5,
+        suppressScrollX: true,
+    });
+});
+
+$('.custom-scrollbar-s4').each(function() {
+    const ps = new PerfectScrollbar($(this)[0], {
+        wheelSpeed: 2,
+        suppressScrollX: true,
+    });
 });
 
 </script>

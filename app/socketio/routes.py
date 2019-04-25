@@ -30,7 +30,7 @@ def connect():
         current_user.online = True
         db.session.commit()
         emit('connect', status)
-    elif status == 'ghost':
+    elif status == 'invisible':
         emit('connect', status)
 
 @socketio.on('chatlist')
@@ -289,6 +289,13 @@ def offline():
     current_user.online = False
     db.session.commit()
     disconnect()
+
+@socketio.on('invisible')
+@authenticated_only
+def invisible():
+    session['chat_status'] = 'invisible'
+    current_user.online = False
+    db.session.commit()
 
 @socketio.on('disconnect')
 def disconnect():

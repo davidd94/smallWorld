@@ -8,138 +8,140 @@
 {% endblock css %}
 
 {% block bodycontent %}
-<form class="faq-container" action="{{ url_for('project.edit_faq', title=project.title) }}" method="POST">
-    {{ form.hidden_tag() }}
-    <h1 class="faq-title">FAQs</h1>
-    {{ form.faqenabled(id="chkToggle", type="checkbox", data_toggle="toggle") }}
-    <div class="faq-alert alert alert-dismissible alert-success">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Questions Saved!</strong>
-    </div>
-    <!-- QUESTION 1 -->
-    <div class="question-container-1 question-container input-group">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-            {{ form.enabled1(type="checkbox", class="question-checkbox question-checkbox-1", data_checkbox="1") }}
-            </div>
+<div class="faq-wrapper">
+    <form class="faq-container custom-scrollbar-s3" action="{{ url_for('project.edit_faq', title=project.title) }}" method="POST">
+        {{ form.hidden_tag() }}
+        <h1 class="faq-title">FAQs</h1>
+        {{ form.faqenabled(id="chkToggle", type="checkbox", data_toggle="toggle") }}
+        <div class="faq-alert alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Questions Saved!</strong>
         </div>
-        {{ form.question1(type="text", class="question-box question-box-1 form-control", placeholder="Question 1", maxlength="190", disabled="disabled") }}
-    </div>
-
-    {{ form.answer1(type="text", class="answer-box answer-box-1 form-control", placeholder="Answer 1", maxlength="490", disabled="disabled") }}
-
-    <!-- QUESTION 2 -->
-    <div class="question-container-2 question-container input-group">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-            {{ form.enabled2(class="question-checkbox question-checkbox-2", type="checkbox", data_checkbox="2") }}
+        <!-- QUESTION 1 -->
+        <div class="question-container-1 question-container input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                {{ form.enabled1(type="checkbox", class="question-checkbox question-checkbox-1", data_checkbox="1") }}
+                </div>
             </div>
+            {{ form.question1(type="text", class="question-box question-box-1 form-control", placeholder="Question 1", maxlength="190", disabled="disabled") }}
         </div>
-        {{ form.question2(type="text", class="question-box question-box-2 form-control", placeholder="Question 2", maxlength="190", disabled="disabled") }}
-    </div>
 
-    {{ form.answer2(type="text", class="answer-box answer-box-2 form-control", placeholder="Answer 2", maxlength="490", disabled="disabled") }}
+        {{ form.answer1(type="text", class="answer-box answer-box-1 form-control", placeholder="Answer 1", maxlength="490", disabled="disabled") }}
 
-    <!-- QUESTION 3 -->
-    <div class="question-container-3 question-container input-group">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-            {{ form.enabled3(class="question-checkbox question-checkbox-3", type="checkbox", data_checkbox="3") }}
+        <!-- QUESTION 2 -->
+        <div class="question-container-2 question-container input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                {{ form.enabled2(class="question-checkbox question-checkbox-2", type="checkbox", data_checkbox="2") }}
+                </div>
             </div>
+            {{ form.question2(type="text", class="question-box question-box-2 form-control", placeholder="Question 2", maxlength="190", disabled="disabled") }}
         </div>
-        {{ form.question3(type="text", class="question-box question-box-3 form-control", placeholder="Question 3", maxlength="190", disabled="disabled") }}
-    </div>
 
-    {{ form.answer3(type="text", class="answer-box answer-box-3 form-control", placeholder="Answer 3", maxlength="490", disabled="disabled") }}
+        {{ form.answer2(type="text", class="answer-box answer-box-2 form-control", placeholder="Answer 2", maxlength="490", disabled="disabled") }}
 
-    <!-- QUESTION 4 -->
-    <div class="question-container-4 question-container input-group">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-            {{ form.enabled4(class="question-checkbox question-checkbox-4", type="checkbox", data_checkbox="4") }}
+        <!-- QUESTION 3 -->
+        <div class="question-container-3 question-container input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                {{ form.enabled3(class="question-checkbox question-checkbox-3", type="checkbox", data_checkbox="3") }}
+                </div>
             </div>
+            {{ form.question3(type="text", class="question-box question-box-3 form-control", placeholder="Question 3", maxlength="190", disabled="disabled") }}
         </div>
-        {{ form.question4(type="text", class="question-box question-box-4 form-control", placeholder="Question 4", maxlength="190", disabled="disabled") }}
-    </div>
 
-    {{ form.answer4(type="text", class="answer-box answer-box-4 form-control", placeholder="Answer 4", maxlength="490", disabled="disabled") }}
+        {{ form.answer3(type="text", class="answer-box answer-box-3 form-control", placeholder="Answer 3", maxlength="490", disabled="disabled") }}
 
-    <!-- QUESTION 5 -->
-    <div class="question-container-5 question-container input-group">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-            {{ form.enabled5(class="question-checkbox question-checkbox-5", type="checkbox", data_checkbox="5") }}
+        <!-- QUESTION 4 -->
+        <div class="question-container-4 question-container input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                {{ form.enabled4(class="question-checkbox question-checkbox-4", type="checkbox", data_checkbox="4") }}
+                </div>
             </div>
+            {{ form.question4(type="text", class="question-box question-box-4 form-control", placeholder="Question 4", maxlength="190", disabled="disabled") }}
         </div>
-        {{ form.question5(type="text", class="question-box question-box-5 form-control", placeholder="Question 5", maxlength="190", disabled="disabled") }}
-    </div>
 
-    {{ form.answer5(type="text", class="answer-box answer-box-5 form-control", placeholder="Answer 5", maxlength="490", disabled="disabled") }}
+        {{ form.answer4(type="text", class="answer-box answer-box-4 form-control", placeholder="Answer 4", maxlength="490", disabled="disabled") }}
 
-    <!-- QUESTION 6 -->
-    <div class="question-container-6 question-container input-group">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-            {{ form.enabled6(class="question-checkbox question-checkbox-6", type="checkbox", data_checkbox="6") }}
+        <!-- QUESTION 5 -->
+        <div class="question-container-5 question-container input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                {{ form.enabled5(class="question-checkbox question-checkbox-5", type="checkbox", data_checkbox="5") }}
+                </div>
             </div>
+            {{ form.question5(type="text", class="question-box question-box-5 form-control", placeholder="Question 5", maxlength="190", disabled="disabled") }}
         </div>
-        {{ form.question6(type="text", class="question-box question-box-6 form-control", placeholder="Question 6", maxlength="190", disabled="disabled") }}
-    </div>
 
-    {{ form.answer6(type="text", class="answer-box answer-box-6 form-control", placeholder="Answer 6", maxlength="490", disabled="disabled") }}
+        {{ form.answer5(type="text", class="answer-box answer-box-5 form-control", placeholder="Answer 5", maxlength="490", disabled="disabled") }}
 
-    <!-- QUESTION 7 -->
-    <div class="question-container-7 question-container input-group">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-            {{ form.enabled7(class="question-checkbox question-checkbox-7", type="checkbox", data_checkbox="7") }}
+        <!-- QUESTION 6 -->
+        <div class="question-container-6 question-container input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                {{ form.enabled6(class="question-checkbox question-checkbox-6", type="checkbox", data_checkbox="6") }}
+                </div>
             </div>
+            {{ form.question6(type="text", class="question-box question-box-6 form-control", placeholder="Question 6", maxlength="190", disabled="disabled") }}
         </div>
-        {{ form.question7(type="text", class="question-box question-box-7 form-control", placeholder="Question 7", maxlength="190", disabled="disabled") }}
-    </div>
 
-    {{ form.answer7(type="text", class="answer-box answer-box-7 form-control", placeholder="Answer 7", maxlength="490", disabled="disabled") }}
+        {{ form.answer6(type="text", class="answer-box answer-box-6 form-control", placeholder="Answer 6", maxlength="490", disabled="disabled") }}
 
-    <!-- QUESTION 8 -->
-    <div class="question-container-8 question-container input-group">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-            {{ form.enabled8(class="question-checkbox question-checkbox-8", type="checkbox", data_checkbox="8") }}
+        <!-- QUESTION 7 -->
+        <div class="question-container-7 question-container input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                {{ form.enabled7(class="question-checkbox question-checkbox-7", type="checkbox", data_checkbox="7") }}
+                </div>
             </div>
+            {{ form.question7(type="text", class="question-box question-box-7 form-control", placeholder="Question 7", maxlength="190", disabled="disabled") }}
         </div>
-        {{ form.question8(type="text", class="question-box question-box-8 form-control", placeholder="Question 8", maxlength="190", disabled="disabled") }}
-    </div>
 
-    {{ form.answer8(type="text", class="answer-box answer-box-8 form-control", placeholder="Answer 8", maxlength="490", disabled="disabled") }}
+        {{ form.answer7(type="text", class="answer-box answer-box-7 form-control", placeholder="Answer 7", maxlength="490", disabled="disabled") }}
 
-    <!-- QUESTION 9 -->
-    <div class="question-container-9 question-container input-group">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-            {{ form.enabled9(class="question-checkbox question-checkbox-9", type="checkbox", data_checkbox="9") }}
+        <!-- QUESTION 8 -->
+        <div class="question-container-8 question-container input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                {{ form.enabled8(class="question-checkbox question-checkbox-8", type="checkbox", data_checkbox="8") }}
+                </div>
             </div>
+            {{ form.question8(type="text", class="question-box question-box-8 form-control", placeholder="Question 8", maxlength="190", disabled="disabled") }}
         </div>
-        {{ form.question9(type="text", class="question-box question-box-9 form-control", placeholder="Question 9", maxlength="190", disabled="disabled") }}
-    </div>
 
-    {{ form.answer9(type="text", class="answer-box answer-box-9 form-control", placeholder="Answer 9", maxlength="490", disabled="disabled") }}
+        {{ form.answer8(type="text", class="answer-box answer-box-8 form-control", placeholder="Answer 8", maxlength="490", disabled="disabled") }}
 
-    <!-- QUESTION 10 -->
-    <div class="question-container-10 question-container input-group">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-            {{ form.enabled10(class="question-checkbox question-checkbox-10", type="checkbox", data_checkbox="10") }}
+        <!-- QUESTION 9 -->
+        <div class="question-container-9 question-container input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                {{ form.enabled9(class="question-checkbox question-checkbox-9", type="checkbox", data_checkbox="9") }}
+                </div>
             </div>
+            {{ form.question9(type="text", class="question-box question-box-9 form-control", placeholder="Question 9", maxlength="190", disabled="disabled") }}
         </div>
-        {{ form.question10(type="text", class="question-box question-box-10 form-control", placeholder="Question 10", maxlength="190", disabled="disabled") }}
-    </div>
 
-    {{ form.answer10(type="text", class="answer-box answer-box-10 form-control", placeholder="Answer 10", maxlength="490", disabled="disabled") }}
+        {{ form.answer9(type="text", class="answer-box answer-box-9 form-control", placeholder="Answer 9", maxlength="490", disabled="disabled") }}
 
-    {{ form.submit(class="faq-save btn btn-primary") }}
-    <a class="faq-back-btn" href="{{ url_for('project.project', title=project.title, username=current_user.username) }}"><button type="button" class="btn btn-secondary">Back</button></a>
+        <!-- QUESTION 10 -->
+        <div class="question-container-10 question-container input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                {{ form.enabled10(class="question-checkbox question-checkbox-10", type="checkbox", data_checkbox="10") }}
+                </div>
+            </div>
+            {{ form.question10(type="text", class="question-box question-box-10 form-control", placeholder="Question 10", maxlength="190", disabled="disabled") }}
+        </div>
 
-</form>
+        {{ form.answer10(type="text", class="answer-box answer-box-10 form-control", placeholder="Answer 10", maxlength="490", disabled="disabled") }}
+
+        {{ form.submit(class="faq-save btn btn-primary") }}
+        <a class="faq-back-btn" href="{{ url_for('project.project', title=project.title, username=current_user.username) }}"><button type="button" class="btn btn-secondary">Back</button></a>
+        <span class="space">:)</span>
+    </form>
+</div>
 {% endblock bodycontent %}
 
 {% block scripts %}
