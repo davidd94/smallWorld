@@ -14,7 +14,7 @@
                 <a class="dropdown-item dropdown-minimize" href="#">Minimize</a>
                 <a class="dropdown-item dropdown-offline" href="#">Go offline</a>
                 <a class="dropdown-item dropdown-online" href="#">Go online</a>
-                <a class="dropdown-item dropdown-invisible" href="#">Invisible<i class="far fa-question-circle invisible-info" style="position: absolute; cursor: pointer;" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container' style='padding: 1em;'><p class='popover-description' style='font-size: 0.8em; font-weight: 600;'>While in Invisible Mode, you may see others online while others cannot see you online. All the chat features are still available. If you are experience any issues or bugs, please let the me know :)</p></div>"></i></a>
+                <a class="dropdown-item dropdown-invisible" href="#">Invisible<i class="far fa-question-circle invisible-info" style="position: absolute; cursor: pointer;" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container' style='padding: 1em;'><p class='popover-description' style='font-size: 0.8em; font-weight: 600;'>While in Invisible Mode, you may see others online while others cannot see you online. All chat features will still be available. If you are experiencing any issues or bugs, please let the me know :)</p></div>"></i></a>
             </div>
         </a>
         </div>
@@ -90,7 +90,7 @@
 <script type="text/javascript">
 /* SOCKETIO SCRIPTS */
 $(document).ready(function() {
-    var socket = io.connect('192.168.0.19:5000');
+    var socket = io.connect();
     var chatRequest;
     
     // LISTENS TO SERVER TO DETERMINE USER'S CHAT STATUS
@@ -374,7 +374,7 @@ $(document).ready(function() {
                         .append($('<p>')
                             .prop('class', 'chat-message-content')
                             .css('font-style', 'italic')
-                            .css('color', 'lightgrey')
+                            .css('color', 'rgb(163, 163, 163)')
                             .text(message)))
                     .append($('<hr>')))
             } else if (username != current_user) {
@@ -391,12 +391,12 @@ $(document).ready(function() {
                         .append($('<span>')
                             .prop('class', 'chat-time')
                             .text(timestamp))
-                        .append($('<h5>')
+                        .append($('<p>')
                             .prop('class', 'chat-message-username')
                             .text(username))
                         .append($('<p>')
                             .prop('class', 'chat-message-content')
-                            .css('color', 'lightgrey')
+                            .css('color', 'rgb(163, 163, 163)')
                             .css('font-style', 'italic')
                             .text(message)))
                     .append($('<hr>'))
@@ -445,6 +445,7 @@ $(document).ready(function() {
         $("#live-chat").fadeOut(300);
         $('.chat-history').empty();
         $('.chat-message-input').val('');
+        $('.chatlist-bubble-' + userid).css('display', 'none');
         var data = {'username': username, 'userid': userid, 'room': room};
         socket.emit('leave', data);
     });
@@ -508,7 +509,7 @@ $(document).ready(function() {
                     .append($('<span>')
                         .prop('class', 'chat-time')
                         .text(timestamp))
-                    .append($('<h5>')
+                    .append($('<p>')
                         .prop('class', 'chat-message-username')
                         .text(username))
                     .append($('<p>')
@@ -531,8 +532,9 @@ $(document).ready(function() {
         var sorted_combined_ids = [userid, current_userid].sort(function(a, b){return a-b});
         var room = sorted_combined_ids[0] + '-' + sorted_combined_ids[1];
         var data = {'username': username, 'room': room};
-        
-        socket.emit('chat_typing', data);
+        if (event.which != 13) {
+            socket.emit('chat_typing', data);
+        }
     });
     // LISTENS FOR TYPING NOTIFICATION
     socket.on('chat_typing', function(data) {

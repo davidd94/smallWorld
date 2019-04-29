@@ -566,6 +566,13 @@
 .project-maintenance-textarea p {
     word-wrap: break-word;
 }
+.project-tutorial-textarea ul li,
+.project-tutorial-textarea ol li,
+.project-maintenance-textarea ol li,
+.project-maintenance-textarea ol li {
+  margin-left: 1em;
+}
+
 .maintenance-title-disabled, .tutorial-title-disabled {
     width: 100%;
     height: 100%;

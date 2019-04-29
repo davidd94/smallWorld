@@ -1,4 +1,26 @@
 /* REGISTRATION STYLES */
+.front-banner {
+    width: 100%;
+    height: auto;
+}
+
+.cover-photo {
+    position: relative;
+    z-index: 15;
+    background-image: url('homepage-aquarium-trees.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    width: 100%;
+    height: auto;
+    max-height:18em;
+}
+
+.register-alert {
+    text-align: center;
+}
+
 #register-container {
     height: 37.5em;
 }
@@ -12,6 +34,36 @@
 #signupform-override {
     width: 100%;
     margin: auto auto;
+}
+
+.message {
+    border-radius: 20px;
+    clear: both;
+    margin: 5px 0;
+    max-width: 15%;
+    padding: 10px 15px;
+    position: absolute;
+    top: 40%;
+    left: 60%;
+}
+.message:after {
+    border-radius: 50%;
+    bottom: 0;
+    content: " ";
+    height: 30px;
+    position: absolute;
+    width: 30px;
+    z-index: -1;
+}
+.receive {
+    font-weight: 600;
+    background: #2d8cfa;
+    color: #fff;
+    float: left;
+}
+.receive:after {
+    box-shadow: inset 1px 9px 0 4px #fff, inset -9px 0px 0 2px #2d8cfa, 0 0 0 1px #fff;
+    left: -19px;
 }
 
 /* ACCT CONFIRMATION STYLES */

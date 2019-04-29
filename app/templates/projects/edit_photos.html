@@ -6,7 +6,7 @@
 {% endblock css %}
 
 {% block bodycontent %}
-<div class="edit-photo-container custom-scrollbar">
+<div class="edit-photo-container custom-scrollbar-s3">
     <h2>Add/Remove Photos</h2>
     <a class="edit-photo-back" href="{{ url_for('project.project', title=project.title, username=user.username) }}"><button type="button" class="btn btn-info">Back to Project</button></a>
     <form id="file_box_input" class="box" method="POST" action="" enctype="multipart/form-data">
@@ -431,7 +431,6 @@ $(function () {
                 } else if (droppedFiles.length > 10) {
                     alert('There is a maximum limit of 10 uploads!')
                 }
-                
                 $.ajax({
                     url: $form.attr('action'),
                     type: $form.attr('method'),

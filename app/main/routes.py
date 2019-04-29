@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, flash, g, current_app, jsonify, Response, send_from_directory, session
 from flask_login import current_user, login_required, logout_user
 from flask_babel import get_locale, _
-from datetime import datetime, timedelta
+from datetime import datetime as dt, timedelta
 from urllib.parse import urlparse
 from math import sqrt
 from hashlib import md5
@@ -26,7 +26,7 @@ import celery
 @bp.before_app_request
 def before_request():
     if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
+        current_user.last_seen = dt.utcnow()
         db.session.commit()
     g.search_form = SearchForm()
     g.locale = str(get_locale())
@@ -397,9 +397,9 @@ def explore():
         all_likes.append(eachproject.likes)
 
     # 'MOST POPULAR PROJECT' ALGORITHM
-    popular_likes = round(sum(all_likes) / len(all_likes))
-    popular_last_edit = datetime.utcnow() - timedelta(days=14)
-    popular_last_visit = datetime.utcnow() - timedelta(days=7)
+    popular_likes = round(sum(all_likes) / len(all_likes) if all_likes else 0.1)
+    popular_last_edit = dt.utcnow() - timedelta(days=14)
+    popular_last_visit = dt.utcnow() - timedelta(days=7)
     most_popular_projects = Projects.query \
                                     .join(project_visitors) \
                                     .join(User) \
@@ -410,8 +410,8 @@ def explore():
                                         .filter(project_visitors.c.last_visit_date > popular_last_visit) \
                                         .limit(10)
     # 'TRENDING PROJECT' ALGORITHM
-    trending_project_date = datetime.utcnow() - timedelta(days=7)
-    trending_visit_date = datetime.utcnow() - timedelta(days=3)
+    trending_project_date = dt.utcnow() - timedelta(days=7)
+    trending_visit_date = dt.utcnow() - timedelta(days=3)
     trending_projects = Projects.query \
                             .join(project_visitors) \
                             .join(User) \
@@ -422,7 +422,7 @@ def explore():
                                 .filter(project_visitors.c.last_visit_date > trending_visit_date) \
                                 .limit(10)
     # 'NEW PROJECT' ALGORITHM
-    new_project_date = datetime.utcnow() - timedelta(days=3)
+    new_project_date = dt.utcnow() - timedelta(days=3)
     new_projects = Projects.query \
                             .filter(Projects.created_date > new_project_date) \
                             .filter(Projects.private != 1) \

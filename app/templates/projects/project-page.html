@@ -336,7 +336,10 @@
         <strong class="message-fail-msg"></strong>
     </div>
 </div>
+
+{% if current_user.is_authenticated %}
 {% include "_message-popup.html" %}
+{% endif %}
 
 {% endblock bodycontent %}
 

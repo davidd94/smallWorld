@@ -41,7 +41,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">URL</span>
                     </div>
-                    <input type="text" class="item-link-value item-link-value-{{ loop.index }} form-control" id="basic-url"  value="{{ eachitem.itemlink }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="295" autocomplete="off">
+                    <input type="text" class="item-link-value item-link-value-{{ loop.index }} form-control" id="basic-url"  value="{{ eachitem.itemlink }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="1495" autocomplete="off">
                 </div>
 
                 <div class="item-brand item-brand-{{ loop.index }} input-group">
@@ -124,7 +124,7 @@ $(function () {
                     .attr('class', 'form-control item-link-value item-link-value-' + itemNumber)
                     .attr('id', 'basic-url')
                     .attr('aria-describedby', 'basic-addon3')
-                    .attr('maxlength', '95')
+                    .attr('maxlength', '1495')
                     .attr('autocomplete', 'off')))
             .append($('<div>')
                 .attr('class', 'input-group item-brand item-brand-' + itemNumber)

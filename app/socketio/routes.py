@@ -4,6 +4,7 @@ from flask_socketio import send, emit, disconnect, join_room, leave_room
 from app import db, socketio
 from app.socketio import bp
 from app.models import User, Messages, ChatMessages, Projects, PhotoGallery, Notifications, project_visitors, followers, deleted_messages, chatlist_favorites
+from datetime import datetime as dt
 import os, time, random, functools
 import json
 
@@ -24,6 +25,7 @@ def authenticated_only(f):
 @authenticated_only
 def connect():
     status = session['chat_status']
+    print(status)
     if status == 'offline':
         emit('connect', status)
     elif status == 'online':
@@ -62,109 +64,107 @@ def chatlist(userlist):
             user_status['online'] = user.online
             online_status.append(user_status)
 
+        # NEED DICT TO BE IN SET FORMAT IN ORDER TO COMPARE VALUES
+        set_userlist = set(tuple(sorted(d.items())) for d in userlist)
+        set_sessionlist = set(tuple(sorted(d.items())) for d in approved_usernames)
+        if set_userlist != set_sessionlist:
+            # NEED TO SET MUTABLE DICT INTO IMMUTABLE TUPLES FOR SET TO WORK
+            unique_userlist = set(tuple((d.items())) for d in userlist)
+            unique_sessionlist = set(tuple((d.items())) for d in approved_usernames)
+            # USING SET DIFFERENCE TO OBTAIN THE DIFFERENCE BETWEEN TWO LISTS
+            changed_user = set.symmetric_difference(unique_sessionlist, unique_userlist)
+            diff_users = []
+            # ADDING EXISTING USERS TO THE OVERALL LIST FIRST BEFORE ULTIMATELY CHANGING TO REMOVE/ADD
+            existing_list = userlist
+            for eachuser in existing_list:
+                eachuser['condition'] = 'none'
+            updated_list = existing_list
+            # CONVERTING SET BACK TO DICT
+            for eachtuple in changed_user:
+                user_info = dict((x, y) for x, y in eachtuple)
+                diff_users.append(user_info)
+            # ADD CONDITION TYPE: USER WAS ADDED TO SESSION LIST
+            if (len(approved_usernames) - len(userlist)) > 0:
+                for eachuser in diff_users:
+                    eachuser['condition'] = 'add'
+                    updated_list.append(eachuser)
+            # ADDED CONDITION TYPE: USER WAS REMOVED FROM SESSION LIST
+            elif (len(approved_usernames) - len(userlist)) < 0:
+                for eachuser in diff_users:
+                    eachuser['condition'] = 'remove'
+                    for eachexistinguser in updated_list:
+                        if eachexistinguser['username'] == eachuser['username']:
+                            eachexistinguser['condition'] = 'remove'
 
-    # NEED DICT TO BE IN SET FORMAT IN ORDER TO COMPARE VALUES
-    set_userlist = set(tuple(sorted(d.items())) for d in userlist)
-    set_sessionlist = set(tuple(sorted(d.items())) for d in approved_usernames)
-    if set_userlist != set_sessionlist:
-        # NEED TO SET MUTABLE DICT INTO IMMUTABLE TUPLES FOR SET TO WORK
-        unique_userlist = set(tuple((d.items())) for d in userlist)
-        unique_sessionlist = set(tuple((d.items())) for d in approved_usernames)
-        # USING SET DIFFERENCE TO OBTAIN THE DIFFERENCE BETWEEN TWO LISTS
-        changed_user = set.symmetric_difference(unique_sessionlist, unique_userlist)
+            # FAVORITED USERS QUERY
+            chatlist_fav = db.session.query(chatlist_favorites.c.user_id) \
+                                    .filter(chatlist_favorites.c.fav_id == current_user.id) \
+                                    .all()
+            filtered_favs = []
+            for eachtuple in chatlist_fav:
+                for eachid in eachtuple:
+                    filtered_favs.append(eachid)
+
+            # FINALIZING UPDATED LIST
+            for eachuser in updated_list:
+                # APPENDING USER ONLINE STATUS TO USER INFO
+                for eachstatus in online_status:
+                    if eachuser['username'] == eachstatus['username']:
+                        eachuser['online'] = eachstatus['online']
+                # APPENDING USER UNREAD MSG CT TO USER INFO
+                approved_room = room_number(current_user.id, eachuser['id'])
+                unread_msg_ct = ChatMessages.query \
+                                            .filter_by(room=approved_room) \
+                                            .filter_by(message_read=False) \
+                                            .filter_by(username=eachuser['username']) \
+                                            .count()
+                # APPENDING USER UNREAD MSG CTs
+                if unread_msg_ct > 0:
+                    eachuser['unread_msg_ct'] = unread_msg_ct
+                # APPENDING FAVORITED USER STATUS
+                for eachid in filtered_favs:
+                    if eachuser['id'] == eachid:
+                        eachuser['favorite'] = True
+            
+            #print(updated_list)
+            emit('chatlist', updated_list)
+        elif set_userlist == set_sessionlist:
+            # FAVORITED USERS QUERY
+            chatlist_fav = db.session.query(chatlist_favorites.c.user_id) \
+                                    .filter(chatlist_favorites.c.fav_id == current_user.id) \
+                                    .all()
+            filtered_favs = []
+            for eachtuple in chatlist_fav:
+                for eachid in eachtuple:
+                    filtered_favs.append(eachid)
+            
+            # IF CLIENT LIST IS SAME AS SERVER SESSION LIST, SET CONDITION TO 'NONE'
+            current_list = approved_usernames
+            for eachuser in current_list:
+                eachuser['condition'] = 'none'
+                # APPENDING USER ONLINE STATUS TO USER INFO
+                for eachonline in online_status:
+                    if eachonline['username'] == eachuser['username']:
+                        eachuser['online'] = eachonline['online']
+                # APPENDING USER UNREAD MSG CT TO USER INFO
+                approved_room = room_number(current_user.id, eachuser['id'])
+                unread_msg_ct = ChatMessages.query \
+                                            .filter_by(room=approved_room) \
+                                            .filter_by(message_read=False) \
+                                            .filter_by(username=eachuser['username']) \
+                                            .count()
+                # APPENDING USER UNREAD MSG CTs
+                if unread_msg_ct > 0:
+                    eachuser['unread_msg_ct'] = unread_msg_ct
+                # APPENDING FAVORITED USER STATUS
+                for eachid in filtered_favs:
+                    if eachuser['id'] == eachid:
+                        eachuser['favorite'] = True
+
+            #print(current_list)
+            emit('chatlist', current_list)
         
-        diff_users = []
-        # ADDING EXISTING USERS TO THE OVERALL LIST FIRST BEFORE ULTIMATELY CHANGING TO REMOVE/ADD
-        existing_list = userlist
-        for eachuser in existing_list:
-            eachuser['condition'] = 'none'
-        updated_list = existing_list
-        # CONVERTING SET BACK TO DICT
-        for eachtuple in changed_user:
-            user_info = dict((x, y) for x, y in eachtuple)
-            diff_users.append(user_info)
-        # ADD CONDITION TYPE: USER WAS ADDED TO SESSION LIST
-        if (len(approved_usernames) - len(userlist)) > 0:
-            for eachuser in diff_users:
-                eachuser['condition'] = 'add'
-                updated_list.append(eachuser)
-        # ADDED CONDITION TYPE: USER WAS REMOVED FROM SESSION LIST
-        elif (len(approved_usernames) - len(userlist)) < 0:
-            for eachuser in diff_users:
-                eachuser['condition'] = 'remove'
-                for eachexistinguser in updated_list:
-                    if eachexistinguser['username'] == eachuser['username']:
-                        eachexistinguser['condition'] = 'remove'
-
-        # FAVORITED USERS QUERY
-        chatlist_fav = db.session.query(chatlist_favorites.c.user_id) \
-                                .filter(chatlist_favorites.c.fav_id == current_user.id) \
-                                .all()
-        filtered_favs = []
-        for eachtuple in chatlist_fav:
-            for eachid in eachtuple:
-                filtered_favs.append(eachid)
-
-        # FINALIZING UPDATED LIST
-        for eachuser in updated_list:
-            # APPENDING USER ONLINE STATUS TO USER INFO
-            for eachstatus in online_status:
-                if eachuser['username'] == eachstatus['username']:
-                    eachuser['online'] = eachstatus['online']
-            # APPENDING USER UNREAD MSG CT TO USER INFO
-            approved_room = room_number(current_user.id, eachuser['id'])
-            unread_msg_ct = ChatMessages.query \
-                                        .filter_by(room=approved_room) \
-                                        .filter_by(message_read=False) \
-                                        .filter_by(username=eachuser['username']) \
-                                        .count()
-            # APPENDING USER UNREAD MSG CTs
-            if unread_msg_ct > 0:
-                eachuser['unread_msg_ct'] = unread_msg_ct
-            # APPENDING FAVORITED USER STATUS
-            for eachid in filtered_favs:
-                if eachuser['id'] == eachid:
-                    eachuser['favorite'] = True
-        
-        #print(updated_list)
-        emit('chatlist', updated_list)
-    elif set_userlist == set_sessionlist:
-        # FAVORITED USERS QUERY
-        chatlist_fav = db.session.query(chatlist_favorites.c.user_id) \
-                                .filter(chatlist_favorites.c.fav_id == current_user.id) \
-                                .all()
-        filtered_favs = []
-        for eachtuple in chatlist_fav:
-            for eachid in eachtuple:
-                filtered_favs.append(eachid)
-        
-        # IF CLIENT LIST IS SAME AS SERVER SESSION LIST, SET CONDITION TO 'NONE'
-        current_list = approved_usernames
-        for eachuser in current_list:
-            eachuser['condition'] = 'none'
-            # APPENDING USER ONLINE STATUS TO USER INFO
-            for eachonline in online_status:
-                if eachonline['username'] == eachuser['username']:
-                    eachuser['online'] = eachonline['online']
-            # APPENDING USER UNREAD MSG CT TO USER INFO
-            approved_room = room_number(current_user.id, eachuser['id'])
-            unread_msg_ct = ChatMessages.query \
-                                        .filter_by(room=approved_room) \
-                                        .filter_by(message_read=False) \
-                                        .filter_by(username=eachuser['username']) \
-                                        .count()
-            # APPENDING USER UNREAD MSG CTs
-            if unread_msg_ct > 0:
-                eachuser['unread_msg_ct'] = unread_msg_ct
-            # APPENDING FAVORITED USER STATUS
-            for eachid in filtered_favs:
-                if eachuser['id'] == eachid:
-                    eachuser['favorite'] = True
-
-        #print(current_list)
-        emit('chatlist', current_list)
-    
-    session['chatlist'] = approved_usernames
+        session['chatlist'] = approved_usernames
 
 @socketio.on('favorite')
 @authenticated_only
@@ -197,20 +197,18 @@ def on_join(data):
         db.session.delete(eachnote)
         # GOIN TO COMMIT FROM CHAT NOTIFICATIONS BELOW SINCE YOU NEED BOTH TO OCCUR
 
-    chat_log_notes = ChatMessages.query \
-                            .filter_by(room=room) \
-                            .filter_by(username=username) \
-                            .all()
-    # MARKS MSG TO BE READ
-    for eachmsg in chat_log_notes:
-        eachmsg.message_read = True
-        db.session.commit()
+    base_chatlogs = ChatMessages.query \
+                            .filter_by(room=room)
+    # MARKS THE OTHER USER'S MSG AS READ WHEN OPENING CHAT BOX
+    unread_chatlogs = base_chatlogs.filter_by(username=username) \
+                                .filter_by(message_read=False) \
+                                .all()
+    for unread_chat in unread_chatlogs:
+        unread_chat.message_read = True
+    db.session.commit()
 
-    chat_logs = ChatMessages.query \
-                            .filter_by(room=room) \
-                            .order_by(ChatMessages \
-                            .timestamp.desc()) \
-                            .all()
+    # ORGANIZES ALL CHAT LOG HISTORY TO BE LOADED FOR BOTH USERS
+    chat_logs = base_chatlogs.order_by(ChatMessages.timestamp.desc()).all()
     chat_data = []
     for eachmsg in chat_logs:
         eachlog = {}
@@ -219,7 +217,6 @@ def on_join(data):
         eachlog['message'] = eachmsg.message
         eachlog['timestamp'] = str(eachmsg.timestamp)
         chat_data.append(eachlog)
-        db.session.commit()
     
     join_room(room)
     emit('join', chat_data, room=room)
@@ -234,6 +231,15 @@ def on_leave(data):
                                 .filter_by(message_read=False) \
                                 .filter_by(username=username) \
                                 .all()
+    
+    # CLEARS CHAT MSG NOTIFICATION UPON OPENING CHAT
+    chat_note = Notifications.query \
+                            .filter_by(username=username) \
+                            .filter_by(notification_type='chat message') \
+                            .all()
+    for eachnote in chat_note:
+        db.session.delete(eachnote)
+    
     # MARK ALL UNREAD MSGS AS READ UPON CLOSING CHATBOX
     for eachmsg in unread_msg_ct:
         eachmsg.message_read = True

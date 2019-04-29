@@ -5,7 +5,7 @@
   align-items: center;
   height: 60vh;
   background-color: #b3d4fc;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   right: 0;
   transition: all 400ms ease;
@@ -115,7 +115,7 @@
     border-radius: 50%;
     font-size: 40px;
     color: #fff;
-    margin: 0 1em 0 0.6em;
+    margin: 0 0.5em 0 0.4em;
 }
 
 .chatlist-bubble {
@@ -133,6 +133,11 @@
     font-size: 0.45em;
     font-weight: 600;
     color: rgb(163, 10, 10);
+}
+
+.popover {
+    position: relative;
+    z-index: 2000;
 }
 
 /* MINIMIZED CHATBOX */
@@ -228,7 +233,8 @@ hr {
 	bottom: 0;
 	font-size: 12px;
 	right: 340px;
-	position: fixed;
+    position: fixed;
+    z-index: 1000;
 	width: 300px;
     height: auto;
     border: 2px solid grey;
@@ -296,7 +302,7 @@ hr {
 }
 
 .chat-history .chat-message-username {
-    font-size: 1.2em;
+    font-size: 1.1em;
     line-height: 1.5em;
 	margin: 0 0 0 3em;
     font-weight: 800;

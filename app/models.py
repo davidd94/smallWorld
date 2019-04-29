@@ -121,7 +121,7 @@ class User(UserMixin, db.Model):
     token = db.Column(db.String(50), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     # FOR CHAT FEATURE
-    online = db.Column(db.Boolean, default=True)
+    online = db.Column(db.Boolean, default=False)
 
     # ASSOCIATION TABLES
     followed = db.relationship('User', secondary=followers,
@@ -218,8 +218,6 @@ class User(UserMixin, db.Model):
         return jwt.encode({'secret_token': self.id, 'exp': time() + expires_in},
         current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
     
-    #RETRIEVES TOKEN IF VALID OTHERWISE RENEWS TOKEN - APIs ONLY
-    """
     def get_token(self, expires_in=3600):
         now = datetime.utcnow()
         if self.token and self.token_expiration > now + timedelta(seconds=60):
@@ -227,7 +225,6 @@ class User(UserMixin, db.Model):
         self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
         db.session.add(self)
         return self.token
-    """
 
     def revoke_token(self):
         self.token_expiration = datetime.utcnow() - timedelta(seconds=1)
@@ -359,6 +356,7 @@ class User(UserMixin, db.Model):
     def verify_email_token(token):
         try:
             id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])['secret_token']
+            print(id)
         except:
             return
         return User.query.get(id)
@@ -492,7 +490,7 @@ class Itemlist(db.Model):
     username = db.Column(db.String(64), index=True)
     title = db.Column(db.String(40), index=True)
     itemname = db.Column(db.String(100))
-    itemlink = db.Column(db.String(300))
+    itemlink = db.Column(db.String(1500))
     itembrand = db.Column(db.String(30))
     quantity = db.Column(db.Integer)
     notes = db.Column(db.String(250))

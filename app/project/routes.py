@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, flash, g, current_app, jsonify, Response, send_from_directory
 from flask_login import current_user, login_required
 from flask_babel import get_locale, _
-from datetime import datetime
+from datetime import datetime as dt
 from sqlalchemy import update
 from app import db
 from app.tasks import test_export
@@ -15,7 +15,7 @@ from werkzeug.exceptions import RequestEntityTooLarge
 from bs4 import BeautifulSoup
 import os, shutil
 import pdfkit
-config = pdfkit.configuration(wkhtmltopdf="/usr/local/bin/wkhtmltopdf")
+config = pdfkit.configuration(wkhtmltopdf="C:/Users/mous3/Desktop/Webapps/smallWorld/plugins/wkhtmltopdf")
 import time
 
 
@@ -184,7 +184,7 @@ def edit_bar(title):
             existing_project.private = form.privacy.data
             
             # UPDATES PROJECT LAST EDIT TIMER
-            existing_project.last_edit = datetime.utcnow()
+            existing_project.last_edit = dt.utcnow()
 
             flash('Your changes have been saved!')
             db.session.commit()
@@ -242,7 +242,7 @@ def edit_tutorial_save(title):
     project = Projects.single_project(current_user.id, title)
     if project:
         project.tutorial = html_content
-        project.last_edit = datetime.utcnow()
+        project.last_edit = dt.utcnow()
         project.last_update_type = 'Updated tutorial contents'
         db.session.commit()
         return jsonify(html_content)
@@ -375,7 +375,7 @@ def edit_maintenance_save(title):
     project = Projects.single_project(current_user.id, title)
     if project:
         project.maintenance = html_content
-        project.last_edit = datetime.utcnow()
+        project.last_edit = dt.utcnow()
         project.last_update_type = 'Updated maintenance guide'
         db.session.commit()
         return jsonify(html_content)
@@ -491,7 +491,7 @@ def edit_photos(title):
             return jsonify('You can only upload a maximum of 10 files at once!')
         
         # UPDATES THE LAST EDITED DATE FOR PROJECT
-        project.last_edit = datetime.utcnow()
+        project.last_edit = dt.utcnow()
         project.last_update_type = 'Added new photos in gallery'
         
         pictures = request.files
@@ -532,7 +532,7 @@ def delete_photos(title, img_name):
         rows = photo_gallery.__dict__
         found_pic_row = ""
         # UPDATES THE PROJECT LAST EDIT DATE
-        Projects.last_edit = datetime.utcnow()
+        Projects.last_edit = dt.utcnow()
         for row in rows:
             if rows[row] == img_name:
                 found_pic_row = row
@@ -555,7 +555,7 @@ def primary_photo(title, img_name):
         old_primary = photo_gallery.photoOne
         old_row = ""
         # UPDATES THE PROJECT LAST EDIT DATE
-        Projects.last_edit = datetime.utcnow()
+        Projects.last_edit = dt.utcnow()
         for row in rows:
             if rows[row] == img_name:
                 old_row = row
@@ -759,7 +759,7 @@ def show_user_replylikes(username, title, reply_id):
 @login_required
 def update_notifications(username, project_id):
     if username == current_user.username:
-        now = datetime.utcnow()
+        now = dt.utcnow()
         project = Projects.query.get(int(project_id))
         project.commentsAndReplies_last_read = now
 
@@ -812,7 +812,7 @@ def edit_faq(title):
             faqs.enabled10 = form.enabled10.data
 
             # UPDATES THE LAST EDITED DATE FOR PROJECT
-            project.last_edit = datetime.utcnow()
+            project.last_edit = dt.utcnow()
             project.last_update_type = 'Updated the FAQs section'
             
             flash('Questions Saved!')

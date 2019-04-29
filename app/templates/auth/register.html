@@ -23,9 +23,9 @@
             {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                <div class="alert alert-dismissible alert-success">
+                <div class="alert alert-dismissible alert-success register-alert">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong>{{ message }}</strong><a href="{{ url_for('auth.homepage') }}" class="alert-link"> Log in here</a>.
+                    <strong>{{ message }}</strong><a href="{{ url_for('auth.homepage') }}" class="register-alert-link"> Log in here</a>.
                 </div>
                 {% endfor %}
             {% endif %}
@@ -86,6 +86,10 @@
         </div>
     </div>
     </div>
+</div>
+
+<div class="message receive">
+    I have disabled email confirmation feature to allow you to login instantly and see many other user-specific features :)
 </div>
 {% endblock bodycontent %}
 

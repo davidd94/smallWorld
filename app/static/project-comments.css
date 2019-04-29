@@ -10,7 +10,8 @@
  	text-decoration: none;
  }
 
-ul {
+.comments-list,
+.userlikes-modal {
 	list-style-type: none;
 }
 

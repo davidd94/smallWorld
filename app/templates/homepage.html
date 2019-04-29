@@ -38,7 +38,7 @@
         </a>
     </div>
     <div class="homepage-login-container">
-        {% include '_login.html' %}
+        {% include 'auth/_login.html' %}
     </div>
 
     <!------ TERRARIUM CREATOR ----->
@@ -534,14 +534,14 @@ $(function() {
         var terrarium = $('.create-terrarium-container').css('display');
         var carousel = $('#carouselExampleIndicators').css('display');
         if (terrarium == 'none') {
-            $('.create-terrarium-container').css('display', 'block');
+            $('.create-terrarium-container').fadeIn(700);
             $('#carouselExampleIndicators').css('display', 'none');
             $('.create-terrarium-text').css('display', 'none');
         }
     });
 
     $('.create-terrarium-close').on('click', () => {
-        $('.create-terrarium-container').css('display', 'none');
+        $('.create-terrarium-container').fadeOut(700);
         $('#carouselExampleIndicators').css('display', 'block');
         $('.create-terrarium-text').css('display', 'block');
     })

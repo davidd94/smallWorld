@@ -1,6 +1,7 @@
 <p>Dear {{ user.firstname }},</p>
 <p>
     Welcome to the smallWorld! Where you can proudly and easily share your great creative designs to others.
+    <p>User name: </p><strong> {{ user.username }}</strong>
     <p>To get started, please verify your account by clicking the link below.</p>
     <a href="{{ url_for('auth.confirm_acct', token=token, _external=True) }}">
         click here

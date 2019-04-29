@@ -8,6 +8,12 @@ from app.auth.forms import LoginForm, RegistrationForm, PasswordResetRequestForm
 from app.main.forms import SearchForm, MessageForm
 from werkzeug.urls import url_parse
 
+"""@bp.before_request
+def enforceHttps():
+  if request.headers.get('X-Forwarded-Proto') == 'http':
+    url = request.url.replace('http://', 'https://', 1)
+    code = 301
+    return redirect(url, code=code)"""
 
 @bp.route('/clear_flash_msgs')
 def clear_flash_msgs():
@@ -52,8 +58,6 @@ def login():
                 return redirect(url_for('auth.login'))
             # REDIRECTS FROM FAILED LOGIN ATTEMPTS IN HOMEPAGE
             return redirect(url_for('auth.homepage'))
-
-            return redirect(url_for('auth.homepage'))
         if user is None or not user.check_password(form.password.data):
             if user:
                 user.failed_login_counter()
@@ -69,7 +73,7 @@ def login():
                 return redirect(url_for('auth.login'))
             # REDIRECTS FROM FAILED LOGIN ATTEMPTS IN HOMEPAGE
             return redirect(url_for('auth.homepage'))
-        if user.verified == False:
+        """if user.verified == False:
             flash('Please check your email to verify your account before logging in.')
 
             # MAINTAINING REQUEST.ARGS AFTER FAILED LOGIN ATTEMPTS
@@ -82,13 +86,13 @@ def login():
                 return redirect(url_for('auth.login'))
             # REDIRECTS FROM FAILED LOGIN ATTEMPTS IN HOMEPAGE
             return redirect(url_for('auth.homepage'))
-
-            return redirect(url_for('auth.homepage'))
+        """
         login_user(user, remember=form.remember_me.data)
         user.max_failed_login = 0
         # NEED TO UPDATE LOGIN STATUS FOR CHAT FEATURE
         user.online = True
         session['chat_status'] = 'online'
+        session['chatlist'] = []
         db.session.commit()
         
         # THIS REDIRECT USERS TO THEIR PREVIOUS PAGE AFTER LOGIN
@@ -103,7 +107,7 @@ def login():
         else:
             next_page = url_for('auth.homepage')
         return redirect(next_page)
-    return render_template('login.html', form=form)
+    return render_template('auth/login.html', form=form)
 
 @bp.route('/logout', methods=['GET', 'POST'])
 def logout():

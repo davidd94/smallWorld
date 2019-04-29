@@ -1,0 +1,3 @@
+SECRET_KEY=its-a-small-world-after-all
+MAIL_PASSWORD='Mouse31@'
+ELASTICSEARCH_URL=http://localhost:9200
