@@ -8,6 +8,8 @@ from app.auth.forms import LoginForm, RegistrationForm, PasswordResetRequestForm
 from app.main.forms import SearchForm, MessageForm
 from werkzeug.urls import url_parse
 
+
+# USE IF NOT USING REVERSE PROXY (NGINX) TO CONVERT AT HTTP REQUEST TO HTTPS
 """@bp.before_request
 def enforceHttps():
   if request.headers.get('X-Forwarded-Proto') == 'http':

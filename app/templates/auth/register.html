@@ -22,12 +22,10 @@
             </div>
             {% with messages = get_flashed_messages() %}
             {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-dismissible alert-success register-alert">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong>{{ message }}</strong><a href="{{ url_for('auth.homepage') }}" class="register-alert-link"> Log in here</a>.
-                </div>
-                {% endfor %}
+            <div class="alert alert-dismissible alert-success register-alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>{{ messages[0] }}</strong><a href="{{ url_for('auth.homepage') }}" class="register-alert-link"> Log in here</a>.
+            </div>
             {% endif %}
             {% endwith %}
             <div class="panel-body">

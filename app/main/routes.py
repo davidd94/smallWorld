@@ -40,10 +40,8 @@ def profile(username):
         form = MessageForm()
         project_list = user.all_projects \
                         .order_by(Projects.last_edit.desc())
-        all_followers = User.query \
-                            .join(followers, followers.c.followed_id == user.id) \
-                            .filter(followers.c.follower_id == User.id) \
-                            .all()
+        # CAN USE BACKREF IN 'FOLLOWED' TO FIND ALL FOLLOWERS
+        all_followers = user.followers.all()
         return render_template('profile.html',
                                 form=form,
                                 user=user,

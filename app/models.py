@@ -93,13 +93,35 @@ class SearchableMixin(object):
         for obj in cls.query:
             add_to_index(cls.__tablename__, obj)
 
-
 # LISTENS TO SQLALCHEMY CHANGES TO INVOKE ELASTICSEARCH INDEX CHANGES ACCORDINGLY
 db.event.listen(db.session, 'before_commit', SearchableMixin.before_commit)
 db.event.listen(db.session, 'after_commit', SearchableMixin.after_commit)
 
 
-class User(UserMixin, db.Model):
+class PaginatedAPIMixin(object):
+    @staticmethod
+    def to_collection_dict(query, page, per_page, endpoint, **kwargs):
+        resources = query.paginate(page, per_page, False)
+        data = {
+            'items': [item.to_dict() for item in resources.items],
+            '_meta': {
+                'page': page,
+                'per_page': per_page,
+                'total_pages': resources.pages,
+                'total_items': resources.total
+            },
+            '_links': {
+                'self': url_for(endpoint, page=page, per_page=per_page,
+                                **kwargs),
+                'next': url_for(endpoint, page=page + 1, per_page=per_page,
+                                **kwargs) if resources.has_next else None,
+                'prev': url_for(endpoint, page=page - 1, per_page=per_page,
+                                **kwargs) if resources.has_prev else None
+            }
+        }
+        return data
+
+class User(PaginatedAPIMixin, UserMixin, db.Model):
     __tablename__ = 'user'
     __searchable__ = ['bio']
     id = db.Column(db.Integer, primary_key=True)
@@ -117,7 +139,7 @@ class User(UserMixin, db.Model):
     msg_note = db.Column(db.Boolean, default=False)
     comment_note = db.Column(db.Boolean, default=False)
     reply_note = db.Column(db.Boolean, default=False)
-    # TOKEN VARIABLES FOR APIs ONLY
+    # TOKEN VARIABLES FOR API USE ONLY
     token = db.Column(db.String(50), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     # FOR CHAT FEATURE
@@ -218,11 +240,13 @@ class User(UserMixin, db.Model):
         return jwt.encode({'secret_token': self.id, 'exp': time() + expires_in},
         current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
     
+    # FOR API USAGE
     def get_token(self, expires_in=3600):
         now = datetime.utcnow()
         if self.token and self.token_expiration > now + timedelta(seconds=60):
             return self.token
         self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
+        self.token_expiration = now + timedelta(seconds=expires_in)
         db.session.add(self)
         return self.token
 
@@ -285,12 +309,6 @@ class User(UserMixin, db.Model):
             self.replies_liked.remove(project_reply)
 
     def is_deleted(self, msg):
-        print(Messages.query \
-                        .join(deleted_messages) \
-                        .join(User) \
-                        .filter(deleted_messages.c.user_id == self.id) \
-                        .filter(deleted_messages.c.message_id == msg.id) \
-                        .all())
         return Messages.query \
                         .join(deleted_messages) \
                         .join(User) \
@@ -341,6 +359,34 @@ class User(UserMixin, db.Model):
         db.session.add(n)
         return n
 
+    # FOR API PURPOSES ONLY
+    def to_dict(self, include_email=False):
+        data = {
+            'id': self.id,
+            'username': self.username,
+            'last_seen': self.last_seen.isoformat() + 'Z',
+            'bio': self.bio,
+            'online': self.online,
+            'follower_count': self.followers.count(),
+            '_links': {
+                'self': url_for('api.get_user', id=self.id),
+                'followers': url_for('api.get_followers', id=self.id),
+                'avatar': self.avatar(70)
+            }
+        }
+        if include_email:
+            data['email'] = self.email
+        return data
+    
+    def from_dict(self, data, new_user=False):
+        for field in ['username', 'email', 'bio', 'firstname', 'lastname', 'picture']:
+            if field in data:
+                setattr(self, field, data[field])
+                # SAME AS 'data[field] = field'
+        
+        if new_user and 'password' in data:
+            self.create_password(data['password'])
+
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -352,7 +398,7 @@ class User(UserMixin, db.Model):
                     .first_or_404()
 
     @staticmethod
-    #EXTRACTING THE UNIQUE USER'S ID FROM THE EMAIL TOKEN'S PAYLOAD
+    #EXTRACTING THE UNIQUE USER'S ID FROM THE EMAIL TOKEN'S PAYLOAD FOR EMAIL CONFIRMATION USAGE
     def verify_email_token(token):
         try:
             id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])['secret_token']
@@ -362,7 +408,7 @@ class User(UserMixin, db.Model):
         return User.query.get(id)
     
     @staticmethod
-    #CHECK IF TOKEN STORED IN DB IS STILL VALID
+    # CHECK IF TOKEN STORED IN DB IS STILL VALID FOR API USAGE
     def check_token(token):
         user = User.query.filter_by(token=token).first()
         if user is None or user.token_expiration < datetime.utcnow():

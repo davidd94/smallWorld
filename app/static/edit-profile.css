@@ -17,9 +17,8 @@
     position: relative;
     border-radius: 0.5em;
 }
-.edit-container:before,
-.edit-container:after {
-  z-index: -1;
+.edit-container:before {
+    z-index: -1;
   position: absolute;
   content: "";
   bottom: 25px;
@@ -27,7 +26,9 @@
   width: 50%;
   top: 80%;
   max-width:300px;
-  background: #777;
+  background-image: url('project-example.jpg');
+    background-position: center center;
+    background-size: cover;
   -webkit-box-shadow: 0 35px 20px #777;
   -moz-box-shadow: 0 35px 20px #777;
   box-shadow: 0 35px 20px #777;
@@ -37,7 +38,22 @@
   -ms-transform: rotate(-8deg);
   transform: rotate(-8deg);
 }
+
 .edit-container:after {
+  z-index: -1;
+  position: absolute;
+  content: "";
+  bottom: 300px;
+  left: 10px;
+  width: 50%;
+  top: 40%;
+  max-width:300px;
+  background-image: url('aboutme.jpg');
+    background-position: center center;
+    background-size: cover;
+  -webkit-box-shadow: 0 35px 20px #777;
+  -moz-box-shadow: 0 35px 20px #777;
+  box-shadow: 0 35px 20px #777;
   -webkit-transform: rotate(8deg);
   -moz-transform: rotate(8deg);
   -o-transform: rotate(8deg);
@@ -239,7 +255,8 @@
     align-self: center;
     text-align: center;
     margin: 0;
-    color: orange;
+    color: rgb(91, 0, 196);
+    font-weight: 600;
 }
 .form-avatar {
     grid-row: 10 / span 1;
@@ -264,7 +281,6 @@
     justify-self: right;
     align-self: center;
     margin: 0;
-    color: orange;
 }
 
 .bio-label {
@@ -273,7 +289,8 @@
     justify-self: center;
     align-self: center;
     margin: 0;
-    color: orange;
+    color: rgb(91, 0, 196);
+    font-weight: 600;
 }
 .form-bio {
     grid-row: 11 / span 1;
