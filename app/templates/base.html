@@ -3,12 +3,15 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0"> 
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        
         {% block css %}
         <!-- THIS IS FOR ONLY THE CHAT BOX DESIGN -->
         <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
 
         <link rel="stylesheet" href="{{ url_for('static', filename='perfect-scrollbar.css') }}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ url_for('static', filename='bootstrapcss/bootstrap-bootswatch-minty.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -25,74 +28,195 @@
             {% endif %}
         {% endblock title %}
 
-        {% block mediaquery %}{% endblock mediaquery %}
-    </head>
-    {% block coverphoto %}{% endblock coverphoto %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="{{ url_for('auth.clear_flash_msgs') }}">smallWorld<img class="homepage-logo" width="50px;" margin="0 0 0 10px;" src="{{ url_for('static', filename='logo.jpg') }}"></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        {% block mediaquery %}
+        <style>
+        /* ----------- iPhone 6, 6S, 7, 8 and X ----------- */
+        /* Portrait */
+        @media only screen 
+        and (min-device-width: 375px) 
+        and (max-device-width: 667px) 
+        and (-webkit-min-device-pixel-ratio: 2)
+        and (orientation: portrait) {
+            /* BASE TEMPLATE */
+            body {
+                padding-top: 15%;
+                -webkit-overflow-scrolling: touch;
+            }
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+            }
+            .alert-box-wrapper {
+                top: 20%;
+            }
+            .notification-dropdown {
+                width: 320px;
+                height: 275px;
+                left: 0;
+                -webkit-overflow-scrolling: touch;
+            }
 
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav mr-auto">
-                <li id="nav-item-home" class="nav-item">
-                    <a id="nav-link-home" class="nav-link" href="{{ url_for('auth.homepage') }}">Home <span class="sr-only">(current)</span></a>
-                </li>
-                {% if current_user.is_authenticated %}
-                <li id="nav-item-profile" class="nav-item">
-                    <a id="nav-link-profile" class="nav-link" href="{{ url_for('main.profile', username=current_user.username) }}">Profile</a>
-                </li>
-                {% endif %}
-                <li id="nav-item-explore" class="nav-item">
-                    <a id="nav-link-explore" class="nav-link" href="{{ url_for('main.explore') }}">Explore</a>
-                </li>
-                <li id="nav-item-about" class="nav-item">
-                    <a id="nav-link-about" class="nav-link" href="{{ url_for('main.about') }}">About</a>
-                </li>
-            </ul>
-            
-            <ul class="nav nav-pills">
-                {% if current_user.is_authenticated %}
-                <li class="nav-notification nav-item">
-                    <a class="notification-nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <div class="notification-icon-wrapper">
-                            <img class="notification-bell-icon" src="{{ url_for('static', filename='notification-bell.svg') }}">
-                            <span class="notification-number badge badge-warning"></span>
-                        </div>
-                    </a>
-                    <ul class="notification-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: -10em; transform: translate3d(0px, 42px, 0px);">
-                        <div class="clear-wrapper custom-scrollbar-s3">
-                            <!-- DYNAMIC NOTIFICATIONS INSERTED HERE -->
-                        </div>
-                        <a class="dropdown-clear dropdown-item" href="#">Clear Notifications</a>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a id="dropdown-toggle-override" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
-                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
-                        <a class="dropdown-item" href="{{ url_for('main.edit_profile', username=current_user.username) }}">Edit</a>
-                        <a class="dropdown-item" href="{{ url_for('main.privacy') }}">Account Settings</a>
-                        <a class="dropdown-item" href="{{ url_for('main.message_inbox') }}">Messages</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>
-                    </div>
-                </li>
-                {% else %}
-                <li class="nav-item dropdown">
-                    <a id="dropdown-togglelogin-override" class="btn btn-primary">Log in</a>
-                </li>
-                {% endif %}
-            </ul>
-            {% if g.search_form %}
-            <form class="form-inline my-2 my-lg-0" action="{{ url_for('main.search') }}" method='GET'>
-                {{ g.search_form.q(class="form-control mr-sm-2", placeholder="Search projects", maxlength="40", autocomplete="off") }}
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>
-            {% endif %}
-        </div>
-    </nav>
+            /* MODAL POP UPS */
+            .modal-content {
+                width: 95vw;
+            }
+            .pic-modal img {
+                width: auto;
+                height: auto;
+                max-height: 80vh;
+                max-width: 80vw;
+            }
+        }
+        /* ----------- iPhone 6, 6S, 7, and 8 ----------- */
+        /* Landscape */
+        @media only screen 
+        and (min-device-width: 375px) 
+        and (max-device-width: 667px) 
+        and (-webkit-min-device-pixel-ratio: 2)
+        and (orientation: landscape) {
+            /* BASE TEMPLATE */
+            body {
+                padding-top: 9%;
+                -webkit-overflow-scrolling: touch;
+            }
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+            }
+            .alert-box-wrapper {
+                top: 30%;
+            }
+            .notification-dropdown {
+                width: 370px;
+                height: 250px;
+                left: 30vw;
+                top: -50vh;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* MODAL POP UPS */
+            .modal-content {
+                width: 85vw;
+            }
+            .pic-modal img {
+                width: auto;
+                height: auto;
+                max-height: 85vh;
+                max-width: 85vw;
+            }
+        }
+        /* ----------- iPhone X ----------- */
+        /* Landscape */
+        @media only screen 
+        and (min-device-width: 375px) 
+        and (max-device-width: 812px) 
+        and (-webkit-min-device-pixel-ratio: 3)
+        and (orientation: landscape) {
+            /* BASE TEMPLATE */
+            body {
+                padding-top: 9%;
+                -webkit-overflow-scrolling: touch;
+            }
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+            }
+            .alert-box-wrapper {
+                top: 30%;
+            }
+            .notification-dropdown {
+                width: 370px;
+                height: 250px;
+                left: 30vw;
+                top: -50vh;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* MODAL POP UPS */
+            .modal-content {
+                width: 85vw;
+            }
+            .pic-modal img {
+                width: auto;
+                height: auto;
+                max-height: 85vh;
+                max-width: 85vw;
+            }
+        }
+        </style>
+        {% endblock mediaquery %}
+    </head>
+
+    {% block coverphoto %}{% endblock coverphoto %}
+    
     <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="{{ url_for('auth.clear_flash_msgs') }}">smallWorld<img class="homepage-logo" width="50px;" margin="0 0 0 10px;" src="{{ url_for('static', filename='logo.jpg') }}"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li id="nav-item-home" class="nav-item">
+                        <a id="nav-link-home" class="nav-link" href="{{ url_for('auth.homepage') }}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li id="nav-item-profile" class="nav-item">
+                        <a id="nav-link-profile" class="nav-link" href="{{ url_for('main.profile', username=current_user.username) }}">Profile</a>
+                    </li>
+                    {% endif %}
+                    <li id="nav-item-explore" class="nav-item">
+                        <a id="nav-link-explore" class="nav-link" href="{{ url_for('main.explore') }}">Explore</a>
+                    </li>
+                    <li id="nav-item-about" class="nav-item">
+                        <a id="nav-link-about" class="nav-link" href="{{ url_for('main.about') }}">About</a>
+                    </li>
+                </ul>
+                
+                <ul class="nav nav-pills">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-notification nav-item">
+                        <a class="notification-nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <div class="notification-icon-wrapper">
+                                <img class="notification-bell-icon" src="{{ url_for('static', filename='notification-bell.svg') }}">
+                                <span class="notification-number badge badge-warning"></span>
+                            </div>
+                        </a>
+                        <ul class="notification-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute;">
+                            <div class="clear-wrapper custom-scrollbar-s3">
+                                <!-- DYNAMIC NOTIFICATIONS INSERTED HERE -->
+                            </div>
+                            <a class="dropdown-clear dropdown-item" href="#">Clear Notifications</a>
+                        </ul>
+                    </li>
+                    <li id="userlogin-dropdown" class="nav-item btn-group dropdown">
+                        <a id="dropdown-toggle-override" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ url_for('main.edit_profile', username=current_user.username) }}">Edit</a>
+                            <a class="dropdown-item" href="{{ url_for('main.privacy') }}">Account Settings</a>
+                            <a class="dropdown-item" href="{{ url_for('main.message_inbox') }}">Messages</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>
+                        </div>
+                    </li>
+                    {% else %}
+                    <li class="nav-item dropdown">
+                        <a id="dropdown-togglelogin-override" class="btn btn-primary">Log in</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                {% if g.search_form %}
+                <form class="form-inline my-2 my-lg-0" action="{{ url_for('main.search') }}" method='GET'>
+                    {{ g.search_form.q(class="form-control mr-sm-2", placeholder="Search projects", maxlength="40", autocomplete="off") }}
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                {% endif %}
+            </div>
+        </nav>
         {% block bodycontent  %}{% endblock bodycontent %}
         {% if current_user.is_authenticated %}
             {% include "_chat.html" %}
@@ -126,6 +250,60 @@ $(function() {
         };
     });
 });
+</script>
+
+<script>
+/* FOR MOBILE & TABLET DEVICES ONLY - RELOADS CSS STYLES WHEN CHANGING LANDSCAPE <--> PORTRAIT */
+window.onorientationchange = function() {
+    window.location.reload();
+};
+
+/* FOR MOBILE DEVICES WHEN TOUCH SCROLL GETS LOCKED */
+function simulateMouseEvent (event, simulatedType) {
+    // Ignore multi-touch events
+    if (event.originalEvent.touches.length > 1) {
+        return;
+    }
+
+    if (event.cancelable) {
+        event.preventDefault();
+    }
+}
+
+/* DETECTS IF USER IS USING A MOBILE DEVICE TO APPLY CERTAIN CSS VALUES */
+var isMobile = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+};
+
+/* IF ANY MOBILE DEVICES DETECTED, SET DROPDOWN POSITION TO UPWARDS */
+if (isMobile.any()) {
+    document.getElementById("userlogin-dropdown").classList.remove("dropdown");
+    document.getElementById("userlogin-dropdown").classList.add("dropup");
+}
+
+
+/* !!! IMPORTANT !!! AUTO ADJUSTS MOBILE VIEW HEIGHT SIZES SO ELEMENTS WITH 100% IS ACTUALLY COVERING 100% OF SCREEN */
+window.onresize = function() {
+    document.body.height = window.innerHeight;
+}
+window.onresize(); // called to initially set the height.
 </script>
 
 <script>

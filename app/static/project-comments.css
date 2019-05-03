@@ -27,7 +27,7 @@ h1 {
  * Comment List
  =======================*/
 #main-comment-container {
-    margin: auto auto;
+    margin: 0;
     padding: 0 0;
     width: 100%;
     height: 100%;
@@ -39,7 +39,7 @@ h1 {
 }
 
 .comments-container {
-	margin: 0.2em auto 0.2em auto;
+	margin: 0.2em 0;
 	width: 100%;
     height: 100%;
     overflow-x: hidden;
@@ -227,6 +227,7 @@ h1 {
 }
 
 .reply-comment-box .comment-head {
+	display: inline-block;
 	background: #FCFCFC;
 	padding: 10px 12px;
 	border-bottom: 1px solid #E5E5E5;
@@ -297,6 +298,7 @@ h1 {
 	font-weight: 700;
 	float: left;
 	margin-right: 10px;
+	padding-top: 0.4em;
 }
 
 .reply-comment-box .comment-name {
@@ -456,33 +458,4 @@ h1 {
     top: 0;
     left: 0;
     position: relative;
-}
-
-/* REPLY BOX */
-
-
-/** =====================
- * Responsive
- ========================*/
-@media only screen and (max-width: 766px) {
-	.comments-container {
-        position: relative;
-		width: 480px;
-	}
-
-	.comments-list .comment-box {
-		width: 390px;
-	}
-
-    .comments-list .reply-comment-box {
-		width: 390px;
-	}
-
-	.reply-list .comment-box {
-		width: 320px;
-	}
-
-    .reply-list .reply-comment-box {
-		width: 320px;
-	}
 }

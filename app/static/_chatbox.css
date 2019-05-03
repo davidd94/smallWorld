@@ -5,7 +5,7 @@
   align-items: center;
   height: 60vh;
   background-color: #b3d4fc;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   right: 0;
   transition: all 400ms ease;

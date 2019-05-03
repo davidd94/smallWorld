@@ -6,6 +6,99 @@
 <link rel="stylesheet" href="https://unpkg.com/flickity@2.0/dist/flickity.min.css">
 {% endblock css %}
 
+{% block mediaquery %}
+{{ super() }}
+<style>
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+    .carousel-wrapper {
+        top: 60%;
+        height: 100%;
+        width: 20em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: auto;
+        height: auto;
+        padding: 5px;
+    }
+    .bio-box p {
+        padding: 5px;
+    }
+    
+    .carousel-wrapper .carousel .carousel-cell-smallworld {
+        width: 17em;
+        height: auto;
+        padding: 5px;
+    }
+    .smallworld-box {
+        width: auto;
+        height: 100%;
+        max-height: auto;
+    }
+    .smallworld-box p {
+        height: auto;
+        width: 100%;
+    }
+
+    .carousel-cell-others {
+        height: auto;
+    }
+    .carousel-cell-others .others-box {
+        max-height: auto;
+    }
+    .others-box h3 {
+        margin: 2em 0 0.5em 0;
+    }
+    .others-box p {
+        height: auto;
+    }
+    
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+    .carousel-wrapper {
+        top: 55%;
+        height: 100%;
+        width: 30em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: 85%;
+        height: 15em;
+        padding: 5px;
+        overflow: hidden;
+    }
+    
+    .bio-box p,
+    .smallworld-box p {
+        height: 5em;
+        max-height: auto;
+        padding: 5px;
+    }
+
+    .others-box {
+        height: 13em;
+        overflow: scroll;
+        padding-bottom: 2em;
+    }
+    .others-box h3 {
+        margin: 1em 0 1em 0;
+    }
+    
+}
+</style>
+{% endblock mediaquery %}
+
 {% block bodycontent %}
 <div class="aboutme-container">
     <div class="carousel-wrapper">
@@ -57,7 +150,7 @@
             <a class="more" href="//dogoodies.shop">DoGoodies</a>
             <div class="others-box custom-scrollbar-s3">
                 <h3>InvestmenTracker</h3>
-                <p>One of my hobbies is investing so I thought it would be a great idea to create my 
+                <p>Having great interest in investing, I thought it would be a great idea to create my 
                     first project as my very own stock portfolio manager. This whole website is made from 
                     scratch meaning no bootstrap or any other code was used to create it. I believed this 
                     would allow a deeper understanding of how each languages work. Although it is still incomplete, 
@@ -75,62 +168,63 @@
         </div>
     </div>
     </div>
+</div>
 
-    <!-- PICTURE 1 POPUP MODAL -->
-    <div class="modal fade pic-modal" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <span>Yoshi(Leopard Gecko-left) first meets Charmander(Bearded Dragon-right)</span>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <img src="{{ url_for('static', filename='beardedgecko.jpg') }}" alt="Image not found">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-            </div>
+<!-- PICTURE 1 POPUP MODAL -->
+<div class="modal fade pic-modal" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <span>Yoshi(Leopard Gecko-left) first meets Charmander(Bearded Dragon-right)</span>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <img src="{{ url_for('static', filename='beardedgecko.jpg') }}" alt="Image not found">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
         </div>
     </div>
-    <!-- PICTURE 2 POPUP MODAL -->
-    <div class="modal fade pic-modal" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <span>Charmander's adult terrarium setup</span>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <img src="{{ url_for('static', filename='beardietank.jpg') }}" alt="Image not found">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-            </div>
+</div>
+
+<!-- PICTURE 2 POPUP MODAL -->
+<div class="modal fade pic-modal" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <span>Charmander's adult terrarium setup</span>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <img src="{{ url_for('static', filename='beardietank.jpg') }}" alt="Image not found">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
         </div>
     </div>
-    <!-- PICTURE 3 POPUP MODAL -->
-    <div class="modal fade pic-modal" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <span>Venus Flytrap, sundews and lichens in a teardrop-shaped terrarium. </span>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <img src="{{ url_for('static', filename='carnivorousplants.jpg') }}" alt="Image not found">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-            </div>
+</div>
+<!-- PICTURE 3 POPUP MODAL -->
+<div class="modal fade pic-modal" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <span>Venus Flytrap, sundews and lichens in a teardrop-shaped terrarium. </span>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <img src="{{ url_for('static', filename='carnivorousplants.jpg') }}" alt="Image not found">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
         </div>
     </div>
 </div>

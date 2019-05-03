@@ -1,52 +1,31 @@
-/* NEW STYLES */
-.front-banner {
-    position: relative;
-    width: 100%;
-    height: auto;
+/* ANONYMOUS USERS */
+.container {
+  height: 100%;
+  max-height: 94vh;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  z-index: 10;
+  background-image: url('homepage-background2.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
-
-/* OVERRIDING BOOTSTRAP STYLES - ANONYMOUS USERS */
-.homepage-container {
-    display: grid;
-    grid-template: 1fr / 1fr 1fr 1fr;
-    height: 92vh;
-    width: 100%;
-    max-height: 92vh;
-    align-items: center;
-    padding: 1em;
-    grid-gap: 15px;
-    position: relative;
-    z-index: 15;
-    background-image: url('homepage-background.jpg');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
+.container-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 15;
 }
-.homepage-login-container {
-    grid-row: 1 / span 1;
-    grid-column: 3 / span 1;
-    height: 28em;
-    width: 35em;
-    margin: 1em 4em 3em 0.5em;
-    overflow: visible;
-    border-radius: 0.6em;
-    background-color: rgb(230, 230, 230);
-    position: relative;
-    z-index: 500;
-    opacity: 0.8;
-    transition: all 600ms ease;
-}
-.homepage-login-container:active, .homepage-login-container:hover {
-    opacity: 1;
+.carousel-wrapper,
+.homepage-login-wrapper {
+  align-self: center;
+  justify-self: center;
 }
 #carouselExampleIndicators {
-    grid-row: 1 / span 1;
-    grid-column: 1 / span 2;
     width: auto;
-    height: 40em;
-    max-height: 40em;
-    margin: auto auto;
+    height: auto;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     display: block;
     transition: all 500ms ease;
@@ -60,6 +39,11 @@
 }
 .carousel-inner {
     height: 100%;
+}
+.carousel-item-zen {
+    height: 100%;
+    width: 100%;
+    position: relative;
 }
 .carousel-item {
     height: 100%;
@@ -78,10 +62,11 @@
     color: rgb(0, 119, 0);
     position: absolute;
     z-index: 100;
-    top: 22%;
-    left: 22%;
-    width: 12em;
-    height: 10em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55%;
+    height: 55%;
     text-align: center;
     padding: 1em 0;
     opacity: 0;
@@ -96,15 +81,35 @@
 .signup-btn-link {
     position: absolute;
     z-index: 100;
-    top: 80%;
-    left: 44%;
-    width: 7em;
-    height: 3em;
+    bottom: 6%;
+    left: 52%;
+    transform: translate(-50%, -50%);
+    width: 15%;
+    height: 7%;
     opacity: 0.75;
 }
 .signup-btn-link:hover {
     opacity: 1;
 }
+
+.homepage-login-container {
+  height: 30em;
+  width: 80%;
+  overflow: visible;
+  border-radius: 0.6em;
+  background-color: rgb(230, 230, 230);
+  position: relative;
+  z-index: 500;
+  opacity: 0.8;
+  margin: 0;
+  padding: 10% 0;
+  text-align: center;
+  transition: all 600ms ease;
+}
+.homepage-login-container:active, .homepage-login-container:hover {
+  opacity: 1;
+}
+
 
 /* CREATE YOUR TERRARIUM */
 .create-terrarium-container {
@@ -124,12 +129,12 @@
 .create-terrarium-text {
     position: absolute;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 100%;
     font-family: "Comic Sans MS", helvetica, sans-serif;
-    top: -5%;
+    top: -10%;
     left: 50%;
     transform: translateX(-50%);
-    width: 23em;
+    width: 70%;
     height: auto;
     color: rgb(22, 160, 22);
     text-align: center;
@@ -406,75 +411,29 @@ main {
   display: block;
 }
 
-/* BOOTSTRAP OVERRIDE */
-#signupform-container-override {
-    width: 100%;
+
+/* AUTHENTICATED USERS */
+.row {
+  height: 100%;
+}
+.followed-wrapper {
+  height: 100%;
+}
+.followed-feed-container,
+.news-feed-container {
     height: 100%;
+    width: 100%;
+    padding: 1em;
     margin: 0;
-}
-#signupform-override {
-    width: 100%;
-    margin: 1em auto 0 auto;
-}
-#login-widened {
-    width: 22em;
-}
-#homepage-login-user{
-    width: 12.5em;
-}
-#login-button-override {
-    width: 12.5em;
-}
-.panel-title {
-    padding-top: 1em;
-    padding-bottom: 2em;
-}
-
-#login-alert-container {
-    position: absolute;
-    width: 28em;
-    height: auto;
-    max-height: 7em;
-    top: -13%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    transition: all 1500ms ease;
-}
-#homepage-forgotpass-link {
-    text-decoration: underline;
-}
-
-/* OVERRIDING BOOTSTRAP STYLES - USERS */
-.dashboard-container {
-    display: grid;
-    grid-template: 1fr 1fr / 1fr 1fr;
-    padding: 1em;
-    height: 100vh;
-    max-height: 93vh;
-    width: 100%;
-    align-items: center;
-    grid-gap: 15px;
-    position: relative;
-    z-index: 15;
-    background-image: url('homepage-background2.jpg');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-}
-.followed-feed-container {
-    grid-row: 1 / span 2;
-    grid-column: 1 / span 1;
-    height: 100%;
-    padding: 1em;
     overflow: hidden;
     background-color: rgb(233, 233, 233);
     border-radius: 0.6em;
     opacity: 0.9;
     transition: all 500ms ease;
+    position: relative;
 }
-.followed-feed-container:hover {
+.followed-feed-container:hover,
+.news-feed-container:hover {
     opacity: 1;
 }
 .followed-feed-title {
@@ -494,7 +453,7 @@ main {
 }
 .projectfeed-container {
     display: grid;
-    grid-template: 4em 2em / 4em 1fr 3em;
+    grid-template: 4em 2em / 6em 1fr 3em;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     background-color: white;
     grid-gap: 0;
@@ -513,7 +472,12 @@ main {
 .projectfeed-username {
     grid-row: 2 / span 1;
     grid-column: 1 / span 1;
-    margin: auto auto;
+    text-align: center;
+    justify-self: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 5.5em;
 }
 .title-border {
     grid-row: 1 / span 1;
@@ -583,26 +547,6 @@ main {
     color: rgb(67, 67, 197);
 }
 
-.dropdown-follower-feed {
-    left: -10em !important;
-}
-
-.news-feed-container {
-    grid-row: 1 / span 1;
-    grid-column: 2 / span 1;
-    height: 100%;
-    padding: 1em;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    background-color: rgb(233, 233, 233);
-    border-radius: 0.6em;
-    opacity: 0.9;
-    transition: all 500ms ease;
-    position: relative;
-}
-.news-feed-container:hover {
-    opacity: 1;
-}
 .followed-note-title {
     text-align: center;
     font-weight: 800;
@@ -646,12 +590,12 @@ main {
 
 /* ANIMATED PLANTS */
 .animated-plants-container {
-    position: absolute;
+    position: fixed;
     height: auto;
     width: auto;
     bottom: -10%;
     right: 0%;
-    z-index: 500;
+    z-index: 13;
     opacity: 1;
 }
 .animated-plant-text {
@@ -761,30 +705,10 @@ svg,
 }
 
 
-.alert-box-wrapper {
-    position: absolute;
-    top: 7%;
-    right: -10em;
-    height: 1%;
-}
-
-#message-alert-box {
-    width: 15em;
-    height: auto;
-    max-height: 6em;
-    padding: 0.8em;
-    text-align: center;
-    right: -70em;
-    top: 0;
-    transition: all 1500ms ease;
-    position: absolute;
-}
-
-
 /* PLANT GENERATOR */
 
 #canvas_container_div {
-  position: absolute;
+  position: fixed;
   bottom: 27%;
   left: 50%;
   transform: translateX(-50%);
@@ -795,4 +719,158 @@ svg,
   width: 100%;
   height: 100%;
     transform: scale(1.5);
+}
+
+
+
+
+/* ALERT MSG BOX */
+.alert-box-wrapper {
+  position: fixed;
+  top: 12%;
+  right: -10em;
+  height: 1%;
+  z-index: 5000;
+}
+
+#message-alert-box {
+  width: 15em;
+  height: auto;
+  max-height: 6em;
+  padding: 0.8em;
+  text-align: center;
+  right: -70em;
+  top: 0;
+  transition: all 1500ms ease;
+  position: absolute;
+}
+
+
+
+
+
+
+.card {
+  width: 50%;
+  background-color: #F7F7F7;
+  /* just in case there no content*/
+  padding: 20px 25px 30px;
+  margin: 0 auto 25px;
+  margin-top: 50px;
+  /* shadows and rounded borders */
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  opacity: 0.8;
+  transition: all 500ms ease;
+}
+.card:hover {
+  opacity: 1;
+}
+
+.profile-img-card {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 10px;
+  display: block;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+}
+
+/*
+* Form styles
+*/
+.profile-name-card {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px 0 0;
+  min-height: 1em;
+}
+
+.reauth-email {
+  display: block;
+  color: #404040;
+  line-height: 2;
+  margin-bottom: 10px;
+  font-size: 14px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.form-signin #inputEmail,
+.form-signin #inputPassword {
+  direction: ltr;
+  height: 44px;
+  font-size: 16px;
+}
+
+.form-signin input[type=email],
+.form-signin input[type=password],
+.form-signin input[type=text],
+.form-signin button {
+  width: 100%;
+  display: block;
+  margin-bottom: 10px;
+  z-index: 1;
+  position: relative;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.form-signin .form-control:focus {
+  border-color: rgb(104, 145, 162);
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+}
+
+.btn.btn-signin {
+  /*background-color: #4d90fe; */
+  background-color: rgb(104, 145, 162);
+  /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
+  padding: 0px;
+  font-weight: 700;
+  font-size: 14px;
+  height: 36px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  border: none;
+  -o-transition: all 0.218s;
+  -moz-transition: all 0.218s;
+  -webkit-transition: all 0.218s;
+  transition: all 0.218s;
+}
+
+.btn.btn-signin:hover,
+.btn.btn-signin:active,
+.btn.btn-signin:focus {
+  background-color: rgb(12, 97, 33);
+}
+
+.forgot-password {
+  color: rgb(104, 145, 162);
+  text-align: center;
+  margin-top: 1%;
+}
+
+.forgot-password:hover,
+.forgot-password:active,
+.forgot-password:focus{
+  color: rgb(12, 97, 33);
+}
+
+#remember {
+  text-align: center;
 }

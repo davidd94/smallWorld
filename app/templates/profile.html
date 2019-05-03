@@ -5,6 +5,40 @@
 <link href="{{ url_for('static', filename='profile.css') }}" rel="stylesheet">
 {% endblock css %}
 
+{% block mediaquery %}
+{{ super() }}
+<style>
+/* ----------- iPhone 6, 6S, 7, 8 and X ----------- */
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+  }
+
+/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) { 
+    
+}
+/* ----------- iPhone X ----------- */
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    
+}
+</style>
+{% endblock mediaquery %}
+
 {% block bodycontent %}
 <div class="profile-main-container">
     <div id="profile-filter-box" class="custom-scrollbar-s1">
@@ -178,31 +212,35 @@
     </div>
 
     <!-- FOLLOWERS POPUP MODAL -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Followers</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="followers-modal-wrapper custom-scrollbar">
-                <ul class="followers-modal">
-                    {% if followers %}
-                    {% for follower in followers %}
-                    <li><a href="{{ url_for('main.profile', username=follower.username) }}">{{ follower.username }}</a></li>
-                    {% endfor %}
-                    {% else %}
-                    <p style="text-align: center; color: black; size: 1.2em; margin-top: 10em;">No followers yet. Be the first! :)</p>
-                    {% endif %}
-                </ul>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Followers</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="followers-modal-wrapper custom-scrollbar">
+                            <ul class="followers-modal custom-scrollbar-s3">
+                                {% if followers %}
+                                {% for follower in followers %}
+                                <li><a href="{{ url_for('main.profile', username=follower.username) }}">{{ follower.username }}</a></li>
+                                {% endfor %}
+                                {% else %}
+                                <p style="text-align: center; color: black; size: 1.2em; margin-top: 10em;">No followers yet. Be the first! :)</p>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
             </div>
         </div>
     </div>
@@ -217,14 +255,14 @@
             <strong class="message-fail-msg"></strong>
         </div>
     </div>
-    {% include "_message-popup.html" %}
-
+    {% if current_user.is_authenticated %}
+        {% include "_message-popup.html" %}
+    {% endif %}
 </div>
 {% endblock bodycontent %}
 
 {% block scripts %}
 {{ super() }}
-
 <script>
 /* ADDS 'ACTIVE' CLASS TO NAV BAR ITEM */
 $(function() {
@@ -247,6 +285,9 @@ $(function () {
     });
 });
 
+/* INITIALLY HIDES ALERT MSGS */
+$('.alert-secondary').fadeOut(1);
+$('.alert-success').fadeOut(1);
 </script>
 
 <script>

@@ -397,8 +397,8 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
                     .filter_by(username=username) \
                     .first_or_404()
 
+    # EXTRACTING THE UNIQUE USER'S ID FROM THE EMAIL TOKEN'S PAYLOAD FOR EMAIL CONFIRMATION USAGE
     @staticmethod
-    #EXTRACTING THE UNIQUE USER'S ID FROM THE EMAIL TOKEN'S PAYLOAD FOR EMAIL CONFIRMATION USAGE
     def verify_email_token(token):
         try:
             id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])['secret_token']
@@ -407,8 +407,8 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
             return
         return User.query.get(id)
     
-    @staticmethod
     # CHECK IF TOKEN STORED IN DB IS STILL VALID FOR API USAGE
+    @staticmethod
     def check_token(token):
         user = User.query.filter_by(token=token).first()
         if user is None or user.token_expiration < datetime.utcnow():

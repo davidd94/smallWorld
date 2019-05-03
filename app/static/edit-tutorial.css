@@ -1,40 +1,35 @@
-.tutorial-container {
+.edit-tutorial-container {
     width: 100%;
-    height: 85vh;
+    height: 100%;
     padding: 1em;
     overflow: hidden;
 }
 .tutorial-container-text {
-    width: auto;
+    width: 100%;
     height: auto;
     max-height: 90%;
-    margin: 0 13em;
     padding-bottom: 0.2em;
     border: 1px solid black;
     overflow-y: scroll;
     overflow-x: hidden !important;
     position: relative;
 }
-.toggle-wrapper {
-    position: absolute;
-    margin: 0;
-    top: 9em;
-    left: 16em;
-    z-index: 500;
+
+.toggle {
+  height: 2.5em !important;
+  width: 5em !important;
 }
 
 /* ADD BUTTON WITH DROPDOWN FEATURES */
 .tutorial-btn-wrapper {
     text-align: center;
     width: 100%;
-    height: 4em;
     position: relative;
 }
 .tutorial-main-add-btn {
     max-width: 5em;
     height: auto;
     cursor: pointer;
-    margin: 0 0 0 6.5em;
 }
 .tutorial-main-add-btn:hover {
     color: #007cba;
@@ -162,7 +157,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  margin: 0 0 0 2em;
+  margin: 0;
   padding: 0.2em 0 0 0;
   top: -0.2em;
   width: 10em;
@@ -286,11 +281,18 @@
 
 
 /* EXPORT STATUS BAR */
+.export-status-container {
+  width: 100%;
+  height: auto;
+  display: none;
+  text-align: center;
+}
 #statuscontainer {
-    margin: 20px auto;
     width: 200px;
     height: 100px;
-    display: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .status-close,
 .status-cancel {

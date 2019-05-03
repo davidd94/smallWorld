@@ -1,6 +1,56 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='_chatbox.css') }}">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700">
 
+<!-- MEDIA QUERIES -->
+<style>
+/* ----------- iPhone 6, 6S, 7, 8 and X ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) { 
+    .chatlist-wrapper {
+        bottom: 0;
+    }
+    #live-chat {
+        bottom: 0;
+        right: 0;
+        z-index: 2000;
+    }
+}
+/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) { 
+    .chatlist-wrapper {
+        height: 85vh;
+        bottom: 0;
+    }
+    .chat-history {
+        height: 225px;
+    }
+}
+/* ----------- iPhone X ----------- */
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .chatlist-wrapper {
+        height: 85vh;
+        bottom: 0;
+    }
+    .chat-history {
+        height: 225px;
+    }
+}
+</style>
+
 <!-- CHATLIST BOX -->
 <div class="chatlist-wrapper">
     <div class="users-list-card mdl-card mdl-shadow--2dp">

@@ -16,27 +16,59 @@
 {% endblock css %}
 
 {% block bodycontent %}
-<h1 class="edit-tutorial-title" style="text-align: center;">Edit Tutorial</h1>
-<div id="statuscontainer" class="export-status-container"><span class="status-cancel">cancel</span><span class="status-close">close</span></div>
-
-<p style="font-size: 0.8em; font-style: italic; color: lightgrey; opacity: 0.9; text-align: center; margin: 0; padding: 0;">You may drag and drop TEXT or IMAGES</p>
-<div class="tutorial-container">
-    <div class="toggle-wrapper">
-        <input id="chkToggle" type="checkbox" class="toggle-tutorial" data-toggle="toggle">
-    </div>
-    <div class="tutorial-btn-wrapper">
-        <i class="tutorial-main-add-btn fas fa-edit fa-2x nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
-        <a class="edit-tutorial-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}">Back to project</a>
-        <div id="tutorial-dropdown-override" class="tutorial-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; transform: translate3d(0px, 42px, 0px);">
-            <a class="dropdown-item dropdown-add-paragraph" onclick="addParagraph();" data-toggle="tooltip" href="#">Edit</a>
-            <a class="dropdown-item dropdown-export" href="#">Export</a>
-            <a class="dropdown-item dropdown-share" href="#">Share</a>
+<div class="container edit-tutorial-container">
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <h1 class="edit-tutorial-title" style="text-align: center;">Edit Tutorial</h1>
         </div>
     </div>
-    <div class="tutorial-container-text custom-scrollbar-s3">
-        <form class="tutorial-form custom-scrollbar-s3" method="POST">
-            <div id="summernote"></div>
-        </form>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-5 text-center">
+            <div class="export-status-container">
+                <div id="statuscontainer">
+                    <span class="status-cancel">cancel</span>
+                    <span class="status-close">close</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <a class="edit-tutorial-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}">Back to project</a>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <p style="font-size: 0.8em; font-style: italic; color: rgb(179, 179, 179); opacity: 0.9; text-align: center; margin: 0; padding: 0;">Experimental: Drag and drop TEXT or IMAGES. <strong style="color: red"><br> *** WARNING *** : </strong> YOU WILL EXPERIENCE BUGS AND ISSUES USING THIS METHOD</p>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <div class="toggle-wrapper">
+                <input id="chkToggle" type="checkbox" class="toggle-tutorial" data-toggle="toggle">
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <div class="tutorial-btn-wrapper">
+                <i class="tutorial-main-add-btn fas fa-edit fa-2x nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
+                <div id="tutorial-dropdown-override" class="tutorial-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; transform: translate3d(0px, 42px, 0px);">
+                    <a class="dropdown-item dropdown-add-paragraph" onclick="addParagraph();" data-toggle="tooltip" href="#">Edit</a>
+                    <a class="dropdown-item dropdown-export" href="#">Export</a>
+                    <a class="dropdown-item dropdown-share" href="#">Share</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <div class="tutorial-container-text custom-scrollbar-s3">
+                <form class="tutorial-form custom-scrollbar-s3" method="POST">
+                    <div id="summernote"></div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock bodycontent %}
@@ -50,9 +82,7 @@
 <script src="https://cdn.rawgit.com/kimmobrunfeldt/progressbar.js/1.0.1/dist/progressbar.min.js"></script>
 <!-- PERFECT SCROLLBAR JS -->
 <script src="{{ url_for('static', filename='plugins/perfect-scrollbar.min.js') }}"></script>
-<!--
-<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
--->
+
 
 <script>
 /* INITIALLY LOADS SUMMERNOTE TEXT EDITOR */
@@ -505,7 +535,7 @@ function update_progress(status_url, progressbar) {
             }
         }
         else {
-            // rerun in 2 seconds
+            // rerun in 3 seconds
             updateTimer = setTimeout(function() {
                 update_progress(status_url, progressbar);
             }, 3000);

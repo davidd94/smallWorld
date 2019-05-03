@@ -2,11 +2,11 @@
     display: grid;
     grid-template: 10em 1fr / 14em 20em 1fr;
     width: 100%;
-    height: 92vh;
+    height: 94%;
     color: black;
     padding: 0.3em 0.3em;
     grid-gap: 0.5em;
-    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-family: "Comic Sans MS", Helvetica, sans-serif;
 }
 
 /* PROJECT SOCIAL BOX */
@@ -432,13 +432,13 @@
     border-right: 2px solid #c02020;
 }
 #modalDel {
-    top: 10em;
+    top: 25vh;
 }
 .modal-header {
     border-bottom: 1px solid rgb(190, 190, 190);
 }
 .modal-content {
-    width: 40em;
+    width: auto;
 }
 .modal-title {
     width: 100%;
@@ -498,10 +498,10 @@
     grid-column: 2 / span 2;
     border-radius: 0.75em;
     border: 1px solid black;
-    overflow: scroll;
+    width: 100%;
     height: auto;
-    max-height: auto;
     position: relative;
+    overflow: hidden;
 }
 .sub-view {
     width: 100%;

@@ -8,173 +8,237 @@
 {% block bodycontent %}
 <form class="project-container custom-scrollbar" action="{{ url_for('project.new_project') }}" method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-    <legend class="new-project-header">Create New Project</legend><br>
-    
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 new-project-header-container">
+            <legend class="new-project-header">Create New Project</legend><br>
+        </div>
+    </div>
     <!----- ERROR ALERT MSGS ----->
     {% if form.title.errors %}
     {% for error in form.title.errors %}
-    <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>{{ error }}</strong>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>{{ error }}</strong>
+            </div>
+        </div>
     </div>
     {% endfor %}
     {% endif %}
 
     {% if form.cost.errors %}
     {% for error in form.cost.errors %}
-    <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>{{ error }}</strong>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>{{ error }}</strong>
+            </div>
+        </div>
     </div>
     {% endfor %}
     {% endif %}
 
     {% if form.difficulty.errors %}
     {% for error in form.difficulty.errors %}
-    <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>{{ error }}</strong>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>{{ error }}</strong>
+            </div>
+        </div>
     </div>
     {% endfor %}
     {% endif %}
 
     {% if form.duration.errors %}
     {% for error in form.duration.errors %}
-    <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>{{ error }}</strong>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div id="new-project-alert" class="alert alert-dismissible alert-secondary" style="width: 40%; margin: 0 auto 1em auto;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>{{ error }}</strong>
+            </div>
+        </div>
     </div>
     {% endfor %}
     {% endif %}
 
     <!----- NEW PROJECT FORM ----->
-    {{ form.title.label(class="title-label") }}
-    <div class="project-title">
-        {% if form.title.errors %}
-            {{ form.title(style="border: 1px solid red;", class="form-control", id="new-project-title", placeholder="Title of project", type="text", maxlength="40") }}
-        {% else %}
-            {{ form.title(class="form-control", id="new-project-title", placeholder="Title of project", type="text", maxlength="40") }}
-        {% endif %}
-    </div>
-    
-    {{ form.description.label(class="description-label") }}
-    <div class="project-description">
-        {{ form.description(class="form-control description-textarea", id="new-project-descrip", rows="3", maxlength="300") }}
-    </div>
-
-    {{ form.difficulty.label(class="difficulty-label") }}
-    <div class="project-difficulty">
-        <select class="form-control" id="new-project-difficulty" value="{{ form.difficulty }}">
-            <option>-</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-            <option>9</option>
-            <option>10</option>
-        </select>
-    </div>
-    
-    {{ form.cost.label(class="cost-label") }}
-    <div class="project-cost">
-        <span id="dollar-sign" class="input-group-text">$</span>
-        {% if form.cost.errors %}
-            {{ form.cost(id="cost-amt", class="form-control", placeholder="Amount", type="number", autocomplete="off", style="border: 1px solid red;") }}
-        {% else %}
-            {{ form.cost(id="cost-amt", class="form-control", placeholder="Amount", type="number", autocomplete="off") }}
-        {% endif %}
-        <span id="cost-decimal" class="input-group-text">.00</span>
-    </div>
-
-    {{ form.duration.label(class="duration-label") }}
-    {% if form.duration.errors %}
-        {{ form.duration(id="new-project-duration", class="form-control", placeholder="Total Hours", type="number", autocomplete="off", style="border: 1px solid red;") }}
-    {% else %}
-        {{ form.duration(id="new-project-duration", class="form-control", placeholder="Total Hours", type="number", autocomplete="off") }}
-    {% endif %}
-
-    {{ form.video.label(class="video-label") }}
-    {{ form.video(class="form-control", class="project-video", placeholder="YouTube recommended", type="text", maxlength="200", autocomplete="off") }}
-
-    <p class="file-input-label" for="InputFile">File input</p>
-    <div class="file-upload-box">
-        <input type='file' name='file' class="form-control-file" aria-describedby="fileHelp">
-        <small id="fileHelp" class="form-text text-muted">Upload a cover photo for your new project (.jpg, .jpeg or .png). Recommended picture size of 1400 x 524.</small>
-    </div>
-    
-    <!----- PROJECT TAGS DROPDOWN ----->
-    <div class="tag-container">
-        <div class="button-group">
-            <button type="button" class="btn btn-default dropdown-toggle tag-btn" data-toggle="dropdown"><a class="tag-text">Tags<span class="caret"></span></a></button>
-            <ul class="dropdown-menu tag-dropdown">
-                <li>
-                    <input type="checkbox" name="tags" id="short" value="aquariums">
-                    <label class="main-li-label" for="short">Aquariums</label>
-                    <ul style="list-style: none;">
+    <div class="row justify-content-center">
+        <div class="col-3 col-sm-3 col-md-3 col-lg-2 col-lg-offset-2 col-xl-2 col-xl-offset-2">
+            {{ form.title.label(class="title-label") }}
+        </div>
+        <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+            {% if form.title.errors %}
+                {{ form.title(style="border: 1px solid red;", class="form-control", placeholder="Title of project", type="text", maxlength="40") }}
+            {% else %}
+                {{ form.title(class="form-control", placeholder="Title of project", type="text", maxlength="40") }}
+            {% endif %}
+        </div>
+        <!----- PROJECT TAGS DROPDOWN ----->
+        <div class="col-3 col-sm-3 col-md-3 col-lg-2 col-lg-offset-2 col-xl-2 col-xl-offset-2">
+                <div class="button-group">
+                    <button type="button" class="btn btn-default dropdown-toggle tag-btn" data-toggle="dropdown"><a class="tag-text">Tags<span class="caret"></span></a></button>
+                    <ul class="dropdown-menu tag-dropdown">
                         <li>
-                            <input type="checkbox" name="tags" id="short-1" value="saltwater">
-                            <label class="secondary-li-label" for="short-1">Saltwater</label>
+                            <input type="checkbox" name="tags" id="short" value="aquariums">
+                            <label class="main-li-label" for="short">Aquariums</label>
+                            <ul style="list-style: none;">
+                                <li>
+                                    <input type="checkbox" name="tags" id="short-1" value="saltwater">
+                                    <label class="secondary-li-label" for="short-1">Saltwater</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" name="tags" id="short-2" value="freshwater">
+                                    <label class="secondary-li-label" for="short-2">Freshwater</label>
+                                </li>
+                            </ul>
                         </li>
                         <li>
-                            <input type="checkbox" name="tags" id="short-2" value="freshwater">
-                            <label class="secondary-li-label" for="short-2">Freshwater</label>
+                            <input type="checkbox" name="tags" id="short" value="terrariums">
+                            <label class="main-li-label" for="short">Terrariums</label>
+                            <ul style="list-style: none;">
+                                <li>
+                                    <input type="checkbox" name="tags" id="short-1" value="enclosedtropical">
+                                    <label class="secondary-li-label" for="short-1">Enclosed Tropical</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" name="tags" id="short-2" value="opentropical">
+                                    <label class="secondary-li-label" for="short-2">Open Tropical</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" name="tags" id="short-2" value="carnivorous">
+                                    <label class="secondary-li-label" for="short-2">Carnivorous</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" name="tags" id="short-2" value="desert">
+                                    <label class="secondary-li-label" for="short-2">Desert</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" name="tags" id="short-2" value="reptiles">
+                                    <label class="secondary-li-label" for="short-2">Reptiles/creatures</label>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="tags" id="short" value="vivariumspaludarium">
+                            <label class="main-li-label" for="short">Vivariums/Paludarium</label>
+                            <ul style="list-style: none;">
+                                <li>
+                                    <input type="checkbox" name="tags" id="short-1" value="waterreptiles">
+                                    <label class="secondary-li-label" for="short-1">Water reptiles/creatures</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" name="tags" id="short-2" value="plantsonly">
+                                    <label class="secondary-li-label" for="short-2">Plants only</label>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
-                </li>
-                <li>
-                    <input type="checkbox" name="tags" id="short" value="terrariums">
-                    <label class="main-li-label" for="short">Terrariums</label>
-                    <ul style="list-style: none;">
-                        <li>
-                            <input type="checkbox" name="tags" id="short-1" value="enclosedtropical">
-                            <label class="secondary-li-label" for="short-1">Enclosed Tropical</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="tags" id="short-2" value="opentropical">
-                            <label class="secondary-li-label" for="short-2">Open Tropical</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="tags" id="short-2" value="carnivorous">
-                            <label class="secondary-li-label" for="short-2">Carnivorous</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="tags" id="short-2" value="desert">
-                            <label class="secondary-li-label" for="short-2">Desert</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="tags" id="short-2" value="reptiles">
-                            <label class="secondary-li-label" for="short-2">Reptiles/creatures</label>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <input type="checkbox" name="tags" id="short" value="vivariumspaludarium">
-                    <label class="main-li-label" for="short">Vivariums/Paludarium</label>
-                    <ul style="list-style: none;">
-                        <li>
-                            <input type="checkbox" name="tags" id="short-1" value="waterreptiles">
-                            <label class="secondary-li-label" for="short-1">Water reptiles/creatures</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="tags" id="short-2" value="plantsonly">
-                            <label class="secondary-li-label" for="short-2">Plants only</label>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+                </div>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-3 col-sm-3 col-md-3 col-lg-2 col-lg-offset-1 col-xl-2 col-xl-offset-1">
+            {{ form.description.label(class="description-label") }}
+        </div>
+        <div class="col-9 col-sm-9 col-md-9 col-lg-6 col-lg-offset-3 col-xl-6 col-xl-offset-3">
+            {{ form.description(class="form-control description-textarea", rows="3", placeholder="Description..", maxlength="300") }}
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2">
+            {{ form.difficulty.label(class="difficulty-label") }}
+        </div>
+
+        <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2">
+            <div class="project-difficulty">
+                <select class="form-control" id="new-project-difficulty" value="{{ form.difficulty }}">
+                    <option>-</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2">
+            {{ form.cost.label(class="cost-label") }}
+        </div>
+
+        <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2">
+            {% if form.cost.errors %}
+                {{ form.cost(id="cost-amt", class="form-control", placeholder="Amount", type="number", autocomplete="off", style="border: 1px solid red;") }}
+            {% else %}
+                {{ form.cost(id="cost-amt", class="form-control", placeholder="Amount", type="number", autocomplete="off") }}
+            {% endif %}
+        </div>
+
+        <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2">
+            {{ form.duration.label(class="duration-label") }}
+        </div>
+        
+        <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2">
+            {% if form.duration.errors %}
+                {{ form.duration(id="new-project-duration", class="form-control", placeholder="Total Hours", type="number", autocomplete="off", style="border: 1px solid red;") }}
+            {% else %}
+                {{ form.duration(id="new-project-duration", class="form-control", placeholder="Total Hours", type="number", autocomplete="off") }}
+            {% endif %}
         </div>
     </div>
 
-    {{ form.privacy.label(class="privacy-label") }}
-    {{ form.privacy(type="checkbox", class="privacy-checkbox") }}
+    <div class="row justify-content-center">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-lg-offset-1 col-xl-2 col-xl-offset-1">
+            {{ form.video.label(class="video-label") }}
+        </div>
+        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-lg-offset-3 col-xl-6 col-xl-offset-3">
+            {{ form.video(class="form-control", placeholder="YouTube recommended", type="text", maxlength="200", autocomplete="off") }}
+        </div>
+    </div>
 
-    {{ form.submit(class="btn btn-primary new-project-submit") }}
+    <div class="row justify-content-center">
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-lg-offset-3 col-xl-3 col-xl-offset-3">
+            <p class="file-input-label" for="InputFile">File input</p>
+        </div>
+        <div class="col-9 col-sm-9 col-md-9 col-lg-3 col-lg-offset-3 col-xl-3 col-xl-offset-3">
+            <div class="file-upload-box">
+                <input type='file' name='file' class="form-control-file" aria-describedby="fileHelp">
+                <small id="fileHelp" class="form-text text-muted">Upload a cover photo for your new project (.jpg, .jpeg or .png). Recommended picture size of 1400 x 524.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-lg-offset-4 col-xl-2 col-xl-offset-4">
+            {{ form.privacy.label(class="privacy-label") }}
+        </div>
+        <div class="col-6 col-sm-6 col-md-6 col-lg-1 col-lg-offset-5 col-xl-1 col-xl-offset-5">
+            {{ form.privacy(type="checkbox", class="privacy-checkbox") }}
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            {{ form.submit(class="btn btn-primary new-project-submit") }}
+        </div>
+        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <a type="button" class="btn btn-secondary" href="{{ url_for('main.profile', username=current_user.username) }}">Back</a>
+        </div>
+    </div>
+
 </form>
--->
 {% endblock bodycontent %}
 
 {% block scripts %}

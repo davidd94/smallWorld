@@ -1,18 +1,14 @@
-.edit-wrapper {
+.edit-container {
     width: 100%;
     height: 92vh;
     overflow: hidden;
 }
 
 .edit-container {
-    width: 60%;
+    width: 100%;
     height: 95%;
     margin: 1em auto;
-    padding: 2em 1em;
     border: 1px solid rgb(160, 160, 160);
-    display: grid;
-    grid-template: 4em 3em repeat(8, 4em) 10em 4em / repeat(3, 1fr);
-    grid-gap: 0;
     overflow: hidden;
     position: relative;
     border-radius: 0.5em;
@@ -63,16 +59,19 @@
   left: auto;
 }
 
+.edit-container label {
+    color: black;
+}
+
+.edit-container input {
+    text-align: center;
+}
 
 .edit-profile-heading {
-    grid-row: 1 / span 1;
-    grid-column: 1 / span 3;
     text-align: center;
 }
 
 .edit-profile-alert-wrapper {
-    grid-row: 2 / span 1;
-    grid-column: 1 / span 3;
     width: 100%;
 }
 #edit-profile-alert-box {
@@ -80,237 +79,14 @@
     margin: 0 auto;
     background: rgb(21, 182, 21);
 }
-.profile-change-msg {
-    margin: 0 auto;
-    color: white;
-    text-align: center;
-}
-#edit-profile-alert-box button {
-    color: black;
-}
-
-.username-label {
-    grid-row: 3 / span 1;
-    grid-column: 1 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: flex-end;
-    text-align: center;
-    margin: 0;
-}
-.form-group-username {
-    grid-row: 4 / span 1;
-    grid-column: 1 / span 1;
-    width: 60%;
-    justify-self: center;
-    align-self: center;
-    text-align: center;
-}
-
-.firstname-label {
-    grid-row: 3 / span 1;
-    grid-column: 2 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: flex-end;
-    text-align: center;
-    margin: 0;
-}
-.form-firstname {
-    grid-row: 4 / span 1;
-    grid-column: 2 / span 1;
-    width: 70%;
-    justify-self: center;
-    align-self: center;
-    text-align: center;
-}
-.firstname-feedback {
-    grid-row: 4 / span 1;
-    grid-column: 2 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: flex-start;
-}
-
-.lastname-label {
-    grid-row: 3 / span 1;
-    grid-column: 3 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: flex-end;
-    text-align: center;
-    margin: 0;
-}
-.form-lastname {
-    grid-row: 4 / span 1;
-    grid-column: 3 / span 1;
-    width: 70%;
-    justify-self: center;
-    align-self: center;
-    text-align: center;
-}
-.lastname-feedback {
-    grid-row: 4 / span 1;
-    grid-column: 3 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: flex-start;
-}
-
-.email-label {
-    grid-row: 6 / span 1;
-    grid-column: 1 / span 1;
-    width: 100%;
-    justify-self: flex-end;
-    align-self: center;
-    text-align: right;
-    margin: 0 3em 0 0;
-}
-.form-email {
-    grid-row: 6 / span 1;
-    grid-column: 2 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: center;
-    text-align: center;
-}
-.email-feedback {
-    grid-row: 6 / span 1;
-    grid-column: 3 / span 1;
-    width: 100%;
-    justify-self: left;
-    align-self: center;
-}
 
 .gravatar-note {
-    grid-row: 8 / span 2;
-    grid-column: 3 / span 1;
-    justify-self: center;
-    align-self: center;
-    width: 90%;
-    font-size: 0.8em;
     font-style: italic;
-    color: rgb(196, 196, 196);
-    opacity: 0.9;
-    text-align: center;
-    margin: 1em 0 0 0;
-    color: rgb(36, 36, 36);
-}
-
-.password-label {
-    grid-row: 7 / span 1;
-    grid-column: 1 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: flex-end;
-    text-align: center;
-    margin: 0;
-}
-.form-password {
-    grid-row: 8 / span 1;
-    grid-column: 1 / span 1;
-    width: 80%;
-    justify-self: center;
-    align-self: center;
-    text-align: center;
-}
-.password-feedback {
-    grid-row: 9 / span 1;
-    grid-column: 1 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: flex-start;
-}
-
-.repassword-label {
-    grid-row: 7 / span 1;
-    grid-column: 2 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: flex-end;
-    text-align: center;
-    margin: 0;
-}
-.form-repassword {
-    grid-row: 8 / span 1;
-    grid-column: 2 / span 1;
-    width: 80%;
-    justify-self: center;
-    align-self: center;
-    text-align: center;
-}
-.repassword-feedback {
-    grid-row: 9 / span 1;
-    grid-column: 2 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: flex-start;
-}
-
-.avatar-label {
-    grid-row: 10 / span 1;
-    grid-column: 1 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: center;
-    text-align: center;
-    margin: 0;
-    color: rgb(91, 0, 196);
     font-weight: 600;
-}
-.form-avatar {
-    grid-row: 10 / span 1;
-    grid-column: 2 / span 1;
-    width: 100%;
-    justify-self: center;
-    align-self: center;
-    text-align: center;
-}
-.custom-gravatar-checkbox {
-    grid-row: 10 / span 1;
-    grid-column: 3 / span 1;
-    width: 25%;
-    justify-self: flex-start;
-    align-self: center;
-    margin-left: 2em;
-}
-.random-gravatar-label {
-    grid-row: 10 / span 1;
-    grid-column: 3 / span 1;
-    width: 70%;
-    justify-self: right;
-    align-self: center;
-    margin: 0;
+    color: rgb(153, 37, 207);
 }
 
-.bio-label {
-    grid-row: 11 / span 1;
-    grid-column: 1 / span 1;
-    justify-self: center;
-    align-self: center;
-    margin: 0;
-    color: rgb(91, 0, 196);
-    font-weight: 600;
-}
 .form-bio {
-    grid-row: 11 / span 1;
-    grid-column: 2 / span 2;
-    width: 100%;
-    height: auto;
-    padding: 1em;
-}
-
-#edit-profile-save-btn {
-    grid-row: 12 / span 1;
-    grid-column: 1 / span 1;
-    align-self: center;
-    justify-self: center;
-    margin-top: 3em;
-}
-.edit-profile-cancel-btn {
-    grid-row: 12 / span 1;
-    grid-column: 3 / span 1;
-    align-self: center;
-    justify-self: center;
-    margin-top: 3em;
+    min-height: 3em;
+    max-height: 10em;
 }

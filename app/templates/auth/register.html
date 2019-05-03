@@ -6,6 +6,40 @@
 <link href="{{ url_for('static', filename='auth-templates.css') }}" rel="stylesheet">
 {% endblock css %}
 
+{% block mediaquery %}
+<style>
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) { 
+    .message {
+        width: 90%;
+        top: 120%;
+        left: 2%;
+        max-width: 90%;
+    }
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) { 
+    .message {
+        width: 24%;
+        top: 136%;
+        left: 75%;
+        max-width: 24%;
+    }
+}
+</style>
+{% endblock mediaquery %}
+
 {% block coverphoto %}
 <div class="front-banner">
     <img class="cover-photo" src="{{ url_for('static', filename='homepage-aquarium-trees.jpg') }}">

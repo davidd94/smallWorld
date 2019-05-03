@@ -5,11 +5,169 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='message-center.css') }}">
 {% endblock css %}
 
+{% block mediaquery %}
+{{ super() }}
+<style>
+/* ----------- iPhone 6, 6S, 7, 8 and X ----------- */
+/* Portrait */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100%;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+}
+/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
+/* Landscape */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: landscape) {
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100vh;
+    }
+    .message-viewer-box {
+        display: none;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+}
+/* ----------- iPhone X ----------- */
+/* Landscape */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: landscape) {
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100vh;
+    }
+    .message-viewer-box {
+        display: none;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+}
+</style>
+{% endblock mediaquery %}
+
 {% block bodycontent %}
 <div class="message-center-container">
     {% include "_message-list.html" %}
     {% include "_message-preview.html" %}
     {% include "_message-popup.html" %}
+</div>
+<div class="message-mobile-msgbox">
+    
+    <div class="alert-box-wrapper">
+        <div id="message-alert-box" class="alert alert-dismissible alert-success">
+            <strong class="message-success-msg"></strong>
+        </div>
+    
+        <div id="message-alert-box" class="alert alert-dismissible alert-secondary">
+            <strong class="message-fail-msg"></strong>
+        </div>
+    </div>
+        
+    <div class="messaging">
+        <div class="mesgs">
+            <div class="msg_history">
+                <div class="message-info-bar">
+                    <a class="message-reply-msg" href="#"><span class="badge badge-info">Reply</span></a>
+                    <a class="message-del-msg" href="#"><span class="badge badge-pill badge-secondary">Delete</span></a>
+                    <a class="message-restore-msg" href="#"><span class="badge badge-pill badge-secondary">Restore</span></a>
+                    <a class="message-close-mobile" href="#"><span class="badge badge-pill badge-secondary">Close</span></a>
+                    <img class="message-user-avatar" width="50"> <a class="message-other-username"></a>
+                </div>
+
+                <!-- DYNAMIC RECEIVED MSGS LOADED HERE -->
+                
+                <!-- DYNAMIC SENT MSGS LOADED HERE -->
+                
+            </div>
+            <form id="message-reply-box" class="type_msg reply-form-mobile" action="#">
+                <div class="input_msg_write">
+                    <input type="text" class="write_msg write-msg-mobile" name="replymsg" autocomplete="off" placeholder="Type a message" maxlength="1495">
+                    <button id="message-reply-close-box" type="button" class="close">&times;</button>
+                </div>
+            </form>
+        </div>
+        
+    </div>
 </div>
 {% endblock bodycontent %}
 
@@ -92,6 +250,7 @@ $(function() {
         let current_msg_id = event.currentTarget.id;
         /* REMOVES PREVIOUSLY READ MSG BACKGROUND COLOR */
         $('.message-list li').removeClass('current-msg');
+        $('.message-mobile-msgbox').css('visibility', 'visible');
         
         $.ajax({
             url: "/view_message/" + sender_username + "/" + current_msg_dataid,
@@ -174,8 +333,13 @@ $(function() {
 /* CLOSE REPLY BOX */
 $(function() {
     $('#message-reply-close-box').on('click', () => {
+        // FOR PC & DESKTOP
         $('#message-reply-box').slideToggle(300, function() {
             $('#reply_msg').val('');
+        });
+        // FOR MOBILE DEVICES
+        $('.reply-form-mobile').slideToggle(300, function() {
+            $('.write-msg-mobile').val('');
         });
     });
 });
@@ -183,15 +347,19 @@ $(function() {
 /* OPEN REPLY BOX */
 $(function() {
     $('.message-reply-msg').on('click', () => {
+        // FOR PC & DESKTOP
         $('#message-reply-box').slideToggle(300, function() {
             $('#reply_msg').val('');
+        });
+        // FOR MOBILE DEVICES
+        $('.reply-form-mobile').slideToggle(300, function() {
+            $('.write-msg-mobile').val('');
         });
     });
 })
 
-/* MSG REPLY FEATURE */
-$(function() {
-    /* NEED TO FIGURE OUT HOW TO SEND REPLY MSGS DYNAMICALLY. MAYBE REMOVE THE REPLY BOX AND ADD NEW ONE UPON CLICK ? */
+/* MSG REPLY FEATURE FOR DESKTOP */
+$(function () {
     $('#reply_msg').keypress(function (event) {
         let replylen = ($('#reply_msg')[0].value).length;
         if (event.which == 13 && replylen > 0) {
@@ -209,16 +377,14 @@ $(function() {
                     }
                 }
             });
-
             $.ajax({
                 url: "/reply_message/" + msg_subj + "/" + recipient_name,
                 data: JSON.stringify(replymsg),
                 type: 'POST',
                 contentType: 'application/json',
                 success: function(response) {
-                    // document.getElementById("message-reply-box").style.bottom = "-10em";
+                    $('#message-reply-box').slideToggle(300);
                     $("#reply_msg")[0].value = "";
-
                     $('.message-success-msg')[0].textContent = response;
                     $('.alert-success').attr('style','right: 13em;');
                     setTimeout(function () {
@@ -230,6 +396,52 @@ $(function() {
                 }
             });
         };
+    });
+});
+
+/* MSG REPLY FEATURE FOR MOBILE */
+$(function() {
+    var replySent = function() {
+        let csrf_token = "{{ csrf_token() }}";
+        let recipient_name = $('.message-other-username')[0].textContent;
+        let msg_subj = $('.current-msg').data('msgSub');
+        let replymsg = $('.write-msg-mobile')[0].value;
+        
+        // Inject our CSRF token into our AJAX request.
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                }
+            }
+        });
+
+        $.ajax({
+            url: "/reply_message/" + msg_subj + "/" + recipient_name,
+            data: JSON.stringify(replymsg),
+            type: 'POST',
+            contentType: 'application/json',
+            success: function(response) {
+                $('.alert-success').fadeIn(300);
+                $('.reply-form-mobile').slideToggle(300);
+                $('.write-msg-mobile').blur();
+                $('.write-msg-mobile')[0].value = "";
+
+                $('.message-success-msg')[1].textContent = response;
+                $('.alert-success').attr('style','right: 13em;');
+                setTimeout(function () {
+                    $('.alert-success').attr('style','right: -70em;');
+                    $('.alert-success').fadeOut(800);
+                }, 4000);
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    }
+    $('.reply-form-mobile').submit(function(event) {
+        event.preventDefault();
+        replySent();
     });
 });
 
@@ -245,6 +457,7 @@ $('.message-del-msg').on('click', () => {
                 if (response == 'Message successfully deleted!') {
                     // REMOVES THE MSG FROM MSG LIST
                     $('.list-group-item[data-msg-sub="' + msg_subj + '"]').remove();
+                    $('.message-mobile-msgbox').css('visibility', 'hidden');
                     
                     // HIDES REPLY/DEL BUTTONS
                     $('.message-reply-msg').css('display', 'none');
@@ -278,6 +491,7 @@ $('.message-restore-msg').on('click', () => {
                 if (response == 'Message successfully restored!') {
                     // REMOVES THE MSG FROM MSG LIST
                     $('.list-group-item[data-msg-sub="' + msg_subj + '"]').remove();
+                    $('.message-mobile-msgbox').css('visibility', 'hidden');
                     
                     // HIDES REPLY/DEL BUTTONS
                     $('.message-restore-msg').css('display', 'none');
@@ -296,6 +510,13 @@ $('.message-restore-msg').on('click', () => {
             }
         });
     }
+});
+
+/* CLOSE MOBILE MAIN MSG CONTAINER */
+$('.message-close-mobile').on('click', () => {
+    $('.message-mobile-msgbox').css('visibility', 'hidden');
+    $('.reply-form-mobile').slideToggle(300);
+    $('.write-msg-mobile')[0].value = "";
 });
 
 

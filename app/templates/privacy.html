@@ -7,91 +7,207 @@
 <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 {% endblock css %}
 
+{% block mediaquery %}
+{{ super() }}
+<style>
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) { 
+    .privacy-container {
+      padding: 0.2em;
+    }
+    .blockeduser-name {
+      padding: 0 !important;
+    }
+    .text-right {
+      width: 25vw !important;
+    }
+    .settings-nav {
+      margin-top: 3em;
+    }
+    .leftbox .settings-nav a {
+      padding: 35px 20px;
+    }
+    .profile .personal-info,
+    .payment .payment-info,
+    .subscription .subscription-info,
+    .privacy .privacy-info,
+    .settings .settings-info  {
+      width: 100%;
+    }
+
+    .profile .personal-info-title,
+    .payment .payment-info-title,
+    .subscription .subscription-info-title,
+    .privacy .privacy-info-title,
+    .settings .settings-info-title {
+      width: 100%;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) { 
+    .hulu-container {
+      height: 130vh;
+    }
+}
+
+/* ----------- iPhone X ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    .privacy-container {
+      padding: 0.3em;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .privacy-container {
+      padding: 0.3em;
+    }
+}
+</style>
+{% endblock mediaquery %}
+
 {% block bodycontent %}
 <div class="privacy-container">
 
 <!----- HULU THEMED BOX ----->
 <div class="container">
-  <div id="logo">
-      <h1 class="logo"></h1>
-  </div>
-  <div class="leftbox">
-    <nav class="settings-nav">
-      <a id="profile" class="active"><i class="fa fa-user"></i></a>
-      <a id="payment"><i class="fa fa-credit-card"></i></a>
-      <a id="subscription"><i class="fa fa-tv"></i></a>
-      <a id="privacy"><i class="fa fa-tasks"></i></a>
-      <a id="settings"><i class="fa fa-cog"></i></a>
-    </nav>
-  </div>
-  <div class="rightbox">
-    <div class="profile">
-      <h1>Personal Info</h1>
-      <h6 class="personal-info-title username">User Name</h6>
-        <p class="personal-info username-value">davie1</p>
-      <h6 class="personal-info-title firstname">First Name</h6>
-        <p class="personal-info firstname-value">David</p>
-      <h6 class="personal-info-title lastname">Last Name</h6>
-        <p class="personal-info lastname-value">Duong</p>
-      <h6 class="personal-info-title email">Email</h6>
-        <p class="personal-info email-value">example@example.com <a href="{{ url_for('main.edit_profile') }}" style="cursor: pointer;"><button class="btn privacy-btn email-btn">update</button></a></p>
-      <h6 class="personal-info-title password">Password </h6>
-        <p class="personal-info password-value">••••••• <a href="{{ url_for('main.edit_profile') }}" style="cursor: pointer;"><button class="btn privacy-btn pw-btn">Change</button></a></p>
-    </div>
-    
-    <div class="payment-wrapper noshow">
-        <img class="payment-construction" src="{{ url_for('static', filename='comingsoon2.jpg') }}">
-    <div class="payment">
-      <h1>Payment Info</h1>
-      <h6 class="payment-info-title">Payment Method</h6>
-        <p class="payment-info">Mastercard •••• •••• •••• 0000 <button class="btn privacy-btn">update</button></p>
-      <h6 class="payment-info-title">Billing Address</h6>
-        <p class="payment-info">1234 Example Ave | Seattle, WA <button class="btn privacy-btn">change</button></p>
-      <h6 class="payment-info-title">Zipcode</h6>
-        <p class="payment-info">999000</p>
-      <h6 class="payment-info-title">Billing History</h6>
-        <p class="payment-info">2018<button class="btn privacy-btn">view</button></p>
-      <p class="payment-info-title">Redeem Gift Subscription </p>
-      <p class="payment-info"><input type="text" class="gift-card-input" placeholder="Enter Gift Code"></input> <button class="btn privacy-btn">Redeem</button></p>
-    </div>
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 my-5">
+      <div class="hulu-container">
+        <div id="logo">
+            <h1 class="logo"></h1>
+        </div>
+        <div class="leftbox">
+          <nav class="settings-nav">
+            <a id="profile" class="active"><i class="fa fa-user"></i></a>
+            <a id="payment"><i class="fa fa-credit-card"></i></a>
+            <a id="subscription"><i class="fa fa-tv"></i></a>
+            <a id="privacy"><i class="fa fa-tasks"></i></a>
+            <a id="settings"><i class="fa fa-cog"></i></a>
+          </nav>
+        </div>
+        <div class="rightbox">
+          <div class="profile">
+            <h1>Personal Info</h1>
+            <h6 class="personal-info-title username">User Name</h6>
+              <p class="personal-info username-value">{{ current_user.username }}</p>
+            <h6 class="personal-info-title firstname">First Name</h6>
+              <p class="personal-info firstname-value">{{ current_user.firstname }}</p>
+            <h6 class="personal-info-title lastname">Last Name</h6>
+              <p class="personal-info lastname-value">{{ current_user.lastname }}</p>
+            <h6 class="personal-info-title email">Email</h6>
+              <p class="personal-info email-value">{{ current_user.email }} <a href="{{ url_for('main.edit_profile') }}" style="cursor: pointer;"><button class="btn privacy-btn email-btn">update</button></a></p>
+            <h6 class="personal-info-title password">Password </h6>
+              <p class="personal-info password-value">••••••• <a href="{{ url_for('main.edit_profile') }}" style="cursor: pointer;"><button class="btn privacy-btn pw-btn">Change</button></a></p>
+          </div>
+          
+          <div class="payment-wrapper noshow">
+              <img class="payment-construction" src="{{ url_for('static', filename='comingsoon2.jpg') }}">
+          <div class="payment">
+            <h1>Payment Info</h1>
+            <h6 class="payment-info-title">Payment Method</h6>
+              <p class="payment-info">Mastercard •••• •••• •••• 0000 <button class="btn privacy-btn">update</button></p>
+            <h6 class="payment-info-title">Billing Address</h6>
+              <p class="payment-info">1234 Example Ave | Seattle, WA <button class="btn privacy-btn">change</button></p>
+            <h6 class="payment-info-title">Zipcode</h6>
+              <p class="payment-info">999000</p>
+            <h6 class="payment-info-title">Billing History</h6>
+              <p class="payment-info">2018<button class="btn privacy-btn">view</button></p>
+            <p class="payment-info-title">Redeem Gift Subscription </p>
+            <p class="payment-info"><input type="text" class="gift-card-input" placeholder="Enter Gift Code"></input> <button class="btn privacy-btn">Redeem</button></p>
+          </div>
+          </div>
+
+          <div class="subscription-wrapper noshow">
+              <img class="subscription-construction" src="{{ url_for('static', filename='comingsoon2.jpg') }}">
+          <div class="subscription">
+            <h1>Your Subscription</h1>
+            <h6 class="subscription-info-title">Payment Date</h6>
+              <p class="subscription-info">05-15-2018 <button class="btn privacy-btn">pay now</button></p>
+            <h6 class="subscription-info-title">Your Next Charge</h6>
+              <p class="subscription-info">$8.48<span> includes tax</span></p>
+            <h6 class="subscription-info-title">Hulu Base Plan</h6>
+              <p class="subscription-info">Limited Commercials <button class="btn privacy-btn">change plan</button></p>
+            <h6 class="subscription-info-title">Add-ons</h6>
+              <p class="subscription-info">None <button class="btn privacy-btn">manage</button></p>
+            <h6 class="subscription-info-title">Monthly Recurring Total </h6>
+              <p class="subscription-info">$7.99/month</p>
+          </div>
+          </div>
+
+          <div class="privacy noshow">
+            <h1>Privacy Settings</h1>
+            <h6 class="privacy-info-title">Manage Email Notifications<button class="btn privacy-btn" data-toggle="modal" data-target="#modalNote">manage</button></h6>
+            <p class="privacy-info"></p>
+            <h6 class="privacy-info-title">View Terms of Use <button class="btn privacy-btn">view</button></h6>
+            <p class="privacy-info"></p>
+            <h6 class="privacy-info-title">Protect Your Account <button class="btn privacy-btn">protect</button></h6>
+            <p class="privacy-info"></p>
+          </div>
+      <div class="settings noshow">
+            <h1>Account Settings</h1>
+            <h6 class="settings-info-title">Hold Your Subscription<button class="btn privacy-btn">hold</button></h6>
+            <p class="settings-info"></p>
+            <h6 class="settings-info-title">Cancel Your Subscription <button class="btn privacy-btn">cancel</button></h6>
+            <p class="settings-info"></p>
+            <h6 class="settings-info-title">Account Status <button class="btn privacy-btn" data-toggle="modal" data-target="#modalDel">DEACTIVATE</button></h6>
+            <p class="settings-info"></p>
+          </div>
+          
+        </div>
+      </div>
     </div>
 
-    <div class="subscription-wrapper noshow">
-        <img class="subscription-construction" src="{{ url_for('static', filename='comingsoon2.jpg') }}">
-    <div class="subscription">
-      <h1>Your Subscription</h1>
-      <h6 class="subscription-info-title">Payment Date</h6>
-        <p class="subscription-info">05-15-2018 <button class="btn privacy-btn">pay now</button></p>
-      <h6 class="subscription-info-title">Your Next Charge</h6>
-        <p class="subscription-info">$8.48<span> includes tax</span></p>
-      <h6 class="subscription-info-title">Hulu Base Plan</h6>
-        <p class="subscription-info">Limited Commercials <button class="btn privacy-btn">change plan</button></p>
-      <h6 class="subscription-info-title">Add-ons</h6>
-        <p class="subscription-info">None <button class="btn privacy-btn">manage</button></p>
-      <h6 class="subscription-info-title">Monthly Recurring Total </h6>
-        <p class="subscription-info">$7.99/month</p>
-    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-1 col-xl-1 mb-5">
+
     </div>
 
-    <div class="privacy noshow">
-      <h1>Privacy Settings</h1>
-      <h6 class="privacy-info-title">Manage Email Notifications<button class="btn privacy-btn" data-toggle="modal" data-target="#modalNote">manage</button></h6>
-      <p class="privacy-info"></p>
-      <h6 class="privacy-info-title">View Terms of Use <button class="btn privacy-btn">view</button></h6>
-      <p class="privacy-info"></p>
-      <h6 class="privacy-info-title">Protect Your Account <button class="btn privacy-btn">protect</button></h6>
-      <p class="privacy-info"></p>
+    <!-----  BLOCKED USER BOX ----->
+    <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-5">
+      <div class="scroll-window-wrapper">
+          <h2 class="privacy-blocked-title">Blocked Users</h2>
+          <div class="scroll-window custom-scrollbar-s2">
+          <table class="table table-striped table-hover user-list fixed-header">
+              <thead>
+                  <th class="blockedavatar-title"><div class="blockedavatar-title-text">Avatar</div></th>
+                  <th class="blockeduser-title"><div class="blockeduser-title-text">User Name</div></th>
+                  <th><div></div></th>
+              </thead>
+              <tbody>
+                  {% if blocked_users %}
+                  {% for user in blocked_users %}
+                  <tr class="userrow userrow-{{ user.id }}">
+                      <td><img class="blockeduser-avatar" src="{{ user.avatar(50) }}"></td>
+                      <td class="blockeduser-name">{{ user.username }}</td>
+                      <td class="text-right">
+                          <a href="{{ url_for('main.profile', username=user.username) }}" target="_blank"><button class="button tiny">View User</button></a>
+                          <button class="button alert tiny privacy-unblock" data-user="{{ user.username }}" data-id="{{ user.id }}">Unblock</button>	
+                      </td>
+                  </tr>
+                  {% endfor %}
+                  {% endif %}
+              </tbody>
+          </table>
+          </div>
+      </div>
     </div>
- <div class="settings noshow">
-      <h1>Account Settings</h1>
-      <h6 class="settings-info-title">Hold Your Subscription<button class="btn privacy-btn">hold</button></h6>
-      <p class="settings-info"></p>
-      <h6 class="settings-info-title">Cancel Your Subscription <button class="btn privacy-btn">cancel</button></h6>
-      <p class="settings-info"></p>
-      <h6 class="settings-info-title">Account Status <button class="btn privacy-btn" data-toggle="modal" data-target="#modalDel">DEACTIVATE</button></h6>
-      <p class="settings-info"></p>
-    </div>
-    
   </div>
 </div>
 
@@ -148,41 +264,6 @@
   </div>
 </div>
 
-
-<!-----  BLOCKED USER BOX ----->
-<div id="bodywrap">
-<div class="row">
-<div class="columns">
-    <div class="scroll-window-wrapper">
-        <h2 class="privacy-blocked-title">Blocked Users</h2>
-        <div class="scroll-window custom-scrollbar-s2">
-        <table class="table table-striped table-hover user-list fixed-header">
-            <thead>
-                <th class="blockedavatar-title"><div class="blockedavatar-title-text">Avatar</div></th>
-                <th class="blockeduser-title"><div class="blockeduser-title-text">User Name</div></th>
-                <th><div></div></th>
-            </thead>
-            <tbody>
-                {% if blocked_users %}
-                {% for user in blocked_users %}
-                <tr class="userrow-{{ user.id }}">
-                    <td><img class="blockeduser-avatar" src="{{ user.avatar(50) }}"></td>
-                    <td class="blockeduser-name">{{ user.username }}</td>
-                    <td></td>
-                    <td class="text-right">
-                        <a href="{{ url_for('main.profile', username=user.username) }}" target="_blank"><button class="button tiny">View User</button></a>
-                        <button class="button alert tiny privacy-unblock" data-user="{{ user.username }}" data-id="{{ user.id }}">Unblock</button>	
-                    </td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-            </tbody>
-        </table>
-        </div>
-    </div>
-</div>
-</div>
-</div>
 </div>
 {% endblock bodycontent %}
 

@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from flask_babel import get_locale, _
 from datetime import datetime as dt
 from sqlalchemy import update
-from app import db
+from app import db, cors
 from app.tasks import test_export
 from app.email import send_notification_email
 from app.models import User, Projects, PhotoGallery, Itemlist, ProjectComments, CommentReplies, Notifications, FAQs, comment_likers, reply_likers, project_likers
@@ -283,13 +283,13 @@ def export_tutorial(username, title):
         full_file_path = file_path + '/' + current_user.username + '/' + title
         html = project.tutorial
         # COMPLETES THE UNFINISHED HTML
-        soup = BeautifulSoup(html, "lxml")
+        #soup = BeautifulSoup(html, "lxml")
         # TAKES COMPLETED HTML AND SAVES INTO FILE
-        Html_file = open(full_file_path + "/tutorial.html","w")
-        Html_file.write(str(soup))
-        Html_file.close()
+        #Html_file = open(full_file_path + "/tutorial.html","w")
+        #Html_file.write(str(soup))
+        #Html_file.close()
         # CONVERTS HTML FILE TO PDF
-        pdf = pdfkit.from_file(full_file_path + "/tutorial.html", full_file_path + "/tutorial.pdf", configuration=config)
+        #pdf = pdfkit.from_file(full_file_path + "/tutorial.html", full_file_path + "/tutorial.pdf", configuration=config)
         
 
         #print(soup.get_text(" "))
@@ -303,7 +303,6 @@ def export_celery_test(username, title):
     return jsonify({}), 202, {'Location': url_for('project.exportstatus', task_id=task.id)}
 
 @bp.route('/exportstatus/<task_id>')
-@login_required
 def exportstatus(task_id):
     task = test_export.AsyncResult(task_id)
     if task.state == 'PENDING':

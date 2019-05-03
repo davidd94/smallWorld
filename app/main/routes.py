@@ -21,6 +21,7 @@ from flask_socketio import send, emit, disconnect, join_room, leave_room
 import os, shutil, time, random, functools
 import json
 import celery
+from app.api.auth import token_auth
 
 
 @bp.before_app_request
@@ -333,6 +334,8 @@ def send_message():
 @login_required
 def reply_message(subject, recip_name):
     reply_msg = request.json
+    print('REPLY MSG ATTEMPT')
+    print(reply_msg)
     user = User.query.filter_by(username=recip_name).first()
     if user and (current_user != user):
         msg = Messages(author=current_user, recipient=user, subject=subject,
@@ -629,6 +632,12 @@ def unblock(username):
 
     return redirect(url_for('auth.homepage'))
 
+@bp.route('/get_avatar/<username>', methods=['GET'])
+def get_avatar(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return jsonify(user.avatar(70))
+    return jsonify('none')
 
 
 # WORKER VIEW FUNCTIONS

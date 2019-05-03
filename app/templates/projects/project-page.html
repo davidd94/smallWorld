@@ -4,10 +4,70 @@
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='project-profile.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='project-comments.css') }}">
-<!--
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
--->
 {% endblock css %}
+
+{% block mediaquery %}
+{{ super() }}
+<style>
+/* ----------- iPhone 6, 6S, 7, 8 and X ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) { 
+    .project-main-container {
+        padding-top: 18%;
+    }
+    .project-card-box,
+    .project-viewer-box {
+        width: 50em;
+    }
+    .project-card-box {
+        grid-template: 1fr / 2fr repeat(3, 1fr);
+    }
+}
+
+/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) { 
+    .project-main-container {
+        padding-top: 10%;
+    }
+    .project-card-box,
+    .project-viewer-box {
+        width: 75em;
+    }
+
+    #modalDel {
+        top: 5vh;
+    }
+}
+/* ----------- iPhone X ----------- */
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .project-main-container {
+        padding-top: 10%;
+    }
+    .project-card-box,
+    .project-viewer-box {
+        width: 75em;
+    }
+
+    #modalDel {
+        top: 5vh;
+    }
+}
+</style>
+{% endblock mediaquery %}
 
 {% block bodycontent %}
 <div class="project-main-container">
@@ -57,7 +117,7 @@
     </div>
 
     <div class="project-card-box">
-        <div class="project-descrip-box custom-scrollbar">
+        <div class="project-descrip-box">
             <i class="project-like-number project-like-number-{{ project.id }}">{{ project.likes }}</i>
             <strong class="project-like-text">Likes</strong>
             {% if current_user.is_authenticated %}
@@ -66,8 +126,8 @@
             {% endif %}
             {% endif %}
             <p class="project-descrip-title">Description</p>
-            <p class="project-descrip custom-scrollbar">{{ project.description }}</p>
-            <p class="project-tags custom-scrollbar">Tags:
+            <p class="project-descrip">{{ project.description }}</p>
+            <p class="project-tags">Tags:
                 {% if project.aquariums == True %}<a href="{{ url_for('project.tagsearch', tag='aquariums') }}"> Aquariums</a>,{% endif %}
                 {% if project.saltwater == True %}<a href="{{ url_for('project.tagsearch', tag='saltwater') }}"> Saltwater</a>,{% endif %}
                 {% if project.freshwater == True %}<a href="{{ url_for('project.tagsearch', tag='freshwater') }}"> Freshwater</a>,{% endif %}
@@ -84,7 +144,7 @@
                 {% if project.cost < 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$') }}"> $</a>,{% elif project.cost > 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$') }}"> $$</a>,{% elif project.cost > 300 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$') }}"> $$$</a>,{% elif project.cost > 600 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$') }}"> $$$$</a>,{% elif project.cost > 1000 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$$') }}"> $$$$$</a>,{% endif %}
             </p>
         </div>
-        <div class="project-difficulty-box custom-scrollbar">
+        <div class="project-difficulty-box">
             <div class="wrapper">
                 <div class="loader">
                     <div class="inner inner{{ project.difficulty }}"></div>
@@ -97,7 +157,7 @@
             {% else %}<span style="font-weight: 800">N/A</span>
             {% endif %}
         </div>
-        <div class="project-cost-box custom-scrollbar">
+        <div class="project-cost-box">
             <p class="project-cost-title">Cost</p>
             <div class="project-cost-bar">
                 <span class="cost-bar-boxes">$</span>
@@ -127,7 +187,7 @@
             </div>
             <p class="project-cost-value-box">$ <span class="project-cost-value" type="number">{{ project.cost }}</span>.00</p>
         </div>
-        <div class="project-duration-box custom-scrollbar">
+        <div class="project-duration-box">
             <p class="project-duration-title">Start to Finish</p>
             <i class="fas fa-calendar duration-img"></i><span class="project-duration-text">{{ project.duration }}</span><span class="project-duration-text2">Hours</span>
             {% if current_user == user %}
@@ -136,8 +196,8 @@
         </div>
     </div>
 
-    <div class="project-nav-list custom-scrollbar">
-        <div class="navlist-title-container custom-scrollbar">
+    <div class="project-nav-list">
+        <div class="navlist-title-container">
             <p class="navlist-title">{{ project.title }}</p>
         </div>
         <ul class="project-nav-ul">
@@ -158,7 +218,7 @@
         <p class="project-last-update">Last updated: {{ moment(project.last_edit).format('L') }}</p>
     </div>
 
-    <div class="project-viewer-box custom-scrollbar">
+    <div class="project-viewer-box">
         <div class="project-view-homepic custom-scrollbar">
             {% if project_gallery.photoOne %}
             <img class="project-homepic" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoOne) }}">
@@ -299,48 +359,52 @@
             {% endif %}
         </div>
     </div>
-</div>
 
-<!--  DELETE PROJECT POPUP MODAL  -->
-<div id="modalDel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" style="text-align: center; width: 100%;">Project Deletion</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Please enter the project name ( <strong style="color: rgb(81, 81, 199);">{{ project.title }}</strong> ) to confirm the deletion.</p>
-        <p><strong style="color: darkred;">WARNING: </strong>You will not be able to recover this project after deleting!</p>
-        <div class="del-input-wrapper">
-            <input type="text" class="project-delete-input" maxlength="150" placeholder="Insert project title here">
+
+    <!--  DELETE PROJECT POPUP MODAL  -->
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div id="modalDel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" style="text-align: center; width: 100%;">Project Deletion</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Please enter the project name ( <strong style="color: rgb(81, 81, 199);">{{ project.title }}</strong> ) to confirm the deletion.</p>
+                    <p><strong style="color: darkred;">WARNING: </strong>You will not be able to recover this project after deleting!</p>
+                    <div class="del-input-wrapper">
+                        <input type="text" class="project-delete-input form-control" maxlength="150" placeholder="Insert project title here">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary project-del-btn" disabled>DELETE</button>
+                    <button type="button" class="btn btn-primary project-delclose-btn" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary project-del-btn" disabled>DELETE</button>
-        <button type="button" class="btn btn-primary project-delclose-btn" data-dismiss="modal">Close</button>
-      </div>
     </div>
-  </div>
+
+    <!----- ALERT MESSAGES ----->
+    <div class="alert-box-wrapper">
+        <div id="message-alert-box" class="alert alert-dismissible alert-success">
+            <strong class="message-success-msg"></strong>
+        </div>
+
+        <div id="message-alert-box" class="alert alert-dismissible alert-secondary">
+            <strong class="message-fail-msg"></strong>
+        </div>
+    </div>
+
+    {% if current_user.is_authenticated %}
+        {% include "_message-popup.html" %}
+    {% endif %}
 </div>
-
-<!----- MESSAGE POP UP & ALERT MESSAGES ----->
-<div class="alert-box-wrapper">
-    <div id="message-alert-box" class="alert alert-dismissible alert-success">
-        <strong class="message-success-msg"></strong>
-    </div>
-
-    <div id="message-alert-box" class="alert alert-dismissible alert-secondary">
-        <strong class="message-fail-msg"></strong>
-    </div>
-</div>
-
-{% if current_user.is_authenticated %}
-{% include "_message-popup.html" %}
-{% endif %}
-
 {% endblock bodycontent %}
 
 {% block scripts %}
@@ -376,6 +440,9 @@ $(function () {
     });
 });
 
+/* INITIALLY HIDES ALERT MSGS */
+$('.alert-secondary').fadeOut(1);
+$('.alert-success').fadeOut(1);
 </script>
 
 <script>

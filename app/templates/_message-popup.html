@@ -1,8 +1,19 @@
 <style>
-.form-container {
-    width: 37.5em;
-    height: 100%;
+.msg-form-popup {
+  display: none;
+  position: fixed;
+  z-index: 500;
+  bottom: 0;
+  right: 15px;
+  border: 2px solid #bdbdbd;
+  background: white;
+  width: 37.5em;
     max-width: 37.5em;
+    height: 37.5em;
+}
+.msg-form-container {
+    height: 100%;
+    width: 100%;
     padding: 10px;
     background-color: white;
     position: relative;
@@ -11,7 +22,7 @@
 }
 
 /* Full-width input fields */
-.form-container input[type=text] {
+.msg-form-container input[type=text] {
     width: 30%;
     padding: 15px;
     margin: 1.2em 0;
@@ -21,7 +32,7 @@
     float: left;
 }
 
-.form-container input[type=text2] {
+.msg-form-container input[type=text2] {
     width: 60%;
     padding: 15px;
     margin: 1.2em 0;
@@ -32,30 +43,21 @@
 }
 
 /* When the inputs get focus, do something */
-.form-container input:focus {
+.msg-form-container input:focus {
   background-color: #ddd;
   outline: none;
 }
 
 .message-popup-msg {
     width: 100%;
-    height: 17em;
+    height: 50%;
     margin: 1.2em 0 2em 0;
     padding: 0.5em;
     resize: none;
 }
 
 /* Set a style for the submit/login button */
-.form-popup {
-  display: none;
-  position: fixed;
-  z-index: 500;
-  bottom: 0;
-  right: 15px;
-  border: 2px solid #bdbdbd;
-  background: white;
-}
-.form-container .btn {
+.msg-form-container .btn {
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -66,24 +68,95 @@
   opacity: 0.8;
 }
 
-.form-container .send {
+.msg-form-container .send {
   margin-left: 1.5em;
   float: left;
 }
 
-.form-container .cancel {
+.msg-form-container .cancel {
   background-color: red;
   margin-right: 1.5em;
   float: right;
 }
 
 /* Add some hover effects to buttons */
-.form-container .btn:hover, .open-button:hover {
+.msg-form-container .btn:hover, .open-button:hover {
   opacity: 1;
 }
+
+
+/* ALERT MSG BOX */
+.alert-box-wrapper {
+    position: fixed;
+    z-index: 5000;
+    top: 10%;
+    right: -10em;
+    height: 1%;
+}
+
+#message-alert-box {
+    width: 15em;
+    height: auto;
+    max-height: 6em;
+    padding: 0.8em;
+    text-align: center;
+    right: -70em;
+    top: 0;
+    transition: all 1500ms ease;
+    position: absolute;
+}
+
+
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+
+/* Portrait */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+    .msg-form-popup {
+        bottom: 10%;
+        width: 330px;
+        height: 400px;
+    }
+    .message-popup-msg {
+        height: 30%;
+    }
+    .msg-form-container .btn {
+        width: 30%;
+    }
+}
+
+/* LANDSCAPE */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: landscape) {
+    .msg-form-popup {
+        bottom: 10%;
+        width: 400px;
+        height: 275px;
+    }
+    .message-popup-heading {
+        display: none;
+    }
+    .message-popup-msg {
+        height: 40%;
+        margin: 0.5em 0;
+    }
+    .msg-form-container .btn {
+        width: 30%;
+        height: 2em;
+    }
+}
 </style>
-<div class="form-popup" id="myForm">
-  <div class="form-container">
+
+
+
+<div class="msg-form-popup" id="myForm">
+  <div class="msg-form-container">
     <h1 class="message-popup-heading">New Message</h1>
 
     {{ form.recipient(placeholder="Enter User Name", class="new-msg-recip", autocomplete="off") }}
@@ -126,6 +199,8 @@ $(function () {
 
 /* SEND MSG DYNAMICALLY */
 $(function () {
+    $('.alert-secondary').fadeOut(500);
+    $('.alert-success').fadeOut(500);
     $('#send-new-msg-btn').on('click', (event) => {
         var new_msg_recip = $('.new-msg-recip')[0].value;
         var new_msg_subject = $('.new-msg-subject')[0].value;
@@ -149,7 +224,8 @@ $(function () {
             contentType: 'application/json',
             success: function(response) {
                 if (response == 'Message successfully sent!') {
-                    $('.form-popup').attr('style','display: none;');
+                    $('.alert-success').fadeIn(500);
+                    $('#myForm').css('display', 'none');
                     $(".new-msg-recip")[0].value = "";
                     $(".new-msg-subject")[0].value = "";
                     $(".message-popup-msg")[0].value = "";
@@ -158,21 +234,26 @@ $(function () {
                     $('.alert-success').attr('style','right: 13em;');
                     setTimeout(function () {
                         $('.alert-success').attr('style','right: -70em;');
+                        $('.alert-success').fadeOut(500);
                     }, 4000);
                 } else if (response == "That user does not exist" || response == "You cannot message yourself") {
+                    $('.alert-secondary').fadeIn(500);
                     $(".new-msg-recip")[0].value = "";
                     $('.message-fail-msg')[0].textContent = response;
                     $('.alert-secondary').attr('style','right: 13em;');
                     setTimeout(function () {
                         $('.alert-secondary').attr('style','right: -70em;');
+                        $('.alert-secondary').fadeOut(500);
                     }, 4000);
                 } else if (response == 'Subject must be 5-50 characters long' || 
                             response == 'Message: max of 500 characters long' || 
                             response == 'User name must be a minimum of 5 characters long') {
+                    $('.alert-secondary').fadeIn(500);
                     $('.message-fail-msg')[0].textContent = response;
                     $('.alert-secondary').attr('style','right: 13em;');
                     setTimeout(function () {
                         $('.alert-secondary').attr('style','right: -70em;');
+                        $('.alert-secondary').fadeOut(500);
                     }, 4000);
                 }
             },

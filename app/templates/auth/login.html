@@ -1,24 +1,65 @@
 {% extends "base.html" %}
 
+{% block mediaquery %}
+<style>
+.row {
+    padding-top: 3em;
+    text-align: center;
+}
+.card {
+    width: 30%;
+}
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) { 
+    .card {
+        width: 80%;
+    }
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+    .row {
+        padding-top: 2em;
+        justify-self: center;
+    }
+    .card {
+        width: 60%;
+        margin-bottom: 2em;
+    }
+}
+</style>
+{% endblock mediaquery %}
+
 {% block bodycontent %}
-<div class="row" style="justify-content: center; padding-top: 10em;">
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-        <div id="login-alert-container" class="alert alert-dismissible alert-secondary" style="width: auto; height: auto; max-height: 6em; max-width: 25%; position: absolute; top: 12%; left: 38%; text-align: center;">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {% if message == "Please check your email to verify your account before logging in." %}
-            <strong>{{ message }}</strong> <a href="{{ url_for('auth.confirm_acct_request') }}" id="homepage-forgotpass-link" class="alert-link">Send new verification link</a>?
-            {% else %}
-            <strong>{{ message }}</strong> <a href="{{ url_for('auth.reset_password_request') }}" id="homepage-forgotpass-link" class="alert-link">Forgot password</a>?
-            {% endif %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-lg-offset-9 col-xl-3 col-xl-offset-9">
+            <div id="login-alert-container" class="alert alert-dismissible alert-secondary" style="width: auto; height: auto; text-align: center;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {% if messages[0] == "Please check your email to verify your account before logging in." %}
+                <strong>{{ messages[0] }}</strong> <a href="{{ url_for('auth.confirm_acct_request') }}" id="homepage-forgotpass-link" class="alert-link">Send new verification link</a>?
+                {% else %}
+                <strong>{{ messages[0] }}</strong> <a href="{{ url_for('auth.reset_password_request') }}" id="homepage-forgotpass-link" class="alert-link">Forgot password</a>?
+                {% endif %}
+            </div>
         </div>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
-
-    <div class="card" style="width: 30%;">
+    </div>
+{% endif %}
+{% endwith %}
+<div class="row" style="justify-content: center;">
+    <div class="card">
     <article class="card-body">
         <a href="{{ url_for('auth.register') }}" class="float-right btn btn-outline-primary">Sign up</a>
         <h4 class="card-title mb-4 mt-1">Sign in</h4>
