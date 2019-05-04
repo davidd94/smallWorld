@@ -531,11 +531,10 @@ def delete_photos(title, img_name):
         rows = photo_gallery.__dict__
         found_pic_row = ""
         # UPDATES THE PROJECT LAST EDIT DATE
-        Projects.last_edit = dt.utcnow()
+        project.last_edit = dt.utcnow()
         for row in rows:
             if rows[row] == img_name:
                 found_pic_row = row
-                print(found_pic_row)
                 setattr(photo_gallery, found_pic_row, None)
 
                 full_file_path = current_app.config['PHOTO_UPLOAD_DIR'] + '/' + current_user.username + '/' + title + '/' + img_name
@@ -554,7 +553,7 @@ def primary_photo(title, img_name):
         old_primary = photo_gallery.photoOne
         old_row = ""
         # UPDATES THE PROJECT LAST EDIT DATE
-        Projects.last_edit = dt.utcnow()
+        project.last_edit = dt.utcnow()
         for row in rows:
             if rows[row] == img_name:
                 old_row = row

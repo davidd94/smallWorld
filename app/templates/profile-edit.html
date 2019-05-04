@@ -6,119 +6,121 @@
 {% endblock css%}
 
 {% block bodycontent %}
-<form class="container edit-container custom-scrollbar-s3" action="" method="POST">
-    {{ form.hidden_tag() }}
-    <div class="row">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-1">
-            <h1 class="edit-profile-heading">Edit Profile</h1>
-        </div>
-    </div>
-    <div class="row align-items-center justify-content-center">
-        <div class="col-10 col-sm-10 col-md-10 col-lg-4 col-lg-offset-8 col-xl-4 col-xl-offset-8 my-1 text-center">
-            {% with messages = get_flashed_messages() %}
-            {% for message in messages %}
-            {% if message %}
-            <div class="alert alert-dismissible alert-success">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                You have <strong>successfully</strong> updated your info !
+<div class="edit-container custom-scrollbar-s3">
+    <form class="container custom-scrollbar-s3" action="" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-1">
+                <h1 class="edit-profile-heading">Edit Profile</h1>
             </div>
-            {% endif %}
-            {% endfor %}
-            {% endwith %}
         </div>
-    </div>
-    <div class="row align-items-center">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 my-4 text-center">
-            {{ form.username.label(class="username-label") }}
-            {{ form.username(id="disabledInput", class="form-control form-group-username", type="text", disabled="") }}
-        </div>
-        <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-4 text-center">
-            {{ form.firstname.label(class="firstname-label") }}
-            {{ form.firstname(id="firstnameinput", class="form-control form-firstname", type="text", placeholder="First Name") }}
-            {% for error in form.firstname.errors %}
-            <div class="firstname-feedback">
-                <span style="color: red;">{{ error }}</span>
+        <div class="row align-items-center justify-content-center">
+            <div class="col-10 col-sm-10 col-md-10 col-lg-4 col-lg-offset-8 col-xl-4 col-xl-offset-8 my-1 text-center">
+                {% with messages = get_flashed_messages() %}
+                {% for message in messages %}
+                {% if message %}
+                <div class="alert alert-dismissible alert-success">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    You have <strong>successfully</strong> updated your info !
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% endwith %}
             </div>
-            {% endfor %}
         </div>
-        <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-4 text-center">
-            {{ form.lastname.label(class="lastname-label") }}
-            {{ form.lastname(id="lastnameinput", class="form-control form-lastname", type="text", placeholder="Last Name") }}
-            {% for error in form.lastname.errors %}
-            <div class="lastname-feedback">
-                <span style="color: red;">{{ error }}</span>
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 my-4 text-center">
+                {{ form.username.label(class="username-label") }}
+                {{ form.username(id="disabledInput", class="form-control form-group-username", type="text", disabled="") }}
             </div>
-            {% endfor %}
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-4 text-center">
+                {{ form.firstname.label(class="firstname-label") }}
+                {{ form.firstname(id="firstnameinput", class="form-control form-firstname", type="text", placeholder="First Name") }}
+                {% for error in form.firstname.errors %}
+                <div class="firstname-feedback">
+                    <span style="color: red;">{{ error }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-4 text-center">
+                {{ form.lastname.label(class="lastname-label") }}
+                {{ form.lastname(id="lastnameinput", class="form-control form-lastname", type="text", placeholder="Last Name") }}
+                {% for error in form.lastname.errors %}
+                <div class="lastname-feedback">
+                    <span style="color: red;">{{ error }}</span>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
 
-    <div class="row align-items-center">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-4 text-center">
-            {{ form.email.label(class="email-label") }}
-            {{ form.email(id="emailinput", class="form-control form-email", type="text", placeholder="Email") }}
-            {% for error in form.email.errors %}
-            <div class="email-feedback">
-                <span style="color: red;">{{ error }}</span>
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-4 text-center">
+                {{ form.email.label(class="email-label") }}
+                {{ form.email(id="emailinput", class="form-control form-email", type="text", placeholder="Email") }}
+                {% for error in form.email.errors %}
+                <div class="email-feedback">
+                    <span style="color: red;">{{ error }}</span>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
-    </div>
 
-    <div class="row align-items-center">
-        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 my-4 text-center">
-            {{ form.password.label(class="password-label") }}
-            {{ form.password(id="passwordinput", class="form-control form-password", type="text", placeholder="New Password") }}
-            {% for error in form.password.errors %}
-            <div class="password-feedback">
-                <span style="color: red;">{{ error }}</span>
+        <div class="row align-items-center">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 my-4 text-center">
+                {{ form.password.label(class="password-label") }}
+                {{ form.password(id="passwordinput", class="form-control form-password", type="text", placeholder="New Password") }}
+                {% for error in form.password.errors %}
+                <div class="password-feedback">
+                    <span style="color: red;">{{ error }}</span>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 my-4 text-center">
-            {{ form.repassword.label(class="repassword-label") }}
-            {{ form.repassword(id="repasswordinput", class="form-control form-repassword", type="text", placeholder="Retype New Password") }}
-            {% for error in form.repassword.errors %}
-            <div class="repassword-feedback">
-                <span style="color: red;">{{ error }}</span>
+            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 my-4 text-center">
+                {{ form.repassword.label(class="repassword-label") }}
+                {{ form.repassword(id="repasswordinput", class="form-control form-repassword", type="text", placeholder="Retype New Password") }}
+                {% for error in form.repassword.errors %}
+                <div class="repassword-feedback">
+                    <span style="color: red;">{{ error }}</span>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
-    </div>
 
-    <div class="row align-items-center">
-        <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-4 text-center">
-            {{ form.picture.label(class="avatar-label") }}
-            {{ form.picture(id="profilepic", class="form-control form-avatar", type="text", placeholder="Insert image link here") }}
+        <div class="row align-items-center">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-4 text-center">
+                {{ form.picture.label(class="avatar-label") }}
+                {{ form.picture(id="profilepic", class="form-control form-avatar", type="text", placeholder="Insert image link here") }}
+            </div>
+            <div class="col-6 col-sm-6 col-md-6 col-lg-3 col-xl-3 my-4 text-center">
+                {{ form.randomavatar.label(class="random-gravatar-label") }}<br>
+                {{ form.randomavatar(type="checkbox", class="custom-gravatar-checkbox") }}
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 my-4 text-center">
+                <p class="gravatar-note">*Note: If your account email matches your gravatar account, it will use your gravatar 
+                picture automatically UNLESS you manually insert a new image link or randomize.</p>
+            </div>
         </div>
-        <div class="col-6 col-sm-6 col-md-6 col-lg-3 col-xl-3 my-4 text-center">
-            {{ form.randomavatar.label(class="random-gravatar-label") }}<br>
-            {{ form.randomavatar(type="checkbox", class="custom-gravatar-checkbox") }}
-        </div>
-        <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 my-4 text-center">
-            <p class="gravatar-note">*Note: If your account email matches your gravatar account, it will use your gravatar 
-            picture automatically UNLESS you manually insert a new image link or randomize.</p>
-        </div>
-    </div>
-    
-    <div class="row align-items-center">
-        <div class="col-2 col-sm-2 col-md-2 col-lg-3 col-xl-3 my-4 text-center">
-            {{ form.bio.label(class="bio-label") }}
-        </div>
-        <div class="col-10 col-sm-10 col-md-10 col-lg-9 col-xl-9 my-4 text-center">
-            {{ form.bio(class="form-control form-bio", row="6", type="text", placeholder="Something about you..", maxlength=400) }}
-        </div>
-    </div>
         
-    <div class="row align-items-center">
-        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 my-4 text-center">
-            {{ form.submit(id="edit-profile-save-btn", class="btn btn-primary") }}
+        <div class="row align-items-center">
+            <div class="col-2 col-sm-2 col-md-2 col-lg-3 col-xl-3 my-4 text-center">
+                {{ form.bio.label(class="bio-label") }}
+            </div>
+            <div class="col-10 col-sm-10 col-md-10 col-lg-9 col-xl-9 my-4 text-center">
+                {{ form.bio(class="form-control form-bio", row="6", type="text", placeholder="Something about you..", maxlength=400) }}
+            </div>
         </div>
-        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 my-4 text-center">
-            <a class="edit-profile-cancel-btn" href="{{ url_for('main.profile', username=current_user.username) }}"><button type="button" class="btn btn-secondary">Cancel</button></a>
+            
+        <div class="row align-items-center">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 my-5 text-center">
+                {{ form.submit(id="edit-profile-save-btn", class="btn btn-primary") }}
+            </div>
+            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 my-5 text-center">
+                <a class="edit-profile-cancel-btn" href="{{ url_for('main.profile', username=current_user.username) }}"><button type="button" class="btn btn-secondary">Cancel</button></a>
+            </div>
         </div>
-    </div>
 
-</form>
+    </form>
+</div>
 {% endblock bodycontent %}
 
 {% block scripts %}
