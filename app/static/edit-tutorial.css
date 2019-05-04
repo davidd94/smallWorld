@@ -2,6 +2,7 @@
     width: 100%;
     height: 100%;
     padding: 1em;
+    padding-bottom: 10%;
     overflow: hidden;
 }
 .tutorial-container-text {
@@ -81,7 +82,7 @@
 /* SUMMERNOTE'S TEXTBOX */
 .note-toolbar {
     background-color: rgb(240, 153, 83);
-    max-height: 3em;
+    max-height: 6em;
 }
 .note-editor {
     width: 100%;

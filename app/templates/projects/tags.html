@@ -5,154 +5,176 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='tags.css') }}">
 {% endblock css %}
 
-{% block bodycontent %}
-<div class="tags-main-container">
-    <form id="profile-filter-box" class="custom-scrollbar-s2" action="{{ url_for('project.tagsearch') }}" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <div class="filter-box-title">
-            <span>Search Tags</span>
-        </div>
-        <ul class="filter-main-ul">
-            <li>
-                <input type="checkbox" class="checked-aquariums" name="tags" id="short" value="aquariums">
-                <label class="main-li-label" for="short">Aquariums</label>
-                <ul style="list-style: none;">
-                    <li>
-                        <input type="checkbox" class="checked-saltwater" name="tags" id="short-1" value="saltwater">
-                        <label class="secondary-li-label" for="short-1">Saltwater</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-freshwater" name="tags" id="short-2" value="freshwater">
-                        <label class="secondary-li-label" for="short-2">Freshwater</label>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <input type="checkbox" class="checked-terrariums" name="tags" id="short" value="terrariums">
-                <label class="main-li-label" for="short">Terrariums</label>
-                <ul style="list-style: none;">
-                    <li>
-                        <input type="checkbox" class="checked-enclosedtropical" name="tags" id="short-1" value="enclosedtropical">
-                        <label class="secondary-li-label" for="short-1">Enclosed Tropical</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-opentropical" name="tags" id="short-2" value="opentropical">
-                        <label class="secondary-li-label" for="short-2">Open Tropical</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-carnivorous" name="tags" id="short-2" value="carnivorous">
-                        <label class="secondary-li-label" for="short-2">Carnivorous</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-desert" name="tags" id="short-2" value="desert">
-                        <label class="secondary-li-label" for="short-2">Desert</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-reptiles" name="tags" id="short-2" value="reptiles">
-                        <label class="secondary-li-label" for="short-2">Reptiles/creatures</label>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <input type="checkbox" class="checked-vivariumpaludarium" name="tags" id="short" value="vivariumpaludarium">
-                <label class="main-li-label" for="short">Vivarium/Paludarium</label>
-                <ul style="list-style: none;">
-                    <li>
-                        <input type="checkbox" class="checked-waterreptiles" name="tags" id="short-1" value="waterreptiles">
-                        <label class="secondary-li-label" for="short-1">Water reptiles/creatures</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-plantsonly" name="tags" id="short-2" value="plantsonly">
-                        <label class="secondary-li-label" for="short-2">Plants only</label>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <input type="checkbox" class="checked-cost" id="short">
-                <label class="main-li-label" for="short">Cost</label>
-                <ul style="list-style: none;">
-                    <li>
-                        <input type="checkbox" class="checked-1" name="cost" id="short-1" value="$">
-                        <label class="secondary-li-label" for="short-1">$</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-2" name="cost" id="short-2" value="$$">
-                        <label class="secondary-li-label" for="short-2">$$</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-3" name="cost" id="short-2" value="$$$">
-                        <label class="secondary-li-label" for="short-2">$$$</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-4" name="cost" id="short-2" value="$$$$">
-                        <label class="secondary-li-label" for="short-2">$$$$</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-5" name="cost" id="short-2" value="$$$$$">
-                        <label class="secondary-li-label" for="short-2">$$$$$</label>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <input type="checkbox" class="checked-difficulty" id="short">
-                <label class="main-li-label" for="short">Difficulty</label>
-                <ul style="list-style: none;">
-                    <li>
-                        <input type="checkbox" class="checked-easy" name="difficulty" id="short-1" value="easy">
-                        <label class="secondary-li-label" for="short-1">Easy</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-medium" name="difficulty" id="short-2" value="medium">
-                        <label class="secondary-li-label" for="short-2">Medium</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="checked-hard" name="difficulty" id="short-2" value="hard">
-                        <label class="secondary-li-label" for="short-2">Hard</label>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <div class="filter-btn-container">
-            <button type="submit" class="btn btn-primary search-btn">Search</button>
-        </div>
-    </form>
+{% block mediaquery %}
+{{ super() }}
+<style>
+/* ----------- FOR ALL NON-DESKTOP DEVICES ----------- */
+/* Portrait & Landscape */
+@media only screen 
+  and (min-device-width: 0px) 
+  and (max-device-width: 812px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+      .project-created-date {
+          display: none;
+      }
+      .project-title {
+          font-size: 1em;
+      }
+}
+</style>
+{% endblock mediaquery %}
 
-    <div class="row tag-row">
-        <div class="card tag-card">
-            <div class="card-content">
-                <div class="card-header-tags">
-                    <h1 class="card-heading">Tag Search: <span>{% if search %}{{ search }}{% endif %}</span></h1>
+{% block bodycontent %}
+<div class="container tags-main-container">
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 my-2 text-center">
+            <form id="profile-filter-box" class="custom-scrollbar-s2" action="{{ url_for('project.tagsearch') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="filter-box-title">
+                    <span>Search Tags</span>
                 </div>
-                <div class="card-body custom-scrollbar-s3">
-                    <div class="card-p">
-                        {% if projects %}
-                        <ul class="card-ul">
-                            {% for project in projects %}
-                            {% set created = moment(project.created_date).format('LL') %}
+                <ul class="filter-main-ul">
+                    <li>
+                        <input type="checkbox" class="checked-aquariums" name="tags" id="short" value="aquariums">
+                        <label class="main-li-label" for="short">Aquariums</label>
+                        <ul style="list-style: none;">
                             <li>
-                                <p class="project-title"><a class="project-title-link project-title-link-{{ project.id }}" href="{{ url_for('project.project', username=project.username, title=project.title) }}" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container popover-container-{{ project.id }}'><img class='popover-avatar' src='{{ project.author.avatar(40) }}'><a class='popover-userlink' href='{{ url_for('main.profile', username=project.username) }}' target='blank'>{{ project.username }}</a><p class='popover-description'>{{ project.description }}</p></div>">{{ project.title }}</a></p>
-                                <span class="project-created-date"><strong>Created on : </strong> {{ created }}</span>
-                                <span class="project-likes">{{ project.likes }} Likes</span>
-                                <p class="project-tags custom-scrollbar">Tags: 
-                                    {% if project.aquariums == True %}<a href="{{ url_for('project.tagsearch', tag='aquariums') }}"> Aquariums</a>,{% endif %}
-                                    {% if project.saltwater == True %}<a href="{{ url_for('project.tagsearch', tag='saltwater') }}"> Saltwater</a>,{% endif %}
-                                    {% if project.freshwater == True %}<a href="{{ url_for('project.tagsearch', tag='freshwater') }}"> Freshwater</a>,{% endif %}
-                                    {% if project.terrariums == True %}<a href="{{ url_for('project.tagsearch', tag='terrariums') }}"> Terrariums</a>,{% endif %}
-                                    {% if project.enclosedtropical == True %}<a href="{{ url_for('project.tagsearch', tag='enclosedtropical') }}"> Enclosed Tropical</a>,{% endif %}
-                                    {% if project.opentropical == True %}<a href="{{ url_for('project.tagsearch', tag='opentropical') }}"> Open Tropical</a>,{% endif %}
-                                    {% if project.carnivorous == True %}<a href="{{ url_for('project.tagsearch', tag='carnivorous') }}"> Carnivorous</a>,{% endif %}
-                                    {% if project.desert == True %}<a href="{{ url_for('project.tagsearch', tag='desert') }}"> Desert</a>,{% endif %}
-                                    {% if project.reptiles == True %}<a href="{{ url_for('project.tagsearch', tag='reptiles') }}"> Reptiles</a>,{% endif %}
-                                    {% if project.vivariumpaludarium == True %}<a href="{{ url_for('project.tagsearch', tag='vivariumpaludarium') }}"> Vivarium/Paludarium</a>,{% endif %}
-                                    {% if project.waterreptiles == True %}<a href="{{ url_for('project.tagsearch', tag='waterreptiles') }}"> Water Reptiles</a>,{% endif %}
-                                    {% if project.plantsonly == True %}<a href="{{ url_for('project.tagsearch', tag='plantsonly') }}"> Plants only</a>,{% endif %}
-                                    {% if project.difficulty < 4 %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='easy') }}"> Easy</a>,{% elif project.difficulty > 7 %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='hard') }}"> Hard</a>,{% else %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='medium') }}"> Medium</a>,{% endif %}
-                                    {% if project.cost < 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$') }}"> $</a>,{% elif project.cost > 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$') }}"> $$</a>,{% elif project.cost > 300 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$') }}"> $$$</a>,{% elif project.cost > 600 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$') }}"> $$$$</a>,{% elif project.cost > 1000 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$$') }}"> $$$$$</a>,{% endif %}
-                                </p>
+                                <input type="checkbox" class="checked-saltwater" name="tags" id="short-1" value="saltwater">
+                                <label class="secondary-li-label" for="short-1">Saltwater</label>
                             </li>
-                            {% endfor %}
+                            <li>
+                                <input type="checkbox" class="checked-freshwater" name="tags" id="short-2" value="freshwater">
+                                <label class="secondary-li-label" for="short-2">Freshwater</label>
+                            </li>
                         </ul>
-                        {% endif %}
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-terrariums" name="tags" id="short" value="terrariums">
+                        <label class="main-li-label" for="short">Terrariums</label>
+                        <ul style="list-style: none;">
+                            <li>
+                                <input type="checkbox" class="checked-enclosedtropical" name="tags" id="short-1" value="enclosedtropical">
+                                <label class="secondary-li-label" for="short-1">Enclosed Tropical</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-opentropical" name="tags" id="short-2" value="opentropical">
+                                <label class="secondary-li-label" for="short-2">Open Tropical</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-carnivorous" name="tags" id="short-2" value="carnivorous">
+                                <label class="secondary-li-label" for="short-2">Carnivorous</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-desert" name="tags" id="short-2" value="desert">
+                                <label class="secondary-li-label" for="short-2">Desert</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-reptiles" name="tags" id="short-2" value="reptiles">
+                                <label class="secondary-li-label" for="short-2">Reptiles/creatures</label>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-vivariumpaludarium" name="tags" id="short" value="vivariumpaludarium">
+                        <label class="main-li-label" for="short">Vivarium/Paludarium</label>
+                        <ul style="list-style: none;">
+                            <li>
+                                <input type="checkbox" class="checked-waterreptiles" name="tags" id="short-1" value="waterreptiles">
+                                <label class="secondary-li-label" for="short-1">Water reptiles/creatures</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-plantsonly" name="tags" id="short-2" value="plantsonly">
+                                <label class="secondary-li-label" for="short-2">Plants only</label>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-cost" id="short">
+                        <label class="main-li-label" for="short">Cost</label>
+                        <ul style="list-style: none;">
+                            <li>
+                                <input type="checkbox" class="checked-1" name="cost" id="short-1" value="$">
+                                <label class="secondary-li-label" for="short-1">$</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-2" name="cost" id="short-2" value="$$">
+                                <label class="secondary-li-label" for="short-2">$$</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-3" name="cost" id="short-2" value="$$$">
+                                <label class="secondary-li-label" for="short-2">$$$</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-4" name="cost" id="short-2" value="$$$$">
+                                <label class="secondary-li-label" for="short-2">$$$$</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-5" name="cost" id="short-2" value="$$$$$">
+                                <label class="secondary-li-label" for="short-2">$$$$$</label>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="checked-difficulty" id="short">
+                        <label class="main-li-label" for="short">Difficulty</label>
+                        <ul style="list-style: none;">
+                            <li>
+                                <input type="checkbox" class="checked-easy" name="difficulty" id="short-1" value="easy">
+                                <label class="secondary-li-label" for="short-1">Easy</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-medium" name="difficulty" id="short-2" value="medium">
+                                <label class="secondary-li-label" for="short-2">Medium</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked-hard" name="difficulty" id="short-2" value="hard">
+                                <label class="secondary-li-label" for="short-2">Hard</label>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="filter-btn-container">
+                    <button type="submit" class="btn btn-primary search-btn">Search</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9 my-2 text-center">
+            <div class="card tag-card">
+                <div class="card-content">
+                    <div class="card-header-tags">
+                        <h1 class="card-heading">Tag Search: <span>{% if search %}{{ search }}{% endif %}</span></h1>
+                    </div>
+                    <div class="card-body custom-scrollbar-s3">
+                        <div class="card-p">
+                            {% if projects %}
+                            <ul class="card-ul">
+                                {% for project in projects %}
+                                {% set created = moment(project.created_date).format('LL') %}
+                                <li>
+                                    <p class="project-title"><a class="project-title-link project-title-link-{{ project.id }}" href="{{ url_for('project.project', username=project.username, title=project.title) }}" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container popover-container-{{ project.id }}'><img class='popover-avatar' src='{{ project.author.avatar(40) }}'><a class='popover-userlink' href='{{ url_for('main.profile', username=project.username) }}' target='blank'>{{ project.username }}</a><p class='popover-description'>{{ project.description }}</p></div>">{{ project.title }}</a></p>
+                                    <span class="project-created-date"><strong>Created on : </strong> {{ created }}</span>
+                                    <span class="project-likes">{{ project.likes }} Likes</span>
+                                    <p class="project-tags custom-scrollbar">Tags: 
+                                        {% if project.aquariums == True %}<a href="{{ url_for('project.tagsearch', tag='aquariums') }}"> Aquariums</a>,{% endif %}
+                                        {% if project.saltwater == True %}<a href="{{ url_for('project.tagsearch', tag='saltwater') }}"> Saltwater</a>,{% endif %}
+                                        {% if project.freshwater == True %}<a href="{{ url_for('project.tagsearch', tag='freshwater') }}"> Freshwater</a>,{% endif %}
+                                        {% if project.terrariums == True %}<a href="{{ url_for('project.tagsearch', tag='terrariums') }}"> Terrariums</a>,{% endif %}
+                                        {% if project.enclosedtropical == True %}<a href="{{ url_for('project.tagsearch', tag='enclosedtropical') }}"> Enclosed Tropical</a>,{% endif %}
+                                        {% if project.opentropical == True %}<a href="{{ url_for('project.tagsearch', tag='opentropical') }}"> Open Tropical</a>,{% endif %}
+                                        {% if project.carnivorous == True %}<a href="{{ url_for('project.tagsearch', tag='carnivorous') }}"> Carnivorous</a>,{% endif %}
+                                        {% if project.desert == True %}<a href="{{ url_for('project.tagsearch', tag='desert') }}"> Desert</a>,{% endif %}
+                                        {% if project.reptiles == True %}<a href="{{ url_for('project.tagsearch', tag='reptiles') }}"> Reptiles</a>,{% endif %}
+                                        {% if project.vivariumpaludarium == True %}<a href="{{ url_for('project.tagsearch', tag='vivariumpaludarium') }}"> Vivarium/Paludarium</a>,{% endif %}
+                                        {% if project.waterreptiles == True %}<a href="{{ url_for('project.tagsearch', tag='waterreptiles') }}"> Water Reptiles</a>,{% endif %}
+                                        {% if project.plantsonly == True %}<a href="{{ url_for('project.tagsearch', tag='plantsonly') }}"> Plants only</a>,{% endif %}
+                                        {% if project.difficulty < 4 %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='easy') }}"> Easy</a>,{% elif project.difficulty > 7 %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='hard') }}"> Hard</a>,{% else %}<a href="{{ url_for('project.tagsearch', tag='difficulty', value='medium') }}"> Medium</a>,{% endif %}
+                                        {% if project.cost < 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$') }}"> $</a>,{% elif project.cost > 100 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$') }}"> $$</a>,{% elif project.cost > 300 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$') }}"> $$$</a>,{% elif project.cost > 600 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$') }}"> $$$$</a>,{% elif project.cost > 1000 %}<a href="{{ url_for('project.tagsearch', tag='cost', value='$$$$$') }}"> $$$$$</a>,{% endif %}
+                                    </p>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,82 @@
 {% block mediaquery %}
 {{ super() }}
 <style>
-/* ----------- iPhone 6, 6S, 7, 8 and X ----------- */
+/* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100%;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100vh;
+    }
+    .message-viewer-box {
+        display: none;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+}
+
+/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
 /* Portrait */
 @media only screen 
 and (min-device-width: 375px) 
@@ -44,7 +119,6 @@ and (orientation: portrait) {
         margin: 0;
     }
 }
-/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
 /* Landscape */
 @media only screen 
 and (min-device-width: 375px) 
@@ -83,13 +157,274 @@ and (orientation: landscape) {
         margin: 0;
     }
 }
+
+/* ----------- iPhone 6+, 7+ and 8+ ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100%;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100vh;
+    }
+    .message-viewer-box {
+        display: none;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+}
+
 /* ----------- iPhone X ----------- */
+/* Portrait */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: portrait) {
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100%;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+}
 /* Landscape */
 @media only screen 
 and (min-device-width: 375px) 
 and (max-device-width: 812px) 
 and (-webkit-min-device-pixel-ratio: 3)
 and (orientation: landscape) {
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100vh;
+    }
+    .message-viewer-box {
+        display: none;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+}
+
+/* ----------- Galaxy S4, S5 and Note 3 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: portrait) {
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100%;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: landscape) {
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100vh;
+    }
+    .message-viewer-box {
+        display: none;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 20%;
+        top: 0;
+        margin: 0;
+    }
+}
+
+/* ----------- Galaxy S6 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: portrait) {
+    .message-viewer-box {
+        display: none;
+    }
+    .message-mobile-msgbox {
+        display: block;
+        height: 100%;
+    }
+    .mesgs {
+        padding: 0;
+    }
+    .message-reply-msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .message-del-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+    .message-restore-msg {
+        position: absolute;
+        left: 17%;
+        top: 0;
+        margin: 0;
+    }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: landscape) {
     .message-viewer-box {
         display: none;
     }

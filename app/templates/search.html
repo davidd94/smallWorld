@@ -7,8 +7,55 @@
 
 {% block mediaquery %}
 <style>
-/* ----------- iPhone 6, 6S, 7, 8 and X ----------- */
+/* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+    .card {
+        width: 100%;
+    }
+    .card-ul li {
+        height: 15em;
+    }
+    .project-created-date,
+    .project-likes {
+        display: none;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .project-title {
+        font-size: 0.7em;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+    .card {
+        width: 100%;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .card-ul li {
+        height: 15em;
+    }
+    .project-created-date,
+    .project-likes {
+        display: none;
+    }
+    .project-title {
+        font-size: 0.8em;
+    }
+}
 
+/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
 /* Portrait */
 @media only screen 
   and (min-device-width: 375px) 
@@ -28,8 +75,10 @@
     .card-ul {
         padding-bottom: 4em;
     }
+    .project-title {
+        font-size: 0.8em;
+    }
 }
-
 /* Landscape */
 @media only screen 
   and (min-device-width: 375px) 
@@ -48,6 +97,202 @@
     .project-created-date,
     .project-likes {
         display: none;
+    }
+    .project-title {
+        font-size: 0.9em;
+    }
+}
+
+/* ----------- iPhone 6+, 7+ and 8+ ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    .card {
+        width: 100%;
+    }
+    .card-ul li {
+        height: 15em;
+    }
+    .project-created-date,
+    .project-likes {
+        display: none;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .project-title {
+        font-size: 0.8em;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .card {
+        width: 100%;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .card-ul li {
+        height: 15em;
+    }
+    .project-created-date,
+    .project-likes {
+        display: none;
+    }
+    .project-title {
+        font-size: 0.9em;
+    }
+}
+
+/* ----------- iPhone X ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    .card {
+        width: 100%;
+    }
+    .card-ul li {
+        height: 15em;
+    }
+    .project-created-date,
+    .project-likes {
+        display: none;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .project-title {
+        font-size: 0.8em;
+    }
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .card {
+        width: 100%;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .card-ul li {
+        height: 15em;
+    }
+    .project-created-date,
+    .project-likes {
+        display: none;
+    }
+    .project-title {
+        font-size: 0.9em;
+    }
+}
+
+/* ----------- Galaxy S4, S5 and Note 3 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: portrait) {
+    .card {
+        width: 100%;
+    }
+    .card-ul li {
+        height: 15em;
+    }
+    .project-created-date,
+    .project-likes {
+        display: none;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .project-title {
+        font-size: 0.7em;
+    }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: landscape) {
+    .card {
+        width: 100%;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .card-ul li {
+        height: 15em;
+    }
+    .project-created-date,
+    .project-likes {
+        display: none;
+    }
+    .project-title {
+        font-size: 0.8em;
+    }
+}
+
+/* ----------- Galaxy S6 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: portrait) {
+    .card {
+        width: 100%;
+    }
+    .card-ul li {
+        height: 15em;
+    }
+    .project-created-date,
+    .project-likes {
+        display: none;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .project-title {
+        font-size: 0.8em;
+    }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: landscape) {
+    .card {
+        width: 100%;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .card-ul li {
+        height: 15em;
+    }
+    .project-created-date,
+    .project-likes {
+        display: none;
+    }
+    .project-title {
+        font-size: 0.9em;
     }
 }
 </style>

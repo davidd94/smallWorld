@@ -8,8 +8,64 @@
 {% block mediaquery %}
 {{ super() }}
 <style>
+/* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+    .explore-main-container {
+        background-image: none;
+        background-repeat: repeat-y;
+        background-size: 100% auto;
+        background: #00bf8f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #001510, #00bf8f);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #001510, #00bf8f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        height: auto;
+    }
+    .card-content {
+        max-height: 20em;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .card-ul li {
+        max-height: 10em;
+    }
+    .project-title {
+        padding: 0.1em 0.1em 0 0.1em;
+        margin: 0;
+    }
+    .project-title-link {
+        font-size: 0.8em;
+    }
+    .project-tags {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 0.2em;
+        width: 100%;
+        border-top: 2px solid rgb(190, 190, 190);
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+    .explore-main-container {
+        background-image: none;
+        background-repeat: repeat-y;
+        background-size: 100% auto;
+        background: #00bf8f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #001510, #00bf8f);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #001510, #00bf8f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        height: auto;
+    }
+}
 /* ----------- iPhone 6, 6S, 7 and 8 ----------- */
-
 /* Portrait */
 @media only screen 
   and (min-device-width: 375px) 
@@ -50,7 +106,6 @@
         border-top: 2px solid rgb(190, 190, 190);
     }
 }
-
 /* Landscape */
 @media only screen 
   and (min-device-width: 375px) 
@@ -67,11 +122,244 @@
         height: auto;
     }
 }
+
+/* ----------- iPhone 6+, 7+ and 8+ ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    .explore-main-container {
+        background-image: none;
+        background-repeat: repeat-y;
+        background-size: 100% auto;
+        background: #00bf8f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #001510, #00bf8f);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #001510, #00bf8f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        height: auto;
+    }
+    .card-content {
+        max-height: 20em;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .card-ul li {
+        max-height: 10em;
+    }
+    .project-title {
+        padding: 0.1em 0.1em 0 0.1em;
+        margin: 0;
+    }
+    .project-title-link {
+        font-size: 0.8em;
+    }
+    .project-tags {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 0.2em;
+        width: 100%;
+        border-top: 2px solid rgb(190, 190, 190);
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .explore-main-container {
+        background-image: none;
+        background-repeat: repeat-y;
+        background-size: 100% auto;
+        background: #00bf8f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #001510, #00bf8f);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #001510, #00bf8f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        height: auto;
+    }
+}
+
+/* ----------- iPhone X ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    .explore-main-container {
+        background-image: none;
+        background-repeat: repeat-y;
+        background-size: 100% auto;
+        background: #00bf8f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #001510, #00bf8f);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #001510, #00bf8f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        height: auto;
+    }
+    .card-content {
+        max-height: 20em;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .card-ul li {
+        max-height: 10em;
+    }
+    .project-title {
+        padding: 0.1em 0.1em 0 0.1em;
+        margin: 0;
+    }
+    .project-title-link {
+        font-size: 0.8em;
+    }
+    .project-tags {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 0.2em;
+        width: 100%;
+        border-top: 2px solid rgb(190, 190, 190);
+    }
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .explore-main-container {
+        background-image: none;
+        background-repeat: repeat-y;
+        background-size: 100% auto;
+        background: #00bf8f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #001510, #00bf8f);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #001510, #00bf8f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        height: auto;
+    }
+}
+
+/* ----------- Galaxy S4, S5 and Note 3 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: portrait) {
+    .explore-main-container {
+        background-image: none;
+        background-repeat: repeat-y;
+        background-size: 100% auto;
+        background: #00bf8f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #001510, #00bf8f);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #001510, #00bf8f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        height: auto;
+    }
+    .card-content {
+        max-height: 20em;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .card-ul li {
+        max-height: 10em;
+    }
+    .project-title {
+        padding: 0.1em 0.1em 0 0.1em;
+        margin: 0;
+    }
+    .project-title-link {
+        font-size: 0.8em;
+    }
+    .project-tags {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 0.2em;
+        width: 100%;
+        border-top: 2px solid rgb(190, 190, 190);
+    }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: landscape) {
+    .explore-main-container {
+        background-image: none;
+        background-repeat: repeat-y;
+        background-size: 100% auto;
+        background: #00bf8f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #001510, #00bf8f);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #001510, #00bf8f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        height: auto;
+    }
+}
+
+/* ----------- Galaxy S6 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: portrait) {
+    .explore-main-container {
+        background-image: none;
+        background-repeat: repeat-y;
+        background-size: 100% auto;
+        background: #00bf8f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #001510, #00bf8f);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #001510, #00bf8f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        height: auto;
+    }
+    .card-content {
+        max-height: 20em;
+    }
+    .card-ul {
+        padding-bottom: 4em;
+    }
+    .card-ul li {
+        max-height: 10em;
+    }
+    .project-title {
+        padding: 0.1em 0.1em 0 0.1em;
+        margin: 0;
+    }
+    .project-title-link {
+        font-size: 0.8em;
+    }
+    .project-tags {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 0.2em;
+        width: 100%;
+        border-top: 2px solid rgb(190, 190, 190);
+    }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: landscape) {
+    .explore-main-container {
+        background-image: none;
+        background-repeat: repeat-y;
+        background-size: 100% auto;
+        background: #00bf8f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #001510, #00bf8f);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #001510, #00bf8f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        height: auto;
+    }
+}
 </style>
 {% endblock mediaquery %}
 
 {% block bodycontent %}
-<div class="explore-main-container">
+<div class="container explore-main-container custom-scrollbar-s3">
     <div class="row">
         <!----- MOST POPULAR CARD ----->
         <div class="col-md-4">
@@ -193,7 +481,7 @@
                     </div>
                 </div>
         </div>
-        </div>
+    </div>
 </div>
 {% endblock bodycontent %}
 

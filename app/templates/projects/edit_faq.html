@@ -7,6 +7,156 @@
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 {% endblock css %}
 
+{% block mediaquery %}
+{{ super() }}
+<style>
+/* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+
+/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
+/* Portrait */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+
+/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
+/* Landscape */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: landscape) {
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+
+/* ----------- iPhone X ----------- */
+/* Portrait */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: portrait) {
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+/* Landscape */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: landscape) {
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+/* ----------- iPhone 6+, 7+ and 8+ ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+
+/* ----------- Galaxy S4, S5 and Note 3 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: portrait) {
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: landscape) {
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+
+/* ----------- Galaxy S6 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: portrait) {
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: landscape) {
+    .question-container,
+    .answer-box {
+        width: 90%;
+    }
+}
+</style>
+{% endblock mediaquery %}
+
 {% block bodycontent %}
 <div class="faq-wrapper">
     <form class="faq-container custom-scrollbar-s3" action="{{ url_for('project.edit_faq', title=project.title) }}" method="POST">
@@ -150,7 +300,7 @@
 /* TRIGGERS DYNAMIC SAVED MESSAGE */
 $(function () {
     {% if get_flashed_messages() %}
-    $('.faq-alert').css('right', '10em');
+    $('.faq-alert').css('right', '8em');
     setTimeout(function () {
         $('.faq-alert').css('right', '-70em');
     }, 4000);
@@ -159,32 +309,31 @@ $(function () {
 
 /* MAIN CHECKMARK BOX TOGGLE */
 $(document).ready(function() {
-        // HIDES THE QUESTIONS & ANSWERS BY DEFAULT VALUE OF FAQ TOGGLE
-        {% if form.faqenabled.data == false %}
-        $('.question-container').css('visibility', 'hidden');
-        $('.answer-box').css('visibility', 'hidden');
-        $('.faq-save').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1');
-        $('.faq-back-btn').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1').css('justify-self', 'right').css('margin-right', '8em');
-        {% endif %}
+    // HIDES THE QUESTIONS & ANSWERS BY DEFAULT VALUE OF FAQ TOGGLE
+    {% if form.faqenabled.data == false %}
+    $('.question-container').css('visibility', 'hidden');
+    $('.answer-box').css('visibility', 'hidden');
+    $('.faq-save').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1');
+    $('.faq-back-btn').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1').css('justify-self', 'right').css('margin-right', '8em');
+    {% endif %}
 
-        /* MANUAL TOGGLING TO ENABLE OR DISABLE ALL FAQs */
-        $('.toggle-group').on('click', () => {
-            var checkstatus = $('#chkToggle').prop('checked');
+    /* MANUAL TOGGLING TO ENABLE OR DISABLE ALL FAQs */
+    $('.toggle-group').on('click', () => {
+        var checkstatus = $('#chkToggle').prop('checked');
 
-            if (checkstatus == true) {
-                $('.question-container').css('visibility', 'hidden');
-                $('.answer-box').css('visibility', 'hidden');
-                $('.faq-save').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1');
-                $('.faq-back-btn').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1').css('justify-self', 'right').css('margin-right', '8em');
-            } else if (checkstatus == false) {
-                $('.question-container').css('visibility', 'visible');
-                $('.answer-box').css('visibility', 'visible');
-                $('.faq-save').css('grid-row', '23 / span 1').css('grid-column', '1 / span 1');
-                $('.faq-back-btn').css('grid-row', '23 / span 1').css('grid-column', '2 / span 1').css('justify-self', 'center').css('margin-right', '0');
-            };
-        });
-    }
-);
+        if (checkstatus == true) {
+            $('.question-container').css('visibility', 'hidden');
+            $('.answer-box').css('visibility', 'hidden');
+            $('.faq-save').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1');
+            $('.faq-back-btn').css('grid-row', '2 / span 1').css('grid-column', '2 / span 1').css('justify-self', 'right').css('margin-right', '8em');
+        } else if (checkstatus == false) {
+            $('.question-container').css('visibility', 'visible');
+            $('.answer-box').css('visibility', 'visible');
+            $('.faq-save').css('grid-row', '23 / span 1').css('grid-column', '1 / span 1');
+            $('.faq-back-btn').css('grid-row', '23 / span 1').css('grid-column', '2 / span 1').css('justify-self', 'center').css('margin-right', '0');
+        };
+    });
+});
 
 /* INDIVIDUAL QUESTION CHECKMARK BOXES */
 $(function () {

@@ -6,37 +6,74 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='perfect-scrollbar.css') }}">
 <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link href="{{ url_for('static', filename='base.css') }}" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='edit-maintenance.css') }}">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
 {% endblock css %}
 
-{% block bodycontent %}
-<h1 class="edit-maintenance-title" style="text-align: center;">Edit maintenance</h1>
-<div id="statuscontainer" class="export-status-container"><span class="status-cancel">cancel</span><span class="status-close">close</span></div>
+{% block mediaquery %}
+<style>
+</style>
+{% endblock mediaquery %}
 
-<p style="font-size: 0.8em; font-style: italic; color: lightgrey; opacity: 0.9; text-align: center; margin: 0; padding: 0;">You may drag and drop TEXT or IMAGES</p>
-<div class="maintenance-container">
-    <div class="toggle-wrapper">
-        <input id="chkToggle" type="checkbox" class="toggle-maintenance" data-toggle="toggle">
-    </div>
-    <div class="maintenance-btn-wrapper">
-        <i class="maintenance-main-add-btn fas fa-edit fa-2x nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
-        <a class="edit-maintenance-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}">Back to project</a>
-        <div id="maintenance-dropdown-override" class="maintenance-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; transform: translate3d(0px, 42px, 0px);">
-            <a class="dropdown-item dropdown-add-paragraph" onclick="addParagraph();" data-toggle="tooltip" href="#">Edit</a>
-            <a class="dropdown-item dropdown-export" href="#">Export</a>
-            <a class="dropdown-item dropdown-share" href="#">Share</a>
+{% block bodycontent %}
+<div class="container edit-maintenance-container custom-scrollbar-s3">
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <h1 class="edit-maintenance-title" style="text-align: center;">Edit Maintenance</h1>
         </div>
     </div>
-    <div class="maintenance-container-text custom-scrollbar-s3">
-        <form class="maintenance-form custom-scrollbar-s3" method="POST">
-            <div id="summernote"></div>
-        </form>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-5 text-center">
+            <div class="export-status-container">
+                <div id="statuscontainer">
+                    <span class="status-cancel">cancel</span>
+                    <span class="status-close">close</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <a class="edit-maintenance-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}">Back to project</a>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <p style="font-size: 0.8em; font-style: italic; color: rgb(179, 179, 179); opacity: 0.9; text-align: center; margin: 0; padding: 0;">Experimental: Drag and drop TEXT or IMAGES. <strong style="color: red"><br> *** WARNING *** : </strong> YOU WILL EXPERIENCE BUGS AND ISSUES USING THIS METHOD</p>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <div class="toggle-wrapper">
+                <input id="chkToggle" type="checkbox" class="toggle-maintenance" data-toggle="toggle">
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <div class="maintenance-btn-wrapper">
+                <i class="maintenance-main-add-btn fas fa-edit fa-2x nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
+                <div id="maintenance-dropdown-override" class="maintenance-dropdown dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; transform: translate3d(0px, 42px, 0px);">
+                    <a class="dropdown-item dropdown-add-paragraph" onclick="addParagraph();" data-toggle="tooltip" href="#">Edit</a>
+                    <a class="dropdown-item dropdown-export" href="#">Export</a>
+                    <a class="dropdown-item dropdown-share" href="#">Share</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2">
+            <div class="maintenance-container-text custom-scrollbar-s3">
+                <form class="maintenance-form custom-scrollbar-s3" method="POST">
+                    <div id="summernote"></div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock bodycontent %}
@@ -51,8 +88,9 @@
 <!-- PERFECT SCROLLBAR JS -->
 <script src="{{ url_for('static', filename='plugins/perfect-scrollbar.min.js') }}"></script>
 
+
 <script>
-/* SUMMERNOTE TEXT EDITOR LOADS WHEN DOCUMENT IS READY */
+/* INITIALLY LOADS SUMMERNOTE TEXT EDITOR */
 $(document).ready(function() {
     var maxcontentfunc = function(max) {
         $('#maxContentPost').text(max);
@@ -60,8 +98,6 @@ $(document).ready(function() {
     $('#summernote').summernote({
         toolbar: [
             // [groupName, [list of button]]
-            ['undo', ['undo']],
-            ['redo', ['redo']],
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['font', ['strikethrough', 'superscript', 'subscript']],
             ['fontsize', ['fontsize']],
@@ -69,6 +105,7 @@ $(document).ready(function() {
             ['para', ['ul', 'ol', 'paragraph']],
             ['height', ['height']],
             ['picture', ['picture']],
+            ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
             ['link', ['linkDialogShow', 'unlink']],
             ['codeview', ['codeview']],
             ['closebutton', ['close']],
@@ -121,6 +158,12 @@ $(document).ready(function() {
                 }
             },
             onPaste: function(e) {
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
+            },
+            /*
+            onPaste: function(e) {
                 var t = e.currentTarget.innerText;
                 var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
                 e.preventDefault();
@@ -130,7 +173,7 @@ $(document).ready(function() {
                 if (typeof maxcontentfunc == 'function') {
                     maxcontentfunc(50000 - t.length);
                 }
-            },
+            }, */
         },
     });
 
@@ -138,9 +181,8 @@ $(document).ready(function() {
     $('.note-link-text').attr('maxlength', 150);
     $('.note-link-url').attr('maxlength', 2000);
     $('.note-editable').addClass('custom-scrollbar-s3');
-    scrollbar();
 
-    // LOADS DATABASE MAINTENANCE CONTENT INTO EDITOR ON PAGE RENDERING - 'TOJSON' USED DUE TO SINGLE&DOUBLE QUOTE OVERLAPPING
+    // LOADS DATABASE TUTORIAL CONTENT INTO EDITOR ON PAGE RENDERING - 'TOJSON' USED DUE TO SINGLE&DOUBLE QUOTE OVERLAPPING
     var contents = '{{ project.maintenance|tojson }}';
     // USING REPLACE AND REGEX TO REMOVE EXCESS QUOTES FROM 'TOJSON'
     var contents2 = contents.replace(/^\"/g, '').replace(/\"$/g, '');
@@ -161,10 +203,12 @@ var CloseButton = function (context) {
                 url: '{{ url_for("project.load_maintenance", title=project.title) }}',
                 type: 'GET',
                 success: function(response) {
-                    // LOADS MOST RECENTLY SAVED maintenance DYNAMICALLY BEFORE CLOSING
+                    // LOADS MOST RECENTLY SAVED TUTORIAL DYNAMICALLY BEFORE CLOSING
                     $('#summernote').summernote('code', response);
                     // CLOSES TEXT EDITOR BOX
-                    $('#summernote').summernote('destroy');
+                    $('#summernote').each(function(index) {
+                        $(this).summernote('destroy');
+                    });
                 },
             });
         },
@@ -181,7 +225,7 @@ var SaveButton = function (context) {
         click: function () {
             // saves the paragraph content
             var html = $("#summernote").summernote("code");
-            savemaintenance(html);
+            saveTutorial(html);
         }
     });
     return button.render();   // return button as jquery object
@@ -215,9 +259,13 @@ function sendFile(pictures, that) {
         success: function(response) {
             for (i = 0; i < response.length; i++) {
                 var filePath = 'users/' + '{{ project.username }}' + '/' + '{{ project.title }}' + '/maintenancepics/';
+                // MUST CHANGE THE IMAGE PATH WHEN IN PRODUCTION MODE
+                console.log('uploading to summer..')
                 $(that).summernote('insertImage',
-                            '{{ url_for("static", filename="") }}' + filePath + response[i],
-                            ''
+                            'https://smallworld.live/static/' + filePath + response[i],
+                            function ($image) {
+                                $image.css('width', $image.width() / 3);
+                            }
                 );
             };
         }
@@ -225,7 +273,7 @@ function sendFile(pictures, that) {
 
 };
 
-// DYNAMICALLY OPENS TEXT EDITOR BOX
+// DYNAMICALLY REOPENS TEXT EDITOR BOX
 function addParagraph() {
     var maxcontentfunc = function(max) {
         $('#maxContentPost').text(max);
@@ -244,6 +292,7 @@ function addParagraph() {
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['height', ['height']],
                     ['picture', ['picture']],
+                    ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
                     ['link', ['linkDialogShow', 'unlink']],
                     ['codeview', ['codeview']],
                     ['closebutton', ['close']],
@@ -296,6 +345,12 @@ function addParagraph() {
                         }
                     },
                     onPaste: function(e) {
+                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                        e.preventDefault();
+                        document.execCommand('insertText', false, bufferText);
+                    },
+                    /*
+                    onPaste: function(e) {
                         var t = e.currentTarget.innerText;
                         var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
                         e.preventDefault();
@@ -305,7 +360,7 @@ function addParagraph() {
                         if (typeof maxcontentfunc == 'function') {
                             maxcontentfunc(50000 - t.length);
                         }
-                    },
+                    }, */
                 },
             });
 
@@ -315,13 +370,13 @@ function addParagraph() {
             $('.note-editable').addClass('custom-scrollbar-s3');
             scrollbar();
 
-            // LOADS SAVED maintenance DYNAMICALLY
+            // LOADS SAVED TUTORIAL DYNAMICALLY
             $('#summernote').summernote('code', response);
         },
     });
 };
 
-function savemaintenance(html) {
+function saveTutorial(html) {
     // ajax for modern browsers
     var csrf_token = "{{ csrf_token() }}";
     // Inject our CSRF token into our AJAX request.
@@ -342,14 +397,14 @@ function savemaintenance(html) {
         cache: false,
         processData: false,
         success: function(response) {
-            
             // closes the text editor box. 'destroy' automatically uses most recent content
-            $('#summernote').summernote('destroy');
+            $('#summernote').each(function(index) {
+                $(this).summernote('destroy');
+            });
         }
     });
     
 }
-
 
 </script>
 
@@ -360,16 +415,16 @@ $(function() {
         {% if project.maintenance_enabled == True %}
             $('.toggle').removeClass('btn btn-light off');
             $('.toggle').addClass('toggle btn btn-primary');
-            $('#chkToggle')[0].checked = true;
+            $('#chkToggle').prop('checked', true);
         {% else %}
             $('.maintenance-container-text').css('display', 'none');
             $('.maintenance-main-add-btn').css('visibility','hidden');
-            $('#chkToggle')[0].checked = false;
+            $('#chkToggle').prop('checked', false);
         {% endif %}
 
     // UPDATES SERVER WITH TOGGLE SETTING
-    $('.toggle-wrapper').on('click', () => {
-        var toggleValue = $('#chkToggle')[0].checked;
+    $('.toggle').on('click', () => {
+        var toggleValue = $('#chkToggle').prop('checked');
         
         if (toggleValue == true) {
             var csrf_token = "{{ csrf_token() }}";
@@ -490,6 +545,7 @@ function update_progress(status_url, progressbar) {
         if (animationNum == 1) {
             $('.status-cancel').css('display', 'none');
             $('.status-close').css('display', 'block');
+            alert('You have successfully tested the exported maintenance doc feature. File download will be implemented in the near future :)')
         }
         
         if (data['state'] != 'PENDING' && data['state'] != 'PROGRESS') {
@@ -503,7 +559,7 @@ function update_progress(status_url, progressbar) {
             }
         }
         else {
-            // rerun in 2 seconds
+            // rerun in 3 seconds
             updateTimer = setTimeout(function() {
                 update_progress(status_url, progressbar);
             }, 3000);
@@ -573,6 +629,7 @@ function scrollbar() {
         });
     });
 };
+
 $(document).ready(function() {
     /* CUSTOM SCROLL BAR - MUST ADD THE SPECIFIED CLASS TO EACH DIV */
     $('.custom-scrollbar').each(function() {

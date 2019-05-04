@@ -12,6 +12,9 @@
   background-attachment: fixed;
   background-size: cover;
 }
+.mobile-row {
+  display: none;
+}
 .container-wrapper {
   width: 100%;
   height: 100%;
@@ -131,7 +134,7 @@
     cursor: pointer;
     font-size: 100%;
     font-family: "Comic Sans MS", helvetica, sans-serif;
-    top: -10%;
+    top: -5%;
     left: 50%;
     transform: translateX(-50%);
     width: 70%;

@@ -11,7 +11,7 @@ from app.main import bp
 from app.main.forms import EditProfileForm, MessageForm, SearchForm
 from app.project.forms import ProjectForm
 from app.email import send_notification_email, send_email
-from sqlalchemy import and_
+from sqlalchemy import and_, desc
 from werkzeug.urls import url_parse
 from werkzeug.datastructures import MultiDict
 from werkzeug.utils import secure_filename
@@ -40,7 +40,9 @@ def profile(username):
     if user:
         form = MessageForm()
         project_list = user.all_projects \
-                        .order_by(Projects.last_edit.desc())
+                        .order_by(Projects.last_edit.desc()) \
+                        .all()
+        print(project_list)
         # CAN USE BACKREF IN 'FOLLOWED' TO FIND ALL FOLLOWERS
         all_followers = user.followers.all()
         return render_template('profile.html',

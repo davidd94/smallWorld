@@ -9,7 +9,6 @@
 {% block mediaquery %}
 <style>
 /* ----------- iPhone 6, 6S, 7 and 8 ----------- */
-
 /* Portrait */
 @media only screen 
   and (min-device-width: 375px) 
@@ -23,7 +22,6 @@
         max-width: 90%;
     }
 }
-
 /* Landscape */
 @media only screen 
   and (min-device-width: 375px) 
@@ -48,80 +46,83 @@
 
 {% block bodycontent %}
 <div id="register-container" class="container">
-    <div id="signupform-container-override" class="row centered-form">
-    <div id="signupform-override" class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Sign up to create your own smallWorld for free!</h3>
-            </div>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="alert alert-dismissible alert-success register-alert">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>{{ messages[0] }}</strong><a href="{{ url_for('auth.homepage') }}" class="register-alert-link"> Log in here</a>.
-            </div>
-            {% endif %}
-            {% endwith %}
-            <div class="panel-body">
-                <form action="" method="POST">
-                {{ form.hidden_tag() }}
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="form-group">
-                            {{ form.firstname(class="form-control", placeholder="First Name", autocomplete="off") }}
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="form-group">
-                            {{ form.lastname(class="form-control input-sm", placeholder="Last Name", autocomplete="off") }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    {{ form.username(class="form-control input-sm", placeholder="User Name", autocomplete="off") }}
-                    {% for error in form.username.errors %}
-                    <div>
-                    <span style="color: red;">{{ error }}</span>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="form-group">
-                    {{ form.email(class="form-control input-sm", placeholder="Email", autocomplete="off") }}
-                    {% for error in form.email.errors %}
-                    <span style="color: red;">{{ error }}</span>
-                    {% endfor %}
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="form-group">
-                            {{ form.password(class="form-control input-sm", placeholder="Password") }}
-                            {% for error in form.password.errors %}
-                            <span style="color: red;">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="form-group">
-                            {{ form.repassword(class="form-control input-sm", placeholder="Retype Password") }}
-                            {% for error in form.repassword.errors %}
-                            <span style="color: red;">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                        
-                {{ form.submit(class="btn btn-info btn-block") }}
-                </form>
+    <div class="row align-items-center justify-content-center">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-lg-offset-6 signup-message text-center">
+            <div class="message receive">
+                I have disabled email confirmation feature to allow you to login instantly and see many other user-specific features :)
             </div>
         </div>
     </div>
-    </div>
-</div>
+    <div id="signupform-container-override" class="row centered-form">
+        <div id="signupform-override" class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Sign up to create your own smallWorld for free!</h3>
+                </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="alert alert-dismissible alert-success register-alert">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ messages[0] }}</strong><a href="{{ url_for('auth.homepage') }}" class="register-alert-link"> Log in here</a>.
+                </div>
+                {% endif %}
+                {% endwith %}
+                <div class="panel-body">
+                    <form action="" method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                {{ form.firstname(class="form-control", placeholder="First Name", autocomplete="off") }}
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                {{ form.lastname(class="form-control input-sm", placeholder="Last Name", autocomplete="off") }}
+                            </div>
+                        </div>
+                    </div>
 
-<div class="message receive">
-    I have disabled email confirmation feature to allow you to login instantly and see many other user-specific features :)
+                    <div class="form-group">
+                        {{ form.username(class="form-control input-sm", placeholder="User Name", autocomplete="off") }}
+                        {% for error in form.username.errors %}
+                        <div>
+                        <span style="color: red;">{{ error }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.email(class="form-control input-sm", placeholder="Email", autocomplete="off") }}
+                        {% for error in form.email.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                {{ form.password(class="form-control input-sm", placeholder="Password") }}
+                                {% for error in form.password.errors %}
+                                <span style="color: red;">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                {{ form.repassword(class="form-control input-sm", placeholder="Retype Password") }}
+                                {% for error in form.repassword.errors %}
+                                <span style="color: red;">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                            
+                    {{ form.submit(class="btn btn-info btn-block") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock bodycontent %}
 

@@ -8,7 +8,7 @@
 {% endblock css %}
 
 {% block bodycontent %}
-<div class="item-container">
+<div class="container item-container">
     <!-- ALERT BOX -->
     <div class="alert-box-wrapper">
         <div id="message-alert-box" class="alert alert-dismissible alert-success">
@@ -19,63 +19,79 @@
             <strong class="message-fail-msg"></strong>
         </div>
     </div>
-    <div class="toggle-wrapper">
-        <input id="chkToggle" type="checkbox" class="toggle-itemlist" data-toggle="toggle">
-    </div>
-    <a class="item-back-btn2" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}"><button type="button" class="btn btn-info">Back</button></a>
-    <div class="item-box">
-        <ol class="item-list">
-            {% if existingitems %}
-            {% for eachitem in existingitems %}
-            <li class="item-sublist item-sublist-{{ loop.index }}" data-item="{{ loop.index }}">
-                <div class="item-name item-name-{{ loop.index }} input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon3">Item Name</span>
-                    </div>
-                    <input type="text" class="item-name-value item-name-value-{{ loop.index }} form-control" id="basic-url" value="{{ eachitem.itemname }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="95" autocomplete="off">
-                </div>
 
-                <i class="item-del-{{ loop.index }} item-del fas fa-times-circle fa-1x" data-item="{{ loop.index }}"></i>
-
-                <div class="item-link item-link-{{ loop.index }} input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon3">URL</span>
-                    </div>
-                    <input type="text" class="item-link-value item-link-value-{{ loop.index }} form-control" id="basic-url"  value="{{ eachitem.itemlink }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="1495" autocomplete="off">
-                </div>
-
-                <div class="item-brand item-brand-{{ loop.index }} input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon3">Brand Name</span>
-                    </div>
-                    <input type="text" class="brand-name-value brand-name-value-{{ loop.index }} form-control" id="basic-url" value="{{ eachitem.itembrand }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="30" autocomplete="off">
-                </div>
-
-                <div class="item-quantity item-quantity-{{ loop.index }} input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">Qty</span>
-                    </div>
-                    <input type="number" class="item-qty-value item-qty-value-{{ loop.index }} form-control"  value="{{ eachitem.quantity }}" name="item-{{ loop.index }}" aria-describedby="basic-addon1" min="0" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "4">
-                </div>
-
-                <div class="item-notes item-notes-{{ loop.index }} input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Notes</span>
-                    </div>
-                    <textarea class="textarea-notes textarea-notes-{{ loop.index }} form-control" name="item-{{ loop.index }}" aria-label="With textarea" maxlength="245">{{ eachitem.notes }}</textarea>
-                </div>
-            </li>
-            {% endfor %}
-            {% endif %}
-        </ol>
-        
-        <div class="item-add-box">
-            <i class="item-add-btn far fa-plus-square fa-2x"></i>
-            <span class="item-add-text">Add Item</span>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <h1 class="edit-items-title" style="text-align: center;">Item List</h1>
         </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 my-2 text-center">
+            <div class="toggle-wrapper">
+                <input id="chkToggle" type="checkbox" class="toggle-itemlist" data-toggle="toggle">
+            </div>
+        </div>
+        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 my-2 text-center">
+            <a class="item-back-btn2" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}"><button type="button" class="btn btn-info">Back</button></a>           
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <div class="item-box">
+                <ol class="item-list">
+                    {% if existingitems %}
+                    {% for eachitem in existingitems %}
+                    <li class="item-sublist item-sublist-{{ loop.index }}" data-item="{{ loop.index }}">
+                        <div class="item-name item-name-{{ loop.index }} input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">Item Name</span>
+                            </div>
+                            <input type="text" class="item-name-value item-name-value-{{ loop.index }} form-control" id="basic-url" value="{{ eachitem.itemname }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="95" autocomplete="off">
+                        </div>
 
-        <a class="item-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}"><button type="button" class="btn btn-info">Back</button></a>
-        <button type="button" class="item-save-btn btn btn-primary">Save</button>
+                        <i class="item-del-{{ loop.index }} item-del fas fa-times-circle fa-1x" data-item="{{ loop.index }}"></i>
+
+                        <div class="item-link item-link-{{ loop.index }} input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">URL</span>
+                            </div>
+                            <input type="text" class="item-link-value item-link-value-{{ loop.index }} form-control" id="basic-url"  value="{{ eachitem.itemlink }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="1495" autocomplete="off">
+                        </div>
+
+                        <div class="item-brand item-brand-{{ loop.index }} input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">Brand Name</span>
+                            </div>
+                            <input type="text" class="brand-name-value brand-name-value-{{ loop.index }} form-control" id="basic-url" value="{{ eachitem.itembrand }}" name="item-{{ loop.index }}" aria-describedby="basic-addon3" maxlength="30" autocomplete="off">
+                        </div>
+
+                        <div class="item-quantity item-quantity-{{ loop.index }} input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Qty</span>
+                            </div>
+                            <input type="number" class="item-qty-value item-qty-value-{{ loop.index }} form-control"  value="{{ eachitem.quantity }}" name="item-{{ loop.index }}" aria-describedby="basic-addon1" min="0" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "4">
+                        </div>
+
+                        <div class="item-notes item-notes-{{ loop.index }} input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Notes</span>
+                            </div>
+                            <textarea class="textarea-notes textarea-notes-{{ loop.index }} form-control" name="item-{{ loop.index }}" aria-label="With textarea" maxlength="245">{{ eachitem.notes }}</textarea>
+                        </div>
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+                </ol>
+                
+                <div class="item-add-box">
+                    <i class="item-add-btn far fa-plus-square fa-2x"></i>
+                    <span class="item-add-text">Add Item</span>
+                </div>
+
+                <a class="item-back-btn" href="{{ url_for('project.project', username=current_user.username, title=project.title) }}"><button type="button" class="btn btn-info">Back</button></a>
+                <button type="button" class="item-save-btn btn btn-primary">Save</button>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock bodycontent %}
@@ -276,11 +292,10 @@ $(document).ready(function() {
         {% else %}
             $('.item-box').css('display', 'none');
             $('#chkToggle')[0].checked = false;
-            $('.item-back-btn2').css('display','block');
         {% endif %}
 
         // UPDATES SERVER WITH TOGGLE SETTING
-        $('.toggle-wrapper').on('click', () => {
+        $('.toggle').on('click', () => {
             var toggleValue = $('#chkToggle')[0].checked;
             
             if (toggleValue == true) {
@@ -300,7 +315,6 @@ $(document).ready(function() {
                     data: JSON.stringify('false'),
                     success: function(response) {
                         $('.item-box').css('display', 'none');
-                        $('.item-back-btn2').css('display','block');
                     }
                 });
             } else if (toggleValue == false) {
@@ -320,7 +334,6 @@ $(document).ready(function() {
                     data: JSON.stringify('true'),
                     success: function(response) {
                         $('.item-box').css('display', 'block');
-                        $('.item-back-btn2').css('display','none');
                     }
                 });
             }

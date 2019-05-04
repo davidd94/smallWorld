@@ -5,40 +5,6 @@
 <link href="{{ url_for('static', filename='profile.css') }}" rel="stylesheet">
 {% endblock css %}
 
-{% block mediaquery %}
-{{ super() }}
-<style>
-/* ----------- iPhone 6, 6S, 7, 8 and X ----------- */
-
-/* Portrait */
-@media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 667px) 
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (orientation: portrait) {
-  }
-
-/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
-/* Landscape */
-@media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 667px) 
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (orientation: landscape) { 
-    
-}
-/* ----------- iPhone X ----------- */
-/* Landscape */
-@media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 812px) 
-  and (-webkit-min-device-pixel-ratio: 3)
-  and (orientation: landscape) { 
-    
-}
-</style>
-{% endblock mediaquery %}
-
 {% block bodycontent %}
 <div class="profile-main-container">
     <div id="profile-filter-box" class="custom-scrollbar-s1">

@@ -85,7 +85,7 @@ def project(username, title):
     if user and project:
         # CHECKS IF THE PROJECT PROFILE IS PRIVATE AND REDIRECTS ACCORDINGLY
         if project.private == True and current_user != user:
-            return redirect(url_for('project.privacy'))
+            return render_template('projects/privacy.html')
         project_gallery = project.photo_gallery \
                                     .filter_by(project_id=project.id) \
                                     .first()

@@ -71,15 +71,6 @@
     text-align: center;
 }
 
-.edit-profile-alert-wrapper {
-    width: 100%;
-}
-#edit-profile-alert-box {
-    width: 60%;
-    margin: 0 auto;
-    background: rgb(21, 182, 21);
-}
-
 .gravatar-note {
     font-style: italic;
     font-weight: 600;

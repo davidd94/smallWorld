@@ -1,351 +1,310 @@
-.maintenance-container {
-    width: 100%;
-    height: 85vh;
-    padding: 1em;
-    overflow: hidden;
-    position: relative;
+.edit-maintenance-container {
+  width: 100%;
+  height: 100%;
+  padding: 1em;
+  padding-bottom: 10%;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 .maintenance-container-text {
-    width: auto;
-    height: auto;
-    max-height: 90%;
-    margin: 0 13em;
-    padding: 0;
-    border: 1px solid black;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    position: relative;
+  width: 100%;
+  height: auto;
+  max-height: 90%;
+  padding-bottom: 0.2em;
+  border: 1px solid black;
+  overflow-y: scroll;
+  overflow-x: hidden !important;
+  position: relative;
 }
-.toggle-wrapper {
-    position: absolute;
-    margin: 0;
-    top: 1.5em;
-    left: 15em;
-    z-index: 500;
+
+.toggle {
+height: 2.5em !important;
+width: 5em !important;
 }
 
 /* ADD BUTTON WITH DROPDOWN FEATURES */
 .maintenance-btn-wrapper {
-    text-align: center;
-    width: 100%;
-    height: 4em;
-    position: relative;
-    z-index: 50;
+  text-align: center;
+  width: 100%;
+  position: relative;
 }
 .maintenance-main-add-btn {
-    max-width: 5em;
-    height: auto;
-    cursor: pointer;
-    margin: 0 0 0 6.5em;
-    
+  max-width: 5em;
+  height: auto;
+  cursor: pointer;
 }
 .maintenance-main-add-btn:hover {
-    color: #007cba;
+  color: #007cba;
 }
 .maintenance-btn-wrapper #maintenance-dropdown-override {
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
-    position: absolute;
-    margin: 0;
-    left: -5em !important;
-    top: 0.3em !important;
-    z-index: 99999;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  margin: 0;
+  left: -5em !important;
+  top: 0.3em !important;
+  z-index: 99999;
 }
 .maintenance-dropdown:before {
-    content:"";
-    position: absolute;
-    left: 100px;
-    top: -10px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 10px 10px 10px;
-    border-color: transparent transparent #007cbaa9 transparent;
-    z-index:9999;
+  content:"";
+  position: absolute;
+  left: 100px;
+  top: -10px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent #007cbaa9 transparent;
+  z-index:9999;
 }
 .maintenance-dropdown:after {
-    content:"";
-    position: absolute;
-    right: 93px;
-    top: -22px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 17px 17px 17px;
-    border-color: transparent transparent transparent transparent;
-    z-index:9998;
+  content:"";
+  position: absolute;
+  right: 93px;
+  top: -22px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 17px 17px 17px;
+  border-color: transparent transparent transparent transparent;
+  z-index:9998;
 }
 .dropdown-item:hover {
-    background: #007cba93;
+  background: #007cba93;
 }
 
 /* MAIN BODY PAGE */
 .maintenance-form {
-    width: 100%;
-    height: 90%;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    position: relative;
+  width: 100%;
+  height: 90%;
+  overflow-y: scroll;
+  overflow-x: hidden !important;
 }
 
 /* SUMMERNOTE'S TEXTBOX */
 .note-toolbar {
-    background-color: rgb(240, 153, 83);
-    max-height: 3em;
+  background-color: rgb(240, 153, 83);
+  max-height: 6em;
 }
 .note-editor {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    margin: 0 auto;
-    position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: 0 auto;
 }
 .note-editing-area {
-    width: 100%;
-    height: 100%;
-    overflow: scroll;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
 }
 .note-editor .note-toolbar .note-savebutton {
-    float: right;
-    border-radius: 1em;
-    margin-right: 2em;
+  float: right;
+  border-radius: 1em;
+  margin-right: 2em;
 }
 .note-closebutton {
-    float: right;
-    border-radius: 1em;
+  float: right;
+  border-radius: 1em;
 }
 .note-editable {
-    border-top: 0.5px solid rgb(207, 207, 207);
-    border-bottom: 0.5px solid rgb(207, 207, 207);
-    overflow-y: scroll;
-    overflow-x: hidden;
-    min-height: 15em;
-    max-height: 32em;
-    height: auto;
+  border-top: 0.5px solid rgb(207, 207, 207);
+  border-bottom: 0.5px solid rgb(207, 207, 207);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  min-height: 15em;
+  max-height: 32em;
+  height: auto;
 }
 
 .modal-header {
-    display: inline-block;
+  display: inline-block;
 }
 .modal-header .modal-title {
-    text-align: center;
+  text-align: center;
 }
 .modal-header .close {
-    float: right;
+  float: right;
 }
 
 #summernote p {
-    word-wrap: break-word;
+  word-wrap: break-word;
 }
 #sn-checkbox-open-in-new-window {
-    margin-right: 1em;
+  margin-right: 1em;
 }
 
 /* OVERRIDING BOOTSTRAP 4.0.0 STYLES TO USE BOOTSWATCH MINT */
 .navbar-dark {
-    background-color: #78C2AD !important;
-    flex-flow: row nowrap !important;
-    justify-content: flex-start !important;
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    padding: 0.5rem 1rem !important;
-    
-    -webkit-box-orient: horizontal !important;
-    -webkit-box-direction: normal !important;
-    -webkit-box-pack: start !important;
+  background-color: #78C2AD !important;
+  flex-flow: row nowrap !important;
+  justify-content: flex-start !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.5rem 1rem !important;
+  
+  -webkit-box-orient: horizontal !important;
+  -webkit-box-direction: normal !important;
+  -webkit-box-pack: start !important;
 }
 
 .btn-secondary {
-    background-color: #F3969A !important;
-    border-color: #F3969A !important;
+  background-color: #F3969A !important;
+  border-color: #F3969A !important;
 }
 
 
 /* BUTTON BORDER EFFECTS */
 .edit-maintenance-back-btn {
-  display: inline-block;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  margin: 0 0 0 2em;
-  padding: 0.2em 0 0 0;
-  top: -0.2em;
-  width: 10em;
-  height: 1.9em;
-  color: rgb(66, 66, 66);
-  background: white;
-  border: 0.5px solid rgb(197, 197, 197);
-  border-radius: 75px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1em;
-  font-weight: lighter;
-  letter-spacing: 2px;
-  transition: all 800ms ease;
-  cursor: pointer;
-  text-decoration: none;
+display: inline-block;
+align-items: center;
+justify-content: center;
+position: relative;
+margin: 0;
+padding: 0.2em 0 0 0;
+top: -0.2em;
+width: 10em;
+height: 1.9em;
+color: rgb(66, 66, 66);
+background: white;
+border: 0.5px solid rgb(197, 197, 197);
+border-radius: 75px;
+font-family: 'Montserrat', sans-serif;
+font-size: 1em;
+font-weight: lighter;
+letter-spacing: 2px;
+transition: all 800ms ease;
+cursor: pointer;
+text-decoration: none;
 }
 .edit-maintenance-back-btn:hover {
-    text-decoration: none;
-    color: #17a2b8;
+  text-decoration: none;
+  color: #17a2b8;
 }
 
 .edit-maintenance-back-btn:hover {
-  box-shadow: 0 5px 35px 0px rgba(0,0,0,.1);
+box-shadow: 0 5px 35px 0px rgba(0,0,0,.1);
 }
 
 .edit-maintenance-back-btn:hover:before, .edit-maintenance-back-btn:hover:after {
-  display: block;
-  content: '';
-  position: absolute;
-  width: 10em;
-  height: 1.9em;
-  background: #FDA8CF;
-  border-radius: 75px;
-  z-index: -1;
-  animation: 1s clockwise infinite;
+display: block;
+content: '';
+position: absolute;
+width: 10em;
+height: 1.9em;
+background: #FDA8CF;
+border-radius: 75px;
+z-index: -1;
+animation: 1s clockwise infinite;
 }
 
 .edit-maintenance-back-btn:hover:after {
-  background: #F3CE5E;
-  animation: 2s counterclockwise infinite;
+background: #F3CE5E;
+animation: 2s counterclockwise infinite;
 }
 
 @keyframes clockwise {
-  0% {
-    top: -2px;
-    left: 0;
-  }
-  12% {
-    top: -1px;
-    left: 1px;
-  }
-  25% {
-    top: 0;
-    left: 3px;    
-  }
-  37% {
-    top: 1px;
-    left: 1px;
-  }
-  50% {
-    top: 2px;
-    left: 0;    
-  }
-  62% {
-    top: 1px;
-    left: -1px;
-  }
-  75% {
-    top: 0;
-    left: -3px;
-  }
-  87% {
-    top: -1px;
-    left: -1px;
-  }
-  100% {
-    top: -2px;
-    left: 0;    
-  }
+0% {
+  top: -2px;
+  left: 0;
+}
+12% {
+  top: -1px;
+  left: 1px;
+}
+25% {
+  top: 0;
+  left: 3px;    
+}
+37% {
+  top: 1px;
+  left: 1px;
+}
+50% {
+  top: 2px;
+  left: 0;    
+}
+62% {
+  top: 1px;
+  left: -1px;
+}
+75% {
+  top: 0;
+  left: -3px;
+}
+87% {
+  top: -1px;
+  left: -1px;
+}
+100% {
+  top: -2px;
+  left: 0;    
+}
 }
 
 @keyframes counterclockwise {
-  0% {
-    top: -2px;
-    right: 0;
-  }
-  12% {
-    top: -1px;
-    right: 1px;
-  }
-  25% {
-    top: 0;
-    right: 2px;    
-  }
-  37% {
-    top: 1px;
-    right: 1px;
-  }
-  50% {
-    top: 2px;
-    right: 0;    
-  }
-  62% {
-    top: 1px;
-    right: -1px;
-  }
-  75% {
-    top: 0;
-    right: -2px;
-  }
-  87% {
-    top: -1px;
-    right: -1px;
-  }
-  100% {
-    top: -2px;
-    right: 0;    
-  }
+0% {
+  top: -2px;
+  right: 0;
+}
+12% {
+  top: -1px;
+  right: 1px;
+}
+25% {
+  top: 0;
+  right: 2px;    
+}
+37% {
+  top: 1px;
+  right: 1px;
+}
+50% {
+  top: 2px;
+  right: 0;    
+}
+62% {
+  top: 1px;
+  right: -1px;
+}
+75% {
+  top: 0;
+  right: -2px;
+}
+87% {
+  top: -1px;
+  right: -1px;
+}
+100% {
+  top: -2px;
+  right: 0;    
+}
 }
 
-
-
-/* BORDER EFFECTS */
-.svg-wrapper {
-  background:#BFBFC2;
-  position: relative;
-  height:470px;
-  top:50%;
-  transform: translateY(-50%);	
-  display:inline-block;
-  margin-right:30px;
-  margin-left:30px;
-  width: 300px;  
-}
-.svg { box-shadow: inset 0px 0px 0px 3px red; }
-.shape {  
-  stroke-width: 2px;
-  fill: transparent;
-  stroke: #EAEAEA;
-  transition: fill .6s;
-}
-.one { stroke-dasharray: 470 300 470 300; stroke-dashoffset: 470; }
-.two { stroke-dasharray: 300 470 300 470; }
-.text {
-  font-family: 'Roboto Condensed';
-  font-size: 22px;
-  line-height: 0px;
-  letter-spacing: 8px;
-  color: rgb(20,20,20);
-  position: relative;
-  transition:color .6s;
-}
-.subtext {
-  color:#65626b;
-  text-transform:uppercase;
-  font-family:'Roboto Condensed';
-  position: relative;
-  text-align:left;
-}
-.first { margin-bottom:30px; }
 
 
 /* EXPORT STATUS BAR */
+.export-status-container {
+width: 100%;
+height: auto;
+display: none;
+text-align: center;
+}
 #statuscontainer {
-    margin: 20px auto;
-    width: 200px;
-    height: 100px;
-    display: none;
+  width: 200px;
+  height: 100px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .status-close,
 .status-cancel {
-    position: absolute;
-    top: -0.2em;
-    right: -5em;
-    font-size: 0.7em;
-    cursor: pointer;
-    display: none;
+  position: absolute;
+  top: -0.2em;
+  right: -5em;
+  font-size: 0.7em;
+  cursor: pointer;
+  display: none;
 }
 .progressbar-text {
-    font-size: 0.8em;
+  font-size: 0.8em;
 }

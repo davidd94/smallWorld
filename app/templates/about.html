@@ -9,8 +9,90 @@
 {% block mediaquery %}
 {{ super() }}
 <style>
-/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+    /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+    .carousel-wrapper {
+        top: 60%;
+        height: 100%;
+        width: 17em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: auto;
+        height: auto;
+        padding: 5px;
+    }
+    .bio-box p {
+        padding: 5px;
+    }
+    
+    .carousel-wrapper .carousel .carousel-cell-smallworld {
+        width: 15em;
+        height: auto;
+        padding: 5px;
+    }
+    .smallworld-box {
+        width: auto;
+        height: 100%;
+        max-height: auto;
+    }
+    .smallworld-box p {
+        height: auto;
+        width: 100%;
+    }
 
+    .carousel-cell-others {
+        height: auto;
+    }
+    .carousel-cell-others .others-box {
+        max-height: auto;
+    }
+    .others-box h3 {
+        margin: 1em 0 0.5em 0;
+    }
+    .others-box p {
+        height: auto;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+    .carousel-wrapper {
+        top: 55%;
+        height: 100%;
+        width: 26em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: 85%;
+        height: 12em;
+        padding: 5px;
+        overflow: hidden;
+    }
+    
+    .bio-box p,
+    .smallworld-box p {
+        height: 4em;
+        max-height: auto;
+        padding: 5px;
+    }
+
+    .others-box {
+        height: 11em;
+        overflow: scroll;
+        padding-bottom: 2em;
+    }
+    .others-box h3 {
+        margin: 1em 0 1em 0;
+    }
+}
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
 /* Portrait */
 @media only screen 
   and (min-device-width: 375px) 
@@ -58,9 +140,7 @@
     .others-box p {
         height: auto;
     }
-    
 }
-
 /* Landscape */
 @media only screen 
   and (min-device-width: 375px) 
@@ -94,7 +174,342 @@
     .others-box h3 {
         margin: 1em 0 1em 0;
     }
+}
+
+/* ----------- iPhone 6+, 7+ and 8+ ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    .carousel-wrapper {
+        top: 60%;
+        height: 100%;
+        width: 20em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: auto;
+        height: auto;
+        padding: 5px;
+    }
+    .bio-box p {
+        padding: 5px;
+    }
     
+    .carousel-wrapper .carousel .carousel-cell-smallworld {
+        width: 17em;
+        height: auto;
+        padding: 5px;
+    }
+    .smallworld-box {
+        width: auto;
+        height: 100%;
+        max-height: auto;
+    }
+    .smallworld-box p {
+        height: auto;
+        width: 100%;
+    }
+
+    .carousel-cell-others {
+        height: auto;
+    }
+    .carousel-cell-others .others-box {
+        max-height: auto;
+    }
+    .others-box h3 {
+        margin: 2em 0 0.5em 0;
+    }
+    .others-box p {
+        height: auto;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .carousel-wrapper {
+        top: 55%;
+        height: 100%;
+        width: 30em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: 85%;
+        height: 15em;
+        padding: 5px;
+        overflow: hidden;
+    }
+    
+    .bio-box p,
+    .smallworld-box p {
+        height: 5em;
+        max-height: auto;
+        padding: 5px;
+    }
+
+    .others-box {
+        height: 13em;
+        overflow: scroll;
+        padding-bottom: 2em;
+    }
+    .others-box h3 {
+        margin: 1em 0 1em 0;
+    }
+}
+
+/* ----------- iPhone X ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    .carousel-wrapper {
+        top: 60%;
+        height: 100%;
+        width: 20em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: auto;
+        height: auto;
+        padding: 5px;
+    }
+    .bio-box p {
+        padding: 5px;
+    }
+    
+    .carousel-wrapper .carousel .carousel-cell-smallworld {
+        width: 17em;
+        height: auto;
+        padding: 5px;
+    }
+    .smallworld-box {
+        width: auto;
+        height: 100%;
+        max-height: auto;
+    }
+    .smallworld-box p {
+        height: auto;
+        width: 100%;
+    }
+
+    .carousel-cell-others {
+        height: auto;
+    }
+    .carousel-cell-others .others-box {
+        max-height: auto;
+    }
+    .others-box h3 {
+        margin: 2em 0 0.5em 0;
+    }
+    .others-box p {
+        height: auto;
+    }
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .carousel-wrapper {
+        top: 55%;
+        height: 100%;
+        width: 30em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: 85%;
+        height: 15em;
+        padding: 5px;
+        overflow: hidden;
+    }
+    
+    .bio-box p,
+    .smallworld-box p {
+        height: 5em;
+        max-height: auto;
+        padding: 5px;
+    }
+
+    .others-box {
+        height: 13em;
+        overflow: scroll;
+        padding-bottom: 2em;
+    }
+    .others-box h3 {
+        margin: 1em 0 1em 0;
+    }
+}
+/* ----------- Galaxy S4, S5 and Note 3 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: portrait) {
+    .carousel-wrapper {
+        top: 60%;
+        height: 100%;
+        width: 20em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: auto;
+        height: auto;
+        padding: 5px;
+    }
+    .bio-box p {
+        padding: 5px;
+    }
+    
+    .carousel-wrapper .carousel .carousel-cell-smallworld {
+        width: 17em;
+        height: auto;
+        padding: 5px;
+    }
+    .smallworld-box {
+        width: auto;
+        height: 100%;
+        max-height: auto;
+    }
+    .smallworld-box p {
+        height: auto;
+        width: 100%;
+    }
+
+    .carousel-cell-others {
+        height: auto;
+    }
+    .carousel-cell-others .others-box {
+        max-height: auto;
+    }
+    .others-box h3 {
+        margin: 2em 0 0.5em 0;
+    }
+    .others-box p {
+        height: auto;
+    }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: landscape) {
+    .carousel-wrapper {
+        top: 55%;
+        height: 100%;
+        width: 30em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: 85%;
+        height: 15em;
+        padding: 5px;
+        overflow: hidden;
+    }
+    
+    .bio-box p,
+    .smallworld-box p {
+        height: 5em;
+        max-height: auto;
+        padding: 5px;
+    }
+
+    .others-box {
+        height: 13em;
+        overflow: scroll;
+        padding-bottom: 2em;
+    }
+    .others-box h3 {
+        margin: 1em 0 1em 0;
+    }
+}
+
+/* ----------- Galaxy S6 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: portrait) {
+    .carousel-wrapper {
+        top: 60%;
+        height: 100%;
+        width: 20em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: auto;
+        height: auto;
+        padding: 5px;
+    }
+    .bio-box p {
+        padding: 5px;
+    }
+    
+    .carousel-wrapper .carousel .carousel-cell-smallworld {
+        width: 17em;
+        height: auto;
+        padding: 5px;
+    }
+    .smallworld-box {
+        width: auto;
+        height: 100%;
+        max-height: auto;
+    }
+    .smallworld-box p {
+        height: auto;
+        width: 100%;
+    }
+
+    .carousel-cell-others {
+        height: auto;
+    }
+    .carousel-cell-others .others-box {
+        max-height: auto;
+    }
+    .others-box h3 {
+        margin: 2em 0 0.5em 0;
+    }
+    .others-box p {
+        height: auto;
+    }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: landscape) {
+    .carousel-wrapper {
+        top: 55%;
+        height: 100%;
+        width: 30em;
+    }
+    .carousel-wrapper .carousel .carousel-cell {
+        width: 85%;
+        height: 15em;
+        padding: 5px;
+        overflow: hidden;
+    }
+    
+    .bio-box p,
+    .smallworld-box p {
+        height: 5em;
+        max-height: auto;
+        padding: 5px;
+    }
+
+    .others-box {
+        height: 13em;
+        overflow: scroll;
+        padding-bottom: 2em;
+    }
+    .others-box h3 {
+        margin: 1em 0 1em 0;
+    }
 }
 </style>
 {% endblock mediaquery %}

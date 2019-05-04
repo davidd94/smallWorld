@@ -227,7 +227,6 @@ h1 {
 }
 
 .reply-comment-box .comment-head {
-	display: inline-block;
 	background: #FCFCFC;
 	padding: 10px 12px;
 	border-bottom: 1px solid #E5E5E5;

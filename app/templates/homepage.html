@@ -8,172 +8,717 @@
 {% block mediaquery %}
 {{ super() }}
 <style>
-  /* ----------- iPhone 6, 6S, 7, 8, and X ----------- */
-  /* Portrait */
-  @media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 667px) 
+/* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
   and (-webkit-min-device-pixel-ratio: 2)
   and (orientation: portrait) {
-    /* ANONYMOUS USERS */
-    .container {
-      background-repeat: repeat;
-      background-attachment: scroll;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-    }
-    .zen-text {
-      font-size: 1em;
-    }
-    .signup-btn-link {
-      left: 63%;
-      width: 50%;
-    }
-    .create-terrarium-text {
-      width: 100%;
-    }
-    .create-terrarium-container {
-      top: -25%;
-      left: -85%;
-      transform: scale(0.3);
-    }
-    #canvas_container_div {
-      bottom: 13%;
-      left: 0;
-      transform: none;
-    }
-    #canvas {
-      transform: scale(1.4);
-    }
-    .card-container {
-      width: 75%;
-    }
-
-    /* AUTHENTICATED USERS */
-    .projectfeed-title {
-      font-size: 1em;
-    }
-    .followed-note-title {
-      margin-bottom: 4em;
-    }
+  /* ANONYMOUS USERS */
+  .container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
-  /* ----------- iPhone 6, 6S, 7, and 8 ----------- */
-  /* Landscape */
-  @media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 667px) 
+  .zen-text {
+    font-size: 1em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .carousel-wrapper {
+    margin-top: 7em;
+  }
+  .create-terrarium-text {
+    top: -25%;
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: -25%;
+    left: -110%;
+    transform: scale(0.3);
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  #canvas_container_div {
+    bottom: 13%;
+    left: 0;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(1.4);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
   and (-webkit-min-device-pixel-ratio: 2)
   and (orientation: landscape) {
-    /* ANONYMOUS USERS */
-    .container {
-      background-repeat: repeat;
-      background-attachment: scroll;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-    }
-    .create-terrarium-text {
-      top: -7%;
-    }
-    .zen-text {
-      font-size: 2em;
-    }
-    .signup-btn-link {
-      left: 63%;
-      width: 50%;
-    }
-    .create-terrarium-text {
-      width: 100%;
-    }
-    .create-terrarium-container {
-      top: 0;
-      left: -20%;
-      transform: scale(0.7);
-    }
-    .animated-plants-container {
-      bottom: -5%;
-      right: 8%;
-      transform: scale(1.5);
-    }
-    #canvas_container_div {
-      bottom: 45%;
-      left: 23%;
-      transform: none;
-    }
-    #canvas {
-      transform: scale(2);
-    }
-    .card-container {
-      width: 75%;
-    }
-
-    /* AUTHENTICATED USERS */
-    .projectfeed-title {
-      font-size: 1em;
-    }
-    .followed-note-title {
-      margin-bottom: 4em;
-    }
-    .chatlist-wrapper {
-      height: 100vh;
-    }
+/* ANONYMOUS USERS */
+.container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
-    /* ----------- iPhone X ----------- */
-    /* Landscape */
-    @media only screen 
-      and (min-device-width: 375px) 
-      and (max-device-width: 812px) 
-      and (-webkit-min-device-pixel-ratio: 3)
-      and (orientation: landscape) { 
-      /* ANONYMOUS USERS */
-      .container {
-        background-repeat: repeat;
-        background-attachment: scroll;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
-      }
-      .create-terrarium-text {
-        top: -7%;
-      }
-      .zen-text {
-        font-size: 2em;
-      }
-      .signup-btn-link {
-        left: 63%;
-        width: 50%;
-      }
-      .create-terrarium-text {
-        width: 100%;
-      }
-      .create-terrarium-container {
-        top: 0;
-        left: -20%;
-        transform: scale(0.7);
-      }
-      .animated-plants-container {
-        bottom: -5%;
-        right: 8%;
-        transform: scale(1.5);
-      }
-      #canvas_container_div {
-        bottom: 45%;
-        left: 23%;
-        transform: none;
-      }
-      #canvas {
-        transform: scale(2);
-      }
-      .card-container {
-        width: 75%;
-      }
+  .carousel-wrapper {
+    margin-top: 5em;
+  }
+  .create-terrarium-text {
+    top: -7%;
+  }
+  .zen-text {
+    font-size: 2em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: 0;
+    left: -20%;
+    transform: scale(0.7);
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  .animated-plants-container {
+    bottom: -5%;
+    right: 8%;
+    transform: scale(1.5);
+  }
+  #canvas_container_div {
+    bottom: 45%;
+    left: 23%;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(2);
+  }
+  .card-container {
+    width: 75%;
+  }
 
-      /* AUTHENTICATED USERS */
-      .projectfeed-title {
-        font-size: 1em;
-      }
-      .followed-note-title {
-        margin-bottom: 4em;
-      }
-    }
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+  .chatlist-wrapper {
+    height: 100vh;
+  }
+}
+
+/* ----------- iPhone 6, 6S, 7, and 8 ----------- */
+/* Portrait */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+  /* ANONYMOUS USERS */
+  .container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .zen-text {
+    font-size: 1em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: -25%;
+    left: -85%;
+    transform: scale(0.3);
+  }
+  .carousel-wrapper {
+    margin-top: 7em;
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  #canvas_container_div {
+    bottom: 13%;
+    left: 0;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(1.4);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+}
+/* Landscape */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: landscape) {
+  /* ANONYMOUS USERS */
+  .container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .create-terrarium-text {
+    top: -7%;
+  }
+  .zen-text {
+    font-size: 2em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: 0;
+    left: -20%;
+    transform: scale(0.7);
+  }
+  .carousel-wrapper {
+    margin-top: 5em;
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  .animated-plants-container {
+    bottom: -5%;
+    right: 8%;
+    transform: scale(1.5);
+  }
+  #canvas_container_div {
+    bottom: 45%;
+    left: 23%;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(2);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+  .chatlist-wrapper {
+    height: 100vh;
+  }
+}
+
+/* ----------- iPhone 6+, 7+ and 8+ ----------- */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+/* ANONYMOUS USERS */
+  .container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .zen-text {
+    font-size: 1em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: -25%;
+    left: -85%;
+    transform: scale(0.3);
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  #canvas_container_div {
+    bottom: 13%;
+    left: 0;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(1.4);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+/* ANONYMOUS USERS */
+.container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .create-terrarium-text {
+    top: -7%;
+  }
+  .zen-text {
+    font-size: 2em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .carousel-wrapper {
+    margin-top: 5em;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: 0;
+    left: -20%;
+    transform: scale(0.7);
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  .animated-plants-container {
+    bottom: -5%;
+    right: 8%;
+    transform: scale(1.5);
+  }
+  #canvas_container_div {
+    bottom: 45%;
+    left: 23%;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(2);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+  .chatlist-wrapper {
+    height: 100vh;
+  }
+}
+
+/* ----------- iPhone X ----------- */
+/* Portrait */
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: portrait) {
+  /* ANONYMOUS USERS */
+  .container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .zen-text {
+    font-size: 1em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: -25%;
+    left: -85%;
+    transform: scale(0.3);
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  #canvas_container_div {
+    bottom: 13%;
+    left: 0;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(1.4);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+}
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+  /* ANONYMOUS USERS */
+  .container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .create-terrarium-text {
+    top: -7%;
+  }
+  .zen-text {
+    font-size: 2em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: 0;
+    left: -10%;
+    transform: scale(0.7);
+  }
+  .carousel-wrapper {
+    margin-top: 5em;
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  .animated-plants-container {
+    bottom: -5%;
+    right: 8%;
+    transform: scale(1.5);
+  }
+  #canvas_container_div {
+    bottom: 45%;
+    left: 23%;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(2);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+}
+
+/* ----------- Galaxy S4, S5 and Note 3 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: portrait) {
+/* ANONYMOUS USERS */
+.container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .zen-text {
+    font-size: 1em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: -25%;
+    left: -85%;
+    transform: scale(0.3);
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  #canvas_container_div {
+    bottom: 13%;
+    left: 0;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(1.4);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: landscape) {
+/* ANONYMOUS USERS */
+.container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .create-terrarium-text {
+    top: -7%;
+  }
+  .zen-text {
+    font-size: 2em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: 0;
+    left: -20%;
+    transform: scale(0.7);
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  .animated-plants-container {
+    bottom: -5%;
+    right: 8%;
+    transform: scale(1.5);
+  }
+  #canvas_container_div {
+    bottom: 45%;
+    left: 23%;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(2);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+}
+
+/* ----------- Galaxy S6 ----------- */
+/* Portrait */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: portrait) {
+/* ANONYMOUS USERS */
+.container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .zen-text {
+    font-size: 1em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: -25%;
+    left: -85%;
+    transform: scale(0.3);
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  #canvas_container_div {
+    bottom: 13%;
+    left: 0;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(1.4);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+}
+/* Landscape */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) 
+  and (orientation: landscape) {
+/* ANONYMOUS USERS */
+.container {
+    background-repeat: repeat;
+    background-attachment: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .create-terrarium-text {
+    top: -7%;
+  }
+  .zen-text {
+    font-size: 2em;
+  }
+  .signup-btn-link {
+    left: 63%;
+    width: 50%;
+  }
+  .create-terrarium-text {
+    width: 100%;
+  }
+  .create-terrarium-container {
+    top: 0;
+    left: -20%;
+    transform: scale(0.7);
+  }
+  .mobile-row {
+    display: block;
+    height: 30%;
+  }
+  .animated-plants-container {
+    bottom: -5%;
+    right: 8%;
+    transform: scale(1.5);
+  }
+  #canvas_container_div {
+    bottom: 45%;
+    left: 23%;
+    transform: none;
+  }
+  #canvas {
+    transform: scale(2);
+  }
+  .card-container {
+    width: 75%;
+  }
+
+  /* AUTHENTICATED USERS */
+  .projectfeed-title {
+    font-size: 1em;
+  }
+  .followed-note-title {
+    margin-bottom: 4em;
+  }
+}
 </style>
 {% endblock mediaquery %}
 
@@ -182,7 +727,7 @@
 <div class="container">
   <div class="container-wrapper">
     <div class="row">
-      <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-5 carousel-wrapper">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 carousel-wrapper">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
             <p class="create-terrarium-text">Create your own animated terriarum here !</p>
             <ol class="carousel-indicators">
@@ -214,7 +759,7 @@
         </div>
       </div>
 
-      <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-4 homepage-login-wrapper">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 homepage-login-wrapper">
         <div class="card card-container">
             <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
             <img id="profile-img" class="profile-img-card" src="{{ url_for('static', filename='unknownuser.png') }}" />
@@ -236,6 +781,8 @@
             </a>
         </div><!-- /card-container -->
       </div>
+
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mobile-row"></div>
     </div>
 
     <!------ TERRARIUM CREATOR ----->

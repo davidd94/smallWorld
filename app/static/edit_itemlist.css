@@ -1,56 +1,30 @@
 .item-container {
     width: 100%;
-    height: 92vh;
+    height: 100%;
     padding: 1em;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     position: relative;
 }
 .item-box {
-    width: 50%;
+    width: 100%;
     height: 100%;
-    margin: 0 auto;
     overflow: hidden;
     border: 1px solid black;
     border-radius: 0.5em;
-}
-.alert-box-wrapper {
-    position: absolute;
-    width: 20em;
-    right: -30em;
-    top: 3em;
-}
-#message-alert-box {
-    width: 15em;
-    height: auto;
-    right: -10em;
-    padding: 1em;
-    text-align: center;
-    position: absolute;
-    transition: all 1800ms ease;
-}
-.toggle-wrapper {
-    position: absolute;
-    margin: 0;
-    top: 2em;
-    left: 13em;
-}
-.item-back-btn2 {
-    width: 4em;
-    height: 2.25em;
-    position: absolute;
-    top: 8em;
-    left: 13em;
-    display: none;
+    margin-bottom: 4em;
 }
 
+
+
 .item-list {
-    height: 92%;
+    height: 90%;
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
     color: black;
     margin: 0;
-    padding: 1em 1em 0 1.5em;
+    padding: 2em 0.5em 2em 2em;
     font-size: 1.5em;
     font-weight: 600;
     border-bottom: 2px solid rgb(209, 209, 209);
@@ -102,10 +76,9 @@
 .item-add-box {
     display: grid;
     grid-template: 1fr / 2.5em 1fr;
-    width: 13%;
-    position: absolute;
-    bottom: 2em;
-    left: 45%;
+    width: 20%;
+    padding: 0 3%;
+    margin: 0 auto;
 }
 .item-add-box:hover .item-add-btn {
     color: rgb(99, 99, 201);
@@ -135,11 +108,35 @@
 .item-save-btn {
     width: 4em;
     height: 2.25em;
-    margin: 0.6em 0 0 4em;
+    float: left;
+    margin-left: 5%;
+    margin-bottom: 1em;
 }
 .item-back-btn {
     width: 4em;
     height: 2.25em;
-    margin: 0.6em 4em 0 0;
+    margin-right: 5%;
     float: right;
+}
+
+
+/* ALERT MSG BOX */
+.alert-box-wrapper {
+    position: fixed;
+    z-index: 5000;
+    top: 10%;
+    right: -10em;
+    height: 1%;
+}
+
+#message-alert-box {
+    width: 15em;
+    height: auto;
+    max-height: 6em;
+    padding: 0.8em;
+    text-align: center;
+    right: -70em;
+    top: 0;
+    transition: all 1500ms ease;
+    position: absolute;
 }

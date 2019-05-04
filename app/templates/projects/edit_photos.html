@@ -6,354 +6,384 @@
 {% endblock css %}
 
 {% block bodycontent %}
-<div class="edit-photo-container custom-scrollbar-s3">
-    <h2>Add/Remove Photos</h2>
-    <a class="edit-photo-back" href="{{ url_for('project.project', title=project.title, username=user.username) }}"><button type="button" class="btn btn-info">Back to Project</button></a>
-    <form id="file_box_input" class="box" method="POST" action="" enctype="multipart/form-data">
-    <svg class="box__icon" xmlns="http://www.w3.org/2000/svg" width="150" viewBox="0 0 50 43"><path d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z"></path></svg>
-    <div id="file_input" class="box__input input-div">  
-        <input class="box__file file-input-child" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
-        <label class="file-input-child" for="file"><strong>Choose a file</strong><span class="box__dragndrop"> or drag it here</span> (jpg/png 5mb max)</label>
-        <br>
-        <button class="box__button file-input-child" type="submit">Upload</button>
-    </div>
-    <div class="box__uploading input-div">Uploading&hellip;</div>
-    <div class="box__success input-div"><span class="success_msg"></span>
-        <a href="" class="box__restart" role="button">Upload more?</a>
-    </div>
-    <div class="box__error input-div">Error! <span class="error_msg"></span> <a href="" class="box__restart" role="button">Try again!</a></div>
-    </form>
-
-    <div class="container">
-
-        <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Photo Gallery</h1>
-
-        <hr class="mt-2 mb-5">
-
-        <div id="main-gallery-frame" class="row text-center text-lg-left">
-            {% if project_gallery %}
-            {% if project_gallery.photoOne %}
-            <div id="main-box" class="col-lg-3 col-md-4 col-6 gradient-border" name="{{ project_gallery.photoOne }}">
-                <a href="#_" id="image-box" class="d-block mb-4 h-100">
-                    <div class="remove-centering">
-                        <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
-                    </div>
-                    <img class="image-thumb" data-toggle="modal" data-target="#exampleModal1" name="{{ project_gallery.photoOne }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoOne) }}" alt="Image not found!">
-                </a>
-            </div>
-            <!-- PICTURE POPUP MODAL -->
-            <div class="modal fade main-pic-modal" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <p><span class="main-photo-text">PRIMARY PHOTO</span>{{ project_gallery.photoOne }}</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="pic-modal" style="text-align: center;">
-                            <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoOne) }}" alt="Image not found">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if project_gallery.photoTwo %}
-            <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoTwo }}">
-                <a href="#_" id="image-box" class="d-block mb-4 h-100">
-                    <div class="remove-centering">
-                        <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
-                    </div>
-                    <img class="image-thumb" data-toggle="modal" data-target="#exampleModal2" name="{{ project_gallery.photoTwo }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTwo) }}" alt="Image not found!">
-                </a>
-            </div>
-            <!-- PICTURE POPUP MODAL -->
-            <div class="modal fade main-pic-modal" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoTwo) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
-                        <p>{{ project_gallery.photoTwo }}</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="pic-modal" style="text-align: center;">
-                            <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTwo) }}" alt="Image not found">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if project_gallery.photoThree %}
-            <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoThree }}">
-                <a href="#_" id="image-box" class="d-block mb-4 h-100">
-                    <div class="remove-centering">
-                        <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
-                    </div>
-                    <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal3" name="{{ project_gallery.photoThree }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoThree) }}" alt="Image not found!">
-                </a>
-            </div>
-            <!-- PICTURE POPUP MODAL -->
-            <div class="modal fade main-pic-modal" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoThree) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
-                        <p>{{ project_gallery.photoThree }}</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="pic-modal" style="text-align: center;">
-                            <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoThree) }}" alt="Image not found">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if project_gallery.photoFour %}
-            <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoFour }}">
-                <a href="#_" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal4">
-                    <div class="remove-centering">
-                        <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
-                    </div>
-                    <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal4" name="{{ project_gallery.photoFour }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFour) }}" alt="Image not found!">
-                </a>
-            </div>
-            <!-- PICTURE POPUP MODAL -->
-            <div class="modal fade main-pic-modal" id="exampleModal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoFour) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
-                        <p>{{ project_gallery.photoFour }}</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="pic-modal" style="text-align: center;">
-                            <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFour) }}" alt="Image not found">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if project_gallery.photoFive %}
-            <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoFive }}">
-                <a href="#_" id="image-box" class="d-block mb-4 h-100">
-                    <div class="remove-centering">
-                        <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
-                    </div>
-                    <img class="image-thumb" data-toggle="modal" data-target="#exampleModal5" name="{{ project_gallery.photoFive }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFive) }}" alt="Image not found!">
-                </a>
-            </div>
-            <!-- PICTURE POPUP MODAL -->
-            <div class="modal fade main-pic-modal" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoFive) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
-                        <p>{{ project_gallery.photoFive }}</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="pic-modal" style="text-align: center;">
-                            <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFive) }}" alt="Image not found">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if project_gallery.photoSix %}
-            <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoSix }}">
-                <a href="#_" id="image-box" class="d-block mb-4 h-100">
-                    <div class="remove-centering">
-                        <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
-                    </div>
-                    <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal6" name="{{ project_gallery.photoSix }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSix) }}" alt="Image not found!">
-                </a>
-            </div>
-            <!-- PICTURE POPUP MODAL -->
-            <div class="modal fade main-pic-modal" id="exampleModal6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoSix) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
-                        <p>{{ project_gallery.photoSix }}</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="pic-modal" style="text-align: center;">
-                            <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSix) }}" alt="Image not found">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if project_gallery.photoSeven %}
-            <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoSeven }}">
-                <a href="#_" id="image-box" class="d-block mb-4 h-100">
-                    <div class="remove-centering">
-                        <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
-                    </div>
-                    <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal7" name="{{ project_gallery.photoSeven }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSeven) }}" alt="Image not found!">
-                </a>
-            </div>
-            <!-- PICTURE POPUP MODAL -->
-            <div class="modal fade main-pic-modal" id="exampleModal7" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoSeven) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
-                        <p>{{ project_gallery.photoSeven }}</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="pic-modal" style="text-align: center;">
-                            <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSeven) }}" alt="Image not found">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if project_gallery.photoEight %}
-            <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoEight }}">
-                <a href="#_" id="image-box" class="d-block mb-4 h-100">
-                    <div class="remove-centering">
-                        <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
-                    </div>
-                    <img class="image-thumb" data-toggle="modal" data-target="#exampleModal8" name="{{ project_gallery.photoEight }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoEight) }}" alt="Image not found!">
-                </a>
-            </div>
-            <!-- PICTURE POPUP MODAL -->
-            <div class="modal fade main-pic-modal" id="exampleModal8" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoEight) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
-                        <p>{{ project_gallery.photoEight }}</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="pic-modal" style="text-align: center;">
-                            <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoEight) }}" alt="Image not found">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if project_gallery.photoNine %}
-            <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoNine }}">
-                <a href="#_" id="image-box" class="d-block mb-4 h-100">
-                    <div class="remove-centering">
-                        <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
-                    </div>
-                    <img class="image-thumb" data-toggle="modal" data-target="#exampleModal9" name="{{ project_gallery.photoNine }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoNine) }}" alt="Image not found!">
-                </a>
-            </div>
-            <!-- PICTURE POPUP MODAL -->
-            <div class="modal fade main-pic-modal" id="exampleModal9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoNine) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
-                        <p>{{ project_gallery.photoNine }}</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="pic-modal" style="text-align: center;">
-                            <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoNine) }}" alt="Image not found">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if project_gallery.photoTen %}
-            <div class="col-lg-3 col-md-4 col-6" name="{{ project_gallery.photoTen }}">
-                <a href="#_" id="image-box" class="d-block mb-4 h-100">
-                    <div class="remove-centering">
-                        <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
-                    </div>
-                    <img class="image-thumb" data-toggle="modal" data-target="#exampleModal10" name="{{ project_gallery.photoTen }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTen) }}" alt="Image not found!">
-                </a>
-            </div>
-            <!-- PICTURE POPUP MODAL -->
-            <div class="modal fade main-pic-modal" id="exampleModal10" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoTen) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
-                        <p>{{ project_gallery.photoTen }}</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="pic-modal" style="text-align: center;">
-                            <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTen) }}" alt="Image not found">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% endif %}
+<div class="container edit-photo-container">
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <h1 class="edit-maintenance-title" style="text-align: center;">Add/Remove Photos</h1>
         </div>
     </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <a class="edit-photo-back" href="{{ url_for('project.project', title=project.title, username=user.username) }}"><button type="button" class="btn btn-info">Back to Project</button></a>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <form id="file_box_input" class="box" method="POST" action="" enctype="multipart/form-data">
+                <svg class="box__icon" xmlns="http://www.w3.org/2000/svg" width="150" viewBox="0 0 50 43"><path d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z"></path></svg>
+                <div id="file_input" class="box__input input-div">  
+                    <input class="box__file file-input-child" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
+                    <label class="file-input-child" for="file"><strong>Choose a file</strong><span class="box__dragndrop"> or drag it here</span> (jpg/png 5mb max)</label>
+                    <br>
+                    <button class="box__button file-input-child" type="submit">Upload</button>
+                </div>
+                <div class="box__uploading input-div">Uploading&hellip;</div>
+                <div class="box__success input-div"><span class="success_msg"></span>
+                    <a href="" class="box__restart" role="button">Upload more?</a>
+                </div>
+                <div class="box__error input-div">Error! <span class="error_msg"></span> <a href="" class="box__restart" role="button">Try again!</a></div>
+            </form>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Photo Gallery</h1>
+        </div>
+    </div>
+
+    <hr class="mt-2 mb-5">
+    
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">
+            <div id="main-gallery-frame" class="row text-center text-lg-left">
+                {% if project_gallery %}
+                {% if project_gallery.photoOne %}
+                <div id="main-box" class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3 gradient-border" name="{{ project_gallery.photoOne }}">
+                    <a href="#_" id="image-box" class="d-block mb-4 h-100">
+                        <div class="remove-centering">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                        </div>
+                        <img class="image-thumb" data-toggle="modal" data-target="#exampleModal1" name="{{ project_gallery.photoOne }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoOne) }}" alt="Image not found!">
+                    </a>
+                </div>
+                {% endif %}
+                {% if project_gallery.photoTwo %}
+                <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoTwo }}">
+                    <a href="#_" id="image-box" class="d-block mb-4 h-100">
+                        <div class="remove-centering">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                        </div>
+                        <img class="image-thumb" data-toggle="modal" data-target="#exampleModal2" name="{{ project_gallery.photoTwo }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTwo) }}" alt="Image not found!">
+                    </a>
+                </div>
+                {% endif %}
+                {% if project_gallery.photoThree %}
+                <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoThree }}">
+                    <a href="#_" id="image-box" class="d-block mb-4 h-100">
+                        <div class="remove-centering">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                        </div>
+                        <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal3" name="{{ project_gallery.photoThree }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoThree) }}" alt="Image not found!">
+                    </a>
+                </div>
+                {% endif %}
+                {% if project_gallery.photoFour %}
+                <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoFour }}">
+                    <a href="#_" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal4">
+                        <div class="remove-centering">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                        </div>
+                        <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal4" name="{{ project_gallery.photoFour }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFour) }}" alt="Image not found!">
+                    </a>
+                </div>
+                {% endif %}
+                {% if project_gallery.photoFive %}
+                <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoFive }}">
+                    <a href="#_" id="image-box" class="d-block mb-4 h-100">
+                        <div class="remove-centering">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                        </div>
+                        <img class="image-thumb" data-toggle="modal" data-target="#exampleModal5" name="{{ project_gallery.photoFive }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFive) }}" alt="Image not found!">
+                    </a>
+                </div>
+                {% endif %}
+                {% if project_gallery.photoSix %}
+                <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoSix }}">
+                    <a href="#_" id="image-box" class="d-block mb-4 h-100">
+                        <div class="remove-centering">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                        </div>
+                        <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal6" name="{{ project_gallery.photoSix }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSix) }}" alt="Image not found!">
+                    </a>
+                </div>
+                {% endif %}
+                {% if project_gallery.photoSeven %}
+                <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoSeven }}">
+                    <a href="#_" id="image-box" class="d-block mb-4 h-100">
+                        <div class="remove-centering">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                        </div>
+                        <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal7" name="{{ project_gallery.photoSeven }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSeven) }}" alt="Image not found!">
+                    </a>
+                </div>
+                {% endif %}
+                {% if project_gallery.photoEight %}
+                <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoEight }}">
+                    <a href="#_" id="image-box" class="d-block mb-4 h-100">
+                        <div class="remove-centering">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                        </div>
+                        <img class="image-thumb" data-toggle="modal" data-target="#exampleModal8" name="{{ project_gallery.photoEight }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoEight) }}" alt="Image not found!">
+                    </a>
+                </div>
+                {% endif %}
+                {% if project_gallery.photoNine %}
+                <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoNine }}">
+                    <a href="#_" id="image-box" class="d-block mb-4 h-100">
+                        <div class="remove-centering">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                        </div>
+                        <img class="image-thumb" data-toggle="modal" data-target="#exampleModal9" name="{{ project_gallery.photoNine }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoNine) }}" alt="Image not found!">
+                    </a>
+                </div>
+                {% endif %}
+                {% if project_gallery.photoTen %}
+                <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoTen }}">
+                    <a href="#_" id="image-box" class="d-block mb-4 h-100">
+                        <div class="remove-centering">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                        </div>
+                        <img class="image-thumb" data-toggle="modal" data-target="#exampleModal10" name="{{ project_gallery.photoTen }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTen) }}" alt="Image not found!">
+                    </a>
+                </div>
+                {% endif %}
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- PHOTO POPUP MODALS -->
+    {% if project_gallery %}
+        {% if project_gallery.photoOne %}
+        <div class="modal fade main-pic-modal" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <p><span class="main-photo-text">PRIMARY PHOTO</span>{{ project_gallery.photoOne }}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="pic-modal" style="text-align: center;">
+                        <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoOne) }}" alt="Image not found">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if project_gallery.photoTwo %}
+        <div class="modal fade main-pic-modal" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoTwo) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
+                    <p>{{ project_gallery.photoTwo }}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="pic-modal" style="text-align: center;">
+                        <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTwo) }}" alt="Image not found">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if project_gallery.photoThree %}
+        <div class="modal fade main-pic-modal" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoThree) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
+                    <p>{{ project_gallery.photoThree }}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="pic-modal" style="text-align: center;">
+                        <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoThree) }}" alt="Image not found">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if project_gallery.photoFour %}
+        <div class="modal fade main-pic-modal" id="exampleModal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoFour) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
+                    <p>{{ project_gallery.photoFour }}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="pic-modal" style="text-align: center;">
+                        <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFour) }}" alt="Image not found">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if project_gallery.photoFive %}
+        <div class="modal fade main-pic-modal" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoFive) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
+                    <p>{{ project_gallery.photoFive }}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="pic-modal" style="text-align: center;">
+                        <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFive) }}" alt="Image not found">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if project_gallery.photoSix %}
+        <div class="modal fade main-pic-modal" id="exampleModal6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoSix) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
+                    <p>{{ project_gallery.photoSix }}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="pic-modal" style="text-align: center;">
+                        <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSix) }}" alt="Image not found">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if project_gallery.photoSeven %}
+        <div class="modal fade main-pic-modal" id="exampleModal7" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoSeven) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
+                    <p>{{ project_gallery.photoSeven }}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="pic-modal" style="text-align: center;">
+                        <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSeven) }}" alt="Image not found">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if project_gallery.photoEight %}
+        <div class="modal fade main-pic-modal" id="exampleModal8" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoEight) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
+                    <p>{{ project_gallery.photoEight }}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="pic-modal" style="text-align: center;">
+                        <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoEight) }}" alt="Image not found">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if project_gallery.photoNine %}
+        <div class="modal fade main-pic-modal" id="exampleModal9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoNine) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
+                    <p>{{ project_gallery.photoNine }}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="pic-modal" style="text-align: center;">
+                        <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoNine) }}" alt="Image not found">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if project_gallery.photoTen %}
+        <div class="modal fade main-pic-modal" id="exampleModal10" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button_cont primary-btn"><a class="primary-btn-link" href="{{ url_for('project.primary_photo', title=project_gallery.title, img_name=project_gallery.photoTen) }}" rel="nofollow noopener">Select as Primary Photo</a></div>
+                    <p>{{ project_gallery.photoTen }}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="pic-modal" style="text-align: center;">
+                        <img src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTen) }}" alt="Image not found">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endif %}
 </div>
 {% endblock bodycontent %}
 
