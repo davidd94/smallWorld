@@ -6,4 +6,3 @@ flaskenv
 *.vscode
 *__pycache__
 *DB Backups
-*logs
