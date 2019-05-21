@@ -666,6 +666,7 @@
     margin: 0;
     overflow-x: hidden;
     overflow-y: scroll;
+    list-style: none;
 }
 .item-sublist {
     background: url('leaf_icon.jpg') no-repeat left top;

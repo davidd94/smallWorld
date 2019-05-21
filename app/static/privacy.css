@@ -29,7 +29,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
+.blockeduser-avatar {
+  width: 4.5em;
+  height: 4.5em;
+  border-radius: 50%;
+}
 
 /* HULU THEMED BOX */
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,900|Montserrat|Roboto");
@@ -267,10 +271,6 @@ table.fixed-header  thead tr{
 #bodywrap ::-webkit-scrollbar {
   width: 1rem;
 }
-/* line 202, ../scss/main.scss */
-#bodywrap ::-webkit-scrollbar-button {
-  /* width:1rem;*/
-}
 /* line 205, ../scss/main.scss */
 #bodywrap ::-webkit-scrollbar-track {
   background-color: #eaeaea;
@@ -301,13 +301,7 @@ tbody tr .blockeduser-name {
 
 /* ACCOUNT NOTIFICATION EMAIL MODAL */
 
-.modal-content {
-    width: 40em;
-}
-.modal-body{
-    overflow: hidden;
-    background: rgb(218, 218, 218);
-}
+
 .emailnote-list {
     list-style: none;
 }
@@ -332,43 +326,6 @@ tbody tr .blockeduser-name {
     margin-top: 1em;
 }
 .acct-emailnoteclose-btn {
-    margin-right: 2em;
-    margin-top: 1em;
-}
-
-/* ACCOUNT DELETION MODAL */
-
-.modal-content {
-    width: 40em;
-}
-.modal-body{
-    overflow: hidden;
-}
-.del-input-wrapper {
-    width: 60%;
-    margin: 0 auto;
-}
-.acct-delete-input {
-    width: 100%;
-    margin: 0;
-    text-align: center;
-}
-.modal-body p {
-    font-size: 1em;
-    color: black;
-    border-image: none;
-    border-style: none;
-    border-width: 0;
-    border-top: none;
-}
-.modal-footer .del-btn-wrapper {
-    width: 100%;
-}
-.acct-del-btn {
-    margin-left: 2em;
-    margin-top: 1em;
-}
-.acct-delclose-btn {
     margin-right: 2em;
     margin-top: 1em;
 }

@@ -18,6 +18,7 @@ class Config(object):
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 465
     MAIL_USE_SSL = True
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
     MAIL_USERNAME = 'smallWorld949@gmail.com'
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = 'smallWorld949@gmail.com'
@@ -38,3 +39,6 @@ class Config(object):
     CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
     CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
     CELERY_IMPORTS = ['app.tasks']
+
+    WEBPACK_STATS_FILE = os.path.join(basedir, 'app/static/users')
+    WEBPACK_BUNDLE_PATH = os.path.join(basedir, 'app/static/dist/bundle.js')

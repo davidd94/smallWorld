@@ -66,7 +66,6 @@ def new_project():
         all_tags = request.form.getlist('tags')
         if all_tags:
             for eachtag in all_tags:
-                print(eachtag)
                 # USES PYTHON BUILT-IN FEATURE 'SETATTR' TO SET DB TABLE VALUES USING DYNAMIC VARIABLES
                 setattr(new_project, eachtag, True)
 
@@ -82,6 +81,7 @@ def new_project():
 def project(username, title):
     user = User.single_user(username=username)
     project = Projects.single_project(user_id=user.id, title=title)
+    print(project.title)
     if user and project:
         # CHECKS IF THE PROJECT PROFILE IS PRIVATE AND REDIRECTS ACCORDINGLY
         if project.private == True and current_user != user:

@@ -3,22 +3,9 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0"> 
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-        
-        {% block css %}
-        <!-- THIS IS FOR ONLY THE CHAT BOX DESIGN -->
-        <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
-
-        <link rel="stylesheet" href="{{ url_for('static', filename='perfect-scrollbar.css') }}">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrapcss/bootstrap-bootswatch-minty.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
-        {{ moment.include_jquery() }}
-        {{ moment.include_moment() }}
-        {% endblock css %}
 
         {% block title %}
             {% if title %}
@@ -27,6 +14,18 @@
             <title>It's a smallWorld</title>
             {% endif %}
         {% endblock title %}
+
+        {% block css %}
+        <!-- THIS IS FOR ONLY THE CHAT BOX DESIGN -->
+        <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
+        <!-- ALL OTHER GLOBAL CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='perfect-scrollbar.css') }}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrapcss/bootstrap-bootswatch-minty.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+        {% endblock css %}
 
         {% block mediaquery %}
         <style>
@@ -58,9 +57,6 @@
             }
 
             /* MODAL POP UPS */
-            .modal-content {
-                width: 95vw;
-            }
             .pic-modal img {
                 width: auto;
                 height: auto;
@@ -414,6 +410,22 @@
         }
         </style>
         {% endblock mediaquery %}
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <!-- PERFECT SCROLLBAR JS -->
+        <script src="{{ url_for('static', filename='plugins/perfect-scrollbar.min.js') }}"></script>
+        <!-- ReactJS -->
+        <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+        <!-- BABEL USED FOR ReactJS JSX -->
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+        {{ moment.include_moment() }}
     </head>
 
     {% block coverphoto %}{% endblock coverphoto %}
@@ -487,291 +499,270 @@
         {% if current_user.is_authenticated %}
             {% include "_chat.html" %}
         {% endif %}
+
+        {% block scripts %}
+        <script>
+            /* AUTO SCROLLS DOWN TO LOGIN BOX */
+            $(function() {
+                $('#dropdown-togglelogin-override').on('click', () => {
+                    if (window.location.href == 'http://localhost:5000/') {
+                        $('html, body').animate({
+                        scrollTop: $("#dropdown-togglelogin-override").offset().top
+                    }, 500);
+                    } else {
+                        window.location.href = "{{ url_for('auth.login') }}";
+                    };
+                });
+            });
+        </script>
+
+        <script>
+        /* FOR MOBILE & TABLET DEVICES ONLY - RELOADS CSS STYLES WHEN CHANGING LANDSCAPE <--> PORTRAIT */
+        window.onorientationchange = function() {
+            window.location.reload();
+        };
+
+        /* FOR MOBILE DEVICES WHEN TOUCH SCROLL GETS LOCKED */
+        function simulateMouseEvent (event, simulatedType) {
+            // Ignore multi-touch events
+            if (event.originalEvent.touches.length > 1) {
+                return;
+            }
+
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+        }
+
+        /* DETECTS IF USER IS USING A MOBILE DEVICE TO APPLY CERTAIN CSS VALUES */
+        var isMobile = {
+            Android: function() {
+                return navigator.userAgent.match(/Android/i);
+            },
+            BlackBerry: function() {
+                return navigator.userAgent.match(/BlackBerry/i);
+            },
+            iOS: function() {
+                return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+            },
+            Opera: function() {
+                return navigator.userAgent.match(/Opera Mini/i);
+            },
+            Windows: function() {
+                return navigator.userAgent.match(/IEMobile/i);
+            },
+            any: function() {
+                return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+            }
+        };
+
+        /* IF ANY MOBILE DEVICES DETECTED, SET DROPDOWN POSITION TO UPWARDS */
+        if (isMobile.any()) {
+            if (document.getElementById("userlogin-dropdown") != null) {
+                document.getElementById("userlogin-dropdown").classList.remove("dropdown");
+                document.getElementById("userlogin-dropdown").classList.add("dropup");
+            }
+        }
+
+
+        /* !!! IMPORTANT !!! AUTO ADJUSTS MOBILE VIEW HEIGHT SIZES SO ELEMENTS WITH 100% IS ACTUALLY COVERING 100% OF SCREEN */
+        window.onresize = function() {
+            document.body.height = window.innerHeight;
+        }
+        window.onresize(); // called to initially set the height.
+        </script>
+
+        <script>
+        /* REMOVES 'ACTIVE' CLASS TO NAV BAR ITEM */
+        $(function() {
+            $('#nav-item').removeClass('active');
+        });
+
+        /* STOPS BOOTSTRAP AUTO CLOSING DROPDOWN ON CLICK */
+        $('.notification-dropdown').on('click', function(event){
+            event.stopPropagation();
+        });
+        </script>
+
+        <script>
+        /* NOTIFICATION UPDATES EVERY 10 SECONDS */
+        $(function () {
+            {% if current_user.is_authenticated %}
+            var since = 0;
+            /* DYNAMICALLY UPDATES THE BADGE NUMBER */
+            function set_message_count(n) {
+                $('.notification-number').text(n);
+                $('.notification-number').css('visibility', n > 0 ? 'visible' : 'hidden');
+            };
+            setInterval(function() {
+                $.ajax("{{ url_for('main.get_notifications') }}")
+                .done(function(notifications) {
+                        /* IF SERVER RETURNS NEW NOTIFICATIONS (IN AN 'OBJECT'), THEY WILL BE ADDED TO EXISTING ONES */
+                        if ((typeof notifications) == "object") {
+                            /* REMOVES ANY OLD EXISTING NOTIFICATIONS */
+                            $('.notif-dropdown-item').remove();
+                            let total_notification_number = (notifications).length;
+                            set_message_count(total_notification_number);
+                            /* LOOPS THROUGH EACH NEW NOTIFICATIONS TO PREAPPEND TO USER FEED */
+                            for (i = 0 ; i < total_notification_number ; i++) {
+                                let type = notifications[i].Type;
+                                let username = notifications[i].User;
+                                let title = notifications[i].Title;
+                                let data = notifications[i].Data;
+                                let timestamp = moment(notifications[i].Timestamp).startOf('hour').fromNow();
+                                let noteIcon;
+                                if (type == 'message') {
+                                    noteIcon = 'noteicon fas fa-envelope fa-lg';
+                                } else if (type == 'message reply') {
+                                    noteIcon = 'noteicon fab fa-replyd fa-lg';
+                                } else if (type == 'comment') {
+                                    noteIcon = 'noteicon fas fa-comment fa-lg';
+                                } else if (type == 'comment reply') {
+                                    noteIcon = 'noteicon fas fa-comment-dots fa-lg';
+                                } else if (type == 'chat message') {
+                                    noteIcon = 'noteicon fas fa-sms fa-lg';
+                                }
+
+                                $('.clear-wrapper').prepend($('<li>')
+                                .attr('class', 'notif-dropdown-item')
+                                .append($('<i>')
+                                        .prop('class', noteIcon))
+                                .append($('<p>')
+                                    .attr('class', 'dropdown-type')
+                                    .text('New ')
+                                    .append($('<a>')
+                                        .attr('class', 'dropdown-type-value')
+                                        .attr('href', (type == 'message' || type == 'message reply') ? '{{ url_for("main.message_inbox") }}' : '/project/' + username + '/' + title)
+                                        .text(type))
+                                    .append($('<span>')
+                                        .text(' from ')
+                                        .css('font-weight', '400')
+                                        .css('font-size', '0.7em')
+                                        .css('margin', '0 0.5em'))
+                                    .append($('<a>')
+                                        .attr('class', 'dropdown-user-link')
+                                        .attr('href', '/profile/' + username)
+                                        .text(username)))
+                                .append($('<hr>'))
+                                .append($('<p>')
+                                    .attr('class', 'dropdown-title')
+                                    .text('Title: ')
+                                    .append($('<span>')
+                                        .attr('class', 'dropdown-title-value')
+                                        .text(title)))
+                                .append($('<p>')
+                                    .attr('class', 'dropdown-data')
+                                    .text(data))
+                                .append($('<span>')
+                                    .attr('class', 'dropdown-timestamp')
+                                    .text(timestamp))
+                                )
+                            }
+                        /* IF SERVER RETURNS THE SAME EXISTING NOTIFICATIONS (IN TERM OF INTEGER) COUNTER */
+                        } else if ((typeof notifications) == "number") {
+                            $('.notif-dropdown-item').remove();
+                            set_message_count(notifications);
+                        }
+                        
+                })
+            }, 10000);
+            {% endif %}
+        });
+
+        /* DELETES ALL EXISTING NOTIFICATIONS */
+        $(function () {
+            {% if current_user.is_authenticated %}
+            /* DYNAMICALLY UPDATES THE BADGE NUMBER */
+            function set_message_count(n) {
+                $('.notification-number').text(n);
+                $('.notification-number').css('visibility', n > 0 ? 'visible' : 'hidden');
+            };
+
+            $('.dropdown-clear').on('click', () => {
+                $.ajax({
+                    url: "{{ url_for('main.delete_notifications') }}",
+                    type: 'GET',
+                    success: function(response) {
+                        $('.notif-dropdown-item').remove();
+                        set_message_count(0);
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+                });
+            })
+            {% endif %}
+        });
+
+        </script>
+
+        <script>
+        /* CUSTOM FUNCTIONS TO BE USED ON DYNAMICALLY ADDED ELEMENTS WHEREAS BELOW THIS ONLY LOADS ONCE WHEN DOC COMPLETES */
+        function scrollbar() {
+            $('.custom-scrollbar').each(function() {
+                const ps = new PerfectScrollbar($(this)[0], {
+                    wheelSpeed: 0.25,
+                    suppressScrollX: true,
+                });
+            });
+            $('.custom-scrollbar-s1').each(function() {
+                const ps = new PerfectScrollbar($(this)[0], {
+                    wheelSpeed: .50,
+                    suppressScrollX: true,
+                });
+            });
+            $('.custom-scrollbar-s2').each(function() {
+                const ps = new PerfectScrollbar($(this)[0], {
+                    wheelSpeed: 1,
+                    suppressScrollX: true,
+                });
+            });
+            $('.custom-scrollbar-s3').each(function() {
+                const ps = new PerfectScrollbar($(this)[0], {
+                    wheelSpeed: 1.5,
+                    suppressScrollX: true,
+                });
+            });
+            $('.custom-scrollbar-s4').each(function() {
+                const ps = new PerfectScrollbar($(this)[0], {
+                    wheelSpeed: 2,
+                    suppressScrollX: true,
+                });
+            });
+        };
+
+        /* CUSTOM SCROLL BAR - MUST ADD THE SPECIFIED CLASS TO EACH DIV */
+        $('.custom-scrollbar').each(function() {
+            const ps = new PerfectScrollbar($(this)[0], {
+                wheelSpeed: 0.25,
+                suppressScrollX: true,
+            });
+        });
+        $('.custom-scrollbar-s1').each(function() {
+            const ps = new PerfectScrollbar($(this)[0], {
+                wheelSpeed: .50,
+                suppressScrollX: true,
+            });
+        });
+        $('.custom-scrollbar-s2').each(function() {
+            const ps = new PerfectScrollbar($(this)[0], {
+                wheelSpeed: 1,
+                suppressScrollX: true,
+            });
+        });
+        $('.custom-scrollbar-s3').each(function() {
+            const ps = new PerfectScrollbar($(this)[0], {
+                wheelSpeed: 1.5,
+                suppressScrollX: true,
+            });
+        });
+        $('.custom-scrollbar-s4').each(function() {
+            const ps = new PerfectScrollbar($(this)[0], {
+                wheelSpeed: 2,
+                suppressScrollX: true,
+            });
+        });
+        </script>
+        {% endblock scripts %}
     </body>
 </html>
-
-{% block scripts %}
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<!-- Popper JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-
-<!-- PERFECT SCROLLBAR JS -->
-<script src="{{ url_for('static', filename='plugins/perfect-scrollbar.min.js') }}"></script>
-
-<script>
-/* AUTO SCROLLS DOWN TO LOGIN BOX */
-$(function() {
-    $('#dropdown-togglelogin-override').on('click', () => {
-        if (window.location.href == 'http://localhost:5000/') {
-            $('html, body').animate({
-            scrollTop: $("#dropdown-togglelogin-override").offset().top
-        }, 500);
-        } else {
-            window.location.href = "{{ url_for('auth.login') }}";
-        };
-    });
-});
-</script>
-
-<script>
-/* FOR MOBILE & TABLET DEVICES ONLY - RELOADS CSS STYLES WHEN CHANGING LANDSCAPE <--> PORTRAIT */
-window.onorientationchange = function() {
-    window.location.reload();
-};
-
-/* FOR MOBILE DEVICES WHEN TOUCH SCROLL GETS LOCKED */
-function simulateMouseEvent (event, simulatedType) {
-    // Ignore multi-touch events
-    if (event.originalEvent.touches.length > 1) {
-        return;
-    }
-
-    if (event.cancelable) {
-        event.preventDefault();
-    }
-}
-
-/* DETECTS IF USER IS USING A MOBILE DEVICE TO APPLY CERTAIN CSS VALUES */
-var isMobile = {
-    Android: function() {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function() {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    any: function() {
-        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-    }
-};
-
-/* IF ANY MOBILE DEVICES DETECTED, SET DROPDOWN POSITION TO UPWARDS */
-if (isMobile.any()) {
-    if (document.getElementById("userlogin-dropdown") != null) {
-        document.getElementById("userlogin-dropdown").classList.remove("dropdown");
-        document.getElementById("userlogin-dropdown").classList.add("dropup");
-    }
-}
-
-
-/* !!! IMPORTANT !!! AUTO ADJUSTS MOBILE VIEW HEIGHT SIZES SO ELEMENTS WITH 100% IS ACTUALLY COVERING 100% OF SCREEN */
-window.onresize = function() {
-    document.body.height = window.innerHeight;
-}
-window.onresize(); // called to initially set the height.
-</script>
-
-<script>
-/* REMOVES 'ACTIVE' CLASS TO NAV BAR ITEM */
-$(function() {
-    $('#nav-item').removeClass('active');
-});
-
-/* STOPS BOOTSTRAP AUTO CLOSING DROPDOWN ON CLICK */
-$('.notification-dropdown').on('click', function(event){
-    event.stopPropagation();
-});
-</script>
-
-<script>
-/* NOTIFICATION UPDATES EVERY 10 SECONDS */
-$(function () {
-    {% if current_user.is_authenticated %}
-    var since = 0;
-    /* DYNAMICALLY UPDATES THE BADGE NUMBER */
-    function set_message_count(n) {
-        $('.notification-number').text(n);
-        $('.notification-number').css('visibility', n > 0 ? 'visible' : 'hidden');
-    };
-    setInterval(function() {
-        $.ajax("{{ url_for('main.get_notifications') }}")
-        .done(function(notifications) {
-                /* IF SERVER RETURNS NEW NOTIFICATIONS (IN AN 'OBJECT'), THEY WILL BE ADDED TO EXISTING ONES */
-                if ((typeof notifications) == "object") {
-                    /* REMOVES ANY OLD EXISTING NOTIFICATIONS */
-                    $('.notif-dropdown-item').remove();
-                    let total_notification_number = (notifications).length;
-                    set_message_count(total_notification_number);
-                    /* LOOPS THROUGH EACH NEW NOTIFICATIONS TO PREAPPEND TO USER FEED */
-                    for (i = 0 ; i < total_notification_number ; i++) {
-                        let type = notifications[i].Type;
-                        let username = notifications[i].User;
-                        let title = notifications[i].Title;
-                        let data = notifications[i].Data;
-                        let timestamp = moment(notifications[i].Timestamp).startOf('hour').fromNow();
-                        let noteIcon;
-                        if (type == 'message') {
-                            noteIcon = 'noteicon fas fa-envelope fa-lg';
-                        } else if (type == 'message reply') {
-                            noteIcon = 'noteicon fab fa-replyd fa-lg';
-                        } else if (type == 'comment') {
-                            noteIcon = 'noteicon fas fa-comment fa-lg';
-                        } else if (type == 'comment reply') {
-                            noteIcon = 'noteicon fas fa-comment-dots fa-lg';
-                        } else if (type == 'chat message') {
-                            noteIcon = 'noteicon fas fa-sms fa-lg';
-                        }
-
-                        $('.clear-wrapper').prepend($('<li>')
-                        .attr('class', 'notif-dropdown-item')
-                        .append($('<i>')
-                                .prop('class', noteIcon))
-                        .append($('<p>')
-                            .attr('class', 'dropdown-type')
-                            .text('New ')
-                            .append($('<a>')
-                                .attr('class', 'dropdown-type-value')
-                                .attr('href', (type == 'message' || type == 'message reply') ? '{{ url_for("main.message_inbox") }}' : '/project/' + username + '/' + title)
-                                .text(type))
-                            .append($('<span>')
-                                .text(' from ')
-                                .css('font-weight', '400')
-                                .css('font-size', '0.7em')
-                                .css('margin', '0 0.5em'))
-                            .append($('<a>')
-                                .attr('class', 'dropdown-user-link')
-                                .attr('href', '/profile/' + username)
-                                .text(username)))
-                        .append($('<hr>'))
-                        .append($('<p>')
-                            .attr('class', 'dropdown-title')
-                            .text('Title: ')
-                            .append($('<span>')
-                                .attr('class', 'dropdown-title-value')
-                                .text(title)))
-                        .append($('<p>')
-                            .attr('class', 'dropdown-data')
-                            .text(data))
-                        .append($('<span>')
-                            .attr('class', 'dropdown-timestamp')
-                            .text(timestamp))
-                        )
-                    }
-                /* IF SERVER RETURNS THE SAME EXISTING NOTIFICATIONS (IN TERM OF INTEGER) COUNTER */
-                } else if ((typeof notifications) == "number") {
-                    $('.notif-dropdown-item').remove();
-                    set_message_count(notifications);
-                }
-                
-        })
-    }, 10000);
-    {% endif %}
-});
-
-/* DELETES ALL EXISTING NOTIFICATIONS */
-$(function () {
-    {% if current_user.is_authenticated %}
-    /* DYNAMICALLY UPDATES THE BADGE NUMBER */
-    function set_message_count(n) {
-        $('.notification-number').text(n);
-        $('.notification-number').css('visibility', n > 0 ? 'visible' : 'hidden');
-    };
-
-    $('.dropdown-clear').on('click', () => {
-        $.ajax({
-            url: "{{ url_for('main.delete_notifications') }}",
-            type: 'GET',
-            success: function(response) {
-                $('.notif-dropdown-item').remove();
-                set_message_count(0);
-            },
-            error: function(response) {
-                console.log(response);
-            }
-        });
-    })
-    {% endif %}
-});
-
-</script>
-
-<script>
-/* CUSTOM FUNCTIONS TO BE USED ON DYNAMICALLY ADDED ELEMENTS WHEREAS BELOW THIS ONLY LOADS ONCE WHEN DOC COMPLETES */
-function scrollbar() {
-    $('.custom-scrollbar').each(function() {
-        const ps = new PerfectScrollbar($(this)[0], {
-            wheelSpeed: 0.25,
-            suppressScrollX: true,
-        });
-    });
-
-    $('.custom-scrollbar-s1').each(function() {
-        const ps = new PerfectScrollbar($(this)[0], {
-            wheelSpeed: .50,
-            suppressScrollX: true,
-        });
-    });
-
-    $('.custom-scrollbar-s2').each(function() {
-        const ps = new PerfectScrollbar($(this)[0], {
-            wheelSpeed: 1,
-            suppressScrollX: true,
-        });
-    });
-
-    $('.custom-scrollbar-s3').each(function() {
-        const ps = new PerfectScrollbar($(this)[0], {
-            wheelSpeed: 1.5,
-            suppressScrollX: true,
-        });
-    });
-
-    $('.custom-scrollbar-s4').each(function() {
-        const ps = new PerfectScrollbar($(this)[0], {
-            wheelSpeed: 2,
-            suppressScrollX: true,
-        });
-    });
-};
-
-/* CUSTOM SCROLL BAR - MUST ADD THE SPECIFIED CLASS TO EACH DIV */
-$('.custom-scrollbar').each(function() {
-    const ps = new PerfectScrollbar($(this)[0], {
-        wheelSpeed: 0.25,
-        suppressScrollX: true,
-    });
-});
-
-$('.custom-scrollbar-s1').each(function() {
-    const ps = new PerfectScrollbar($(this)[0], {
-        wheelSpeed: .50,
-        suppressScrollX: true,
-    });
-});
-
-$('.custom-scrollbar-s2').each(function() {
-    const ps = new PerfectScrollbar($(this)[0], {
-        wheelSpeed: 1,
-        suppressScrollX: true,
-    });
-});
-
-$('.custom-scrollbar-s3').each(function() {
-    const ps = new PerfectScrollbar($(this)[0], {
-        wheelSpeed: 1.5,
-        suppressScrollX: true,
-    });
-});
-
-$('.custom-scrollbar-s4').each(function() {
-    const ps = new PerfectScrollbar($(this)[0], {
-        wheelSpeed: 2,
-        suppressScrollX: true,
-    });
-});
-
-</script>
-{% endblock scripts %}

@@ -301,17 +301,17 @@
 {% block bodycontent %}
 <div class="search-container">
     <div class="container">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 card-wrapper">
                 <div class="card">
                     <div class="card-content">
                         <div class="card-header card-header-search">
                             <h1 class="card-heading">Search Results</h1>
                         </div>
-                        <div class="card-body custom-scrollbar">
+                        <div class="card-body">
                             <div class="card-p">
                                 {% if projects %}
-                                <ul class="card-ul">
+                                <ul class="card-ul custom-scrollbar-s3">
                                     {% for project in projects %}
                                     {% if project.private != True %}
                                     {% set created = moment(project.created_date).format('LL') %}
@@ -320,7 +320,7 @@
                                         <span class="project-created-date"><strong>Created on : </strong> {{ created }}</span>
                                         <span class="project-likes"><strong>{{ project.likes }} </strong> Likes</span>
                                         <p class="project-description custom-scrollbar">{{ project.description }}</p>
-                                        <p class="project-tags custom-scrollbar">Tags: 
+                                        <p class="project-tags">Tags: 
                                             {% if project.aquariums == True %}<a href="{{ url_for('project.tagsearch', tag='aquariums') }}"> Aquariums</a>,{% endif %}
                                             {% if project.saltwater == True %}<a href="{{ url_for('project.tagsearch', tag='saltwater') }}"> Saltwater</a>,{% endif %}
                                             {% if project.freshwater == True %}<a href="{{ url_for('project.tagsearch', tag='freshwater') }}"> Freshwater</a>,{% endif %}

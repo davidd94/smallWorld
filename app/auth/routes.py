@@ -127,10 +127,11 @@ def register():
         return redirect(url_for('auth.homepage'))
     form = RegistrationForm()
     if form.validate_on_submit():
+        lowercased_email = (form.email.data).lower()
         newuser = User(username=form.username.data,
                         firstname=form.firstname.data,
                         lastname=form.lastname.data,
-                        email=form.email.data,
+                        email=lowercased_email,
                         max_failed_login=0)
         newuser.create_password(form.password.data)
         
@@ -159,7 +160,8 @@ def confirm_acct_request():
         redirect(url_for('auth.homepage'))
     form = PasswordResetRequestForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        lowercased_email = (form.email.data).lower()
+        user = User.query.filter_by(email=lowercased_email).first()
         if user:
             flash('A new confirmation link has been sent to your email.')
             send_confirmation_email(user)
@@ -175,7 +177,8 @@ def reset_password_request():
         return redirect(url_for('auth.homepage'))
     form = PasswordResetRequestForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        lowercased_email = (form.email.data).lower()
+        user = User.query.filter_by(email=lowercased_email).first()
         if user:
             flash('A new password link will be sent to your email.')
             send_password_reset_email(user)

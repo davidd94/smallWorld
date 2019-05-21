@@ -1,11 +1,12 @@
 from flask import render_template, redirect, url_for, request, flash, g, current_app, jsonify, Response, send_from_directory, session
 from flask_login import current_user, login_required, logout_user
 from flask_babel import get_locale, _
+from flask_wtf.csrf import generate_csrf
 from datetime import datetime as dt, timedelta
 from urllib.parse import urlparse
 from math import sqrt
 from hashlib import md5
-from app import db, mail, socketio
+from app import db, mail, socketio, csrf
 from app.models import User, Messages, ChatMessages, Projects, PhotoGallery, Notifications, project_visitors, followers, deleted_messages
 from app.main import bp
 from app.main.forms import EditProfileForm, MessageForm, SearchForm
@@ -34,6 +35,27 @@ def before_request():
 
 
 
+# ReactJS APIs
+
+@bp.route('/fetch_api/csrf_token')
+def fetch_CSRFToken():
+    CSRFToken = generate_csrf()
+    return jsonify(CSRFToken)
+
+@bp.route('/fetch_api/email_notifications')
+@login_required
+def fetch_emailNotes():
+    user = current_user
+    data = {
+        'msg': user.msg_note,
+        'comment': user.comment_note,
+        'reply': user.reply_note
+    }
+    return jsonify(data)
+
+
+# GENERAL VIEW FUNCTIONS
+
 @bp.route('/profile/<username>', methods=['GET', 'POST'])
 def profile(username):
     user = User.query.filter_by(username=username).first()
@@ -42,7 +64,6 @@ def profile(username):
         project_list = user.all_projects \
                         .order_by(Projects.last_edit.desc()) \
                         .all()
-        print(project_list)
         # CAN USE BACKREF IN 'FOLLOWED' TO FIND ALL FOLLOWERS
         all_followers = user.followers.all()
         return render_template('profile.html',
@@ -106,71 +127,73 @@ def project_preview(project_id):
 @login_required
 def privacy():
     blocked_users = current_user.blocked.all()
-    print(blocked_users)
     
     return render_template('privacy.html', blocked_users=blocked_users)
 
-@bp.route('/delete_acct')
+@bp.route('/delete_acct', methods=['POST'])
 @login_required
 def delete_acct():
     user = User.query.get(current_user.id)
-    projects = Projects.query.filter_by(user_id=user.id).all()
-    if projects:
-        for project in projects:
-            photo_gallery = project.photo_gallery.first()
-            project_faqs = project.faqs.first()
-            project_itemlist = project.item_list.all()
-            project_comments = project.project_comments.all()
-            project_replies = project.comment_replies.all()
-            
-            # REMOVING PROJECT AND ALL RELATED TABLES
-            db.session.delete(project)
-            db.session.delete(photo_gallery)
-            db.session.delete(project_faqs)
-            if project_itemlist:
-                for eachitem in project_itemlist:
-                    db.session.delete(eachitem)
-            if project_comments:
-                for eachcomment in project_comments:
-                    db.session.delete(eachcomment)
-            if project_replies:
-                for eachreply in project_replies:
-                    db.session.delete(eachreply)
-    
-    messages = Messages.query.filter_by(recipient_id=user.id).all()
-    if messages:
-        for message in messages:
-            db.session.delete(message)
-    
-    notifications = Notifications.query.filter_by(user_id=user.id).all()
-    if notifications:
-        for eachnote in notifications:
-            db.session.delete(eachnote)
-    
-    # REMOVING MAIN USER DIRECTORY WITH ALL PROJECTS AND IMAGES
-    file_path = current_app.config['PHOTO_UPLOAD_DIR']
-    if os.path.isdir(file_path + '/' + user.username):
-        # shutil IS REQUIRED TO REMOVE ALL FILES AND SUBDIRECTORIES WITHIN A DIRECTORY. rmdir only removes when empty
-        shutil.rmtree(file_path + '/' + user.username)
-    logout_user()
-    db.session.delete(user)
-    db.session.commit()
-    return jsonify('User successfully deleted permanently!')
+    approval = request.json['confirmation']
+    print(approval)
+    if approval:
+        projects = Projects.query.filter_by(user_id=user.id).all()
+        if projects:
+            for project in projects:
+                photo_gallery = project.photo_gallery.first()
+                project_faqs = project.faqs.first()
+                project_itemlist = project.item_list.all()
+                project_comments = project.project_comments.all()
+                project_replies = project.comment_replies.all()
+                
+                # REMOVING PROJECT AND ALL RELATED TABLES
+                db.session.delete(project)
+                db.session.delete(photo_gallery)
+                db.session.delete(project_faqs)
+                if project_itemlist:
+                    for eachitem in project_itemlist:
+                        db.session.delete(eachitem)
+                if project_comments:
+                    for eachcomment in project_comments:
+                        db.session.delete(eachcomment)
+                if project_replies:
+                    for eachreply in project_replies:
+                        db.session.delete(eachreply)
+        
+        messages = Messages.query.filter_by(recipient_id=user.id).all()
+        if messages:
+            for message in messages:
+                db.session.delete(message)
+        
+        notifications = Notifications.query.filter_by(user_id=user.id).all()
+        if notifications:
+            for eachnote in notifications:
+                db.session.delete(eachnote)
+        
+        # REMOVING MAIN USER DIRECTORY WITH ALL PROJECTS AND IMAGES
+        file_path = current_app.config['PHOTO_UPLOAD_DIR']
+        if os.path.isdir(file_path + '/' + user.username):
+            # shutil IS REQUIRED TO REMOVE ALL FILES AND SUBDIRECTORIES WITHIN A DIRECTORY. rmdir only removes when empty
+            shutil.rmtree(file_path + '/' + user.username)
+        logout_user()
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify('Account successfully deleted!')
+    return jsonify('something failed')
 
 @bp.route('/email_notifications', methods=['POST'])
 @login_required
 def email_notifications():
     settings = request.json
-    print(settings)
     user = current_user
     if settings:
-        user.msg_note = settings['msg_note']
-        user.comment_note = settings['comment_note']
-        user.reply_note = settings['reply_note']
+        user.msg_note = settings['msg']
+        user.comment_note = settings['comment']
+        user.reply_note = settings['reply']
 
         db.session.commit()
 
-        return jsonify('Email notification settings saved!')
+        return jsonify(settings)
     
     return jsonify('Unable to save email notification settings')
 
@@ -336,8 +359,6 @@ def send_message():
 @login_required
 def reply_message(subject, recip_name):
     reply_msg = request.json
-    print('REPLY MSG ATTEMPT')
-    print(reply_msg)
     user = User.query.filter_by(username=recip_name).first()
     if user and (current_user != user):
         msg = Messages(author=current_user, recipient=user, subject=subject,
@@ -502,7 +523,6 @@ def search():
 @bp.route('/report_feed/<project_id>')
 @login_required
 def report_feed(project_id):
-    print(project_id)
     project = Projects.query.get(project_id)
     if project:
         send_email(subject='Feed Report - ' + project.title,

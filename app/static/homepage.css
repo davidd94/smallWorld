@@ -14,6 +14,7 @@
 }
 .mobile-row {
   display: none;
+  z-index: 1;
 }
 .container-wrapper {
   width: 100%;
@@ -25,6 +26,8 @@
 .homepage-login-wrapper {
   align-self: center;
   justify-self: center;
+  position: relative;
+  z-index: 20;
 }
 #carouselExampleIndicators {
     width: auto;
@@ -422,7 +425,18 @@ main {
 .followed-wrapper {
   height: 100%;
 }
-.followed-feed-container,
+.followed-feed-container {
+    height: 95%;
+    width: 100%;
+    padding: 1em 1em 5em 1em;
+    margin: 0;
+    overflow: hidden;
+    background-color: rgb(233, 233, 233);
+    border-radius: 0.6em;
+    opacity: 0.9;
+    transition: all 500ms ease;
+    position: relative;
+}
 .news-feed-container {
     height: 100%;
     width: 100%;
@@ -448,10 +462,10 @@ main {
 .followed-update-list {
     list-style: none;
     margin: 0.5em 0;
-    padding: 0 0;
+    padding: 0;
     overflow-x: hidden;
     overflow-y: scroll;
-    height: 92%;
+    height: 100%;
     width: 100%;
 }
 .projectfeed-container {
@@ -556,9 +570,7 @@ main {
     border-bottom: 1px solid black;
 }
 .followed-note-list {
-    list-style: none;
-    margin: 0.5em 0;
-    padding: 0 0;
+    font-weight: 600;
 }
 
 
@@ -598,7 +610,7 @@ main {
     width: auto;
     bottom: -10%;
     right: 0%;
-    z-index: 13;
+    z-index: 19;
     opacity: 1;
 }
 .animated-plant-text {
@@ -876,4 +888,18 @@ svg,
 
 #remember {
   text-align: center;
+}
+
+
+
+
+
+
+
+
+/* TEMPORARY CSS */
+
+.major-title {
+  font-size: 1.4em;
+  font-weight: 600;
 }
