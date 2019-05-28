@@ -1,7 +1,7 @@
 from flask import render_template, current_app, request
 from app import db, email
 from app.errors import bp
-from app.api.errors import error_response as api_error_response
+from app.api_user.errors import error_response as api_error_response
 
 
 def wants_json_response():

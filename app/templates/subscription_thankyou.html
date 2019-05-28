@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 
 {% block bodycontent %}
-<div>
-    Thank you for making that payment!
+<div class="jumbotron text-xs-center" style="text-align: center; height: 100%;">
+    <h1 class="display-3">Thank You for subscribing!</h1>
+    <p class="lead">Your support <strong>tremendously</strong> helps us maintain our site.</p>
+    <hr>
+    <p>
+      Accidental payment? <a href="">Contact us</a>
+    </p>
+    <p class="lead">
+      <a class="btn btn-primary btn-sm" href="{{ url_for('auth.homepage') }}" role="button">Continue to homepage</a>
+    </p>
 </div>
 {% endblock bodycontent %}

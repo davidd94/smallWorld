@@ -67,7 +67,7 @@ export class ModalBody extends Component {
             var toggleBtns = this.props.customElems;
             return (
                 <div className="modal-body-wrapper">
-                    {React.cloneElement(toggleBtns)}
+                    {toggleBtns}
                 </div>
             )
         }

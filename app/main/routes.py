@@ -22,7 +22,7 @@ from flask_socketio import send, emit, disconnect, join_room, leave_room
 import os, shutil, time, random, functools
 import json
 import celery
-from app.api.auth import token_auth
+import stripe
 
 
 @bp.before_app_request
@@ -34,24 +34,6 @@ def before_request():
     g.locale = str(get_locale())
 
 
-
-# ReactJS APIs
-
-@bp.route('/fetch_api/csrf_token')
-def fetch_CSRFToken():
-    CSRFToken = generate_csrf()
-    return jsonify(CSRFToken)
-
-@bp.route('/fetch_api/email_notifications')
-@login_required
-def fetch_emailNotes():
-    user = current_user
-    data = {
-        'msg': user.msg_note,
-        'comment': user.comment_note,
-        'reply': user.reply_note
-    }
-    return jsonify(data)
 
 
 # GENERAL VIEW FUNCTIONS
@@ -699,6 +681,61 @@ def taskstatus(task_id):
     return jsonify(response)
 
 
+@bp.route('/subscription/preload')
+def subscription_preload():
+    CSRFToken = generate_csrf()
+    stripe_pub_key = current_app.config['STRIPE_PUB_KEY']
+    user_sub = current_user.subscription or 'free'
+    data = {'csrf_token': CSRFToken,
+            'stripe_key': stripe_pub_key,
+            'user_sub': user_sub}
+    return jsonify(data)
+
+@bp.route('/subscriptions')
+def subscriptions():
+    return render_template('subscriptions.html')
+
+@bp.route('/subscription/pay', methods=['POST'])
+def subscription_pay():
+    email = request.json['stripeEmail']
+    stripe_token = request.json['stripeToken']
+    amount = request.json['amount']
+    subtype = request.json['subtype']
+    stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
+
+    # THIS IS FOR TESTING PURPOSE ONLY. WILL REQUIRE USERS TO LOGIN PRIOR SUBSCRIBING IN FUTURE
+    user = current_user
+    if user:
+        if user.subscription == subtype:
+            return jsonify('You are already subscribed for that tier!')
+        email = current_user.email
+        user.subscription = subtype
+        db.session.commit()
+        return jsonify('You have successfully subscribed!')
+    
+    customer = stripe.Customer.create(email=email, source=stripe_token)
+
+    charge = stripe.Charge.create(
+        customer=customer.id,
+        amount=amount,
+        currency='usd',
+        description=subtype
+    )
+
+    return jsonify('You have successfully subscribed!')
+
+@bp.route('/subscription/thankyou')
+def subscription_thankyou():
+    return render_template('subscription_thankyou.html')
+
+@bp.route('/subscription/modify')
+def subscription_modify():
+    user = current_user
+    if user:
+        user.subscription = 'free'
+        db.session.commit()
+        return jsonify('Subscription changes saved!')
+    return jsonify('You must be logged in.')
 
 
 def allowed_file(filename):

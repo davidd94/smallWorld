@@ -4,7 +4,7 @@ var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 
 const config = {
     entry: { privacy: (__dirname + '/reactJS/privacy-index.jsx'),
-             testing: (__dirname + '/reactJS/testme.jsx')
+             subscription: (__dirname + '/reactJS/subscription-index.jsx')
     },
     output: {
         path: path.join(__dirname, '/dist'),

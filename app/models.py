@@ -135,6 +135,7 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     picture = db.Column(db.Text(500), default=None)
     verified = db.Column(db.Boolean, default=False)
     max_failed_login = db.Column(db.Integer)
+    subscription = db.Column(db.String(20), default='free')
     # EMAIL NOTIFICATION SETTINGS
     msg_note = db.Column(db.Boolean, default=False)
     comment_note = db.Column(db.Boolean, default=False)

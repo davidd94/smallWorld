@@ -74,8 +74,11 @@ def create_app(config_class=Config):
     from app.socketio import bp as socketio_bp
     app.register_blueprint(socketio_bp)
 
-    from app.api import bp as api_bp
-    app.register_blueprint(api_bp, url_prefix='/api')
+    from app.api_user import bp as api_user_bp
+    app.register_blueprint(api_user_bp, url_prefix='/api')
+
+    from app.api_server import bp as api_server_bp
+    app.register_blueprint(api_server_bp, url_prefix='/fetch_api')
 
     app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
         if app.config['ELASTICSEARCH_URL'] else None

@@ -1,8 +1,8 @@
 from app import db
-from app.api import bp
+from app.api_user import bp
 from app.models import User
-from app.api.errors import bad_request
-from app.api.auth import token_auth
+from app.api_user.errors import bad_request
+from app.api_user.auth import token_auth
 from flask import jsonify, request, url_for, g, abort
 
 

@@ -28,7 +28,7 @@ export class AcctDelModal extends Component {
             },
         })
         .then(function (response) {
-            response.text().then(function (msg) {
+            response.json().then(function (msg) {
                 window.location.replace('/');
             })
         });
