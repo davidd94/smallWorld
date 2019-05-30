@@ -136,6 +136,8 @@ def register():
         newuser.create_password(form.password.data)
         
         db.session.add(newuser)
+        newuser.picture = newuser.avatar(70)
+        
         db.session.commit()
         flash('You have created your new account! Please check your email to verify your account.')
         send_confirmation_email(newuser)

@@ -76,9 +76,7 @@ def create_app(config_class=Config):
 
     from app.api_user import bp as api_user_bp
     app.register_blueprint(api_user_bp, url_prefix='/api')
-
-    from app.api_server import bp as api_server_bp
-    app.register_blueprint(api_server_bp, url_prefix='/fetch_api')
+    csrf.exempt(api_user_bp)
 
     app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
         if app.config['ELASTICSEARCH_URL'] else None
@@ -111,7 +109,6 @@ def create_app(config_class=Config):
 
         app.logger.setLevel(logging.INFO)
         app.logger.info('smallWorld startup')
-
 
     return app
 

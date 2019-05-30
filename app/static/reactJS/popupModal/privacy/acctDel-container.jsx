@@ -36,7 +36,7 @@ export class AcctDelModal extends Component {
 
     componentDidMount() {
         const that = this;
-        fetch('/fetch_api/csrf_token', {
+        fetch('/api/csrf_token', {
             method: "GET",
             headers: new Headers({
                 "content-type": "application/json"

@@ -42,3 +42,8 @@ class Config(object):
 
     WEBPACK_STATS_FILE = os.path.join(basedir, 'app/static/users')
     WEBPACK_BUNDLE_PATH = os.path.join(basedir, 'app/static/dist/bundle.js')
+
+    STRIPE_PUB_KEY = os.environ.get('STRIPE_PUB_KEY') or None
+    STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY') or None
+
+    #WTF_CSRF_CHECK_DEFAULT = False

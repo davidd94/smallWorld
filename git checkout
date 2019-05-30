@@ -1,0 +1,150 @@
+[33mcommit ed726eca8091b6f32bd644f9a7d94acac7b2f5ba[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: davidd94 <44618968+davidd94@users.noreply.github.com>
+Date:   Mon May 20 18:46:50 2019 -0700
+
+    minor db updates..
+
+[33mcommit 27e14d0d41ba2c79c83eaa09a80d73c2ed8521ea[m
+Merge: b777d3a 8696ea1
+Author: davidd94 <44618968+davidd94@users.noreply.github.com>
+Date:   Mon May 20 18:45:34 2019 -0700
+
+    Merge branch 'master' of https://github.com/davidd94/smallWorld
+
+[33mcommit b777d3ad9df7500d2f51daaa188962ffd4d4dba7[m
+Author: davidd94 <44618968+davidd94@users.noreply.github.com>
+Date:   Mon May 20 18:27:59 2019 -0700
+
+    minor updates on db
+
+[33mcommit c5e6e9e1e38806109bc50b832fcab25aa8e49e63[m
+Author: davidd94 <44618968+davidd94@users.noreply.github.com>
+Date:   Mon May 20 18:27:19 2019 -0700
+
+    minor updates on db
+
+[33mcommit 70fc28ea8d1a167ad9cc113b60e4ef1684a42db2[m
+Author: davidd94 <44618968+davidd94@users.noreply.github.com>
+Date:   Mon May 20 18:23:46 2019 -0700
+
+    Learned how to perform unit testing and added basic functionalities for now. Learned ReactJS and refactor User Privacy settings to incorporate ReactJS.
+
+[33mcommit 8696ea1928ff08b6dd2e852d92e1cbb2e1d2f48b[m
+Author: David Duong <44618968+davidd94@users.noreply.github.com>
+Date:   Sat May 4 14:13:27 2019 -0700
+
+    Delete env
+
+[33mcommit 25f1910d09566372dcf4632c88a4117b3b53a39c[m
+Author: David Duong <44618968+davidd94@users.noreply.github.com>
+Date:   Sat May 4 14:13:17 2019 -0700
+
+    Delete flaskenv
+
+[33mcommit 0fe343cbe8aab8852ee743904163a4da06e8db52[m
+Author: davidd94 <44618968+davidd94@users.noreply.github.com>
+Date:   Sat May 4 14:11:55 2019 -0700
+
+    Finalized mobile responsiveness! This will be the live version 1.0
+
+[33mcommit 08443cfc7bdf72478a909f8df011fbd12b87f20c[m
+Author: davidd94 <44618968+davidd94@users.noreply.github.com>
+Date:   Sat May 4 04:14:39 2019 -0700
+
+    mobile responsiveness completed for iPhone 5, 5s 6, 6s, 6+, 7, 7+, 8, 8+, and X. Galaxy s3, s5, s6, and note 3. Quickly implemented CORS. Everything is now ready for launch!
+
+[33mcommit c5511cc9a23703aab198dbdb59313c5aa90d1bbd[m
+Author: davidd94 <44618968+davidd94@users.noreply.github.com>
+Date:   Fri May 3 02:52:51 2019 -0700
+
+    Revamped my own grid system to bootstrap CSS framework grid system for mobile responsiveness. Added media queries for custom features on iPhone 6 to X.
+
+[33mcommit b22a871eea65262a8602f9049b1224ca66880770[m
+Author: davidd94 <44618968+davidd94@users.noreply.github.com>
+Date:   Tue Apr 30 00:23:46 2019 -0700
+
+    Implemented basic API-like system for non-desktop devices via token-based authentication. Will add more to it in future. Currently working on responsiveness in mobile&tablet devices
+
+[33mcommit 328cc4d57a118853712f414480b799dca42f09d0[m
+Author: davidd94 <44618968+davidd94@users.noreply.github.com>
+Date:   Mon Apr 29 10:33:35 2019 -0700
+
+    Minor updates in all sector to prepare for Windows Deployment on Nginx, flask socketio, websocket (eventlet)
+
+[33mcommit 183e72c17e6f33056aa091111f7788e8e94c9109[m
+Author: David <investmentracker1@gmail.com>
+Date:   Wed Apr 24 17:45:36 2019 -0700
+
+    Debugged and polished all project features with chrome and firefox to prepare for launch. Will work on mobile features in soon after.
+
+[33mcommit f6b63f85ffa528aa65cc688f9322970f3ce170e0[m
+Author: David <investmentracker1@gmail.com>
+Date:   Tue Apr 23 01:12:33 2019 -0700
+
+    Added mini notifications for chat and have them updated dynamically. Added offline mode and real global notfications on top of the mini ones. Removes unread and notification for each msgs accordingly. Will work on GHOST mode for the last implementation
+
+[33mcommit cb57e060593449e077289c6dc564ad20dbe140f2[m
+Author: David <investmentracker1@gmail.com>
+Date:   Mon Apr 22 14:22:24 2019 -0700
+
+    Added a fully functional chat system using flask socketio with live feeds of online/offline, msgs, timestamp, etc. Working on implementing users to go offline AND ghost mode.
+
+[33mcommit dad8d72ed5eb85e1d6839d9b9e23752d9e533b2c[m
+Author: David <investmentracker1@gmail.com>
+Date:   Fri Apr 19 00:11:26 2019 -0700
+
+    implented flask SocketIO for chat system. Still in the works to better optimize the chat system by caching chatlist instead of query for results constantly
+
+[33mcommit bf2da8d5fcbcd81894ca199eedffab07e469ad3f[m
+Author: David <investmentracker1@gmail.com>
+Date:   Thu Apr 18 02:06:10 2019 -0700
+
+    Learned how celery + redis MQ works. Implemented feature to tutorial section only. Also provides live update progress
+
+[33mcommit 41a595ec21e3959653f9a0bd26a0e093717a4ca3[m
+Author: David <investmentracker1@gmail.com>
+Date:   Mon Apr 15 01:22:11 2019 -0700
+
+    Added private msg delete and restore for message inbox. Added dynamic popup modals and delete for recently uploaded project images. Added login required for Project reply/comment section (learned how to redirect with request.args)
+
+[33mcommit 317b42375b59705e7a48ec280c1d10be7a2d1f64[m
+Author: David <investmentracker1@gmail.com>
+Date:   Fri Apr 12 19:48:03 2019 -0700
+
+    Added account settings with fully functional block/unblock user feature. Added email notifications along with option to disable/enable. Added option to completely delete USER. Added user to HIDE (not block) followed users' news feed.
+
+[33mcommit 90a267f409099632736523a4e8079a9f9fd1be61[m
+Author: David <investmentracker1@gmail.com>
+Date:   Thu Apr 11 01:34:14 2019 -0700
+
+    Added complete TAGS system with search engine. Tweaked FAQs CSS and effects. Added TOGGLE on-off for items list, tutorial, maintenance. Fixed chronological order of homepage news feed.
+
+[33mcommit a1fd167d1ec17e8e40b545264d046f49815217b8[m
+Author: David <investmentracker1@gmail.com>
+Date:   Mon Apr 8 23:52:39 2019 -0700
+
+    Added a item list for projects with complete popover effects. Added interactive terrarium creator in homepage. Improved popover display user experience.
+
+[33mcommit 4f4ad7b9844599eccaf3e74c079f45e9e1db0258[m
+Author: David <investmentracker1@gmail.com>
+Date:   Sat Apr 6 22:11:55 2019 -0700
+
+    Added FAQ section for project. Polished a few css features on all pages. Added redirects for appropriate pages.
+
+[33mcommit f6476aa24bdb9dbfab84981f3b66c66c264f0424[m
+Author: David <investmentracker1@gmail.com>
+Date:   Fri Apr 5 00:20:57 2019 -0700
+
+    added fully functional dynamic text editor with images
+
+[33mcommit 8161cf5335137856b3182f7ffd67954691885dad[m
+Author: David <investmentracker1@gmail.com>
+Date:   Wed Apr 3 23:12:38 2019 -0700
+
+    added interactive text editor for tutorial edit page
+
+[33mcommit 58605bcbdcbe37696e84b8bf485e7080d9fd87c9[m
+Author: David <investmentracker1@gmail.com>
+Date:   Tue Apr 2 13:08:41 2019 -0700
+
+    latest update from 4/1/19

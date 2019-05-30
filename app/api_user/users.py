@@ -3,7 +3,23 @@ from app.api_user import bp
 from app.models import User
 from app.api_user.errors import bad_request
 from app.api_user.auth import token_auth
+from app.schema import schema
 from flask import jsonify, request, url_for, g, abort
+from flask_graphql import GraphQLView
+from app import csrf
+import json
+
+
+bp.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+
+# CUSTOM GRAPHQL VIEW FUNCTION (NOT RECOMMENDED FOR PRODUCTION)
+"""@bp.route('/graphql', methods=['POST'])
+def graphql():
+    print(request.data)
+    data = json.loads(request.data)
+    print(data)
+    return json.dumps(schema.execute(data['query']).data)"""
+
 
 
 @bp.route('/users/<int:id>', methods=['GET'])

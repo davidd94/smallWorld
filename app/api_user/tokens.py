@@ -1,8 +1,14 @@
 from flask import jsonify, g
+from flask_wtf.csrf import generate_csrf
 from app import db
 from app.api_user import bp
 from app.api_user.auth import basic_auth, token_auth
 
+
+@bp.route('/csrf_token')
+def fetch_CSRFToken():
+    CSRFToken = generate_csrf()
+    return jsonify(CSRFToken)
 
 @bp.route('/tokens', methods=['POST'])
 @basic_auth.login_required

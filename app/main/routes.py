@@ -12,6 +12,7 @@ from app.main import bp
 from app.main.forms import EditProfileForm, MessageForm, SearchForm
 from app.project.forms import ProjectForm
 from app.email import send_notification_email, send_email
+from app.schema import schema
 from sqlalchemy import and_, desc
 from werkzeug.urls import url_parse
 from werkzeug.datastructures import MultiDict
@@ -32,7 +33,6 @@ def before_request():
         db.session.commit()
     g.search_form = SearchForm()
     g.locale = str(get_locale())
-
 
 
 
@@ -108,9 +108,10 @@ def project_preview(project_id):
 @bp.route('/privacy')
 @login_required
 def privacy():
-    blocked_users = current_user.blocked.all()
+    # REMOVED - REACTJS & GRAPHQL REPLACED JINJA2 HERE
+    #blocked_users = current_user.blocked.all()
     
-    return render_template('privacy.html', blocked_users=blocked_users)
+    return render_template('privacy.html')
 
 @bp.route('/delete_acct', methods=['POST'])
 @login_required
@@ -628,7 +629,7 @@ def unblock(username):
         if args == 'user-profile':
             return redirect(url_for('main.profile', username=username))
         elif args == 'privacy-settings':
-            return redirect
+            return jsonify('Successfully unblocked user!')
     
     # FOR AJAX REQUEST - BETTER USER EXPERIENCE
     if request.json:

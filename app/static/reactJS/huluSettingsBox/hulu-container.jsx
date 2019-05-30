@@ -1,18 +1,12 @@
 import React, { Component } from "react";
+
 import { HuluBox } from "./hulu-present.jsx";
 
 
 
-export class HuluContainer extends Component {
+class HuluContainer extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            firstName: 'none',
-            lastName: 'none',
-            userName: 'none',
-            email: 'none'
-        }
 
         this.handleClick = this.handleClick.bind(this);
     };
@@ -47,35 +41,16 @@ export class HuluContainer extends Component {
         }
     };
 
-    componentDidMount() {
-        const that = this;
-
-        fetch('/fetch_api/privacy_info', {
-            method: "GET",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            }
-        })
-        .then(function (response) {
-            response.json().then(function (data) {
-                that.setState({
-                    firstName: data.firstname,
-                    lastName: data.lastname,
-                    userName: data.username,
-                    email: data.email
-                });
-            });
-        });
-    };
-
     render() {
         return (
             <HuluBox onClick={this.handleClick}
-                    username={this.state.userName}
-                    firstname={this.state.firstName}
-                    lastname={this.state.lastName}
-                    email={this.state.email} />
+                    username={this.props.username}
+                    firstname={this.props.firstname}
+                    lastname={this.props.lastname}
+                    email={this.props.email} />
         )
     }
 }
+
+
+export default HuluContainer;

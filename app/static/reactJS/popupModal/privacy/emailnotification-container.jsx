@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+
 import { Modal } from '../factory/container-modal.jsx';
 import { CustomProps } from './emailnotificationBody-present.jsx';
 
 
-export class EmailNotificationModal extends Component {
+class EmailNotificationModal extends Component {
     constructor(props) {
         super(props);
 
@@ -42,7 +43,6 @@ export class EmailNotificationModal extends Component {
         })
         .then(function (response) {
             response.json().then(function (data) {
-                console.log(data);
                 that.setState({
                     msg: data.msg,
                     comment: data.comment,
@@ -63,7 +63,7 @@ export class EmailNotificationModal extends Component {
         const that = this;
 
         // OBTAINS CSRF TOKEN FOR EMAIL NOTE SUBMIT SAVE
-        fetch('/fetch_api/csrf_token', {
+        fetch('/api/csrf_token', {
             method: "GET",
             headers: new Headers({
                 "content-type": "application/json"
@@ -76,24 +76,12 @@ export class EmailNotificationModal extends Component {
                 });
             });
         });
-
+        
         // LOADS USER'S EMAIL NOTIFICATION SETTINGS
-        fetch('/fetch_api/email_notifications', {
-            method: "GET",
-            headers: new Headers({
-                "content-type": "application/json"
-            })
-        })
-        .then(function (response) {
-            response.json().then(function (data) {
-                console.log(data);
-                that.setState({
-                    msg: data.msg,
-                    comment: data.comment,
-                    reply: data.reply
-                });
-                that.applyChanges();
-            })
+        this.setState({
+            msg: this.props.msgNote,
+            comment: this.props.commentNote,
+            reply: this.props.replyNote
         })
     }
 
@@ -101,9 +89,15 @@ export class EmailNotificationModal extends Component {
         return (
             <Modal title="Email Notifications" 
                     bodyType="custom" 
-                    customElems={<CustomProps />}
+                    customElems={<CustomProps msgNote={this.state.msg} 
+                                                commentNote={this.state.comment}
+                                                reply={this.state.reply} />}
                     btnConfirm="Save" 
                     onClick={this.handleSave} />
         )
     }
 }
+
+
+
+export default EmailNotificationModal;

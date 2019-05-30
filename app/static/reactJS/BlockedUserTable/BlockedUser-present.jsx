@@ -39,6 +39,11 @@ const BlockedUserTitle = styled.div`
     text-align: center;
 `
 
+const AvatarStyle = styled.img`
+    width: 4.5em;
+    height: 4.5em;
+    border-radius: 50%;
+`
 
 
 class BlockedUserTable extends Component {
@@ -57,7 +62,22 @@ class BlockedUserTable extends Component {
                             </tr>
                         </thead>
                         <tbody id="blockeduser-list">
-                            
+                            {this.props.blockedUsers.map((user, index) => {
+                                return (
+                                    <tr key={index} className='userrow' id={user.username}>
+                                        <td><AvatarStyle src={user.picture}></AvatarStyle></td>
+                                        <td>{user.username}</td>
+                                        <td className='text-right'>
+                                            <a href={'/profile/' + user.username} target='_blank'><button className='button tiny'>View User</button></a>
+                                            <button className='button alert tiny' 
+                                                    style={{marginLeft: '1em'}} 
+                                                    data-user={user.username} 
+                                                    onClick={(e) => this.props.onClick(e, index)}>Unblock</button>
+                                        </td>
+                                    </tr>
+                                    )
+                                })
+                            }
                         </tbody>
                     </table>
                     </ScrollWindow>
