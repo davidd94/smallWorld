@@ -2,12 +2,12 @@
 
 {% block css %}
 {{ super() }}
-<link rel='stylesheet' href="{{ url_for('static', filename='404.css') }}">
+<link rel='stylesheet' href="{{ url_for('static', filename='stylesheets/404.css') }}">
 {% endblock css %}
 
 {% block bodycontent %}
 <div class="error-container">
-    <h3 style="color: white;"><img src="{{ url_for('static', filename='error/404error.png') }}" style="width: 5em; height: auto; border-radius: 50%; margin-right: 0.5em;"><strong style="color: maroon">Oops!</strong> The page cannot be found!</h3>
+    <h3 style="color: white;"><img src="{{ url_for('static', filename='images/error/404error.png') }}" style="width: 5em; height: auto; border-radius: 50%; margin-right: 0.5em;"><strong style="color: maroon">Oops!</strong> The page cannot be found!</h3>
     <p style="color: white;">Sorry for the inconvenience! Please send a message to our team regarding this.</p>
     <br>
     {% if current_user.is_authenticated %}

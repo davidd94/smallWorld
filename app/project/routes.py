@@ -6,7 +6,7 @@ from sqlalchemy import update
 from app import db, cors
 from app.tasks import test_export
 from app.email import send_notification_email
-from app.models import User, Projects, PhotoGallery, Itemlist, ProjectComments, CommentReplies, Notifications, FAQs, comment_likers, reply_likers, project_likers
+from app.models import User, Projects, PhotoGallery, Itemlist, ProjectComments, CommentReplies, Notifications, FAQs, comment_likers, reply_likers, project_likers, project_visitors
 from app.project import bp
 from app.main.forms import MessageForm
 from app.project.forms import ProjectForm, EditProjectForm, FAQForm
@@ -18,6 +18,17 @@ import pdfkit
 config = pdfkit.configuration(wkhtmltopdf="C:/Users/mous3/Desktop/Webapps/smallWorld/plugins/wkhtmltopdf")
 import time
 
+
+@bp.route('/refresh_project_timer')
+@login_required
+def refresh_project():
+    if current_user.username == 'Davie':
+        all_projects = Projects.query.all()
+        for eachproj in all_projects:
+            eachproj.created_date = dt.utcnow()
+            eachproj.last_edit = dt.utcnow()
+        db.session.commit()
+    return redirect(url_for('auth.homepage'))
 
 @bp.route('/new_project', methods=['GET', 'POST'])
 @login_required

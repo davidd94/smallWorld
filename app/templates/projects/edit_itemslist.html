@@ -2,9 +2,8 @@
 
 {% block css %}
 {{ super () }}
-<link rel="stylesheet" href="{{ url_for('static', filename='edit_itemlist.css') }}">
-<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
-<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/edit_itemlist.css') }}">
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 {% endblock css %}
 
 {% block bodycontent %}
@@ -98,6 +97,8 @@
 
 {% block scripts %}
 {{ super() }}
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+
 <script>
 /* ADD NEW ITEMS TO LIST */
 var existingItemNumber = $('.item-list')[0].childElementCount;

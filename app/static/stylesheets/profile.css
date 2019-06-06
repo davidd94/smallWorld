@@ -235,6 +235,14 @@
     text-align: center;
 }
 
+.profile-social-refresh {
+  grid-row: 1 / span 1;
+  grid-column: 4 / span 2;
+  text-align: right;
+  justify-self: right;
+  width: 30%;
+  margin: 0 0.5em;
+}
 .profile-social-follow {
     grid-row: 1 / span 1;
     grid-column: 4 / span 2;

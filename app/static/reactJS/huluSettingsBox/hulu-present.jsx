@@ -180,7 +180,7 @@ export class HuluBox extends Component {
                         </TabStyles>
                         
                         <TabStyles className="payment-wrapper">
-                            <ConstructionLogo className="payment-construction" src="static/comingsoon2.jpg" />
+                            <ConstructionLogo className="payment-construction" src="static/images/comingsoon2.jpg" />
                             <TabStyles2 className="payment">
                                 <TabTitle>Payment Info</TabTitle>
                                 <TabSubTitle className="payment-info-title">Payment Method</TabSubTitle>
@@ -197,7 +197,7 @@ export class HuluBox extends Component {
                         </TabStyles>
 
                         <TabStyles className="subscription-wrapper">
-                            <ConstructionLogo className="subscription-construction" src="static/comingsoon2.jpg" />
+                            <ConstructionLogo className="subscription-construction" src="static/images/comingsoon2.jpg" />
                             <TabStyles2 className="subscription">
                                 <TabTitle>Your Subscription</TabTitle>
                                 <TabSubTitle className="subscription-info-title">Payment Date</TabSubTitle>

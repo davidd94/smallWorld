@@ -686,7 +686,7 @@ def taskstatus(task_id):
 def subscription_preload():
     CSRFToken = generate_csrf()
     stripe_pub_key = current_app.config['STRIPE_PUB_KEY']
-    user_sub = current_user.subscription or 'free'
+    user_sub = current_user.subscription if current_user.is_authenticated else 'free'
     data = {'csrf_token': CSRFToken,
             'stripe_key': stripe_pub_key,
             'user_sub': user_sub}

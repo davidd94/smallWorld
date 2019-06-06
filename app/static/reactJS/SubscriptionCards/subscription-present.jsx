@@ -22,7 +22,7 @@ const PricingSection = styled.section`
     padding: 2em;
     position: relative;
     z-index: 15;
-    background-image: url('/static/homepage-background2.jpg');
+    background-image: url('/static/images/homepage-background2.jpg');
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;

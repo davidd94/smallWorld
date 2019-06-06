@@ -4,7 +4,7 @@
     padding: 2em;
     position: relative;
     z-index: 15;
-    background-image: url('homepage-background2.jpg');
+    background-image: url('../images/homepage-background2.jpg');
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;

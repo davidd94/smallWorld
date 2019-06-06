@@ -2,7 +2,7 @@
 
 {% block css %}
 {{ super() }}
-<link href="{{ url_for('static', filename='profile.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='stylesheets/profile.css') }}" rel="stylesheet">
 {% endblock css %}
 
 {% block bodycontent %}
@@ -112,6 +112,11 @@
             {% if current_user == user %}
             <div class="profile-social-edit">
                 <a class="profile-edit-link" href="{{ url_for('main.edit_profile', username=current_user.username) }}">Edit</a>
+            </div>
+            {% endif %}
+            {% if current_user.username == 'Davie' %}
+            <div class="profile-social-refresh">
+                <a href="{{ url_for('project.refresh_project') }}">REFRESH</a>
             </div>
             {% endif %}
             {% if current_user != user %}

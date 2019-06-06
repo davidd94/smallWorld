@@ -3,7 +3,7 @@
 
 {% block css %}
 {{ super() }}
-<link href="{{ url_for('static', filename='auth-templates.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='stylesheets/auth-templates.css') }}" rel="stylesheet">
 {% endblock css %}
 
 {% block mediaquery %}
@@ -40,7 +40,7 @@
 
 {% block coverphoto %}
 <div class="front-banner">
-    <img class="cover-photo" src="{{ url_for('static', filename='homepage-aquarium-trees.jpg') }}">
+    <img class="cover-photo" src="{{ url_for('static', filename='images/homepage-aquarium-trees.jpg') }}">
 </div>
 {% endblock coverphoto %}
 

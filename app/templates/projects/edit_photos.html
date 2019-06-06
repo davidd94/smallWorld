@@ -2,7 +2,7 @@
 
 {% block css %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='edit-photos.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/edit-photos.css') }}">
 {% endblock css %}
 
 {% block bodycontent %}
@@ -51,7 +51,7 @@
                 <div id="main-box" class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3 gradient-border" name="{{ project_gallery.photoOne }}">
                     <a href="#_" id="image-box" class="d-block mb-4 h-100">
                         <div class="remove-centering">
-                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='images/removemark.png') }}">
                         </div>
                         <img class="image-thumb" data-toggle="modal" data-target="#exampleModal1" name="{{ project_gallery.photoOne }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoOne) }}" alt="Image not found!">
                     </a>
@@ -61,7 +61,7 @@
                 <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoTwo }}">
                     <a href="#_" id="image-box" class="d-block mb-4 h-100">
                         <div class="remove-centering">
-                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='images/removemark.png') }}">
                         </div>
                         <img class="image-thumb" data-toggle="modal" data-target="#exampleModal2" name="{{ project_gallery.photoTwo }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTwo) }}" alt="Image not found!">
                     </a>
@@ -71,7 +71,7 @@
                 <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoThree }}">
                     <a href="#_" id="image-box" class="d-block mb-4 h-100">
                         <div class="remove-centering">
-                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='images/removemark.png') }}">
                         </div>
                         <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal3" name="{{ project_gallery.photoThree }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoThree) }}" alt="Image not found!">
                     </a>
@@ -81,7 +81,7 @@
                 <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoFour }}">
                     <a href="#_" id="image-box" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal4">
                         <div class="remove-centering">
-                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='images/removemark.png') }}">
                         </div>
                         <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal4" name="{{ project_gallery.photoFour }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFour) }}" alt="Image not found!">
                     </a>
@@ -91,7 +91,7 @@
                 <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoFive }}">
                     <a href="#_" id="image-box" class="d-block mb-4 h-100">
                         <div class="remove-centering">
-                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='images/removemark.png') }}">
                         </div>
                         <img class="image-thumb" data-toggle="modal" data-target="#exampleModal5" name="{{ project_gallery.photoFive }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoFive) }}" alt="Image not found!">
                     </a>
@@ -101,7 +101,7 @@
                 <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoSix }}">
                     <a href="#_" id="image-box" class="d-block mb-4 h-100">
                         <div class="remove-centering">
-                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='images/removemark.png') }}">
                         </div>
                         <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal6" name="{{ project_gallery.photoSix }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSix) }}" alt="Image not found!">
                     </a>
@@ -111,7 +111,7 @@
                 <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoSeven }}">
                     <a href="#_" id="image-box" class="d-block mb-4 h-100">
                         <div class="remove-centering">
-                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='images/removemark.png') }}">
                         </div>
                         <img class="image-thumb"  data-toggle="modal" data-target="#exampleModal7" name="{{ project_gallery.photoSeven }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoSeven) }}" alt="Image not found!">
                     </a>
@@ -121,7 +121,7 @@
                 <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoEight }}">
                     <a href="#_" id="image-box" class="d-block mb-4 h-100">
                         <div class="remove-centering">
-                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='images/removemark.png') }}">
                         </div>
                         <img class="image-thumb" data-toggle="modal" data-target="#exampleModal8" name="{{ project_gallery.photoEight }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoEight) }}" alt="Image not found!">
                     </a>
@@ -131,7 +131,7 @@
                 <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoNine }}">
                     <a href="#_" id="image-box" class="d-block mb-4 h-100">
                         <div class="remove-centering">
-                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='images/removemark.png') }}">
                         </div>
                         <img class="image-thumb" data-toggle="modal" data-target="#exampleModal9" name="{{ project_gallery.photoNine }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoNine) }}" alt="Image not found!">
                     </a>
@@ -141,7 +141,7 @@
                 <div class="col-12 col-sm-12 cold-md-6 col-lg-3 col-xl-3" name="{{ project_gallery.photoTen }}">
                     <a href="#_" id="image-box" class="d-block mb-4 h-100">
                         <div class="remove-centering">
-                            <img class="picture-remove-btn" src="{{ url_for('static', filename='removemark.png') }}">
+                            <img class="picture-remove-btn" src="{{ url_for('static', filename='images/removemark.png') }}">
                         </div>
                         <img class="image-thumb" data-toggle="modal" data-target="#exampleModal10" name="{{ project_gallery.photoTen }}" src="{{ url_for('static', filename='users/' + user.username + '/' + project.title + '/' + project_gallery.photoTen) }}" alt="Image not found!">
                     </a>
@@ -500,7 +500,7 @@ $(function () {
                                             .prop('class', 'remove-centering')
                                             .append($('<img>')
                                                 .prop('class', 'picture-remove-btn')
-                                                .prop('src', '{{ url_for("static", filename="removemark.png") }}')))
+                                                .prop('src', '{{ url_for("static", filename="images/removemark.png") }}')))
                                         .append($('<img>')
                                             .prop('class', 'image-thumb')
                                             .prop('name', data[i])

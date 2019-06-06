@@ -2,7 +2,7 @@
 
 {% block css %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='explore.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/explore.css') }}">
 {% endblock css %}
 
 {% block mediaquery %}
@@ -453,7 +453,7 @@
                                 <div class="card-p">
                                     {% if new_projects %}
                                     <ul class="card-ul custom-scrollbar-s3">
-                                        {% for project in trending_projects %}
+                                        {% for project in new_projects %}
                                         <li>
                                             <p class="project-title"><a class="project-title-link project-title-link-{{ project.id }}" href="{{ url_for('project.project', username=project.username, title=project.title) }}" data-toggle="popover" data-popover="true" data-html="true" data-content="<div class='popover-container popover-container-{{ project.id }}'><img class='popover-avatar' src='{{ project.author.avatar(40) }}'><a class='popover-userlink' href='{{ url_for('main.profile', username=project.username) }}' target='blank'>{{ project.username }}</a><p class='popover-description'>{{ project.description }}</p></div>">{{ project.title }}</a></p>
                                             <span class="project-likes">{{ project.likes }} Likes</span>

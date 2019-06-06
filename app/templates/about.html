@@ -2,7 +2,7 @@
 
 {% block css %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/about.css') }}">
 <link rel="stylesheet" href="https://unpkg.com/flickity@2.0/dist/flickity.min.css">
 {% endblock css %}
 
@@ -543,9 +543,9 @@
             <h3>smallWorld Vision</h3>
             <div class="smallworld-box custom-scrollbar-s3">
                 <div class="smallworld-img-box">
-                    <a href="#" data-toggle="modal" data-target="#exampleModal1"><img src="{{ url_for('static', filename='beardedgecko.jpg') }}"></a>
-                    <a href="#" data-toggle="modal" data-target="#exampleModal2"><img src="{{ url_for('static', filename='beardietank.jpg') }}"></a>
-                    <a href="#" data-toggle="modal" data-target="#exampleModal3"><img src="{{ url_for('static', filename='carnivorousplants.jpg') }}"></a>
+                    <a href="#" data-toggle="modal" data-target="#exampleModal1"><img src="{{ url_for('static', filename='images/beardedgecko.jpg') }}"></a>
+                    <a href="#" data-toggle="modal" data-target="#exampleModal2"><img src="{{ url_for('static', filename='images/beardietank.jpg') }}"></a>
+                    <a href="#" data-toggle="modal" data-target="#exampleModal3"><img src="{{ url_for('static', filename='images/carnivorousplants.jpg') }}"></a>
                 </div>
                 <p>
                     My hobbies from childhood until today were to collect many varieties of carnivious and non-carnivorous plants, 
@@ -596,7 +596,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <img src="{{ url_for('static', filename='beardedgecko.jpg') }}" alt="Image not found">
+            <img src="{{ url_for('static', filename='images/beardedgecko.jpg') }}" alt="Image not found">
         </div>
         <div class="modal-footer">
             <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
@@ -616,7 +616,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <img src="{{ url_for('static', filename='beardietank.jpg') }}" alt="Image not found">
+            <img src="{{ url_for('static', filename='images/beardietank.jpg') }}" alt="Image not found">
         </div>
         <div class="modal-footer">
             <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>
@@ -635,7 +635,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <img src="{{ url_for('static', filename='carnivorousplants.jpg') }}" alt="Image not found">
+            <img src="{{ url_for('static', filename='images/carnivorousplants.jpg') }}" alt="Image not found">
         </div>
         <div class="modal-footer">
             <button type="button" class="modal-btn btn btn-secondary" data-dismiss="modal">Close</button>

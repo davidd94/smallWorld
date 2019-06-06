@@ -23,7 +23,7 @@
   width: 50%;
   top: 80%;
   max-width:300px;
-  background-image: url('project-example.jpg');
+  background-image: url('../images/project-example.jpg');
     background-position: center center;
     background-size: cover;
   -webkit-box-shadow: 0 35px 20px #777;
@@ -45,7 +45,7 @@
   width: 50%;
   top: 40%;
   max-width:300px;
-  background-image: url('aboutme.jpg');
+  background-image: url('../images/aboutme.jpg');
     background-position: center center;
     background-size: cover;
   -webkit-box-shadow: 0 35px 20px #777;

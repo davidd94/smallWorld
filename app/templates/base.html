@@ -19,10 +19,10 @@
         <!-- THIS IS FOR ONLY THE CHAT BOX DESIGN -->
         <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
         <!-- ALL OTHER GLOBAL CSS -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='perfect-scrollbar.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/perfect-scrollbar.css') }}">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ url_for('static', filename='bootstrapcss/bootstrap-bootswatch-minty.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/base.css') }}">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
         {% endblock css %}
@@ -432,7 +432,7 @@
     
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="{{ url_for('auth.clear_flash_msgs') }}">smallWorld<img class="homepage-logo" width="50px;" margin="0 0 0 10px;" src="{{ url_for('static', filename='logo.jpg') }}"></a>
+            <a class="navbar-brand" href="{{ url_for('auth.clear_flash_msgs') }}">smallWorld<img class="homepage-logo" width="50px;" margin="0 0 0 10px;" src="{{ url_for('static', filename='images/logo.jpg') }}"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -463,7 +463,7 @@
                     <li class="nav-notification nav-item">
                         <a class="notification-nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                             <div class="notification-icon-wrapper">
-                                <img class="notification-bell-icon" src="{{ url_for('static', filename='notification-bell.svg') }}">
+                                <img class="notification-bell-icon" src="{{ url_for('static', filename='images/notification-bell.svg') }}">
                                 <span class="notification-number badge badge-warning"></span>
                             </div>
                         </a>
@@ -612,7 +612,7 @@
                                 let username = notifications[i].User;
                                 let title = notifications[i].Title;
                                 let data = notifications[i].Data;
-                                let timestamp = moment(notifications[i].Timestamp).startOf('hour').fromNow();
+                                let timestamp = moment(notifications[i].Timestamp).startOf('minute').fromNow();
                                 let noteIcon;
                                 if (type == 'message') {
                                     noteIcon = 'noteicon fas fa-envelope fa-lg';

@@ -10,7 +10,7 @@
     max-width: 100vw;
     position: relative;
     z-index: 10;
-    background-image: url('../../static/homepage-background.jpg');
+    background-image: url('../../static/images/homepage-background.jpg');
     background-position: center center;
     background-repeat: repeat-y;
     background-attachment: fixed;
@@ -23,7 +23,7 @@
 {% block bodycontent %}
 <div class="privacy-container">
     <div style="width: 90vw; height: auto; background-color: rgb(182, 182, 182); padding: 1em; border-radius: 1em; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        <h3 style="margin: 1em; color: white;"><img src="{{ url_for('static', filename='error/privacy.gif') }}" style="width: 5em; height: auto; border-radius: 50%; margin-right: 0.5em;"><strong style="color: maroon">Oops!</strong> You are trying to access a private project!</h3>
+        <h3 style="margin: 1em; color: white;"><img src="{{ url_for('static', filename='images/error/privacy.gif') }}" style="width: 5em; height: auto; border-radius: 50%; margin-right: 0.5em;"><strong style="color: maroon">Oops!</strong> You are trying to access a private project!</h3>
         <p style="color: white;">The creator must disable the privacy setting for this project in order for you to see it. Sorry for the inconvenience!</p>
         <br>
         {% if current_user.is_authenticated %}

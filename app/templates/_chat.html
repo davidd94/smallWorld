@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='_chatbox.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/_chatbox.css') }}">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700">
 
 <!-- MEDIA QUERIES -->
@@ -59,7 +59,7 @@
         </div>
         <div class="mdl-card__menu">
         <a class="chatbox-expand-btn" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <img class="expand-icons" src="{{ url_for('static', filename='dots-expand.png') }}">
+            <img class="expand-icons" src="{{ url_for('static', filename='images/dots-expand.png') }}">
             <div class="dropdown-menu chat-dropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 42px, 0px);">
                 <a class="dropdown-item dropdown-minimize" href="#">Minimize</a>
                 <a class="dropdown-item dropdown-offline" href="#">Go offline</a>

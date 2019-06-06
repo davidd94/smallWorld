@@ -46,4 +46,5 @@ class Config(object):
     STRIPE_PUB_KEY = os.environ.get('STRIPE_PUB_KEY') or None
     STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY') or None
 
+    # ONLY USED FOR DEVELOPMENT/TESTING ONLY
     #WTF_CSRF_CHECK_DEFAULT = False
