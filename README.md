@@ -2,14 +2,14 @@
 This is a complete social network website for terrarium/reptile hobbyist. smallWorld is created to be used by people who love to display their creative setups online. Members can also replicate each other's work through detailed instructions/tutorials, picture gallery, maintenance, item list, and FAQs. In essence, smallWorld is the center where anyone can proudly showcase their passionate hobby.
 
 ## Goals
-To refine/refactor existing features such as (not limited to) editing tutorial section to be a smooth user experience. One of my major goal is to add an interactive photo section in each project. This photo will contain MANY if not ALL of each enclosure/terrarium setup that will populate on hover. Lots of front end work needs to be done to achieve this to ensure smoothness and to be aesthetically pleasing. To summarize, we strive to provide users the best tools in terms of easiness and user experience. Users should enjoy uploading their work online as much as creating their terrariums/enclosures, frustration-free.
+To refine/refactor existing features such as (not limited to) editing tutorial, maintenance and item list section to be a smooth user experience. Private message center backend functionality needs to be revamped to improve security and usability. One of my major goal is to add an interactive photo section in each project. This interactive photo will contain MANY if not ALL of each enclosure/terrarium information (type of materials, brand, notes, plants, fishes, reptiles, etc) that will populate on hover. Lots of front end work is required to achieve smoothness and to have it aesthetically pleasing. To summarize, my goal is striving to provide users the best tools in terms of easiness and user experience. Users should enjoy uploading their work online as much as creating their terrariums/enclosures, frustration-free.
 
 ## Screenshots
 Homepage Screen
-<img src="https://i.imgur.com/AINiPSM.png">
+<img src="https://i.imgur.com/txfjykn.jpg">
 
 Homepage Logged in w/ Chat
-<img src="https://i.imgur.com/txfjykn.jpg">
+<img src="https://i.imgur.com/eidmCtv.jpg">
 
 Explore Page
 <img src="https://i.imgur.com/AINiPSM.png">
