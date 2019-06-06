@@ -292,7 +292,7 @@
                 </a>
             </div>
             <div class="project-user-name">
-                <a class="project-username-link" href="{{ url_for('main.profile', username=user.username) }}"><p class="test321">{{ user.username }}</p></a>
+                <a class="project-username-link" href="{{ url_for('main.profile', username=user.username) }}">{{ user.username }}</a>
             </div>
                 {% if not current_user.is_following(user) %}
                 <div class="project-social-follow">

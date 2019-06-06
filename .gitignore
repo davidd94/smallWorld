@@ -2,6 +2,8 @@ env
 flaskenv
 .env
 .flaskenv
+*flask_session
+*logs
 *node_modules
 *.vscode
 *__pycache__
