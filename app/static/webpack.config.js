@@ -1,18 +1,13 @@
 const webpack = require('webpack');
 const path = require('path');
-var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+
 
 const config = {
-    entry: { privacy: (__dirname + '/reactJS/privacy-index.jsx'),
-             subscription: (__dirname + '/reactJS/subscription-index.jsx')
-    },
+    entry: path.join(__dirname, 'reactJS/index.jsx'),
     output: {
-        path: path.join(__dirname, '/dist'),
-        filename: '[name].entry.chunk.js',
+        path: path.join(__dirname, 'dist'),
+        filename: 'bundle.js',
     },
-    plugins: [
-		new CommonsChunkPlugin("commons")
-	],
     resolve: {
         modules: [path.join(__dirname, 'node_modules')],
         extensions: ['.js', '.jsx', '.css']
@@ -36,4 +31,6 @@ const config = {
         }]
     },
 };
+
+
 module.exports = config;

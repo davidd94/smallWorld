@@ -36,7 +36,10 @@ def before_request():
 
 
 
-# GENERAL VIEW FUNCTIONS
+@bp.route('/testingreact')
+def testingreact():
+    return render_template('react-index.html')
+
 
 @bp.route('/profile/<username>', methods=['GET', 'POST'])
 def profile(username):

@@ -2,6 +2,8 @@ env
 flaskenv
 .env
 .flaskenv
+app.db
+*migrations
 *flask_session
 *logs
 *node_modules
