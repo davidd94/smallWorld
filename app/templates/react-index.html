@@ -11,14 +11,13 @@
 
         <title>It's a smallWorld</title>
 
-        <!-- THIS IS FOR ONLY THE CHAT BOX DESIGN -->
-        <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
-        <!-- ALL OTHER GLOBAL CSS -->
-        <link rel="stylesheet" href="../static/stylesheets/perfect-scrollbar.css">
+        <!-- GLOBAL CSS -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
-
         
+        <!-- GLOBAL FONTS -->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto&display=swap" rel="stylesheet">
+
         <style>
         /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
         /* Portrait */
@@ -401,19 +400,8 @@
         }
         </style>
 
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <!-- Popper JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
         <!-- PERFECT SCROLLBAR JS -->
         <script src="{{ url_for('static', filename='plugins/perfect-scrollbar.min.js') }}"></script>
-        <!-- ReactJS -->
-        <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-        <!-- BABEL USED FOR ReactJS JSX -->
-        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     </head>
 
     <body style="height: 100%;
@@ -421,7 +409,9 @@
                 position: relative;
                 overflow-y: hidden;
                 -webkit-overflow-scrolling: touch;">
-        <div id="smallworld-container" style="background-color: lightgrey;"></div>
+        <div id="smallworld-container" style="height: 100vh; width: 100vw;">
+        <!-- ReactJS SPA Insert here -->
+        </div>
         <script type="text/javascript" src="../static/dist/bundle.js" charset="utf-8"></script>
     </body>
 </html>

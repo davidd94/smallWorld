@@ -1,0 +1,43 @@
+
+.loginContainer {
+    height: 30em;
+    width: 100%;
+    overflow: visible;
+    border-radius: 0.6em;
+    background-color: rgb(230, 230, 230);
+    position: relative;
+    z-index: 500;
+    opacity: 0.8;
+    margin: 0;
+    padding: 10%;
+    text-align: center;
+    transition: all 600ms ease;
+
+    &:focus-within {
+        opacity: 1;
+    }
+}
+
+.loginProfileImage {
+    width: 6rem;
+    height: 6rem;
+    margin: 0 auto 0.625rem;
+    display: block;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.loginProfileName {
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 0.625rem 0 0;
+    min-height: 1rem;
+}
+
+.loginInput {
+    display: inline-block;
+    width: 60%;
+    text-align: center;
+}

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import BaseTemplate from './components/base/base-present';
-import FormTest from './components/navbar/contactme-present';
-import NavBar from './components/navbar/navbar-present';
+import BaseTemplate from './pages/_base_template/base-present';
+import HomeAnonymous from './pages/home/home-index';
+import NavBar from './pages/_base_template/navbar/navbar-present';
 
 
 export default (
     <BaseTemplate>
-        <Route path='/testingreact' exact component={NavBar} />
-        <Route path='/meep' component={FormTest} />
+        <Route path='/testingreact' exact component={ HomeAnonymous } />
+        <Route path='/meep' component={ NavBar } />
     </BaseTemplate>
 )
