@@ -40,6 +40,10 @@ def before_request():
 def testingreact():
     return render_template('react-index.html')
 
+@bp.route('/testingtemp')
+def testingtemp():
+    return render_template('index2.html')
+
 
 @bp.route('/profile/<username>', methods=['GET', 'POST'])
 def profile(username):
