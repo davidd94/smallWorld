@@ -6,11 +6,27 @@ $font-primary: 'Nunito Sans',Arial, sans-serif;
 $white: #fff;
 $black: #000000;
 $darken: #232931;
+$blue: #3396ff;
 
 $primary: #31de79;
 $secondary: #a0f669;
 
+h1, h2, h3, h4, h5,
+.h1, .h2, .h3, .h4, .h5 {
+	line-height: 1.5;
+	color: rgba(0,0,0,.9);
+	font-weight: 400;
+}
 
+a {
+	transition: .3s all ease;
+	color: $primary;
+	&:hover, &:focus {
+		text-decoration: none;
+		color: $primary;
+		outline: none !important;
+	}
+}
 
 @mixin border-radius($radius) {
   -webkit-border-radius: $radius;

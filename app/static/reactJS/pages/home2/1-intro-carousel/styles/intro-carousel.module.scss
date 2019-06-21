@@ -25,12 +25,17 @@
 }
 
 
-//OWL CAROUSEL
+//IMG CAROUSEL
+.introContainer {
+    position: relative;
+    z-index: 10;
+}
+
 .introBackground {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    height: 750px;
+    height: 100%;
     position: absolute;
     right: 0;
     top: 0;
@@ -39,9 +44,25 @@
     display: flex;
     align-content: center;
 
+    img {
+        height: 100%;
+    }
+
     @include media-breakpoint-down(lg){
         background-position: center center !important;
     }
+    @include media-breakpoint-down(md){
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.carouselWrapper {
+    position: absolute;
+    width: 100%;
+    z-index: 5;
+    top: 0;
+    left: 0;
 }
 
 .introSlidertext {
@@ -61,19 +82,26 @@
 }
 
 .introTextBox {
-    position: relative;
     z-index: 1;
     width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    padding-left: 2.8rem;
+    padding-right: 3rem;
     
-    @include media-breakpoint-up(lg){
+    @include media-breakpoint-up(xs){
         position: absolute;
+        top: 35%;
+        left: 0;
+        transform: translateY(-50%);
+    }
+
+    @include media-breakpoint-up(lg){
         top: 50%;
         left: 0;
         transform: translateY(-50%);
-        right: 0;
-        // width: 1200px;
-        padding-left: 2.8rem;
-        padding-right: 3rem;
     }
 
     h1 {
@@ -86,7 +114,7 @@
             font-weight: 900;
         }
         @include media-breakpoint-down(md) {
-            color: $white;
+            color: $black;
             font-size: 50px;
         }
         @include media-breakpoint-down(sm) {
@@ -99,7 +127,7 @@
         color: rgba(0,0,0,.8);
         font-weight: 400;
         @include media-breakpoint-down(md) {
-            color: rgba(255,255,255,.7);
+            color: $black;
             font-size: 23px;
         }
     }
@@ -117,42 +145,3 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-
-.owlCarousel {
-	position: relative;
-	.owlItem {
-		opacity: .4;
-		&.active {
-			opacity: 1;
-		}
-	}
-	.owlDots {
-		text-align: center;
-		.owlDot {
-			width: 10px;
-			height: 10px;
-			margin: 5px;
-			border-radius: 50%;
-			background: lighten($black, 90%);
-			position: relative;
-			&:after{
-				position: absolute;
-				top: -2px;
-				left: -2px;
-				right: 0;
-				bottom: 0;
-				width: 14px;
-				height: 14px;
-				content: '';
-				border:1px solid rgba(255,255,255,.3);
-				@include border-radius(50%);
-			}	
-			&:hover, &:focus{
-				outline: none !important;
-			}
-			&.active {
-				background: lighten($black, 70%);
-			}
-		}
-	}
-} 

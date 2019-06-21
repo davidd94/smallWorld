@@ -15,7 +15,7 @@ const IntroStatement = () => {
         <div className={styles.introTextBox}>
             <span className={styles.introSubheading}>Welcome to smallWorld</span>
             <h1><span><strong>Unlease</strong> your creativity to the <strong>world</strong></span></h1>
-            <p>A social network platform for users to share their terrarium designs with others. A one-stop website that includes everything you need to know about the setup</p>
+            <p>A social network platform for users to share their terrarium designs with others. A one-stop website that includes everything you need to know about each unique setup.</p>
 
             <p><Button color="primary">Sign up</Button></p>
         </div>
@@ -44,11 +44,15 @@ const ImageCarousel = (props) => {
         }
     ];
 
-    return <UncontrolledCarousel items={images}
+    return (
+        <div className={styles.carouselWrapper} style={{height: props.windowHeight}}>
+            <UncontrolledCarousel items={images}
                                 controls={false}
                                 indicators={false}
                                 className={styles.introBackground}
                                 style={{height: props.windowHeight}} />
+        </div>
+    )
 };
 
 const CarouselTextOverlay = () => {
@@ -59,17 +63,17 @@ const CarouselTextOverlay = () => {
 
 const IntroCarousel = (props) => {
     return (
-        <section>
+        <section style={{padding: 0, position: 'relative', zIndex: 1}}>
         <h3 className={styles.vr}>Welcome to smallWorld</h3>
             <ImageCarousel windowHeight={props.windowHeight} />
-            <Container style={{height: props.windowHeight}}>
+            <Container className={styles.introContainer} style={{height: props.windowHeight}}>
             <Row className={styles.introSlidertext} style={{height: props.windowHeight}} >
-                <Col xs={6} style={{height: props.windowHeight}} >
+                <Col xs={12} lg={6} style={{height: props.windowHeight}} >
                     <div className={styles.homeSlider} style={{height: props.windowHeight}} >
                         <IntroStatement />
                     </div>
                 </Col>
-                <Col xs={6}>
+                <Col xs={12} lg={6}>
                     <CarouselTextOverlay />
                 </Col>
             </Row>

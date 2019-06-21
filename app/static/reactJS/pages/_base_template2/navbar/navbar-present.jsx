@@ -28,7 +28,7 @@ const NavBar = () => {
                 <NavbarToggler onClick={toggle} className={styles.navbarToggler} />
 
                 <Collapse isOpen={open} navbar>
-                    <Nav className={[styles.navbarNav, 'ml-auto'].join(' ')} navbar>
+                    <Nav className={[styles.navbarNav, 'float-xs-right'].join(' ')} navbar>
                         <NavItem>
                             <RouterLink className={styles.navLink} to="#" activeClassName="active" activeClassName={styles.activeItem}><span className={styles.navlinkSpan}>Home</span></RouterLink>
                         </NavItem>

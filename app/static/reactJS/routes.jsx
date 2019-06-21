@@ -9,7 +9,7 @@ import HomepageLanding from './pages/home2/homepage-index';
 
 export default (
     <BaseTemplate2>
-        <Route path='/testingtemp' exact component={ HomepageLanding } />
-        <Route path='/meep' component={HomeAnonymous} />
+        <Route path='/reactdev-home' exact component={ HomepageLanding } />
+        <Route path='/reactdev-meep' component={HomeAnonymous} />
     </BaseTemplate2>
 )

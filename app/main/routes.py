@@ -36,13 +36,9 @@ def before_request():
 
 
 
-@bp.route('/testingreact')
-def testingreact():
-    return render_template('react-index.html')
-
-@bp.route('/testingtemp')
-def testingtemp():
-    return render_template('index2.html')
+@bp.route('/reactdev-home')
+def reactdev():
+    return render_template('reactindex.html')
 
 
 @bp.route('/profile/<username>', methods=['GET', 'POST'])

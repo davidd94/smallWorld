@@ -41,7 +41,7 @@ const config = {
             options: {
               name: '[name].[ext]',
               outputPath: 'images/',
-              publicPath: 'static/dist/images',
+              publicPath: '/static/dist/images',
               useRelativePaths: true
             }
           }]
