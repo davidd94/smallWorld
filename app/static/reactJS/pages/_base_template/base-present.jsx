@@ -1,21 +1,22 @@
 import React, { Fragment } from 'react';
 
-import styles from './base-specific.module.scss';
 import NavBar from './navbar/navbar-present';
 
 
-function BaseTemplate(props) {
+const BaseTemplate = React.forwardRef((props, ref) => {
     return (
         <Fragment>
             <header>
-                <NavBar />
+                <NavBar ref={ref} scrollState={props.scrollState}
+                                    scrollSleep={props.scrollSleep}
+                                    scrollAwake={props.scrollAwake} />
             </header>
-            <div className={styles.baseContainer} >
-                {props.children}
+            <div onScroll={props.onScroll} style={{height: '100vh'}}>
+                {props.routers}
             </div>
         </Fragment>
     );
-};
+});
 
 
 export default BaseTemplate;

@@ -1,67 +1,78 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
+import { NavLink as RouterLink } from 'react-router-dom';
 import {
-    Collapse,
     Navbar,
-    NavbarToggler,
     NavbarBrand,
+    Container,
+    NavLink,
+    NavbarToggler,
+    Collapse,
     Nav,
-    NavLink as NavLinkStrap,
     NavItem,
-    InputGroup,
-    Input
 } from 'reactstrap';
 
-import { CustomNavItem } from './styles/navbar-common';
-import styles from './styles/navbar-specific.module';
+import styles from './styles/navbar.module';
 
 
-const NavBarItems = () => {
-  return (
-    <Fragment>
-      <NavItem>
-        <CustomNavItem to='/testingreact' activeClassName='selected' activeClassName={styles.activeItem}>Home</CustomNavItem>
-      </NavItem>
-      <NavItem>
-        <CustomNavItem to='/meep' activeClassName={styles.activeItem}>Explore</CustomNavItem>
-      </NavItem>
-      <NavItem>
-        <CustomNavItem to='/about' activeClassName={styles.activeItem}>About</CustomNavItem>
-      </NavItem>
-      <NavItem>
-        <CustomNavItem to='/subscriptions' activeClassName={styles.activeItem}>Subscriptions</CustomNavItem>
-      </NavItem>
-    </Fragment>
-  );
-};
-
-
-const NavBar = () => {
+const NavBar = (props) => {
     const [open, setOpen] = useState(false);
 
-    const toggle = () => {
+    const onToggle = () => {
         setOpen(!open);
     };
 
+    var navbarStyle = '';
+    var navbarSleep = '';
+    var navbarAwake = '';
+    
+    if (props.scrollState == true) {
+        navbarStyle = styles.scrolled;
+        navbarSleep = '';
+    } 
+    if (props.scrollSleep == true) {
+        navbarStyle = styles.scrolled;
+        navbarSleep = styles.sleep;
+        navbarAwake = '';
+    } 
+    if (props.scrollAwake == true) {
+        navbarStyle = styles.scrolled;
+        navbarSleep = styles.sleep;
+        navbarAwake = styles.awake;
+    };
+
     return (
-      <Navbar className={styles.navbarContainer} expand="md">
-        <NavbarBrand className={styles.navbarTitle} href="/">smallWorld</NavbarBrand>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={open} navbar>
-          <Nav className="mr-auto" navbar>
-            <NavBarItems />
-          </Nav>
-          <Nav navbar>
-            <NavItem>
-              <NavLinkStrap href='/login' className={styles.navbarLogin} >Login</NavLinkStrap>
-            </NavItem>
-            <NavItem>
-              <InputGroup>
-                <Input placeholder="Search projects" />
-              </InputGroup>
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Navbar>
+        <Navbar expand='lg' dark className={[styles.ftcoNavbarLight, navbarStyle, navbarSleep, navbarAwake].join(' ')}>
+            <Container className={styles.container} >
+                <NavLink href='#' className={styles.navbarBrand} >small<span className={styles.navbrandSpan}>World</span></NavLink>
+                <NavbarToggler onClick={onToggle} className={styles.navbarToggler} />
+
+                <Collapse isOpen={open} navbar className='justify-content-end'>
+                    <Nav className={[styles.navbarNav, 'float-xs-right'].join(' ')} navbar>
+                        <NavItem>
+                            <RouterLink className={styles.navLink} to="/reactdev-home" activeClassName="active" activeClassName={styles.activeItem}><span className={styles.navlinkSpan}>Home</span></RouterLink>
+                        </NavItem>
+                        <NavItem>
+                            <RouterLink className={styles.navLink} to="#"><span className={styles.navlinkSpan}>Explore</span></RouterLink>
+                        </NavItem>
+                        <NavItem>
+                            <RouterLink className={styles.navLink} to="#"><span className={styles.navlinkSpan}>About</span></RouterLink>
+                        </NavItem>
+                        <NavItem>
+                            <RouterLink className={styles.navLink} to="/reactdev-404"><span className={styles.navlinkSpan}>Blog</span></RouterLink>
+                        </NavItem>
+                        <NavItem>
+                            <RouterLink className={styles.navLink} to="/BOGUS"><span className={styles.navlinkSpan}>Contact</span></RouterLink>
+                        </NavItem>
+                        <NavItem>
+                            <RouterLink className={styles.navLink} to="/reactdev-subscriptions"><span className={styles.navlinkSpan}>Subscriptions</span></RouterLink>
+                        </NavItem>
+                        <NavItem>
+                            <RouterLink className={styles.navLink} to="/reactdev-login"><span className={styles.navLinkLogin}>Login</span></RouterLink>
+                        </NavItem>
+                    </Nav>
+                </Collapse>
+            </Container>
+        </Navbar>
     );
 };
 

@@ -1,15 +1,25 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
-import BaseTemplate2 from './pages/_base_template2/base-present2';
-import HomeAnonymous from './pages/home/home-index';
-import NavBar from './pages/_base_template/navbar/navbar-present';
+import BaseTemplateContainer from './pages/_base_template/base-container';
+import HomepageLanding from './pages/home/homepage-index';
+import Subscriptions from './pages/subscription-SPA/subscription-index';
+import LoginBox from './pages/login/login-present';
+import Error404 from './pages/404/404-present';
 
-import HomepageLanding from './pages/home2/homepage-index';
 
-export default (
-    <BaseTemplate2>
-        <Route path='/reactdev-home' exact component={ HomepageLanding } />
-        <Route path='/reactdev-meep' component={HomeAnonymous} />
-    </BaseTemplate2>
-)
+const Routes = () => {
+    return (
+        <BaseTemplateContainer>
+            <Switch>
+                <Route exact path='/reactdev-home' component={ HomepageLanding } />
+                <Route path='/reactdev-subscriptions' component={Subscriptions} />
+                <Route path='/reactdev-login' component={LoginBox} />
+                <Route path='*' component={Error404} />
+            </Switch>
+        </BaseTemplateContainer>
+    );
+};
+
+
+export default Routes;
