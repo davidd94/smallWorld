@@ -11,6 +11,7 @@ from app.search import add_to_index, remove_from_index, query_index
 import jwt, base64, json
 import redis
 import celery
+import os
 
 
 followers = db.Table('followers',

@@ -5,13 +5,15 @@ from app.api_user import bp
 from app.api_user.auth import basic_auth, token_auth
 
 
-@bp.route('/csrf_token')
+
+# FOR STATEFUL (COOKIES) SESSION
+@bp.route('/csrf_token', methods=['GET'])
 def fetch_CSRFToken():
     CSRFToken = generate_csrf()
     return jsonify(CSRFToken)
 
-@bp.route('/tokens', methods=['POST'])
-@basic_auth.login_required
+
+# FOR STATELESS (TOKEN) SESSION
 def get_token():
     token = g.current_user.get_token()
     db.session.commit()

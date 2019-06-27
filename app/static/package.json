@@ -45,6 +45,8 @@
   ],
   "dependencies": {
     "apollo-boost": "^0.4.0",
+    "apollo-link-context": "^1.0.18",
+    "apollo-link-http": "^1.5.15",
     "babel-loader": "^8.0.6",
     "bootstrap": "^4.3.1",
     "graphql": "^14.3.1",
@@ -56,6 +58,7 @@
     "react-router-dom": "^5.0.1",
     "reactstrap": "^8.0.0",
     "styled-components": "^4.2.0",
-    "webpack": "^4.34.0"
+    "webpack": "^4.34.0",
+    "wow.js": "^1.2.2"
   }
 }

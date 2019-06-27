@@ -2,11 +2,11 @@ from app import db
 from app.api_user import bp
 from app.models import User
 from app.api_user.errors import bad_request
-from app.api_user.auth import token_auth
+from app.api_user.auth import token_auth, verify_password
+from app.api_user.tokens import get_token
 from app.schema import schema
 from flask import jsonify, request, url_for, g, abort
 from flask_graphql import GraphQLView
-from app import csrf
 import json
 
 
@@ -21,6 +21,18 @@ def graphql():
     return json.dumps(schema.execute(data['query']).data)"""
 
 
+@bp.route('/login', methods=['POST'])
+def get_login():
+    username = request.json['username']
+    password = request.json['password']
+    
+    if verify_password(username, password):
+        if g.current_user.max_failed_login >= 10:
+            return jsonify('Reached maximum login attempts. Please reset your password.')
+        return get_token()
+    
+    return jsonify('Invalid Username and Password combination!')
+    
 
 @bp.route('/users/<int:id>', methods=['GET'])
 @token_auth.login_required

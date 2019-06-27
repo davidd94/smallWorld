@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import {
     Navbar,
-    NavbarBrand,
     Container,
     NavLink,
     NavbarToggler,
@@ -39,6 +38,14 @@ const NavBar = (props) => {
         navbarSleep = styles.sleep;
         navbarAwake = styles.awake;
     };
+    
+    const RenderLoginBtn = (props) => {
+        if (props.userinfo) {
+            return <RouterLink className={styles.navLink} to="/reactdev-userprofile"><span className={styles.navLinkLogin}>{props.userinfo.username}</span></RouterLink>
+        } else {
+            return <RouterLink className={styles.navLink} to="/reactdev-login"><span className={styles.navLinkLogin}>Login</span></RouterLink>
+        };
+    };
 
     return (
         <Navbar expand='lg' dark className={[styles.ftcoNavbarLight, navbarStyle, navbarSleep, navbarAwake].join(' ')}>
@@ -67,7 +74,7 @@ const NavBar = (props) => {
                             <RouterLink className={styles.navLink} to="/reactdev-subscriptions"><span className={styles.navlinkSpan}>Subscriptions</span></RouterLink>
                         </NavItem>
                         <NavItem>
-                            <RouterLink className={styles.navLink} to="/reactdev-login"><span className={styles.navLinkLogin}>Login</span></RouterLink>
+                            <RenderLoginBtn userinfo={props.userinfo} />
                         </NavItem>
                     </Nav>
                 </Collapse>

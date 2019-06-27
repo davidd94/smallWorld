@@ -35,12 +35,12 @@ def before_request():
     g.locale = str(get_locale())
 
 
-
 @bp.route('/reactdev-home', defaults={'path': 'reactdev-home'})
 @bp.route('/<path:path>')
 def reactdev(path):
     print(path)
     return render_template('reactindex.html')
+
 
 
 @bp.route('/profile/<username>', methods=['GET', 'POST'])
