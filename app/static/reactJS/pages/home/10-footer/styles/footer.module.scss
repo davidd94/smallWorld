@@ -6,8 +6,8 @@
 	background: $black;
 	padding: 7em 0;
 	z-index: 0;
-	padding: 7em 0;
-    position: relative;
+	position: relative;
+	width: 100%;
 	@include media-breakpoint-down(sm){
 		padding: 6em 0;
 	}

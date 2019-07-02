@@ -26,7 +26,7 @@ const LoginBox = (props) => {
                                     <div className='input-group-prepend'>
                                         <span className='input-group-text'><i className='fa fa-user' /></span>
                                     </div>
-                                    <Input onChange={props.handleUser} type='text' placeholder='User name' style={{borderColor: props.error}} />
+                                    <Input autoFocus onKeyUp={props.handleUser} type='text' placeholder='User name' style={{borderColor: props.error}} />
                                     </div>
                                 </FormGroup>
                                 <FormGroup className='mb-5'>
@@ -34,7 +34,7 @@ const LoginBox = (props) => {
                                     <div className='input-group-prepend'>
                                         <span className='input-group-text'><i className='fa fa-lock' /></span>
                                     </div>
-                                    <Input onChange={props.handlePassword} type='password' placeholder='*******' style={{borderColor: props.error}}/>
+                                    <Input onKeyUp={props.handlePassword} type='password' placeholder='*******' style={{borderColor: props.error}}/>
                                     </div>
                                 </FormGroup>
                                 <FormGroup style={{textAlign: 'center', marginBottom: '2rem'}}>

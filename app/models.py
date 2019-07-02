@@ -244,13 +244,14 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
         current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
     
     # FOR API USAGE
-    def get_token(self, expires_in=3600):
+    def get_token(self, expires_in=300):
         now = datetime.utcnow()
-        if self.token and self.token_expiration > now + timedelta(seconds=60):
+        if self.token and self.token_expiration >= now:
             return self.token
         self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
         self.token_expiration = now + timedelta(seconds=expires_in)
         db.session.add(self)
+        print('TOKEN REFRESHED!!!!!!!!!!!')
         return self.token
 
     def revoke_token(self):
@@ -406,7 +407,6 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     def verify_email_token(token):
         try:
             id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])['secret_token']
-            print(id)
         except:
             return
         return User.query.get(id)
@@ -419,6 +419,20 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
             return None
         return user
 
+    @staticmethod
+    def token_renewal(token):
+        user = User.query.filter_by(token=token).first()
+        if user:
+            now = datetime.utcnow()
+            token_expiration = user.token_expiration
+            grace_period = timedelta(minutes=10)
+            print('attempting to renew token..')
+            if abs(now - token_expiration) <= grace_period:
+                print('renewed token!!')
+                user.get_token()
+                db.session.commit()
+                return user
+        return None
 
 class Messages(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -1,8 +1,6 @@
 import React, { Fragment, useState, useEffect, Children } from 'react';
-import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 
-import NavBar from './navbar/navbar-present';
+import NavBar from './navbar/navbar-container';
 
 
 const BaseTemplate = (props) => {
@@ -15,6 +13,7 @@ const BaseTemplate = (props) => {
     // base template features
     useEffect(() => {
         window.addEventListener('scroll', ScrollView);
+        return () => window.removeEventListener('scroll', ScrollView);
     });
 
     const ScrollView = () => {
@@ -34,60 +33,25 @@ const BaseTemplate = (props) => {
             setAwake(false);
         };
     };
-
-
-    const GET_USER_INFO = gql`
-    {
-        UserLimitedInfo { 
-            username
-            firstname
-        }
-    }
-    `
-
+    console.log(localStorage.getItem('token'))
+    // manually inserting props to each child components
+    const NestedChildWithProps = Children.map(props.children, (child, index) => {
+        const key = child.key ? `key-${child.key}` : `index-${index}`;
+        return React.cloneElement(child, {key: key});
+    });
 
     return (
-        <Query query={GET_USER_INFO}>
-            {({ loading, error, data }) => {
-                if (loading) return <p>Loading...</p>;
-                if (error) return <p>Error !</p>;
-                if (data.UserLimitedInfo != null) {
-                    console.log(data.UserLimitedInfo);
-                    return data.UserLimitedInfo.map((info) => {
-                        // manually inserting props to each child components
-                        const childWithProp = Children.map(props.children, (child) => {
-                            return React.cloneElement(child, {userinfo: info});
-                        });
-                        return (
-                            <Fragment>
-                                <header>
-                                    <NavBar scrollState={scroll}
-                                            scrollSleep={sleep}
-                                            scrollAwake={awake}
-                                            userinfo={info} />
-                                </header>
-                                <div onScroll={ScrollView} style={{height: '100vh'}}>
-                                    {childWithProp}
-                                </div>
-                            </Fragment>
-                        );
-                    });
-                } else {
-                    return (
-                        <Fragment>
-                            <header>
-                                <NavBar scrollState={scroll}
-                                        scrollSleep={sleep}
-                                        scrollAwake={awake} />
-                            </header>
-                            <div onScroll={ScrollView} style={{height: '100vh'}}>
-                                {props.children}
-                            </div>
-                        </Fragment>
-                    );
-                }
-            }}
-        </Query>
+        <Fragment>
+            <header>
+                <NavBar scrollState={scroll}
+                        scrollSleep={sleep}
+                        scrollAwake={awake}
+                            />
+            </header>
+            <div onScroll={ScrollView} style={{height: '100%', width: '100%', overflowX: 'hidden'}}>
+                {NestedChildWithProps}
+            </div>
+        </Fragment>
     );
 };
 

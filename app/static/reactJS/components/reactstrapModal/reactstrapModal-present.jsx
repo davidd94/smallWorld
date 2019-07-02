@@ -11,19 +11,6 @@ const ModalBox = (props) => {
                 </ModalHeader>
                 <ModalBody style={{padding: '2rem', textAlign: 'center'}}>
                     {props.modalBodyText}
-                    <br />
-                    <Modal isOpen={props.nestedModal} toggle={props.toggleNested} onClosed={props.closeAll ? props.toggle : undefined}>
-                    <ModalHeader style={{display: 'flex', justifyContent: 'center'}}>
-                        <span style={{fontWeight: 600}}>{props.nestedModalTitle}</span>
-                    </ModalHeader>
-                    <ModalBody style={{textAlign: 'center'}}>
-                        {props.nestedModalBody}
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={props.confirmFree} style={{marginRight: 'auto'}} >{props.nestedModalConfirm}</Button>{' '}
-                        <Button color="secondary" onClick={props.toggleNested}>{props.nestedModalCancel}</Button>
-                    </ModalFooter>
-                    </Modal>
                 </ModalBody>
                 <ModalFooter>
                     <Button color="success" onClick={props.toggleNested} style={{marginRight: 'auto'}}>{props.modalConfirm}</Button>
@@ -39,8 +26,6 @@ ModalBox.defaultProps = {
     btnColor: "primary",
     modalConfirm: "Confirm",
     modalCancel: "Close",
-    nestedModalConfirm: "Confirm",
-    nestedModalCancel: "Cancel"
 };
 
 

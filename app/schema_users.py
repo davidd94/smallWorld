@@ -8,9 +8,9 @@ class UserLimitedInfoModel(SQLAlchemyObjectType):
         # 'model' needs to be specified with a SQLAlchemy model
         model = User
         # only return specific fields
-        only_fields = ("username", "firstname", "picture")
+        only_fields = ("username", "firstname", "picture", "token")
         # exclude specified fields
-        exclude_fields = ("token", "password_hash", "last_seen", "lastname", "email", "bio",
+        exclude_fields = ("password_hash", "last_seen", "lastname", "email", "bio",
                         "msg_note", "comment_note", "reply_note")
 
 class UserInfoModel(SQLAlchemyObjectType):
@@ -19,9 +19,9 @@ class UserInfoModel(SQLAlchemyObjectType):
         model = User
         # only return specific fields
         only_fields = ("username", "firstname", "lastname", "email", "bio", "picture",
-                        "msg_note", "comment_note", "reply_note")
+                        "msg_note", "comment_note", "reply_note", "token")
         # exclude specified fields
-        exclude_fields = ("token", "password_hash", "last_seen",)
+        exclude_fields = ("password_hash", "last_seen",)
 
 class UsersBlockedModel(SQLAlchemyObjectType):
     class Meta:

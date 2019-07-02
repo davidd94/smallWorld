@@ -3,40 +3,15 @@ import React, { useState } from 'react';
 import ModalBox from './reactstrapModal-present';
 
 
-const ReactFreeModal = (props) => {
+const ReactModal = (props) => {
 
     const [modal, setModal] = useState(false);
-    const [nestedModal, setNestedModal] = useState(false);
-    const [closeAll, setCloseAll] = useState(false);
 
     const toggle = () => {
         setModal(!modal);
     };
 
-    const toggleNested = () => {
-        setNestedModal(!nestedModal);
-        setCloseAll(false);
-    };
-
-    const toggleAll = () => {
-        setNestedModal(!nestedModal);
-        setCloseAll(true);
-    };
-
-    const confirmFree = () => {
-        toggleAll();
-
-        fetch('/subscription/modify', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            },
-        });
-    };
-
     return <ModalBox toggle={toggle}
-                    toggleNested={toggleNested}
-                    toggleAll={toggleAll}
                     modal={modal}
                     nestedModal={nestedModal}
                     closeAll={closeAll}
@@ -49,11 +24,8 @@ const ReactFreeModal = (props) => {
                             modalBodyText={props.modalBodyText}
                             modalConfirm={props.modalConfirm}
                             modalCancel={props.modalCancel}
-                                    nestedModalTitle={props.nestedModalTitle}
-                                    nestedModalBody={props.nestedModalBody}
-                                    nestedModalConfirm={props.nestedModalConfirm}
-                                    nestedModalCancel={props.nestedModalCancel} />
+                            />
 };
 
 
-export default ReactFreeModal;
+export default ReactModal;

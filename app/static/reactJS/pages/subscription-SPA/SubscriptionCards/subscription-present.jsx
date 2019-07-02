@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import SubscriptionPayModal from '../PayModal/subscriptionPayModal-container';
-import ReactModal from '../../../components/reactstrapModal/reactstrapModal-container';
+import ReactModal2 from '../../../components/reactstrapModal2/reactstrapModal-container';
 
 
 const btnStyles = {
@@ -89,7 +89,7 @@ class SubscriptionBox extends Component {
                                 <CardPriceLI className="text-muted" style={{opacity: 0.7}}><span className="fa-li"><i className="fas fa-times"></i></span>Private Projects</CardPriceLI>
                                 <CardPriceLI className="text-muted" style={{opacity: 0.7}}><span className="fa-li"><i className="fas fa-times"></i></span>Export PDF Features</CardPriceLI>
                             </ul>
-                            <ReactModal btnColor='primary'
+                            <ReactModal2 btnColor='primary'
                                         btnStyles={{borderRadius: '2rem', letterSpacing: '0.1rem', fontWeight: 600, padding: '0.5rem', width: '100%', opacity: 0.9}}
                                         buttonLabel='FREE'
                                         modalTitleText='Free Subscription'

@@ -6935,6 +6935,66 @@ a {
     color: #78C2AD;
     outline: none !important; }
 
+table {
+  border-collapse: collapse;
+  margin: 1rem auto; }
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: #eee; }
+
+th {
+  background: #3498db;
+  color: white;
+  font-weight: bold; }
+
+td, th {
+  padding: 10px;
+  border: 1px solid #eee;
+  text-align: center;
+  font-size: 1rem;
+  width: 100%; }
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  table {
+    width: 100%; }
+  /* Force table to not be like tables anymore */
+  table, thead, tbody, th, td, tr {
+    display: block; }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px; }
+  tr {
+    border: 1px solid #ccc; }
+  td {
+    /* Behave  like a "row" */
+    border: none;
+    border: 1px solid rgba(192, 192, 192, 0.7);
+    position: relative;
+    text-align: center;
+    font-size: 1rem;
+    width: 100%; }
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+      color: #000;
+      font-weight: bold; } }
+
 ._31cQpw6oTO-7jXBEdJt9UW {
   background: transparent !important;
   position: absolute;
@@ -6951,6 +7011,131 @@ a {
       padding-bottom: 0;
       padding-left: 15px;
       padding-right: 15px; } }
+  ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 {
+    width: 1110px;
+    margin: 0 auto;
+    padding: 0; }
+    ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1uiFzBXLhcW76bDl4xO2Z9 {
+      font-weight: 900;
+      font-size: 24px;
+      text-transform: uppercase;
+      color: #000000;
+      padding-top: .7rem;
+      padding-bottom: .7rem;
+      text-decoration: none; }
+      @media (max-width: 991.98px) {
+        ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1uiFzBXLhcW76bDl4xO2Z9 {
+          color: #fff; } }
+      ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1uiFzBXLhcW76bDl4xO2Z9 ._2lABI9bNj6iFvDJhadg7wB {
+        color: #78C2AD;
+        font-weight: 900;
+        background: #9ff669;
+        background: -moz-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
+        background: -webkit-gradient(left top, right bottom, color-stop(0%, #9ff669), color-stop(100%, #31de79));
+        background: -webkit-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
+        background: -o-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
+        background: -ms-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
+        background: linear-gradient(135deg, #9ff669 0%, #31de79 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9ff669', endColorstr='#31de79', GradientType=1 );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent; }
+    ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 .grJRHpeRyvxG4JpS3xXAT {
+      border: none;
+      color: rgba(255, 255, 255, 0.5) !important;
+      cursor: pointer;
+      padding-right: 0;
+      text-transform: uppercase;
+      font-size: 16px;
+      letter-spacing: .1em; }
+      ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 .grJRHpeRyvxG4JpS3xXAT:hover, ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 .grJRHpeRyvxG4JpS3xXAT:focus {
+        text-decoration: none;
+        color: #78C2AD;
+        outline: none !important; }
+    @media (max-width: 991.98px) {
+      ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1vI_Ipr9ycLR9eFPOviQ28 {
+        padding-bottom: 10px;
+        margin-left: auto; } }
+    ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc {
+      display: block;
+      font-size: 16px;
+      padding: .7rem .5rem;
+      color: #000000;
+      font-weight: 400;
+      opacity: 1 !important; }
+      ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc:hover {
+        text-decoration: none; }
+      ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc:hover ._3-pYiAQEVG8iOL9MJjRa-v:before {
+        visibility: visible;
+        -webkit-transform: scaleX(1);
+        -moz-transform: scaleX(1);
+        -ms-transform: scaleX(1);
+        -o-transform: scaleX(1);
+        transform: scaleX(1); }
+      @media (max-width: 991.98px) {
+        ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc {
+          padding-left: 0;
+          padding-right: 0;
+          padding-bottom: 1rem;
+          padding-top: 0;
+          color: #fff; } }
+      ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc ._3-pYiAQEVG8iOL9MJjRa-v {
+        position: relative;
+        display: block;
+        padding-bottom: 2px;
+        color: #000000; }
+        ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc ._3-pYiAQEVG8iOL9MJjRa-v:before {
+          content: "";
+          position: absolute;
+          width: 100%;
+          height: 2px;
+          bottom: 0;
+          left: 0;
+          background: #78C2AD;
+          visibility: visible;
+          -webkit-transform: scaleX(0);
+          -moz-transform: scaleX(0);
+          -ms-transform: scaleX(0);
+          -o-transform: scaleX(0);
+          transform: scaleX(0);
+          -webkit-transition: all 0.3s ease-in-out 0s;
+          -moz-transition: all 0.3s ease-in-out 0s;
+          -ms-transition: all 0.3s ease-in-out 0s;
+          -o-transition: all 0.3s ease-in-out 0s;
+          transition: all 0.3s ease-in-out 0s; }
+        @media (max-width: 991.98px) {
+          ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc ._3-pYiAQEVG8iOL9MJjRa-v {
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 1rem;
+            padding-top: 0;
+            color: #fff; } }
+        @media (max-width: 1199.98px) {
+          ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc ._3-pYiAQEVG8iOL9MJjRa-v {
+            display: inline-block; } }
+        ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc ._3-pYiAQEVG8iOL9MJjRa-v ._1vonm5x8D6aFyApMm80Weq {
+          background: transparent;
+          background: none;
+          color: #78C2AD; }
+    ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._27jgIludr_P1IYKlnjBg7q {
+      border: 2px solid black;
+      border-radius: 1rem;
+      font-weight: 600;
+      padding: 0.5rem;
+      margin-left: 2rem;
+      transition: 300ms all ease; }
+      @media (max-width: 991.98px) {
+        ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._27jgIludr_P1IYKlnjBg7q {
+          color: #a0f669; } }
+      ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 ._27jgIludr_P1IYKlnjBg7q:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+        color: #3396ff; }
+    ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 .oo8txUuhLTPJX1-BrybLt {
+      color: black !important; }
+      @media (max-width: 991.98px) {
+        ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 .oo8txUuhLTPJX1-BrybLt {
+          color: #a0f669 !important; } }
+      ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 .oo8txUuhLTPJX1-BrybLt:hover, ._31cQpw6oTO-7jXBEdJt9UW .jesO5ZuEeIQSyQantlOh5 .oo8txUuhLTPJX1-BrybLt:active {
+        color: #78C2AD !important; }
   ._31cQpw6oTO-7jXBEdJt9UW._2FgHyUJfOEiYpNvPYx0o7S {
     position: fixed;
     right: 0;
@@ -6960,6 +7145,9 @@ a {
     background: #fff !important;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     padding: 0 15px; }
+    @media (max-width: 991.98px) {
+      ._31cQpw6oTO-7jXBEdJt9UW._2FgHyUJfOEiYpNvPYx0o7S {
+        background: #000000 !important; } }
     @media (max-width: 991.98px) {
       ._31cQpw6oTO-7jXBEdJt9UW._2FgHyUJfOEiYpNvPYx0o7S ._3j3y6R6NKvZfBp58mG9kbn > ._2f-hf4tm13Cr82gphXcquc {
         padding-left: 0 !important;
@@ -6991,146 +7179,6 @@ a {
       transition: .3s all ease-out; }
     ._31cQpw6oTO-7jXBEdJt9UW._2FgHyUJfOEiYpNvPYx0o7S._3_krCknMpOLwsNjGogUf9T {
       transition: .3s all ease-out; }
-    ._31cQpw6oTO-7jXBEdJt9UW._2FgHyUJfOEiYpNvPYx0o7S ._1uiFzBXLhcW76bDl4xO2Z9 {
-      color: #000000;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-      font-size: 24px; }
-      ._31cQpw6oTO-7jXBEdJt9UW._2FgHyUJfOEiYpNvPYx0o7S ._1uiFzBXLhcW76bDl4xO2Z9 span {
-        color: #78C2AD;
-        background: #9ff669;
-        background: -moz-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
-        background: -webkit-gradient(left top, right bottom, color-stop(0%, #9ff669), color-stop(100%, #31de79));
-        background: -webkit-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
-        background: -o-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
-        background: -ms-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
-        background: linear-gradient(135deg, #9ff669 0%, #31de79 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9ff669', endColorstr='#31de79', GradientType=1 );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent; }
-
-.jesO5ZuEeIQSyQantlOh5 {
-  width: 1110px;
-  margin: 0 auto;
-  padding: 0; }
-
-._1uiFzBXLhcW76bDl4xO2Z9 {
-  font-weight: 900;
-  font-size: 24px;
-  text-transform: uppercase;
-  color: #000000;
-  padding-top: .7rem;
-  padding-bottom: .7rem;
-  text-decoration: none; }
-  ._1uiFzBXLhcW76bDl4xO2Z9:hover {
-    color: #000000; }
-  @media (max-width: 991.98px) {
-    ._1uiFzBXLhcW76bDl4xO2Z9 {
-      color: #fff; } }
-  ._1uiFzBXLhcW76bDl4xO2Z9 ._2lABI9bNj6iFvDJhadg7wB {
-    color: #78C2AD;
-    font-weight: 900;
-    background: #9ff669;
-    background: -moz-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
-    background: -webkit-gradient(left top, right bottom, color-stop(0%, #9ff669), color-stop(100%, #31de79));
-    background: -webkit-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
-    background: -o-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
-    background: -ms-linear-gradient(-45deg, #9ff669 0%, #31de79 100%);
-    background: linear-gradient(135deg, #9ff669 0%, #31de79 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9ff669', endColorstr='#31de79', GradientType=1 );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent; }
-
-.grJRHpeRyvxG4JpS3xXAT {
-  border: none;
-  color: rgba(255, 255, 255, 0.5) !important;
-  cursor: pointer;
-  padding-right: 0;
-  text-transform: uppercase;
-  font-size: 16px;
-  letter-spacing: .1em; }
-  .grJRHpeRyvxG4JpS3xXAT:hover, .grJRHpeRyvxG4JpS3xXAT:focus {
-    text-decoration: none;
-    color: #78C2AD;
-    outline: none !important; }
-
-@media (max-width: 991.98px) {
-  ._1vI_Ipr9ycLR9eFPOviQ28 {
-    padding-bottom: 20px;
-    margin-left: auto; } }
-
-._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc {
-  display: block;
-  font-size: 16px;
-  padding: .7rem .5rem;
-  color: #000000;
-  font-weight: 400;
-  opacity: 1 !important; }
-  ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc:hover {
-    text-decoration: none; }
-  ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc:hover ._3-pYiAQEVG8iOL9MJjRa-v:before {
-    visibility: visible;
-    -webkit-transform: scaleX(1);
-    -moz-transform: scaleX(1);
-    -ms-transform: scaleX(1);
-    -o-transform: scaleX(1);
-    transform: scaleX(1); }
-  @media (max-width: 991.98px) {
-    ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc {
-      padding-left: 0;
-      padding-right: 0;
-      padding-bottom: 1rem;
-      padding-top: 0;
-      color: #fff; } }
-  ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc ._3-pYiAQEVG8iOL9MJjRa-v {
-    position: relative;
-    display: block;
-    padding-bottom: 2px;
-    color: #000000; }
-    ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc ._3-pYiAQEVG8iOL9MJjRa-v:before {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 2px;
-      bottom: 0;
-      left: 0;
-      background: #78C2AD;
-      visibility: visible;
-      -webkit-transform: scaleX(0);
-      -moz-transform: scaleX(0);
-      -ms-transform: scaleX(0);
-      -o-transform: scaleX(0);
-      transform: scaleX(0);
-      -webkit-transition: all 0.3s ease-in-out 0s;
-      -moz-transition: all 0.3s ease-in-out 0s;
-      -ms-transition: all 0.3s ease-in-out 0s;
-      -o-transition: all 0.3s ease-in-out 0s;
-      transition: all 0.3s ease-in-out 0s; }
-    @media (max-width: 991.98px) {
-      ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc ._3-pYiAQEVG8iOL9MJjRa-v {
-        padding-left: 0;
-        padding-right: 0;
-        padding-bottom: 1rem;
-        padding-top: 0;
-        color: #fff; } }
-    @media (max-width: 1199.98px) {
-      ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc ._3-pYiAQEVG8iOL9MJjRa-v {
-        display: inline-block; } }
-    ._1vI_Ipr9ycLR9eFPOviQ28 ._2f-hf4tm13Cr82gphXcquc ._3-pYiAQEVG8iOL9MJjRa-v ._1vonm5x8D6aFyApMm80Weq {
-      background: transparent;
-      background: none;
-      color: #78C2AD; }
-
-._1vI_Ipr9ycLR9eFPOviQ28 ._27jgIludr_P1IYKlnjBg7q {
-  border: 2px solid black;
-  border-radius: 1rem;
-  font-weight: 600;
-  padding: 0.5rem;
-  margin-left: 2rem;
-  transition: 300ms all ease; }
-  ._1vI_Ipr9ycLR9eFPOviQ28 ._27jgIludr_P1IYKlnjBg7q:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #3396ff; }
 
 /*!
  * Bootstrap v4.2.1 (https://getbootstrap.com/)
@@ -14069,6 +14117,66 @@ a {
     color: #78C2AD;
     outline: none !important; }
 
+table {
+  border-collapse: collapse;
+  margin: 1rem auto; }
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: #eee; }
+
+th {
+  background: #3498db;
+  color: white;
+  font-weight: bold; }
+
+td, th {
+  padding: 10px;
+  border: 1px solid #eee;
+  text-align: center;
+  font-size: 1rem;
+  width: 100%; }
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  table {
+    width: 100%; }
+  /* Force table to not be like tables anymore */
+  table, thead, tbody, th, td, tr {
+    display: block; }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px; }
+  tr {
+    border: 1px solid #ccc; }
+  td {
+    /* Behave  like a "row" */
+    border: none;
+    border: 1px solid rgba(192, 192, 192, 0.7);
+    position: relative;
+    text-align: center;
+    font-size: 1rem;
+    width: 100%; }
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+      color: #000;
+      font-weight: bold; } }
+
 ._2gm2UrIRGfcvfnQ2gBP2cd {
   writing-mode: vertical-lr;
   transform: rotate(180deg);
@@ -14119,7 +14227,7 @@ a {
 
 ._1D5Y-LKNk9nnAw4mdh31ce {
   position: absolute;
-  width: 100vw;
+  width: 100%;
   z-index: 5;
   top: 0;
   left: 0; }
@@ -21134,6 +21242,66 @@ a {
     color: #78C2AD;
     outline: none !important; }
 
+table {
+  border-collapse: collapse;
+  margin: 1rem auto; }
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: #eee; }
+
+th {
+  background: #3498db;
+  color: white;
+  font-weight: bold; }
+
+td, th {
+  padding: 10px;
+  border: 1px solid #eee;
+  text-align: center;
+  font-size: 1rem;
+  width: 100%; }
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  table {
+    width: 100%; }
+  /* Force table to not be like tables anymore */
+  table, thead, tbody, th, td, tr {
+    display: block; }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px; }
+  tr {
+    border: 1px solid #ccc; }
+  td {
+    /* Behave  like a "row" */
+    border: none;
+    border: 1px solid rgba(192, 192, 192, 0.7);
+    position: relative;
+    text-align: center;
+    font-size: 1rem;
+    width: 100%; }
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+      color: #000;
+      font-weight: bold; } }
+
 ._2iPoLPnNfb7vuqOFjDuOid {
   padding: 7em 0;
   position: relative; }
@@ -21144,7 +21312,8 @@ a {
 ._2Avifd63rXVaTdeN8cCh17 {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
-  background: #f8f9fa !important; }
+  background: #f8f9fa !important;
+  width: 100%; }
   ._2Avifd63rXVaTdeN8cCh17 ._35Kb99MPFTVVZ25gjysRH4 {
     padding-top: 2.5rem;
     padding-bottom: 2.5rem;
@@ -28211,9 +28380,70 @@ a {
     color: #78C2AD;
     outline: none !important; }
 
+table {
+  border-collapse: collapse;
+  margin: 1rem auto; }
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: #eee; }
+
+th {
+  background: #3498db;
+  color: white;
+  font-weight: bold; }
+
+td, th {
+  padding: 10px;
+  border: 1px solid #eee;
+  text-align: center;
+  font-size: 1rem;
+  width: 100%; }
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  table {
+    width: 100%; }
+  /* Force table to not be like tables anymore */
+  table, thead, tbody, th, td, tr {
+    display: block; }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px; }
+  tr {
+    border: 1px solid #ccc; }
+  td {
+    /* Behave  like a "row" */
+    border: none;
+    border: 1px solid rgba(192, 192, 192, 0.7);
+    position: relative;
+    text-align: center;
+    font-size: 1rem;
+    width: 100%; }
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+      color: #000;
+      font-weight: bold; } }
+
 .GvacZ50zOrFsqpSav_qVy {
   padding: 7em 0;
-  position: relative; }
+  position: relative;
+  width: 100%; }
   @media (max-width: 767.98px) {
     .GvacZ50zOrFsqpSav_qVy {
       padding: 6em 0; } }
@@ -35266,9 +35496,70 @@ a {
     color: #78C2AD;
     outline: none !important; }
 
+table {
+  border-collapse: collapse;
+  margin: 1rem auto; }
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: #eee; }
+
+th {
+  background: #3498db;
+  color: white;
+  font-weight: bold; }
+
+td, th {
+  padding: 10px;
+  border: 1px solid #eee;
+  text-align: center;
+  font-size: 1rem;
+  width: 100%; }
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  table {
+    width: 100%; }
+  /* Force table to not be like tables anymore */
+  table, thead, tbody, th, td, tr {
+    display: block; }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px; }
+  tr {
+    border: 1px solid #ccc; }
+  td {
+    /* Behave  like a "row" */
+    border: none;
+    border: 1px solid rgba(192, 192, 192, 0.7);
+    position: relative;
+    text-align: center;
+    font-size: 1rem;
+    width: 100%; }
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+      color: #000;
+      font-weight: bold; } }
+
 ._1Iv3Woq4w3FCYAsHyt1SzJ {
   padding: 7em 0;
-  position: relative; }
+  position: relative;
+  width: 100%; }
   @media (max-width: 767.98px) {
     ._1Iv3Woq4w3FCYAsHyt1SzJ {
       padding: 6em 0; } }
@@ -42296,13 +42587,73 @@ a {
     color: #78C2AD;
     outline: none !important; }
 
+table {
+  border-collapse: collapse;
+  margin: 1rem auto; }
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: #eee; }
+
+th {
+  background: #3498db;
+  color: white;
+  font-weight: bold; }
+
+td, th {
+  padding: 10px;
+  border: 1px solid #eee;
+  text-align: center;
+  font-size: 1rem;
+  width: 100%; }
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  table {
+    width: 100%; }
+  /* Force table to not be like tables anymore */
+  table, thead, tbody, th, td, tr {
+    display: block; }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px; }
+  tr {
+    border: 1px solid #ccc; }
+  td {
+    /* Behave  like a "row" */
+    border: none;
+    border: 1px solid rgba(192, 192, 192, 0.7);
+    position: relative;
+    text-align: center;
+    font-size: 1rem;
+    width: 100%; }
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+      color: #000;
+      font-weight: bold; } }
+
 .WdBim9gHEzAEfXFtKJzbI {
   font-size: 16px;
   background: #000000;
   padding: 7em 0;
   z-index: 0;
-  padding: 7em 0;
-  position: relative; }
+  position: relative;
+  width: 100%; }
   @media (max-width: 767.98px) {
     .WdBim9gHEzAEfXFtKJzbI {
       padding: 6em 0; } }
@@ -49346,6 +49697,66 @@ a {
     color: #78C2AD;
     outline: none !important; }
 
+table {
+  border-collapse: collapse;
+  margin: 1rem auto; }
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: #eee; }
+
+th {
+  background: #3498db;
+  color: white;
+  font-weight: bold; }
+
+td, th {
+  padding: 10px;
+  border: 1px solid #eee;
+  text-align: center;
+  font-size: 1rem;
+  width: 100%; }
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  table {
+    width: 100%; }
+  /* Force table to not be like tables anymore */
+  table, thead, tbody, th, td, tr {
+    display: block; }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px; }
+  tr {
+    border: 1px solid #ccc; }
+  td {
+    /* Behave  like a "row" */
+    border: none;
+    border: 1px solid rgba(192, 192, 192, 0.7);
+    position: relative;
+    text-align: center;
+    font-size: 1rem;
+    width: 100%; }
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+      color: #000;
+      font-weight: bold; } }
+
 .VwC4dmqL4cUOtN91vRPVT {
   height: 100%;
   width: 100%;
@@ -56315,6 +56726,66 @@ a {
     text-decoration: none;
     color: #78C2AD;
     outline: none !important; }
+
+table {
+  border-collapse: collapse;
+  margin: 1rem auto; }
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: #eee; }
+
+th {
+  background: #3498db;
+  color: white;
+  font-weight: bold; }
+
+td, th {
+  padding: 10px;
+  border: 1px solid #eee;
+  text-align: center;
+  font-size: 1rem;
+  width: 100%; }
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  table {
+    width: 100%; }
+  /* Force table to not be like tables anymore */
+  table, thead, tbody, th, td, tr {
+    display: block; }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px; }
+  tr {
+    border: 1px solid #ccc; }
+  td {
+    /* Behave  like a "row" */
+    border: none;
+    border: 1px solid rgba(192, 192, 192, 0.7);
+    position: relative;
+    text-align: center;
+    font-size: 1rem;
+    width: 100%; }
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+      color: #000;
+      font-weight: bold; } }
 
 ._3K1PdUsFAsuSmNoySOAENP {
   margin: 0;

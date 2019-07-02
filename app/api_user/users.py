@@ -7,6 +7,7 @@ from app.api_user.tokens import get_token
 from app.schema import schema
 from flask import jsonify, request, url_for, g, abort
 from flask_graphql import GraphQLView
+from datetime import datetime, timedelta
 import json
 
 
@@ -32,7 +33,21 @@ def get_login():
         return get_token()
     
     return jsonify('Invalid Username and Password combination!')
-    
+
+@bp.route('/reauth_token', methods=['POST'])
+def reauth_token():
+    old_token = request.json['old_token']
+    user = User.query.filter_by(token=old_token).first()
+    if user:
+        now = datetime.utcnow()
+        # gives the user 10 min grace period to auto-renew token
+        grace_period = timedelta(minutes=10)
+        token_expiration = user.token_expiration
+        if abs(now - token_expiration) <= grace_period:
+            user.get_token()
+            db.session.commit()
+            return jsonify(user.token)
+    return jsonify('Failed to reauth. Please log in again.')
 
 @bp.route('/users/<int:id>', methods=['GET'])
 @token_auth.login_required

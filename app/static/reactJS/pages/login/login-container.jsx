@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Redirect } from 'react-router-dom';
 import WOW from 'wow.js';
 
 import LoginBox from './login-present';
 
 
-const Login = (props) => {
+const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMsg, setMsg] = useState('');
@@ -23,6 +23,9 @@ const Login = (props) => {
     };
 
     const handlePassword = (e) => {
+        if (e.keyCode === 13) {
+            handleSubmit();
+        }
         setPassword(e.target.value);
         setShake('');
     };
@@ -55,13 +58,13 @@ const Login = (props) => {
                     setShake('wow shake');
                     return false
                 };
-                console.log(authResponse['token'])
                 localStorage.setItem('token', authResponse['token']);
+                window.location.href = '/reactdev-home';
             });
         });
     };
 
-    if (localStorage.getItem('token') && localStorage.getItem('teststop')) {
+    if (localStorage.getItem('token')) {
         return <Redirect to='/reactdev-home' />;
     };
 

@@ -1,9 +1,10 @@
 from flask import jsonify, g
 from flask_wtf.csrf import generate_csrf
 from app import db
+from app.models import User
 from app.api_user import bp
 from app.api_user.auth import basic_auth, token_auth
-
+from datetime import datetime, timedelta
 
 
 # FOR STATEFUL (COOKIES) SESSION
