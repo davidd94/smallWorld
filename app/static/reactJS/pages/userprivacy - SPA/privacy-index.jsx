@@ -3,8 +3,6 @@ import { Redirect } from 'react-router-dom';
 import styled from "styled-components";
 
 import QueryUserPrivacyInfo from '../../components/_queryuserinfo/privacyUserinfo';
-import { AcctDelModal } from "./AcctDelModal/acctDel-container";
-import EmailNotificationModal from "./EmailModal/emailnotification-container";
 import BlockedUserContainer from './BlockedUserTable/BlockedUser-container';
 import HuluContainer from "./huluSettingsBox/hulu-container";
 
@@ -43,16 +41,6 @@ const PrivacyIndex = () => {
                         <BlockedUserContainer />
                     </GridRow>
                 </GridContainer>
-
-                {/* NOTIFICATION EMAIL POPUP MODAL */}
-                <div id="modalDel" className="modal fade" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <AcctDelModal />
-                </div>
-
-                {/* DELETE ACCOUNT POPUP MODAL */}
-                <div id="modalNote" className="modal del-modal fade" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <EmailNotificationModal />
-                </div>
             </div>
         </QueryUserPrivacyInfo>
     );

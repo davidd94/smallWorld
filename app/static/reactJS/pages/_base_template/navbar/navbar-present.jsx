@@ -14,7 +14,6 @@ const NavBarSection = (props) => {
     
     const UserInfo = useContext(UserContext);
     const [open, setOpen] = useState(false);
-    console.log(UserInfo);
     const onToggle = () => {
         setOpen(!open);
     };
@@ -69,10 +68,10 @@ const NavBarSection = (props) => {
                             <RouterLink className={styles.navLink} to="/reactdev-home" activeClassName="active" activeClassName={styles.activeItem}><span className={styles.navlinkSpan}>Home</span></RouterLink>
                         </NavItem>
                         <NavItem>
-                            <RouterLink className={styles.navLink} to="#"><span className={styles.navlinkSpan}>Explore</span></RouterLink>
+                            <RouterLink className={styles.navLink} to="/reactdev-explore"><span className={styles.navlinkSpan}>Explore</span></RouterLink>
                         </NavItem>
                         <NavItem>
-                            <RouterLink className={styles.navLink} to="/reactdev-acctsettings"><span className={styles.navlinkSpan}>About</span></RouterLink>
+                            <RouterLink className={styles.navLink} to="/reactdev-aboutme"><span className={styles.navlinkSpan}>About</span></RouterLink>
                         </NavItem>
                         <NavItem>
                             <RouterLink className={styles.navLink} to="/reactdev-404"><span className={styles.navlinkSpan}>Blog</span></RouterLink>

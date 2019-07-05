@@ -17,7 +17,7 @@ const btnStyles = {
 
 const PricingSection = styled.section`
     width: 100%;
-    height: 100%;
+    height: 100vh;
     padding: 2em;
     display: flex;
     align-items: center;

@@ -26,8 +26,11 @@ const QueryUserPrivacyInfo = (props) => {
     }
     `
 
+    /* NOTE: Added "no-cache" so every time a user renders privacy page, it refreshes with the latest changes. 
+    I am able to implement re-Querying ONLY IF the cached data is mutated instead of re-Querying every time 
+    with or without changes. Will be working on this in the future */
     return (
-        <Query query={GET_USER_INFO}>
+        <Query query={GET_USER_INFO} fetchPolicy="no-cache">
             {({ loading, error, data }) => {
                 if (loading) return <p>Loading...</p>;
                 // second security layer to redirect users if not logged in

@@ -49,6 +49,75 @@ def reauth_token():
             return jsonify(user.token)
     return jsonify('Failed to reauth. Please log in again.')
 
+@bp.route('/email_notifications', methods=['POST'])
+@token_auth.login_required
+def email_notifications():
+    settings = request.json
+    user = g.current_user
+    print(settings)
+    print(user)
+    if settings and user:
+        user.msg_note = settings['msg']
+        user.comment_note = settings['comment']
+        user.reply_note = settings['reply']
+
+        db.session.commit()
+
+        return jsonify(settings)
+    
+    return jsonify('Unable to save email notification settings')
+
+@bp.route('/delete_acct', methods=['POST'])
+@token_auth.login_required
+def delete_acct():
+    user = g.current_user
+    approval = request.json['confirmation']
+    if approval:
+        projects = Projects.query.filter_by(user_id=user.id).all()
+        if projects:
+            for project in projects:
+                photo_gallery = project.photo_gallery.first()
+                project_faqs = project.faqs.first()
+                project_itemlist = project.item_list.all()
+                project_comments = project.project_comments.all()
+                project_replies = project.comment_replies.all()
+                
+                # REMOVING PROJECT AND ALL RELATED TABLES
+                db.session.delete(project)
+                db.session.delete(photo_gallery)
+                db.session.delete(project_faqs)
+                if project_itemlist:
+                    for eachitem in project_itemlist:
+                        db.session.delete(eachitem)
+                if project_comments:
+                    for eachcomment in project_comments:
+                        db.session.delete(eachcomment)
+                if project_replies:
+                    for eachreply in project_replies:
+                        db.session.delete(eachreply)
+        
+        messages = Messages.query.filter_by(recipient_id=user.id).all()
+        if messages:
+            for message in messages:
+                db.session.delete(message)
+        
+        notifications = Notifications.query.filter_by(user_id=user.id).all()
+        if notifications:
+            for eachnote in notifications:
+                db.session.delete(eachnote)
+        
+        # REMOVING MAIN USER DIRECTORY WITH ALL PROJECTS AND IMAGES
+        file_path = current_app.config['PHOTO_UPLOAD_DIR']
+        if os.path.isdir(file_path + '/' + user.username):
+            # shutil IS REQUIRED TO REMOVE ALL FILES AND SUBDIRECTORIES WITHIN A DIRECTORY. rmdir only removes when empty
+            shutil.rmtree(file_path + '/' + user.username)
+        logout_user()
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify('Account successfully deleted!')
+    return jsonify('something failed')
+
+
 @bp.route('/users/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_user(id):

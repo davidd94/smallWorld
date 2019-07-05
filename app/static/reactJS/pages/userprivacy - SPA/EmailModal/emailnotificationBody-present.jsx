@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Toggle from 'react-bootstrap-toggle';
 
 
 export class CustomProps extends Component {

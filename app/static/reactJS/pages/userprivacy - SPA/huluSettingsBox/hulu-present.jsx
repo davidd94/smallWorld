@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 import { PrivacyContext } from "../../../components/_context/UserContext";
-import ReactModal from '../../../components/reactstrapModal/reactstrapModal-container';
+import AcctDelModal from '../AcctDelModal/acctdelete-container';
+import EmailModal from "../EmailModal/emailnotification-container";
 
 
 const HuluContainer = styled.div`
@@ -237,7 +238,7 @@ class HuluBox extends Component {
 
                         <TabStyles className="privacy">
                             <TabTitle>Privacy Settings</TabTitle>
-                            <TabSubTitle className="privacy-info-title" style={{marginTop: "25px"}}>Manage Email Notifications<HuluBtn data-toggle="modal" data-target="#modalNote">manage</HuluBtn></TabSubTitle>
+                            <TabSubTitle className="privacy-info-title" style={{marginTop: "25px"}}>Manage Email Notifications<EmailModal btnStyles={HuluBtn1} /></TabSubTitle>
                             <TabSubTitle2 className="privacy-info"></TabSubTitle2>
                             <TabSubTitle className="privacy-info-title" style={{marginTop: "25px"}}>View Terms of Use <HuluBtn>view</HuluBtn></TabSubTitle>
                             <TabSubTitle2 className="privacy-info"></TabSubTitle2>
@@ -251,16 +252,7 @@ class HuluBox extends Component {
                             <TabSubTitle className="settings-info-title" style={{marginTop: "25px"}}>Cancel Your Subscription <HuluBtn>cancel</HuluBtn></TabSubTitle>
                             <TabSubTitle2 className="settings-info"></TabSubTitle2>
                             <TabSubTitle className="settings-info-title" style={{marginTop: "25px"}}>Account Status 
-                            <ReactModal btnStyles={HuluBtn1}
-                                    buttonLabel='DEACTIVATE'
-                                    modalTitleText='Account Deactivation'
-                                    modalBodyText='Are you sure you want to permanently delete your account?'
-                                    modalConfirm='Delete'
-                                    modalCancel='Cancel'
-                                            nestedModalTitle='Account Deactivation Confirmation'
-                                            nestedModalBody='If you confirm, your account will be deleted and unrestorable!'
-                                            nestedModalConfirm='Confirm'
-                                            nestedModalCancel='Cancel' />
+                            <AcctDelModal btnStyles={HuluBtn1} />
                             </TabSubTitle>
                             <TabSubTitle2 className="settings-info"></TabSubTitle2>
                         </TabStyles>

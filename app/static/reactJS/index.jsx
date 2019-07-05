@@ -5,7 +5,7 @@ import { ApolloProvider } from 'react-apollo';
 import client from './apolloclient_init';
 
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
-import '../stylesheets/perfect-scrollbar.css';
+import '../node_modules/react-perfect-scrollbar/dist/css/styles.css'
 import '../dist/styles/main.css';
 
 

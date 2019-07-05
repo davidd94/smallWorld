@@ -427,7 +427,7 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
             token_expiration = user.token_expiration
             grace_period = timedelta(minutes=10)
             print('attempting to renew token..')
-            if abs(now - token_expiration) <= grace_period:
+            if (abs(token_expiration - now) <= grace_period):
                 print('renewed token!!')
                 user.get_token()
                 db.session.commit()

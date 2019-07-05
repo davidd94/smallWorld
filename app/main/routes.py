@@ -113,10 +113,9 @@ def project_preview(project_id):
 @bp.route('/privacy')
 @login_required
 def privacy():
-    # REMOVED - REACTJS & GRAPHQL REPLACED JINJA2 HERE
-    #blocked_users = current_user.blocked.all()
+    blocked_users = current_user.blocked.all()
     
-    return render_template('privacy.html')
+    return render_template('privacy.html', blocked_users=blocked_users)
 
 @bp.route('/delete_acct', methods=['POST'])
 @login_required

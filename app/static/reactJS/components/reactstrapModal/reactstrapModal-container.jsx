@@ -13,9 +13,7 @@ const ReactModal = (props) => {
 
     return <ModalBox toggle={toggle}
                     modal={modal}
-                    nestedModal={nestedModal}
-                    closeAll={closeAll}
-                    confirmFree={confirmFree}
+                    handleSave={props.handleSave}
                             btnColor={props.btnColor}
                             btnStyles={props.btnStyles}
                             buttonLabel={props.buttonLabel}
@@ -23,6 +21,7 @@ const ReactModal = (props) => {
                             modalTitleText={props.modalTitleText}
                             modalBodyText={props.modalBodyText}
                             modalConfirm={props.modalConfirm}
+                            modalBtnStyles={props.modalBtnStyles}
                             modalCancel={props.modalCancel}
                             />
 };

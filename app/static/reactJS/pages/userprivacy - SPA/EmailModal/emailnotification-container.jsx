@@ -1,84 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import Switch from 'react-switch';
 
+import { PrivacyContext } from '../../../components/_context/UserContext';
 import ReactModal from '../../../components/reactstrapModal/reactstrapModal-container';
 
 
-const EmailModal = () => {
-    const [msgNote, setMsg] = useState('');
-    const [commentNote, setComment] = useState('');
-    const [replyNote, setReply] = useState('');
+const EmailModal = (props) => {
+    let data = useContext(PrivacyContext);
+    
+    const [msgNote, setMsg] = useState(data.UserInfo[0].msgNote);
+    const [commentNote, setComment] = useState(data.UserInfo[0].commentNote);
+    const [replyNote, setReply] = useState(data.UserInfo[0].replyNote);
 
-    const handleSave = (e) => { 
+    const handleMsgNote = () => {
+        setMsg(!msgNote);
+    };
+
+    const handleCommentNote = (e) => {
+        setComment(!commentNote);
+    };
+
+    const handleReplyNote = (e) => {
+        setReply(!replyNote);
+    };
+
+    const handleSave = () => { 
         const token = localStorage.getItem('token');
+
+        var emailSettings = {
+            'msg': msgNote,
+            'comment': commentNote,
+            'reply': replyNote
+        };
         
-        setMsg(msgValue);
-        setComment(commentValue);
-        setReply(replyValue);
-        
-        fetch('/email_notifications', {
+        console.log(emailSettings);
+        fetch('/api/email_notifications', {
             method: "POST",
             credentials: "include",
-            mode: "cors",
             body: JSON.stringify(emailSettings),
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken
+                authorization: `Bearer ${token}`
             },
         })
         .then(function (response) {
             response.json().then(function (data) {
-                that.setState({
-                    msg: data.msg,
-                    comment: data.comment,
-                    reply: data.reply
-                });
-                that.applyChanges()
-            })
-        });
-    }
-
-    applyChanges() {
-        document.getElementsByClassName('email-msg-note-btn')[0].checked = this.state.msg;
-        document.getElementsByClassName('email-comment-note-btn')[0].checked = this.state.comment;
-        document.getElementsByClassName('email-reply-note-btn')[0].checked = this.state.reply;
-    }
-
-    componentDidMount() {
-        const that = this;
-
-        // OBTAINS CSRF TOKEN FOR EMAIL NOTE SUBMIT SAVE
-        fetch('/api/csrf_token', {
-            method: "GET",
-            headers: new Headers({
-                "content-type": "application/json"
-            })
-        })
-        .then(function (response) {
-            response.json().then(function (data) {
-                that.setState({
-                    csrf_token: data
-                });
+                console.log(data);
+                if (data == 'Unable to save email notification settings') {
+                    alert(data);
+                };
             });
         });
-        
-        // LOADS USER'S EMAIL NOTIFICATION SETTINGS
-        this.setState({
-            msg: this.props.msgNote,
-            comment: this.props.commentNote,
-            reply: this.props.replyNote
-        })
     }
 
-    render() {
+    const CustomModalBody = () => {
         return (
-            <Modal title="Email Notifications" 
-                    bodyType="custom" 
-                    customElems={<CustomProps msgNote={this.state.msg} 
-                                                commentNote={this.state.comment}
-                                                reply={this.state.reply} />}
-                    btnConfirm="Save" 
-                    onClick={this.handleSave} />
-        )
-    }
+            <ul style={{listStyle: 'none', textAlign: 'left'}}>
+                <li style={{marginBottom: '1rem', display: 'flex', alignSelf: 'center'}}><Switch onChange={handleMsgNote} checked={msgNote} id="normal-switch" height={22} width={44} /><span style={{marginLeft: '2rem'}}>Send email for all private messages</span></li>
+                <li style={{marginBottom: '1rem', display: 'flex', alignSelf: 'center'}}><Switch onChange={handleCommentNote} checked={commentNote} id="normal-switch" height={22} width={44} /><span style={{marginLeft: '2rem'}}>Send email for all project comments</span></li>
+                <li style={{marginBottom: '1rem', display: 'flex', alignSelf: 'center'}}><Switch onChange={handleReplyNote} checked={replyNote} id="normal-switch" height={22} width={44} /><span style={{marginLeft: '2rem'}}>Send email for all project replies</span></li>
+            </ul>
+        );
+    };
+
+    return (
+        <ReactModal 
+            btnColor="primary"
+            handleSave={handleSave}
+                btnStyles={props.btnStyles}
+                buttonLabel="Manage"
+                modalClassName="none"
+                modalTitleText="Email Notifications" 
+                modalBodyText={CustomModalBody()}
+                modalConfirm="Save"
+                modalCancel="Cancel">
+        </ReactModal>
+    )
 }
+
+
+export default EmailModal;

@@ -1,0 +1,65 @@
+@import '../../../pages/__styles/commonstyles';
+
+
+.card {
+    background:#FFF;
+    display: block;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    border:1px solid #AAA;
+    border-bottom:3px solid #BBB;
+    padding:0px;
+    margin-top: 0.5em;
+    overflow:hidden;
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-family: 'Roboto', sans-serif;
+    -webkit-transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 100;
+    opacity: 0.8;
+    transform: scale(0.9);
+    transition: all 400ms ease;
+    height: 100%;
+
+    &:hover {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .cardContent {
+        height: 100%;
+
+        .cardHeader {
+            color: #fff;
+            
+            .cardHeading {
+                display: block;
+                font-size: 24px;
+                line-height: 28px;
+                margin-top: 0.7rem;
+                margin-bottom: 0;
+                height: 2.5em;
+                border-bottom: 1px rgb(0, 0, 0);
+                color:#fff;
+                text-align: center;
+                padding: 0.6em 0;
+                text-align: center;
+            }
+        }
+
+        .cardBody {
+            margin: 0;
+            height: 92%;
+            overflow: hidden;
+            position: relative;
+    
+            .cardP {
+                margin-bottom: 0;
+                height: 100%;
+            }
+        }
+    }
+}
