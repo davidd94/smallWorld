@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import SubscriptionPayModal from '../PayModal/subscriptionPayModal-container';
 import ReactModal2 from '../../../components/reactstrapModal2/reactstrapModal-container';
+import BGImg from '../../../../images/homepage-background2.jpg';
 
 
 const btnStyles = {
@@ -18,12 +20,13 @@ const btnStyles = {
 const PricingSection = styled.section`
     width: 100%;
     height: 100vh;
-    padding: 2em;
+    padding: 5rem 2rem;
     display: flex;
     align-items: center;
     position: relative;
     z-index: 15;
-    background-image: url('/static/images/homepage-background2.jpg');
+    overflow: hidden;
+    background-image: url(${BGImg});
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -72,7 +75,8 @@ const CardPriceLI = styled.li`
 class SubscriptionBox extends Component {
     render() {
         return (
-            <PricingSection className="pricing py-5">
+            <PricingSection className="pricing">
+                <PerfectScrollbar style={{width: '100%', padding: '3rem 0'}}>
                 <div className="container">
                     <div className="row">
                     <div className="col-lg-4">
@@ -142,6 +146,7 @@ class SubscriptionBox extends Component {
                     </div>
                     </div>
                 </div>
+                </PerfectScrollbar>
             </PricingSection>
         );
     };

@@ -1,0 +1,35 @@
+@import '../../../pages/__styles/commonstyles';
+
+
+.cardStyles {
+    background-color: $white;
+    transition: 300ms all ease;
+
+    &:focus-within {
+        background-color: white;
+        opacity: 1;
+    }
+}
+
+.signUpTitle {
+    font-size: 1.2rem;
+    color: rgb(104, 104, 104);
+    text-align: center;
+    width: 100%;
+    margin-bottom: 3rem;
+}
+.signUpBtn {
+    background-color: white;
+    color: $primary;
+    border-color: $primary;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    transition: 300ms all ease;
+
+    &:hover {
+        background-color: $blue;
+        border-color: $blue;
+        color: white;
+    }
+}

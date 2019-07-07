@@ -7,7 +7,7 @@ import HomepageLanding from './pages/home/homepage-index';
 import Explore from './pages/explore/explore-index';
 import AboutMe from './pages/aboutme/aboutme-index';
 import Subscriptions from './pages/subscription-SPA/subscription-index';
-import Login from './pages/login/login-container';
+import UserLoginPage from './pages/login/login-index';
 import PrivacyIndex from './pages/userprivacy - SPA/privacy-index';
 import Error404 from './pages/404/404-present';
 
@@ -21,7 +21,7 @@ const Routes = () => {
                     <Route path='/reactdev-explore' component={() => <BaseTemplate><Explore /></BaseTemplate>} />
                     <Route path='/reactdev-aboutme' component={() => <BaseTemplate><AboutMe /></BaseTemplate>} />
                     <Route path='/reactdev-subscriptions' component={() => <BaseTemplate><Subscriptions /></BaseTemplate>} />
-                    <Route path='/reactdev-login' component={() => <BaseTemplate><Login /></BaseTemplate>} />
+                    <Route path='/reactdev-login' component={() => <BaseTemplate><UserLoginPage /></BaseTemplate>} />
                     <Route path='/reactdev-acctsettings' component={() => <BaseTemplate><PrivacyIndex /></BaseTemplate>} />
                     <Route path='*' component={() => <BaseTemplate><Error404 /></BaseTemplate>} />
                 </Switch>

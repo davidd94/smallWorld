@@ -20,10 +20,11 @@ h1, h2, h3, h4, h5,
 a {
 	transition: .3s all ease;
 	color: $primary;
+	cursor: pointer;
+
 	&:hover, &:focus {
 		text-decoration: none;
-		color: $primary;
-		outline: none !important;
+		color: $blue;
 	}
 }
 
@@ -138,4 +139,12 @@ only screen and (max-width: 760px),
 	background: -ms-linear-gradient(-45deg, rgba(159,246,105,1) 0%, rgba(49,222,121,1) 100%);
 	background: linear-gradient(135deg, rgba(159,246,105,1) 0%, rgba(49,222,121,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9ff669', endColorstr='#31de79', GradientType=1 );
+}
+
+@mixin peril-background() {
+	background: linear-gradient(to right top, #d6d6d6, #cccbd6, #bfc0d7, #b1b6d8, #a0add9, #98b1df, #8eb6e3, #84bae7, #8acbed, #97dbf1, #aaeaf5, #c0f9f9);
+}
+
+@mixin space-background() {
+	background: linear-gradient(to right top, #555454, #594b4e, #59424e, #543b53, #46365b, #35365c, #21365b, #003658, #00354b, #0f323e, #1c2f32, #252a2a);
 }

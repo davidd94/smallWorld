@@ -1,6 +1,7 @@
 from app import db
 from app.api_user import bp
 from app.models import User
+from app.auth.forms import RegistrationForm
 from app.api_user.errors import bad_request
 from app.api_user.auth import token_auth, verify_password
 from app.api_user.tokens import get_token
@@ -33,6 +34,41 @@ def get_login():
         return get_token()
     
     return jsonify('Invalid Username and Password combination!')
+
+@bp.route('/register', methods=['POST'])
+def register_user():
+    print(request.json)
+    user_info = [{
+                "firstname": request.json['firstname'],
+                "lastname": request.json['lastname'],
+                "username": request.json['username'],
+                "password": request.json['password'],
+                "repassword": request.json['repassword']
+                }]
+    form = RegistrationForm(firstname=request.json['firstname'],
+                            lastname=request.json['lastname'],
+                            username=request.json['username'],
+                            password=request.json['password'],
+                            repassword=request.json['repassword'])
+    print(form.validate())
+    if form.validate() and False:
+        lowercased_email = (form.email.data).lower()
+        newuser = User(username=form.username.data,
+                        firstname=form.firstname.data,
+                        lastname=form.lastname.data,
+                        email=lowercased_email,
+                        max_failed_login=0)
+        newuser.create_password(form.password.data)
+        
+        db.session.add(newuser)
+        newuser.picture = newuser.avatar(70)
+        
+        #db.session.commit()
+        flash('You have created your new account! Please check your email to verify your account.')
+        send_confirmation_email(newuser)
+        return jsonify('New account created!')
+    return jsonify('Failed to create account')
+
 
 @bp.route('/reauth_token', methods=['POST'])
 def reauth_token():

@@ -46,15 +46,15 @@
             height: 40%;
             padding: 1rem;
             border-radius: 1rem;
-            overflow-y: scroll;
+            overflow: hidden;
             color: #fff !important;
             background: linear-gradient(to right top, #555454, #594b4e, #59424e, #543b53, #46365b, #35365c, #21365b, #003658, #00354b, #0f323e, #1c2f32, #252a2a);
             text-align: center;
 
             @include media-breakpoint-down(md){
                 text-align: center;
-                height: 65%;
-                width: 60%;
+                height: 60%;
+                width: 65%;
             }
         }
 

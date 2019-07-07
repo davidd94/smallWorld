@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import CarouselBox from './carousel-present';
 import WOW from 'wow.js';
-
+import BGBio from '../../../../images/aboutme-bio.jpg';
+import BGProg from '../../../../images/aboutme-space.jpg';
+import BGFuture from '../../../../images/aboutme-program.jpg';
 
 const items = [
     {
-        src: 'https://artoflivingretreatcenter.org/wp-content/uploads/2016/09/asphalt-dark-dawn-531321.jpg',
+        src: BGBio,
         altText: "Hello! First, I want to thank you for coming to my website. I am a passonionate self-taught full stack web developer. \
         My career has started off with a Bachelor of Science in Civil Engineer that focused on construction estimating and plan \
         developement for custom luxurious hillside homes. After working in the Construction/Civil Engineer field for two years, I've \
@@ -22,7 +24,7 @@ const items = [
         caption: 'About Me'
     },
     {
-        src: 'https://wallpapercave.com/wp/wp2555874.jpg',
+        src: BGProg,
         altText: 'My hobbies from childhood until today were to collect many varieties of carnivious and non-carnivorous plants, \
         reptiles, and fresh water fishes. Creative desert setups were made for my bearded dragon and leopard gecko. Unique and inspiring \
         terrariums for my carnivious plants. Nature overall seemed fascinating to me.',
@@ -34,7 +36,7 @@ const items = [
         caption: 'The Path to Programming'
     },
     {
-        src: 'https://image.freepik.com/free-photo/developing-programmer-development-website-design-coding-technologies_18497-1090.jpg',
+        src: BGFuture,
         altText: "Having great interest in investing, I thought it would be a great idea to create my \
         first project as my very own stock portfolio manager called InvestmenTracker. This whole website is made from \
         scratch meaning no bootstrap or any other code was used to create it. I believed this \

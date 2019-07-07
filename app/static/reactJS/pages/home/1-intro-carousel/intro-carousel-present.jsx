@@ -14,7 +14,7 @@ const IntroStatement = () => {
     return (
         <div className={styles.introTextBox}>
             <span className={styles.introSubheading}>Welcome to smallWorld</span>
-            <h1><span><strong>Unlease</strong> your creativity to the <strong>world</strong></span></h1>
+            <p className={styles.introText}><span><strong>Unlease</strong> your creativity to the <strong>world</strong></span></p>
             <p>A social network platform for users to share their terrarium designs with others. A one-stop website that includes everything you need to know about each unique setup.</p>
 
             <p><Button color="primary">Sign up</Button></p>

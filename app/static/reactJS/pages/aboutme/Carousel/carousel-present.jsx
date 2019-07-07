@@ -4,6 +4,7 @@ import {Carousel,
         CarouselIndicators,
         CarouselControl,
 } from 'reactstrap';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import styles from './styles/carouselStyles.module';
 
@@ -47,9 +48,11 @@ const CarouselBox = (props) => {
                 className={styles.carouselItems}>
                 <h2 className={styles.carouselTitle}>{item.caption}</h2>
                 <div className={styles.bodyText}>
+                    <PerfectScrollbar>
                     <p>{item.altText}</p>
                     <p>{item.altText2}</p>
                     <p>{item.altText3}</p>
+                    </PerfectScrollbar>
                 </div>
                 <SlideFooter type={item.caption} className={styles.carouselFooter} />
                 <img src={item.src} alt={item.altText} className={styles.carouselImg} />

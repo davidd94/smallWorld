@@ -5,18 +5,12 @@ import {Container, Row,
 import ResultsCards from './resultsCard/resultsCard-present';
 import QueryProjectInfo from '../../components/_queryuserinfo/projectInfo';
 import BGImage from '../../../images/homepage-background.jpg';
+import styles from './resultsCard/styles/imp-resultsCardStyles.module';
 
-
-const ExploreContainerStyle = {
-    width: '100%',
-    height: '100vh',
-    background: `url(${BGImage})`,
-    backgroundSize: 'cover'
-}
 
 const Explore = () => {
     return (
-        <div style={ExploreContainerStyle}>
+        <div className={styles.exploreContainer} style={{background: `url(${BGImage})`}}>
             <QueryProjectInfo>
                 <Container style={{width: '100%', height: '100%', padding: '5rem 0'}}>
                     <Row style={{height: '100%'}}>
