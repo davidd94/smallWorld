@@ -5,7 +5,8 @@ import {TabContent, TabPane,
 } from 'reactstrap';
 
 import LoginTab from './loginTab/logintab-container';
-import RegisterTabBox from './registerTab/registertab-present';
+import RegistrationFormContainer from './registerTab/registration-container';
+import AcctResetTabContainer from './acctResetTab/acctResetTab-container';
 import styles from './_styles/userLoginTabsStyles.module';
 
 
@@ -71,14 +72,14 @@ const UserLoginTabs = (props) => {
           <TabPane tabId="2">
             <Row>
               <Col sm="12">
-                <RegisterTabBox />
+                <RegistrationFormContainer handleShake={handleShake} />
               </Col>
             </Row>
           </TabPane>
           <TabPane tabId="3">
             <Row>
               <Col sm="12">
-                <h4>Account Reset</h4>
+                <AcctResetTabContainer handleShake={handleShake} />
               </Col>
             </Row>
           </TabPane>

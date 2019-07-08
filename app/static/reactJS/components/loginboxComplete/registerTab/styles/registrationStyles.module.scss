@@ -1,0 +1,23 @@
+@import '../../../../pages/__styles/commonstyles';
+
+
+.registerContainer {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+
+    .registerHeader {
+        justify-content: center;
+        width: 100%;
+        margin: 0 0 2rem 0;
+
+        p {
+            font-family: 'Roboto', Arial, Helvetica, sans-serif;
+            font-weight: 600;
+            color: black;
+            margin: 1rem 0;
+            text-align: center;
+            width: 100%;
+        }
+    }
+}

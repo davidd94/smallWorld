@@ -14,7 +14,7 @@ class RegistrationForm(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired()])
     lastname = StringField('Last Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=50, message='Maximum of 50 characters is allowed for your email address.')])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=5, max=30, message='Password must be 5-30 characters long with one lowercase, uppercase, and number.')])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=5, max=30, message='Password must be 5-30 characters.')])
     repassword = PasswordField('Retype Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Submit')
     

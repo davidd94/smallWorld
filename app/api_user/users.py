@@ -1,7 +1,8 @@
 from app import db
 from app.api_user import bp
 from app.models import User
-from app.auth.forms import RegistrationForm
+from app.auth.forms import RegistrationForm, PasswordResetRequestForm
+from app.email import send_confirmation_email, send_password_reset_email
 from app.api_user.errors import bad_request
 from app.api_user.auth import token_auth, verify_password
 from app.api_user.tokens import get_token
@@ -38,20 +39,14 @@ def get_login():
 @bp.route('/register', methods=['POST'])
 def register_user():
     print(request.json)
-    user_info = [{
-                "firstname": request.json['firstname'],
-                "lastname": request.json['lastname'],
-                "username": request.json['username'],
-                "password": request.json['password'],
-                "repassword": request.json['repassword']
-                }]
     form = RegistrationForm(firstname=request.json['firstname'],
                             lastname=request.json['lastname'],
                             username=request.json['username'],
+                            email=request.json['email'],
                             password=request.json['password'],
-                            repassword=request.json['repassword'])
-    print(form.validate())
-    if form.validate() and False:
+                            repassword=request.json['repassword'],
+                            csrf_enabled=False)
+    if form.validate():
         lowercased_email = (form.email.data).lower()
         newuser = User(username=form.username.data,
                         firstname=form.firstname.data,
@@ -63,12 +58,29 @@ def register_user():
         db.session.add(newuser)
         newuser.picture = newuser.avatar(70)
         
-        #db.session.commit()
-        flash('You have created your new account! Please check your email to verify your account.')
+        db.session.commit()
         send_confirmation_email(newuser)
-        return jsonify('New account created!')
+        return jsonify('New account created !')
+    
+    if form.errors:
+        for error in (form.firstname.errors or form.lastname.errors \
+        or form.username.errors or form.email.errors \
+        or form.password.errors or form.repassword.errors):
+            return jsonify(error)
+        
     return jsonify('Failed to create account')
 
+@bp.route('/reset_user_password', methods=['POST'])
+def reset_user_password():
+    form = PasswordResetRequestForm(email=request.json['email'], csrf_enabled=False)
+    if form.validate():
+        lowercased_email = (form.email.data).lower()
+        user = User.query.filter_by(email=lowercased_email).first()
+        if user:
+            send_password_reset_email(user)
+            return jsonify('A new password link will be sent to your email.')
+        return jsonify('A new password link will be sent to your email.')
+    return jsonify('A valid email is required.')
 
 @bp.route('/reauth_token', methods=['POST'])
 def reauth_token():
