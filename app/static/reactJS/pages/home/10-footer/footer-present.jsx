@@ -46,7 +46,7 @@ const FooterSection = () => {
                 </Row>
                 <Row>
                     <Col xs={12} className={styles.footerPrivacy}>
-                        <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script>, smallWorld, Inc. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a></p>
+                        <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> smallWorld, Inc. All rights reserved | <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a></p>
                     </Col>
                 </Row>
             </Container>

@@ -148,3 +148,37 @@ only screen and (max-width: 760px),
 @mixin space-background() {
 	background: linear-gradient(to right top, #555454, #594b4e, #59424e, #543b53, #46365b, #35365c, #21365b, #003658, #00354b, #0f323e, #1c2f32, #252a2a);
 }
+
+@mixin prefixed($property, $value) {
+
+	-webkit-#{$property}: #{$value};
+	-moz-#{$property}: #{$value};
+	-ms-#{$property}: #{$value};
+	-o-#{$property}: #{$value};
+	#{$property}: #{$value};
+
+}
+
+// prefix keyframes
+@mixin keyframes($name) {
+
+	@-webkit-keyframes #{$name} {
+	  @content;
+	 }
+
+	@-moz-keyframes #{$name} {
+	  @content;
+	}
+
+	@-ms-keyframes #{$name} {
+	  @content;
+	}
+
+	@-o-keyframes #{$name} {
+	  @content;
+	}
+
+	@keyframes #{$name} {
+	@content;
+  }
+}

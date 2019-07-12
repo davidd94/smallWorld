@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 
 import styles from './styles/404styles.module';
+import errorImg from '../../../images/error/404error.png';
 
 
 const Error404 = () => {
@@ -15,7 +16,7 @@ const Error404 = () => {
         <Container className={styles.containerStyles}>
             <Row className='align-items-center mb-5'>
                 <Col xs={12} md={12} lg={2}>
-                    <img src="static/images/error/404error.png" className={styles.img} />
+                    <img src={errorImg} className={styles.img} />
                 </Col>
                 <Col xs={12} md={12} lg={10}>
                     <h3 styles={styles.errorTitle}><strong style={{color: 'maroon'}}>Oops!</strong> The page cannot be found!</h3>

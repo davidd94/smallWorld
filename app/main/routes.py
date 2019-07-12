@@ -38,7 +38,6 @@ def before_request():
 @bp.route('/reactdev-home', defaults={'path': 'reactdev-home'})
 @bp.route('/<path:path>')
 def reactdev(path):
-    print(path)
     return render_template('reactindex.html')
 
 
@@ -502,8 +501,6 @@ def search():
         if total > page * current_app.config['PROJECTS_PER_PAGE'] else None
     prev_url = url_for('main.search', q=g.search_form.q.data, page=page - 1) \
         if page > 1 else None
-    print(projects)
-    print(projects.all())
     return render_template('search.html', projects=projects.all(),
                                         next_url=next_url,
                                         prev_url=prev_url)

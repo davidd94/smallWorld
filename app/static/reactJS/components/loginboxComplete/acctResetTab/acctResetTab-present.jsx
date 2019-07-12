@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 
 import styles from './styles/AcctResetTabStyles.module';
+import RecaptchaV2 from '../../reCaptcha/reCaptcha-index';
 
 
 const AcctResetTabBox = (props) => {
@@ -28,7 +29,7 @@ const AcctResetTabBox = (props) => {
                     <AcctResetHeader serverError={props.serverError} />
                 </Col>
             </Row>
-            <Row style={{width: '100%', marginTop: '2rem', marginBottom: '2rem', justifyContent: 'center'}}>
+            <Row style={{width: '100%', marginTop: '1rem', marginBottom: '1rem', justifyContent: 'center'}}>
                 <Col md={12} lg={8} offset={{ lg: 4 }}>
                     <FormGroup>
                         <Input placeholder='Email'
@@ -38,6 +39,9 @@ const AcctResetTabBox = (props) => {
                                 autoComplete="something-to-stop-autocomplete"
                                 style={{borderColor: (props.emailError == 'ok' || props.emailError == '' ? '' : 'red'), textAlign: 'center'}} />
                     </FormGroup>
+                </Col>
+                <Col md={12} lg={12} className="my-3">
+                    <RecaptchaV2 handleRecaptchaToken={props.handleRecaptchaToken} />
                 </Col>
             </Row>
             <Row style={{width: '100%', marginTop: '2rem', marginBottom: '2rem', justifyContent: 'center'}}>

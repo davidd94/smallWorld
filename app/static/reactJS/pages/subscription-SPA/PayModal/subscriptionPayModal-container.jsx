@@ -79,7 +79,7 @@ class SubscriptionPayModal extends Component {
                     token: (token) => {
                         this.setState({ loading: true });
                         // use fetch or some other AJAX library here if you dont want to use axios
-                        fetch('/subscription/pay', {
+                        fetch('/api/subscription_pay', {
                             method: 'POST',
                             credentials: "include",
                             mode: "cors",
@@ -98,7 +98,8 @@ class SubscriptionPayModal extends Component {
                         .then(function (response) {
                             response.json().then(function (msg) {
                                 if (msg == 'You have successfully subscribed!') {
-                                    window.location = '/subscription/thankyou'
+                                    alert(msg);
+                                    window.location.href = '/reactdev-home';
                                 } else if (msg == 'There was an error processing payment... please contact the sales department') {
                                     alert(msg);
                                 }

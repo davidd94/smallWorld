@@ -9,7 +9,7 @@ const BaseTemplate = (props) => {
     const [scroll, setScroll] = useState(false);
     const [sleep, setSleep] = useState(false);
     const [awake, setAwake] = useState(false);
-    
+
     // base template features
     useEffect(() => {
         window.addEventListener('scroll', ScrollView);
@@ -33,7 +33,7 @@ const BaseTemplate = (props) => {
             setAwake(false);
         };
     };
-    console.log(localStorage.getItem('token'))
+    
     // manually inserting props to each child components
     const NestedChildWithProps = Children.map(props.children, (child, index) => {
         const key = child.key ? `key-${child.key}` : `index-${index}`;
@@ -46,13 +46,18 @@ const BaseTemplate = (props) => {
                 <NavBar scrollState={scroll}
                         scrollSleep={sleep}
                         scrollAwake={awake}
-                            />
+                        disableSearch={props.disableSearch} />
             </header>
             <div onScroll={ScrollView} style={{height: '100%', width: '100%', overflowX: 'hidden'}}>
                 {NestedChildWithProps}
             </div>
         </Fragment>
     );
+};
+
+
+BaseTemplate.defaultProps = {
+    disableSearch: false
 };
 
 

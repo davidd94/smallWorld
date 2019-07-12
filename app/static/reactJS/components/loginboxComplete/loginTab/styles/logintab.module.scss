@@ -4,6 +4,7 @@
 .cardStyles {
     background-color: $white;
     transition: 300ms all ease;
+    border: none;
 
     &:focus-within {
         background-color: white;

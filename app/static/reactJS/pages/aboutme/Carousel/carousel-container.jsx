@@ -5,7 +5,6 @@ import WOW from 'wow.js';
 
 
 const Carousel = () => {
-    console.log('rendering....');
     useEffect(() => {
         const wow = new WOW();
         wow.init();

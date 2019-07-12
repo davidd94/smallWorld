@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from 'react-router-dom';
 import styled from "styled-components";
 
-import QueryUserPrivacyInfo from '../../components/_queryuserinfo/privacyUserinfo';
+import QueryUserPrivacyInfo from '../../components/_queryinfo/privacyUserinfo';
 import BlockedUserContainer from './BlockedUserTable/BlockedUser-container';
 import HuluContainer from "./huluSettingsBox/hulu-container";
 

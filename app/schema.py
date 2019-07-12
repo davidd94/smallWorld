@@ -1,5 +1,4 @@
-from flask import jsonify, request
-from flask_login import current_user
+from flask import jsonify, request, current_app
 from sqlalchemy import and_
 import graphene
 from graphql import GraphQLError

@@ -8,6 +8,8 @@ const AcctResetTabContainer = (props) => {
     const [emailError, setEmailError] = useState('');
     const [serverError, setServerError] = useState('');
 
+    const [recaptchaToken, setRecaptchaToken] = useState('');
+
     const handleInputs = (e) => {
         let inputType = e.target.name;
         props.handleShake('');
@@ -28,7 +30,8 @@ const AcctResetTabContainer = (props) => {
     const handleSubmit = () => {
         if (emailError === 'ok') {
                 let data = {
-                    'email': email
+                    'email': email,
+                    'recaptcha': recaptchaToken
                 };
 
                 fetch('/api/reset_user_password', {
@@ -50,6 +53,7 @@ const AcctResetTabContainer = (props) => {
                             setEmailError('');
                         } else {
                             setServerError(response);
+                            setEmail('');
                             setEmailError('');
                             props.handleShake(true);
                         }
@@ -60,8 +64,13 @@ const AcctResetTabContainer = (props) => {
             }
     };
 
+    const handleRecaptchaToken = (value) => {
+        setRecaptchaToken(value);
+    };
+
     return <AcctResetTabBox handleInputs={handleInputs}
                             handleSubmit={handleSubmit}
+                            handleRecaptchaToken={handleRecaptchaToken}
                             email={email}
                             emailError={emailError}
                             serverError={serverError} />

@@ -13,6 +13,10 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_TYPE = 'filesystem'
 
+    RECAPTCHA_ENABLED = True
+    RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY') or '6LeXGa0UAAAAAAjJeDYYWkxN8XG_r9iOplBrByeA'
+    RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY') or None
+
     LANGUAGES = ['en', 'es']
 
     MAIL_SERVER = 'smtp.gmail.com'

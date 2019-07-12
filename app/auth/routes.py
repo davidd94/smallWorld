@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, flash, session
+from flask import render_template, redirect, url_for, request, flash, session, current_app
 from flask_login import current_user, login_user, logout_user
 from app import db
 from app.email import send_email, send_confirmation_email, send_password_reset_email
@@ -7,6 +7,8 @@ from app.auth import bp
 from app.auth.forms import LoginForm, RegistrationForm, PasswordResetRequestForm, PasswordResetForm
 from app.main.forms import SearchForm, MessageForm
 from werkzeug.urls import url_parse
+import requests
+import json
 
 
 # USE IF NOT USING REVERSE PROXY (NGINX) TO CONVERT AT HTTP REQUEST TO HTTPS
@@ -125,8 +127,16 @@ def logout():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('auth.homepage'))
+    recaptchakey = current_app.config['RECAPTCHA_PUBLIC_KEY']
     form = RegistrationForm()
     if form.validate_on_submit():
+        recaptchadata = request.form['g-recaptcha-response']
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data = {'secret': current_app.config['RECAPTCHA_PRIVATE_KEY'], 'response': recaptchadata}, timeout=10)
+        google_response = json.loads(r.text)    #CONVERTS GOOGLE'S RESPONSE
+        if google_response['success'] == False:
+            flash('Captcha authentication failed !')
+            return redirect(url_for('auth.register'))
+
         lowercased_email = (form.email.data).lower()
         newuser = User(username=form.username.data,
                         firstname=form.firstname.data,
@@ -142,7 +152,7 @@ def register():
         flash('You have created your new account! Please check your email to verify your account.')
         send_confirmation_email(newuser)
         return redirect(url_for('auth.register'))
-    return render_template('auth/register.html', form=form)
+    return render_template('auth/register.html', form=form, recaptchakey=recaptchakey)
 
 @bp.route('/confirm_acct/<token>', methods=['GET', 'POST'])
 def confirm_acct(token):

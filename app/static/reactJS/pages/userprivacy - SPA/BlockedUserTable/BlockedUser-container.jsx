@@ -17,20 +17,26 @@ class BlockedUserContainer extends Component {
     handleBlock(e, index) {
         const that = this;
         var username = e.currentTarget.dataset.user;
-        var url = new URL('https://smallworld.live/unblock/' + username);
-        var params = {redirect: 'privacy-settings'};
-        url.search = new URLSearchParams(params);
+        var url = new URL('https://smallworld.live/api/unblock');
+        var token = localStorage.getItem('token');
+        var body = {'username': username};
+        // var params = {redirect: 'privacy-settings'};
+        // url.search = new URLSearchParams(params);
         fetch(url, {
-            method: "GET",
+            method: "POST",
+            credentials: 'include',
             headers: {
                 "Accept": "application/json",
-                "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json",
+                authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(body)
         })
         .then(function (response) {
             response.json().then(function (data) {
-                console.log(data);
-                that.updateBlockedList(index);
+                if (data === 'Successfully unblocked user!') {
+                    that.updateBlockedList(index);
+                };
             })
         });
     };

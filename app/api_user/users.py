@@ -1,16 +1,17 @@
 from app import db
 from app.api_user import bp
-from app.models import User
+from app.models import User, Projects
 from app.auth.forms import RegistrationForm, PasswordResetRequestForm
 from app.email import send_confirmation_email, send_password_reset_email
 from app.api_user.errors import bad_request
 from app.api_user.auth import token_auth, verify_password
 from app.api_user.tokens import get_token
 from app.schema import schema
-from flask import jsonify, request, url_for, g, abort
+from flask import jsonify, request, url_for, g, abort, current_app
 from flask_graphql import GraphQLView
 from datetime import datetime, timedelta
-import json
+import json, requests
+import stripe
 
 
 bp.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
@@ -38,7 +39,11 @@ def get_login():
 
 @bp.route('/register', methods=['POST'])
 def register_user():
-    print(request.json)
+    recaptcha = request.json['recaptcha']
+    r = requests.post('https://www.google.com/recaptcha/api/siteverify', data = {'secret': current_app.config['RECAPTCHA_PRIVATE_KEY'], 'response': recaptcha}, timeout=10)
+    google_response = json.loads(r.text)    #CONVERTS GOOGLE'S RESPONSE
+    if google_response['success'] == False:
+        return jsonify('reCaptcha verification failed !')
     form = RegistrationForm(firstname=request.json['firstname'],
                             lastname=request.json['lastname'],
                             username=request.json['username'],
@@ -46,7 +51,7 @@ def register_user():
                             password=request.json['password'],
                             repassword=request.json['repassword'],
                             csrf_enabled=False)
-    if form.validate():
+    if form.validate() and google_response['success'] == True:
         lowercased_email = (form.email.data).lower()
         newuser = User(username=form.username.data,
                         firstname=form.firstname.data,
@@ -72,8 +77,16 @@ def register_user():
 
 @bp.route('/reset_user_password', methods=['POST'])
 def reset_user_password():
+    print(request.json['recaptcha'])
+    recaptcha = request.json['recaptcha']
+    r = requests.post('https://www.google.com/recaptcha/api/siteverify', data = {'secret': current_app.config['RECAPTCHA_PRIVATE_KEY'], 'response': recaptcha}, timeout=10)
+    google_response = json.loads(r.text)    #CONVERTS GOOGLE'S RESPONSE
+    print(google_response)
+    if google_response['success'] == False:
+        return jsonify('reCaptcha verification failed !')
+
     form = PasswordResetRequestForm(email=request.json['email'], csrf_enabled=False)
-    if form.validate():
+    if form.validate() and google_response['success'] == True:
         lowercased_email = (form.email.data).lower()
         user = User.query.filter_by(email=lowercased_email).first()
         if user:
@@ -165,6 +178,60 @@ def delete_acct():
         return jsonify('Account successfully deleted!')
     return jsonify('something failed')
 
+@bp.route('/unblock', methods=['POST'])
+@token_auth.login_required
+def user_unblock():
+    blocked_username = request.json['username']
+    if g.current_user is None:
+        return jsonify('Failed to unblock user! Please login to unblock.')
+    g.current_user.unblock(blocked_username)
+    db.session.commit()
+
+    return jsonify('Successfully unblocked user!')
+
+@bp.route('/subscription_pay', methods=['POST'])
+def user_subscription_pay():
+    email = request.json['stripeEmail']
+    stripe_token = request.json['stripeToken']
+    amount = request.json['amount']
+    subtype = request.json['subtype']
+    stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
+
+    # THIS IS FOR TESTING PURPOSE ONLY. WILL REQUIRE USERS TO LOGIN PRIOR SUBSCRIBING IN FUTURE
+    user = User.query.filter_by(email=email).first()
+    if user:
+        if user.subscription == subtype:
+            return jsonify('You are already subscribed for that tier!')
+        email = user.email
+        user.subscription = subtype
+        db.session.commit()
+        return jsonify('You have successfully subscribed!')
+    # added this section for non-users to interact with stripe feature
+    customer = stripe.Customer.create(email=email, source=stripe_token)
+
+    charge = stripe.Charge.create(
+        customer=customer.id,
+        amount=amount,
+        currency='usd',
+        description=subtype
+    )
+
+    return jsonify('You have successfully subscribed!')
+
+@bp.route('/subscription_modify')
+@token_auth.login_required
+def user_subscription_modify():
+    user = g.current_user
+    if user:
+        user.subscription = 'free'
+        db.session.commit()
+        return jsonify('Subscription changes saved!')
+    return jsonify('You must be logged in.')
+
+
+@bp.route('/project/<int:id>', methods=['GET'])
+def get_project(id):
+    return jsonify('project retrieved..')
 
 @bp.route('/users/<int:id>', methods=['GET'])
 @token_auth.login_required

@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 
 import styles from './styles/registrationStyles.module';
+import ReCaptchaV2 from '../../reCaptcha/reCaptcha-index';
 
 
 const RegistrationHeader = (props) => {
@@ -85,7 +86,10 @@ const RegistrationFormBox = (props) => {
                     </FormGroup>
                 </Col>
             </Row>
-            <Row style={{width: '100%', marginTop: '2rem', marginBottom: '2rem'}}>
+            <Row style={{width: '100%', marginBottom: '1rem'}}>
+                <Col md={12} lg={12} className='my-4'>
+                    <ReCaptchaV2 handleRecaptchaToken={props.handleRecaptchaToken} />
+                </Col>
                 <Col md={12} lg={12} className='text-center'>
                     <Button onClick={props.handleSubmit} color="primary">Submit</Button>
                 </Col>

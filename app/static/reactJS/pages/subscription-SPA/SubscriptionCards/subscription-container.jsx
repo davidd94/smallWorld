@@ -11,7 +11,7 @@ class SubscriptionContainer extends Component {
     }
 
     handleClick() {
-        fetch('/subscription/modify', {
+        fetch('/api/subscription_modify', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -21,7 +21,8 @@ class SubscriptionContainer extends Component {
         .then((response) => {
             response.json().then((msg) => {
                 if (msg == 'Subscription changes saved!') {
-                    window.location = '/subscriptions'
+                    alert(msg);
+                    window.location.href = '/reactdev-home';
                 }
             })
         })

@@ -22,7 +22,11 @@
 }
 
 #register-container {
-    height: 37.5em;
+    height: 37rem;
+    width: 100%;
+    overflow-y: scroll;
+    padding-top: 1rem;
+    padding-bottom: 4rem;
 }
 
 #signupform-container-override {

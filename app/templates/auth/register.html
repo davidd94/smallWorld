@@ -45,7 +45,8 @@
 {% endblock coverphoto %}
 
 {% block bodycontent %}
-<div id="register-container" class="container">
+<div id="register-container">
+<div class="container">
     <div class="row align-items-center justify-content-center">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-lg-offset-6 signup-message text-center">
             <div class="message receive">
@@ -116,7 +117,14 @@
                             </div>
                         </div>
                     </div>
-                            
+                    {% if recaptchakey %}
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 my-4">
+                            <div class="g-recaptcha" data-sitekey='{{ recaptchakey }}' style="display: flex; justify-content: center;"></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
                     {{ form.submit(class="btn btn-info btn-block") }}
                     </form>
                 </div>
@@ -124,10 +132,12 @@
         </div>
     </div>
 </div>
+</div>
 {% endblock bodycontent %}
 
 {% block scripts %}
 {{ super() }}
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <script>
 $(function() {
   // scroll all the way down

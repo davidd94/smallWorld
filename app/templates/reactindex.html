@@ -22,8 +22,8 @@
         <script src="{{ url_for('static', filename='plugins/perfect-scrollbar.min.js') }}"></script>
     </head>
 
-    <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-        <div id="smallworld-container" style="height: 100%; width: 100%;">
+    <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300" style="overflow-x: hidden;">
+        <div id="smallworld-container" style="height: 100%; width: 100%; overflow-x: hidden;">
         <!-- ReactJS SPA Insert here -->
         </div>
         <script type="text/javascript" src="../static/dist/bundle.js" charset="utf-8"></script>

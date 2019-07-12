@@ -33,7 +33,6 @@ const EmailModal = (props) => {
             'reply': replyNote
         };
         
-        console.log(emailSettings);
         fetch('/api/email_notifications', {
             method: "POST",
             credentials: "include",
@@ -46,7 +45,6 @@ const EmailModal = (props) => {
         })
         .then(function (response) {
             response.json().then(function (data) {
-                console.log(data);
                 if (data == 'Unable to save email notification settings') {
                     alert(data);
                 };

@@ -3,7 +3,6 @@
 
 .card {
     background:#FFF;
-    display: block;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -62,11 +61,6 @@
             height: 92%;
             overflow: hidden;
             position: relative;
-    
-            .cardP {
-                margin-bottom: 0;
-                height: 100%;
-            }
         }
     }
 }

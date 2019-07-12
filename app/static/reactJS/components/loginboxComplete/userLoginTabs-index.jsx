@@ -30,11 +30,11 @@ const UserLoginTabs = (props) => {
     };
     
     return (
-        <div className={shake} style={{backgroundColor: 'white', width: '100%', height: '100%', borderRadius: '0.3rem'}}>
+        <div className={([shake, styles.container]).join(' ')}>
         <Nav tabs>
           <NavItem>
             <NavLink
-              className={activeTab === '1' ? styles.customActive : ''}
+              className={activeTab === '1' ? styles.customActive : styles.customTabText}
               onClick={ () => {toggle('1')} }
             >
               Sign In
@@ -42,7 +42,7 @@ const UserLoginTabs = (props) => {
           </NavItem>
           <NavItem>
             <NavLink
-              className={activeTab === '2' ? styles.customActive : ''}
+              className={activeTab === '2' ? styles.customActive : styles.customTabText}
               onClick={ () => {toggle('2')} }
             >
               Register
@@ -50,7 +50,7 @@ const UserLoginTabs = (props) => {
           </NavItem>
           <NavItem>
             <NavLink
-              className={activeTab === '3' ? styles.customActive : ''}
+              className={activeTab === '3' ? styles.customActive : styles.customTabText}
               onClick={ () => {toggle('3')} }
             >
               Account Reset

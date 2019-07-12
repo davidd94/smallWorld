@@ -18,6 +18,8 @@ const RegistrationFormContainer = (props) => {
     const [passwordError, setPasswordError] = useState('');
     const [repasswordError, setRepasswordError] = useState('');
     const [serverError, setServerError] = useState('');
+
+    const [recaptchaToken, setRecaptchaToken] = useState('');
     
     const handleInputs = (e) => {
         let inputType = e.target.name;
@@ -84,14 +86,16 @@ const RegistrationFormContainer = (props) => {
     const handleSubmit = () => {
         if (firstNameError === 'ok' && lastNameError === 'ok' &&
             userNameError === 'ok' && emailError === 'ok' &&
-            passwordError === 'ok' && repasswordError === 'ok') {
+            passwordError === 'ok' && repasswordError === 'ok' &&
+            recaptchaToken !== '') {
                 let data = {
                     'firstname': firstname,
                     'lastname': lastname,
                     'username': username,
                     'email': email,
                     'password': password,
-                    'repassword': repassword
+                    'repassword': repassword,
+                    'recaptcha': recaptchaToken
                 };
 
                 fetch('/api/register', {
@@ -145,7 +149,11 @@ const RegistrationFormContainer = (props) => {
                 });
             } else {
                 props.handleShake(true);
-            }
+            };
+    };
+
+    const handleRecaptchaToken = (token) => {
+        setRecaptchaToken(token);
     };
 
     return <RegistrationFormBox handleInputs={handleInputs}
@@ -162,7 +170,8 @@ const RegistrationFormContainer = (props) => {
                                         emailError={emailError}
                                         passwordError={passwordError}
                                         repasswordError={repasswordError}
-                                        serverError={serverError} />
+                                        serverError={serverError}
+                                            handleRecaptchaToken={handleRecaptchaToken} />
 };
 
 

@@ -537,6 +537,58 @@ class Projects(SearchableMixin, db.Model):
                                         lazy='dynamic',
                                         passive_deletes=True)
 
+
+    # FOR API PURPOSES ONLY
+    def to_dict(self, include_project_profile=False, include_project_feed=False):
+        data = {
+            'username': self.username,
+            'title': self.title,
+            'description': self.description,
+            'difficulty': self.difficulty,
+            'cost': self.cost,
+            'duration': self.duration,
+            'likes': self.likes,
+            'tags': {
+                'aquariums': self.aquariums,
+                'saltwater': self.saltwater,
+                'freshwater': self.freshwater,
+                'terrariums': self.terrariums,
+                'enclosedtropical': self.enclosedtropical,
+                'opentropical': self.opentropical,
+                'carnivorous': self.carnivorous,
+                'desert': self.desert,
+                'reptiles': self.reptiles,
+                'vivariumpaludarium': self.vivariumpaludarium,
+                'waterreptiles': self.waterreptiles,
+                'plantsonly': self.plantsonly
+            },
+            '_links': {
+                'self': url_for('api_user.get_project', id=self.id),
+            }
+        }
+        if include_project_profile:
+            data['tutorial'] = self.tutorial
+            data['tutorial_enabled'] = self.tutorial_enabled
+            data['maintenance'] = self.maintenance
+            data['maintenance_enabled'] = self.maintenance_enabled
+            data['item_list'] = self.item_list
+            data['itemlist_enabled'] = self.itemlist_enabled
+            data['last_edit'] = self.last_edit
+            data['video'] = self.video
+        if include_project_feed:
+            data['last_update'] = self.last_update_type
+        return data
+    
+    def from_dict(self, data, new_project=False):
+        for field in ['username', 'title', 'description', 'difficulty', 'cost', 'duration', 'likes']:
+            if field in data:
+                setattr(self, field, data[field])
+                # SAME AS 'data[field] = field'
+        
+        if new_project:
+            self.created_date = datetime.utcnow()
+
+
     def __repr__(self):
         return '<Project {}>'.format(self.title)
 

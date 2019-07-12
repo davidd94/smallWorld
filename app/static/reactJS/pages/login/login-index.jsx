@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 
 import BGImg from '../../../images/homepage-background.jpg'
-
 import FeedbackAlert from './FeedbackAlert/FeedbackAlert-present';
 import UserLoginTabsSection from './UserLoginTabs/UserLoginTabs-present';
+import styles from './_styles/loginpageStyles.module';
 
 
 const LoginContainer = {
-    width: '100%',
-    height: '100vh',
-    padding: '5rem 2rem',
-    overflow: 'hidden',
     backgroundImage: `url(${BGImg})`,
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
@@ -33,8 +30,8 @@ const UserLoginPage = () => {
     });
 
     return (
-        <div style={LoginContainer}>
-            <Container style={{padding: '2rem 0'}}>
+        <div style={LoginContainer} className={styles.loginContainer}>
+            <Container>
                 <Row className='justify-content-center'>
                     <Col md={12} lg={5} offset={{ lg: 7 }}>
                         <FeedbackAlert customError={customError}

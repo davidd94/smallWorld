@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import {
     Container,
     Row,
@@ -17,7 +18,7 @@ const IntroStatement = () => {
             <p className={styles.introText}><span><strong>Unlease</strong> your creativity to the <strong>world</strong></span></p>
             <p>A social network platform for users to share their terrarium designs with others. A one-stop website that includes everything you need to know about each unique setup.</p>
 
-            <p><Button color="primary">Sign up</Button></p>
+            <p><Button color="primary"><NavLink to="/reactdev-login">Sign up</NavLink></Button></p>
         </div>
     );
 };
