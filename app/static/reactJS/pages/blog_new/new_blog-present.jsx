@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactQuill from 'react-quill';
+import '../../../node_modules/react-quill/dist/quill.snow.css'
 import {
     Container, Row, Col,
     InputGroup, Input, Button
@@ -19,10 +21,12 @@ const NewBlogPresent = (props) => {
                             <InputGroup>
                                 <Input type="text" name="title" placeholder="Blog title..." style={{width: '50%'}} onChange={props.handleInputs} />
                             </InputGroup>
-                            <InputGroup className="my-5">
-                                <Input type="textarea" name="bodytext" style={{height: '12rem'}} placeholder="Say something..." onChange={props.handleInputs} />
+                            <InputGroup className="my-3">
+                                <ReactQuill onChange={props.handleTextBody}
+                                            placeholder="Say something..."
+                                            style={{width: '100%', height: '10rem', margin: '2rem 0'}} />
                             </InputGroup>
-                            <InputGroup className="my-5">
+                            <InputGroup className="my-4">
                                 <Input
                                     type="url"
                                     name="url"

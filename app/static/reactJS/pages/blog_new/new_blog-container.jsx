@@ -38,14 +38,17 @@ const NewBlogContainer = () => {
         fetchAdminStatus();
 
     }, []);
+
     const handleInputs = (e) => {
         if (e.target.name == 'title') {
             setTitle(e.target.value);
-        } else if (e.target.name == 'bodytext') {
-            setText(e.target.value);
         } else if (e.target.name == 'url') {
             setUrl(e.target.value);
         };
+    };
+    console.log(text);
+    const handleTextBody = (content, delta, source, editor) => {
+        setText(content);
     };
     
     const handleSubmit = () => {
@@ -92,6 +95,7 @@ const NewBlogContainer = () => {
             setUrl={setUrl}
             handleSubmit={handleSubmit}
             handleInputs={handleInputs}
+            handleTextBody={handleTextBody}
             />
     } else {
         return <div>There was an error authorizing user...</div>

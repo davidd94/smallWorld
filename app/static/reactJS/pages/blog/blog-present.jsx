@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Moment from 'react-moment';
+import parse from 'html-react-parser';
 
 import styles from './_styles/blogStyles.module';
 import blogdefault from '../../../images/blogdefault.jpg';
@@ -31,7 +32,7 @@ const BlogPresent = (props) => {
                                 format="MMM D YYYY"
                                 interval={0} />
                         <h2 className={styles.previewHeader}>{blog.title}</h2>
-                        <p className={styles.previewExcerpt}>{blog.body}</p>
+                        <div className={styles.previewExcerpt}>{parse(blog.body)}</div>
                         <span className={styles.previewMore}>Read More</span>
                     </a>
                 </li>
@@ -51,7 +52,7 @@ const BlogPresent = (props) => {
                     
                     <div className={styles.blogViewBody}>
                         <PerfectScrollbar>
-                        <p style={{padding: '1rem'}}>{blog.body}</p>
+                        <div style={{padding: '1rem'}}>{parse(blog.body)}</div>
                         </PerfectScrollbar>
                     </div>
                     
@@ -71,7 +72,7 @@ const BlogPresent = (props) => {
             </div>
             <div>
                 <div className={([styles.active]).join(' ')}>
-                        <ul itemScope itemType="http://schema.org/Blog">   
+                        <ul style={props.blogPreview ? {height: '100vh', overflow: 'hidden'} : {}}> 
                             <BlogPosts blogs={data.BlogPosts}
                                         handleImgIndex={props.handleImgIndex}
                                         handleBlogView={props.handleBlogView} />

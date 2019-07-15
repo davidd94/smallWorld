@@ -26653,6 +26653,19 @@ and also iPads specifically.
   font-size: 100%;
   line-height: 1.6;
   background-color: #f8f9f9; }
+  ._1-sMyrsu6DZBwRYwItf1ig p {
+    margin: 0 0 0.75em;
+    color: #000000 !important; }
+  ._1-sMyrsu6DZBwRYwItf1ig a {
+    color: #0a0a0a !important;
+    text-decoration: none;
+    transition: color 0.4s ease-in-out; }
+  ._1-sMyrsu6DZBwRYwItf1ig a:hover, ._1-sMyrsu6DZBwRYwItf1ig a:active, ._1-sMyrsu6DZBwRYwItf1ig a:focus {
+    color: #9f8f68; }
+  ._1-sMyrsu6DZBwRYwItf1ig ul {
+    list-style: none;
+    padding: 0;
+    margin: 0; }
 
 @media (min-width: 20em) {
   ._1-sMyrsu6DZBwRYwItf1ig {
@@ -26673,38 +26686,6 @@ and also iPads specifically.
 @media (min-width: 76.5em) {
   ._1-sMyrsu6DZBwRYwItf1ig {
     font-size: 115% !important; } }
-
-h1, h2 {
-  margin: 0;
-  font-family: "Space Mono", monospace; }
-
-@media (min-width: 54em) {
-  h1 {
-    font-size: 3em; } }
-
-@media (min-width: 76.5em) {
-  h1 {
-    font-size: 3.5em; } }
-
-p {
-  margin: 0 0 0.75em;
-  color: #000000 !important; }
-
-a {
-  color: #0a0a0a !important;
-  text-decoration: none;
-  transition: color 0.4s ease-in-out; }
-
-a:hover, a:active, a:focus {
-  color: #9f8f68; }
-
-figure {
-  margin: 0; }
-
-ul {
-  margin: 0;
-  padding: 0;
-  list-style-type: none; }
 
 /**
    * Text Selection
@@ -26843,7 +26824,8 @@ ul {
 
 .KB7h9guOolZJbBGMaj8LB {
   will-change: opacity;
-  animation: _3vVEwkNuZK9uwx0L_RfN0q 1s both; }
+  animation: _3vVEwkNuZK9uwx0L_RfN0q 1s both;
+  margin: 0; }
 
 .icq0c3erLABWs8RllehUU {
   display: block;
@@ -26864,7 +26846,15 @@ ul {
 
 ._3JUW-ed2aTvsrrfLTxJbgg {
   color: #9f8f68;
-  margin-bottom: 0.5em; }
+  margin-bottom: 0.5rem;
+  margin: 0;
+  font-family: "Space Mono", monospace; }
+  @media (min-width: 54em) {
+    ._3JUW-ed2aTvsrrfLTxJbgg {
+      font-size: 1.5rem; } }
+  @media (min-width: 76.5em) {
+    ._3JUW-ed2aTvsrrfLTxJbgg {
+      font-size: 2rem; } }
 
 .dPABaakKwc7vmm8HDOoQs {
   color: #0a0a0a;
@@ -26873,7 +26863,8 @@ ul {
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4; }
+  -webkit-line-clamp: 4;
+  margin: 2rem 0; }
 
 .aF4JKb-DB0P0CxzFOGVAD {
   display: inline-block;
