@@ -2,8 +2,10 @@ from flask import jsonify, request, current_app
 from sqlalchemy import and_
 import graphene
 from graphql import GraphQLError
-from app.schema_users import UserTokenModel, UserLimitedInfoModel, UserInfoModel, UsersBlockedModel, ProjectLimitedInfoModel
-from app.models import User, Projects, project_visitors
+from app.schema_users import UserTokenModel, UserLimitedInfoModel, UserInfoModel, UsersBlockedModel
+from app.schema_projects import ProjectLimitedInfoModel
+from app.schema_blogs import BlogInfoModel
+from app.models import User, Projects, AdminBlogPosts, project_visitors
 from datetime import datetime, timedelta
 
 
@@ -13,6 +15,7 @@ class Query(graphene.ObjectType):
     UserInfo = graphene.List(UserInfoModel)
     UsersBlocked = graphene.List(UsersBlockedModel)
     ProjectLimitedInfo = PopularProjects = TrendingProjects = NewProjects = graphene.List(ProjectLimitedInfoModel)
+    BlogPosts = graphene.List(BlogInfoModel)
 
     def resolve_UserTokenRefresh(self, info):
         if request.headers.get('Authorization'):
@@ -118,5 +121,9 @@ class Query(graphene.ObjectType):
                         .order_by(Projects.created_date.desc()) \
                         .limit(10)
         raise GraphQLError('A server error occurred!')
+    
+    def resolve_BlogPosts(self, info):
+        query = BlogInfoModel.get_query(info)
+        return query.filter(AdminBlogPosts.username == 'Davie').order_by(AdminBlogPosts.timestamp.desc()).all()
 
 schema = graphene.Schema(query=Query)

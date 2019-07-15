@@ -212,6 +212,10 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
                                     backref='author', lazy='dynamic')
     notifications = db.relationship('Notifications', backref='user',
                                     lazy='dynamic')
+    blog_posts = db.relationship('AdminBlogPosts',
+                                    foreign_keys='AdminBlogPosts.user_id',
+                                    backref='user',
+                                    lazy='dynamic')
 
     # USER METHODS
     def create_password(self, password):
@@ -772,6 +776,19 @@ class Notifications(db.Model):
     @classmethod
     def get_notification_number(cls):
         return cls.query.filter_by(user=current_user).count()
+
+
+class AdminBlogPosts(db.Model):
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    username = db.Column(db.String(64), index=True)
+    title = db.Column(db.String(500), index=True)
+    body = db.Column(db.String(5000), index=True)
+    url = db.Column(db.String(500))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return '<Blog Post: {}'.format(self.title)
 
 
 #FLASK-LOGIN LOADS EACH USER INTO ITS SESSION

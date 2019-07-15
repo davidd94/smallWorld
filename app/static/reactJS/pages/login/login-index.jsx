@@ -13,7 +13,9 @@ const LoginContainer = {
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundAttachment: 'fixed',
-    backgroundSize: 'cover'
+    backgroundSize: 'cover',
+    display: 'flex',
+    alignItems: 'center'
 }
 
 

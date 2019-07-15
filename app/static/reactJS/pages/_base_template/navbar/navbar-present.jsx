@@ -44,7 +44,7 @@ const NavBarSection = React.forwardRef((props, ref) => {
     };
 
     const RenderLoginBtn = () => {
-        if (UserInfo) {
+        if (UserInfo && localStorage.getItem('token')) {
             return (
                 <UncontrolledDropdown nav inNavbar>
                     <DropdownToggle nav caret className={styles.navLinkLoggedin}>{UserInfo.username}</DropdownToggle>
@@ -74,13 +74,13 @@ const NavBarSection = React.forwardRef((props, ref) => {
                             <RouterLink className={styles.navLink} to="/reactdev-home" activeClassName="active" activeClassName={styles.activeItem}><span className={styles.navlinkSpan}>Home</span></RouterLink>
                         </NavItem>
                         <NavItem>
-                            <RouterLink className={styles.navLink} to="/reactdev-explore"><span className={styles.navlinkSpan}>Explore</span></RouterLink>
-                        </NavItem>
-                        <NavItem>
                             <RouterLink className={styles.navLink} to="/reactdev-aboutme"><span className={styles.navlinkSpan}>About</span></RouterLink>
                         </NavItem>
                         <NavItem>
-                            <RouterLink className={styles.navLink} to="/reactdev-search"><span className={styles.navlinkSpan}>Blog</span></RouterLink>
+                            <RouterLink className={styles.navLink} to="/reactdev-explore"><span className={styles.navlinkSpan}>Explore</span></RouterLink>
+                        </NavItem>
+                        <NavItem>
+                            <RouterLink className={styles.navLink} to="/reactdev-blog"><span className={styles.navlinkSpan}>Blog</span></RouterLink>
                         </NavItem>
                         <NavItem>
                             <RouterLink className={styles.navLink} to="/reactdev-subscriptions"><span className={styles.navlinkSpan}>Subscriptions</span></RouterLink>

@@ -233,6 +233,7 @@ def user_subscription_modify():
 def get_project(id):
     return jsonify('project retrieved..')
 
+
 @bp.route('/users/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_user(id):

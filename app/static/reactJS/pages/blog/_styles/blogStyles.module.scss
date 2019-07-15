@@ -1,0 +1,443 @@
+@import '../../../pages/__styles/commonstyles';
+
+
+.blogContainer {
+    font-family: "Inconsolata", monospace;
+    font-feature-settings: "liga" 0;
+    font-size: 100%;
+    line-height: 1.6;
+    background-color: #f8f9f9;
+}
+
+  @media (min-width: 20em) {
+    .blogContainer {
+      font-size: 102.5% !important;
+    }
+  }
+  @media (min-width: 30em) {
+    .blogContainer {
+      font-size: 105% !important;
+    }
+  }
+  @media (min-width: 54em) {
+    .blogContainer {
+      font-size: 107.5% !important;
+    }
+  }
+  @media (min-width: 64em) {
+    .blogContainer {
+      font-size: 110% !important;
+    }
+  }
+  @media (min-width: 76.5em) {
+    .blogContainer {
+      font-size: 115% !important;
+    }
+  }
+  
+  h1, h2 {
+    margin: 0;
+    font-family: "Space Mono", monospace;
+  }
+  
+  @media (min-width: 54em) {
+    h1 {
+      font-size: 3em;
+    }
+  }
+  @media (min-width: 76.5em) {
+    h1 {
+      font-size: 3.5em;
+    }
+  }
+  
+  p {
+    margin: 0 0 0.75em;
+    color: $black !important;
+  }
+  
+  a {
+    color: #0a0a0a !important;
+    text-decoration: none;
+    transition: color 0.4s ease-in-out;
+  }
+  a:hover, a:active, a:focus {
+    color: #9f8f68;
+  }
+  
+  figure {
+    margin: 0;
+  }
+  
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  /**
+   * Text Selection
+   */
+  ::selection {
+    color: #fff;
+    background-color: #9f8f68;
+    text-shadow: none;
+  }
+  
+  /**
+   * Underline Slide from left and back
+   */
+  /**
+   * Button Slide
+   * Need to still add hover state in parent element
+   * box-shadow: inset 175px 0 0 0 $color-alpha;
+   * color: $color-white;
+   */
+  /**
+   * Flex Grid
+   */
+  /**
+   * Box Shadow
+   */
+  /**
+   * Letter Spacing
+   */
+  .previewsContainer span, .previewMore, .cardMore, .footerArchive {
+    font-family: "Space Mono", monospace;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  
+  /**
+   * Black Color Overlay
+   */
+  .previews > :first-child:after, .cardImg:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(10, 10, 10, 0.2);
+    transition: background-color 0.4s ease-in-out;
+  }
+  
+  /**
+   * Sections
+   */
+  .section {
+    position: relative;
+    font-family: "Inconsolata", monospace;
+    font-feature-settings: "liga" 0;
+    font-size: 100%;
+    line-height: 1.6;
+    background-color: #f8f9f9;
+  }
+  
+  .sectionPadding {
+    padding: 4em 0;
+  }
+  .sectionPaddingLG {
+    padding: 6em 0;
+  }
+  .sectionPaddingSM {
+    padding: 2em 0;
+  }
+  
+  /**
+   * Class Container (BEM)
+   */
+  [class*='__container'] {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /**
+   * Blog page
+   */
+  @media (max-width: 54em) {
+    .previews {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .previews > *:first-child {
+    position: relative;
+    height: 30em;
+    background-color: #0a0a0a;
+  }
+  @media (min-width: 54em) {
+    .previews > *:first-child {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 45%;
+    }
+  }
+  .previews > *:last-child {
+    min-height: 100vh;
+  }
+  @media (min-width: 54em) {
+    .previews > *:last-child {
+      margin-left: 45%;
+    }
+  }
+  
+  
+  .active {
+    will-change: opacity;
+    animation: fade-in 1s both;
+    position: relative;
+    width: 100%;
+  }
+  
+  /**
+   * Blog Post Preview
+   * On the Blog page
+   */
+  .previewsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding: 2em;
+    color: #fff;
+  }
+  .previewsContainer span {
+    font-family: "Inconsolata", monospace;
+  }
+  
+  .preview {
+    transition: background-color 0.2s ease-in-out;
+  }
+  .preview:nth-child(even) {
+    background-color: #fff;
+  }
+  .preview:hover {
+    background-color: #f5f3ef;
+  }
+  .preview:hover .previewMore {
+    box-shadow: inset 175px 0 0 0 #9f8f68;
+    color: #fff;
+  }
+  .previewImg {
+    will-change: opacity;
+    animation: fadeIn 1s both;
+  }
+  .previewLink {
+    display: block;
+    padding: 2em 1em;
+  }
+  @media (min-width: 54em) {
+    .previewLink {
+      padding: 4em 8em;
+    }
+  }
+  @media (min-width: 114em) {
+    .previewLink {
+      padding-left: 10em;
+      padding-right: 10em;
+    }
+  }
+  .previewDate {
+    font-family: "Space Mono", monospace;
+    color: #0a0a0a;
+  }
+  .previewHeader {
+    color: #9f8f68;
+    margin-bottom: 0.5em;
+  }
+  .previewExcerpt {
+    color: #0a0a0a;
+    height: 7rem;
+    max-height: 10rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+  .previewMore {
+    display: inline-block;
+    padding: 0.5em;
+    font-family: "Space Mono", monospace;
+    color: #9f8f68;
+    border: 3px solid #9f8f68;
+    box-shadow: inset 0 0 0 0 #9f8f68;
+    transition: all 0.4s ease-in-out;
+  }
+
+  /*
+    Blog View
+  */
+  .blogViewContainer {
+    font-family: 'Inconsolata', monospace;
+    font-feature-settings: "liga" 0;
+    font-size: 100%;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ecd69f;
+    opacity: 0;
+    visibility: hidden;
+    will-change: opacity;
+    transition: 500ms all ease;
+    
+    @include media-breakpoint-down(md) {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+  .blogView {
+    width: 100%;
+    height: 100%;
+    padding: 6rem 2rem 1rem 2rem;
+    margin: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+
+    .closeBtn {
+      color: red !important;
+      text-align: right;
+      cursor: pointer;
+      margin: 0.5rem;
+    }
+
+    .blogViewTitle {
+      font-family: 'Yanone Kaffeesatz', Helvetica, Arial, Lucida, sans-serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .blogViewAuthor {
+      font-family: 'Arimo', Helvetica, Arial, Lucida, sans-serif;
+      text-align: left;
+      color: $black;
+      text-align: center;
+    }
+
+    .blogViewBody {
+      height: 75%;
+      color: $black;
+      margin: 1rem 0;
+      overflow: hidden;
+      padding: 0;
+      border: 1px solid $black;
+      border-radius: 0.5rem;
+    }
+
+    @include media-breakpoint-down(md) {
+      margin-left: 0;
+      padding: 3rem 1.5rem;
+      width: 100%;
+    }
+  }
+  
+  /**
+   * Footer
+   */
+  .footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+  @media (min-width: 30em) {
+    .footer {
+      flex-direction: row;
+    }
+  }
+  .footerArchive {
+    position: relative;
+    color: #0a0a0a;
+    transition: 400ms all ease;
+
+    &:hover {
+        width: 100%;
+        color: $secondary !important;
+    }
+
+    &:after {
+        width: 100%;
+    }
+  }
+  .footerArchive:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    border-bottom: 3px solid #9f8f68;
+    transition: width 0.4s ease-in-out;
+  }
+  .footerSocial {
+    display: flex;
+    margin-top: 1em;
+
+    .footerIcon:hover {
+        transition: 400ms all ease;
+        color: $secondary;
+    }
+  }
+  @media (min-width: 30em) {
+    .footerSocial {
+      margin-top: 0;
+    }
+  }
+  .footerSocial > *:not(:last-child) {
+    margin-right: 1em;
+  }
+  
+  /**
+   * Animations
+   */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .fadeIn {
+    will-change: opacity;
+    animation: fade-in 2s both;
+  }
+  
+  /**
+   * Absolute Background Cover
+   */
+  .absoluteBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50%;
+  }
+  
+  /**
+   * Color Helpers
+   */
+  .bgBlack {
+    background-color: #0a0a0a;
+  }
+  
+  .bgWhite {
+    background-color: #fff;
+  }

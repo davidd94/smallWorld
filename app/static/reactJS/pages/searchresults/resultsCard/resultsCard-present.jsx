@@ -60,7 +60,9 @@ const ResultsCard = React.forwardRef((props, ref) => {
                 <div className={styles.searchInputIcon}></div>
             </div>
             <ul className={styles.cardUL}>
-                <SearchResultsList />
+                <PerfectScrollbar>
+                    <SearchResultsList />
+                </PerfectScrollbar>
             </ul>
         </ResultsCardBox>
     );

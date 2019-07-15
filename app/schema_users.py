@@ -1,6 +1,6 @@
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from app.models import User, Projects
+from app.models import User
 
 
 class UserTokenModel(SQLAlchemyObjectType):
@@ -37,13 +37,4 @@ class UsersBlockedModel(SQLAlchemyObjectType):
     class Meta:
         model = User
         only_fields = ("username", "picture")
-        exclude_fields = ()
-
-class ProjectLimitedInfoModel(SQLAlchemyObjectType):
-    class Meta:
-        model = Projects
-        only_fields = ("username", "title", "description", "created_date", "likes",
-                        "aquariums", "saltwater", "freshwater", "terrariums", "enclosedtropical",
-                        "opentropical", "carnivorous", "desert", "reptiles", "vivariumpaludarium",
-                        "plantsonly" )
         exclude_fields = ()
