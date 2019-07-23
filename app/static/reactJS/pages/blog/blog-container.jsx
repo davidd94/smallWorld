@@ -10,6 +10,7 @@ const BlogContainer = () => {
     const [blogID, setBlogID] = useState('');
     const [admin, setAdmin] = useState(false);
     const [blogPreview, setBlogPreview] = useState(false);
+    const [blogPage, setBlogPage] = useState(1);
     
     useEffect(() => {
         let token = localStorage.getItem('token');
@@ -40,14 +41,21 @@ const BlogContainer = () => {
         setBlogPreview(!blogPreview);
     };
 
+    const handlePagination = (direction) => {
+        direction == 'next' ? setBlogPage(blogPage + 1) : setBlogPage(blogPage - 1);
+    }
+
     return (
-        <QueryBlogInfo type="all">
+        <QueryBlogInfo type="all" blogPage={blogPage}>
             <BlogPresent imgIndex={imageIndex}
                         handleImgIndex={handleImgIndex}
                         handleBlogView={handleBlogView}
                         blogPreview={blogPreview}
                         admin={admin}
                         blogID={blogID}
+                        blogPage={blogPage}
+                        setBlogPage={setBlogPage}
+                        handlePagination={handlePagination}
                          />
         </QueryBlogInfo>
     );

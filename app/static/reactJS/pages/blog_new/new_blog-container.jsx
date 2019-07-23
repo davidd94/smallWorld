@@ -46,7 +46,7 @@ const NewBlogContainer = () => {
             setUrl(e.target.value);
         };
     };
-    console.log(text);
+    
     const handleTextBody = (content, delta, source, editor) => {
         setText(content);
     };

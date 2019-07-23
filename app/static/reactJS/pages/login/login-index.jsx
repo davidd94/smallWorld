@@ -32,7 +32,7 @@ const UserLoginPage = () => {
     });
 
     return (
-        <div style={LoginContainer} className={styles.loginContainer}>
+        <div style={LoginContainer} className={styles.loginContainerWrapper}>
             <Container>
                 <Row className='justify-content-center'>
                     <Col md={12} lg={5} offset={{ lg: 7 }}>

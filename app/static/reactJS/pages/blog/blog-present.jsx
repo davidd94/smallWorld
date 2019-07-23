@@ -79,10 +79,16 @@ const BlogPresent = (props) => {
                         </ul>
                         <footer className={([styles.sectionPaddingSM, styles.footer]).join(' ')} style={props.blogPreview ? {display: 'none'} : {}}>
                             <NavLink className={styles.footerArchive} to={props.admin ? "/reactdev-blog/new" : "/reactdev-home"} style={props.admin ? {visibility: 'visible'} : {visibility: 'hidden'}}>New Blog Post</NavLink>
+                            <div className={styles.paginationBox}>
+                                <i className="fas fa-chevron-left" onClick={() => props.handlePagination('prev')} style={props.blogPage >= 2 ? {} : {visibility: 'hidden', pointerEvents: 'none'}} />
+                                <div className={styles.paginationNum}>{props.blogPage}</div>
+                                <div className={styles.circle}></div>
+                                <i className="fas fa-chevron-right" onClick={() => props.handlePagination('next')} style={(data.BlogPosts).length !== 0 ? {} : {visibility: 'hidden', pointerEvents: 'none'}} />
+                            </div>
                             <ul className={styles.footerSocial}>
                                 <li><a href="mailto:smallworld949@gmail.com"><i className={([styles.footerIcon, "far fa-envelope"]).join(' ')} /></a></li>
                                 <li><a href="https://github.com/davidd94" target="_blank"><i className={([styles.footerIcon, "fab fa-github"]).join(' ')} /></a></li>
-                                <li><a href="https://www.linkedin.com/in/duong-david-3b451aa2/" target="_blank"><i className={([styles.footerIcon, "fab fa-linkedin-in"]).join(' ')} /></a></li>
+                                <li><a href="https://www.linkedin.com/in/duong-david-3b451aa2" target="_blank"><i className={([styles.footerIcon, "fab fa-linkedin-in"]).join(' ')} /></a></li>
                             </ul>
                         </footer>
                         <div className={styles.blogViewContainer} style={props.blogPreview ? {visibility: 'visible', opacity: 1} : {}}>

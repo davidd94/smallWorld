@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -7,10 +7,11 @@ import { AllBlogsContext } from '../_context/BlogContext';
 
 const QueryBlogInfo = (props) => {
     let GET_BLOG_INFO;
+    let currentPage = (props.blogPage - 1) * 5;
     if (props.type == 'all') {
         GET_BLOG_INFO = gql`
-        {
-            BlogPosts {
+        query GetAllBlogs($currentPage: Int) {
+            BlogPosts(first: 5, skip: $currentPage) {
                 id 
                 username
                 title
@@ -51,7 +52,8 @@ const QueryBlogInfo = (props) => {
     I am able to implement re-Querying ONLY IF the cached data is mutated instead of re-Querying every time 
     with or without changes. Will be working on this in the future */
     return (
-        <Query query={GET_BLOG_INFO} fetchPolicy="no-cache">
+        <Query query={GET_BLOG_INFO} fetchPolicy="no-cache"
+                variables={{ currentPage }}>
             {({ loading, error, data }) => {
                 if (loading) return <p>Loading...</p>;
                 if (data) {
@@ -68,10 +70,15 @@ const QueryBlogInfo = (props) => {
                             {props.children}
                         </>
                     );
-                }
+                };
             }}
         </Query>
     );
+};
+
+
+QueryBlogInfo.defaultProps = {
+    blogPage: 0
 };
 
 

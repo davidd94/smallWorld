@@ -8151,7 +8151,7 @@ and also iPads specifically.
           background: rgba(43, 43, 43, 0.9);
           color: #fff;
           padding: 0;
-          width: 100%;
+          width: 90%;
           text-align: center;
           position: absolute;
           top: 5%;
@@ -26781,6 +26781,10 @@ and also iPads specifically.
 
 .auHsTrtNpmrMTnVKrsw3f > *:last-child {
   min-height: 100vh; }
+  @media (max-width: 991.98px) {
+    .auHsTrtNpmrMTnVKrsw3f > *:last-child {
+      min-height: 100%;
+      height: 100%; } }
 
 @media (min-width: 54em) {
   .auHsTrtNpmrMTnVKrsw3f > *:last-child {
@@ -26790,7 +26794,8 @@ and also iPads specifically.
   will-change: opacity;
   animation: _1TDjBlBycVpuv3etuXTKCc 1s both;
   position: relative;
-  width: 100%; }
+  width: 100%;
+  height: 100%; }
 
 /**
    * Blog Post Preview
@@ -26899,7 +26904,8 @@ and also iPads specifically.
   @media (max-width: 991.98px) {
     ._1oMwVxXZ7jFo2M96qvky0v {
       margin-left: 0;
-      width: 100%; } }
+      width: 100%;
+      height: 100%; } }
 
 ._1gZ5Gb8oRvijhXRdCF5cb9 {
   width: 100%;
@@ -26910,6 +26916,11 @@ and also iPads specifically.
   visibility: hidden;
   opacity: 0;
   display: none; }
+  @media (max-width: 991.98px) {
+    ._1gZ5Gb8oRvijhXRdCF5cb9 {
+      margin-left: 0;
+      padding: 3rem 1.5rem;
+      width: 100%; } }
   ._1gZ5Gb8oRvijhXRdCF5cb9 .NDWq7Y3vdGzKl-4gGUp0m {
     color: red !important;
     text-align: right;
@@ -26933,11 +26944,9 @@ and also iPads specifically.
     padding: 0;
     border: 1px solid #000000;
     border-radius: 0.5rem; }
-  @media (max-width: 991.98px) {
-    ._1gZ5Gb8oRvijhXRdCF5cb9 {
-      margin-left: 0;
-      padding: 3rem 1.5rem;
-      width: 100%; } }
+    @media (max-width: 991.98px) {
+      ._1gZ5Gb8oRvijhXRdCF5cb9 ._6vuLbJ6HsVtrjC9RHasax {
+        height: 50%; } }
 
 /**
    * Footer
@@ -26949,6 +26958,40 @@ and also iPads specifically.
   justify-content: space-between;
   padding-left: 2em;
   padding-right: 2em; }
+  .sYnW7ibajtTSKaoAxUaXv ._19QXzbe-tQ2RZv2oMrGY00 {
+    margin: 10% auto;
+    width: 80px;
+    display: inline-flex;
+    position: relative; }
+    .sYnW7ibajtTSKaoAxUaXv ._19QXzbe-tQ2RZv2oMrGY00 ._3tRVpvvzPA-eRxcXrICu3u {
+      align-self: center;
+      margin: 0 1.5rem; }
+    .sYnW7ibajtTSKaoAxUaXv ._19QXzbe-tQ2RZv2oMrGY00 i {
+      position: relative;
+      display: block;
+      overflow: hidden;
+      color: #222222;
+      text-decoration: none;
+      -webkit-transition: all 0.4s ease 0s;
+      -o-transition: all 0.4s ease 0s;
+      transition: all 0.4s ease 0s;
+      background-color: rgba(255, 255, 255, 0);
+      border-radius: 32px;
+      line-height: 30px;
+      z-index: 100;
+      cursor: pointer; }
+      .sYnW7ibajtTSKaoAxUaXv ._19QXzbe-tQ2RZv2oMrGY00 i::after {
+        position: relative;
+        color: #222;
+        left: 7px;
+        top: -7px; }
+      .sYnW7ibajtTSKaoAxUaXv ._19QXzbe-tQ2RZv2oMrGY00 i:hover {
+        color: #a0f669; }
+    .sYnW7ibajtTSKaoAxUaXv ._19QXzbe-tQ2RZv2oMrGY00:hover > div._1qOPemIZDvL2vPKcIRzWfT {
+      background: #ebebeb;
+      border-radius: 50%;
+      transform: scale(1);
+      transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms; }
 
 @media (min-width: 30em) {
   .sYnW7ibajtTSKaoAxUaXv {
@@ -42384,15 +42427,18 @@ and also iPads specifically.
       font-weight: bold; } }
 
 /* Bootstrap Toggle v2.2.2 corrections for Bootsrtap 4*/
-.LSvZw1e9L2HjsYnRehCaD {
+._2pY_erTWbRvOj5lV5vEYOd {
   width: 100%;
   height: 100vh;
   padding: 5rem 2rem;
-  overflow-x: hidden;
-  overflow-y: scroll; }
+  overflow: hidden; }
   @media (max-width: 991.98px) {
-    .LSvZw1e9L2HjsYnRehCaD {
-      padding: 1rem; } }
+    ._2pY_erTWbRvOj5lV5vEYOd {
+      padding: 5rem 1rem;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: scroll; } }
 
 /*!
  * Bootstrap Grid v4.2.1 (https://getbootstrap.com/)

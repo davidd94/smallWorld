@@ -157,6 +157,11 @@
   }
   .previews > *:last-child {
     min-height: 100vh;
+
+    @include media-breakpoint-down(md) {
+      min-height: 100%;
+      height: 100%;
+    }
   }
   @media (min-width: 54em) {
     .previews > *:last-child {
@@ -170,6 +175,7 @@
     animation: fade-in 1s both;
     position: relative;
     width: 100%;
+    height: 100%;
   }
   
   /**
@@ -285,6 +291,7 @@
     @include media-breakpoint-down(md) {
       margin-left: 0;
       width: 100%;
+      height: 100%;
     }
   }
   .blogView {
@@ -296,6 +303,12 @@
     visibility: hidden;
     opacity: 0;
     display: none;
+
+    @include media-breakpoint-down(md) {
+      margin-left: 0;
+      padding: 3rem 1.5rem;
+      width: 100%;
+    }
 
     .closeBtn {
       color: red !important;
@@ -326,12 +339,10 @@
       padding: 0;
       border: 1px solid $black;
       border-radius: 0.5rem;
-    }
 
-    @include media-breakpoint-down(md) {
-      margin-left: 0;
-      padding: 3rem 1.5rem;
-      width: 100%;
+      @include media-breakpoint-down(md) {
+        height: 50%;
+      }
     }
   }
   
@@ -345,6 +356,52 @@
     justify-content: space-between;
     padding-left: 2em;
     padding-right: 2em;
+
+    .paginationBox {
+      margin: 10% auto;
+      width: 80px;
+      display: inline-flex;
+      position: relative;
+
+      .paginationNum {
+        align-self: center;
+        margin: 0 1.5rem;
+      }
+
+      i {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        color: #222222;
+        text-decoration: none;
+        -webkit-transition: all 0.4s ease 0s;
+        -o-transition: all 0.4s ease 0s;
+        transition: all 0.4s ease 0s;
+        background-color: rgba(255,255,255,0);
+        border-radius: 32px;
+        line-height: 30px;
+        z-index: 100;
+        cursor: pointer;
+
+        &::after {
+          position: relative;
+          color: #222;
+          left: 7px;
+          top: -7px;
+        }
+
+        &:hover {
+          color: $secondary;
+        }
+      }
+
+      &:hover > div.circle {
+        background: #ebebeb;
+        border-radius: 50%;
+        transform: scale(1);
+        transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+      }
+    }
   }
   @media (min-width: 30em) {
     .footer {
