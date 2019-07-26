@@ -5,7 +5,6 @@ import QueryBlogInfo from '../../components/_queryinfo/blogInfo';
 
 
 const BlogContainer = () => {
-
     const [imageIndex, setImgIndex] = useState(0);
     const [blogID, setBlogID] = useState('');
     const [admin, setAdmin] = useState(false);
@@ -43,7 +42,7 @@ const BlogContainer = () => {
 
     const handlePagination = (direction) => {
         direction == 'next' ? setBlogPage(blogPage + 1) : setBlogPage(blogPage - 1);
-    }
+    };
 
     return (
         <QueryBlogInfo type="all" blogPage={blogPage}>

@@ -13,6 +13,7 @@ import UserLoginPage from './pages/login/login-index';
 import SearchResults from './pages/searchresults/search-index';
 import PrivacyIndex from './pages/userprivacy - SPA/privacy-index';
 import Error404 from './pages/404/404-present';
+import TwitterAPI from './pages/twitterapi';
 
 
 const Routes = () => {
@@ -29,6 +30,8 @@ const Routes = () => {
                     <Route path='/reactdev-login' component={() => <BaseTemplate><UserLoginPage /></BaseTemplate>} />
                     <Route exact path={['/reactdev-search', '/reactdev-search/:searchinput']} component={(props) => <BaseTemplate disableSearch={true}><SearchResults {...props} /></BaseTemplate>} />
                     <Route path='/reactdev-acctsettings' component={() => <BaseTemplate><PrivacyIndex /></BaseTemplate>} />
+
+                    <Route path='/reactdev-twitterAPI' component={() => <BaseTemplate><TwitterAPI /></BaseTemplate>}  />
                     <Route path='*' component={() => <BaseTemplate><Error404 /></BaseTemplate>} />
                 </Switch>
             </Router>

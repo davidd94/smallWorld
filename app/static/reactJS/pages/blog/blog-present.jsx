@@ -7,6 +7,8 @@ import parse from 'html-react-parser';
 import styles from './_styles/blogStyles.module';
 import blogdefault from '../../../images/blogdefault.jpg';
 import { AllBlogsContext } from '../../components/_context/BlogContext';
+import CopyLinkContainer from './copyLink/copyLink-container';
+
 
 
 const BlogPresent = (props) => {
@@ -35,6 +37,11 @@ const BlogPresent = (props) => {
                         <div className={styles.previewExcerpt}>{parse(blog.body)}</div>
                         <span className={styles.previewMore}>Read More</span>
                     </a>
+                    <ul className={styles.blogShare}>
+                        <li className={(["mx-2", styles.tweetText]).join(' ')}><a href="https://twitter.com/intent/tweet?text=Check out the latest updates at https://smallworld.live/reactdev-blog" target="_blank" className="twitter-share-button" data-show-count="false"><i className="fas fa-retweet mx-2"/>Tweet it</a></li>
+                        <CopyLinkContainer urlTitle='Blog Post'
+                                            urlDestination="https://smallworld.live/reactdev-blog" />
+                    </ul>
                 </li>
             );
         });
@@ -75,7 +82,9 @@ const BlogPresent = (props) => {
                         <ul style={props.blogPreview ? {height: '100vh', overflow: 'hidden'} : {}}> 
                             <BlogPosts blogs={data.BlogPosts}
                                         handleImgIndex={props.handleImgIndex}
-                                        handleBlogView={props.handleBlogView} />
+                                        handleBlogView={props.handleBlogView}
+                                        handleCopyLink={props.handleCopyLink}
+                                        copyLink={props.copyLink} />
                         </ul>
                         <footer className={([styles.sectionPaddingSM, styles.footer]).join(' ')} style={props.blogPreview ? {display: 'none'} : {}}>
                             <NavLink className={styles.footerArchive} to={props.admin ? "/reactdev-blog/new" : "/reactdev-home"} style={props.admin ? {visibility: 'visible'} : {visibility: 'hidden'}}>New Blog Post</NavLink>
@@ -86,6 +95,7 @@ const BlogPresent = (props) => {
                                 <i className="fas fa-chevron-right" onClick={() => props.handlePagination('next')} style={(data.BlogPosts).length !== 0 ? {} : {visibility: 'hidden', pointerEvents: 'none'}} />
                             </div>
                             <ul className={styles.footerSocial}>
+                                <li><a href="https://twitter.com/smallWo32181120" target="_blank"><i className={([styles.footerIcon, 'fab fa-twitter']).join(' ')} /></a></li>
                                 <li><a href="mailto:smallworld949@gmail.com"><i className={([styles.footerIcon, "far fa-envelope"]).join(' ')} /></a></li>
                                 <li><a href="https://github.com/davidd94" target="_blank"><i className={([styles.footerIcon, "fab fa-github"]).join(' ')} /></a></li>
                                 <li><a href="https://www.linkedin.com/in/duong-david-3b451aa2" target="_blank"><i className={([styles.footerIcon, "fab fa-linkedin-in"]).join(' ')} /></a></li>

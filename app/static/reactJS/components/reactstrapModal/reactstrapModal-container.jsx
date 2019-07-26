@@ -14,6 +14,8 @@ const ReactModal = (props) => {
     return <ModalBox toggle={toggle}
                     modal={modal}
                     handleSave={props.handleSave}
+                            linkEnabled={props.linkEnabled}
+                            linkText={props.linkText}
                             btnColor={props.btnColor}
                             btnStyles={props.btnStyles}
                             buttonLabel={props.buttonLabel}

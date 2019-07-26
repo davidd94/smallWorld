@@ -16,7 +16,7 @@ const FooterSection = () => {
                         <h2 className={styles.footerHeading2}>About smallWorld</h2>
                         <p>A far far away land that you've never heard of before. Far from west of Westeros</p>
                         <ul className={styles.footerSocial}>
-                            <li><a href='#'><i className='fab fa-twitter'></i></a></li>
+                            <li><a href='https://twitter.com/smallWo32181120' target="_blank"><i className='fab fa-twitter'></i></a></li>
                             <li><a href='#'><i className='fab fa-facebook-f'></i></a></li>
                             <li><a href='https://github.com/davidd94' target='_blank'><i className='fab fa-github'></i></a></li>
                             <li><a href='#'><i className='fab fa-instagram'></i></a></li>

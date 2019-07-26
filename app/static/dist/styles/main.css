@@ -26653,15 +26653,8 @@ and also iPads specifically.
   font-size: 100%;
   line-height: 1.6;
   background-color: #f8f9f9; }
-  ._1-sMyrsu6DZBwRYwItf1ig p {
-    margin: 0 0 0.75em;
-    color: #000000 !important; }
   ._1-sMyrsu6DZBwRYwItf1ig a {
-    color: #0a0a0a !important;
-    text-decoration: none;
-    transition: color 0.4s ease-in-out; }
-  ._1-sMyrsu6DZBwRYwItf1ig a:hover, ._1-sMyrsu6DZBwRYwItf1ig a:active, ._1-sMyrsu6DZBwRYwItf1ig a:focus {
-    color: #9f8f68; }
+    color: #000000 !important; }
   ._1-sMyrsu6DZBwRYwItf1ig ul {
     list-style: none;
     padding: 0;
@@ -26815,7 +26808,20 @@ and also iPads specifically.
   font-family: "Inconsolata", monospace; }
 
 ._2nncMYLjAq_1HhDKJddHiZ {
-  transition: background-color 0.2s ease-in-out; }
+  transition: background-color 0.2s ease-in-out;
+  position: relative; }
+  ._2nncMYLjAq_1HhDKJddHiZ ._1907JDjaoP-gHHZk3_gutc {
+    position: absolute;
+    bottom: 0;
+    right: 0.3rem;
+    list-style: none;
+    padding: 0;
+    margin: 0; }
+    ._2nncMYLjAq_1HhDKJddHiZ ._1907JDjaoP-gHHZk3_gutc ._1KAHWnT5cPNxVtiVhjxobB {
+      display: inline-block; }
+      ._2nncMYLjAq_1HhDKJddHiZ ._1907JDjaoP-gHHZk3_gutc ._1KAHWnT5cPNxVtiVhjxobB:hover i {
+        transition: 300ms all ease;
+        color: #3396ff; }
 
 ._2nncMYLjAq_1HhDKJddHiZ:nth-child(even) {
   background-color: #fff; }
@@ -26834,7 +26840,11 @@ and also iPads specifically.
 
 .icq0c3erLABWs8RllehUU {
   display: block;
-  padding: 2em 1em; }
+  padding: 2em 1em;
+  transition: color 0.4s ease-in-out;
+  text-decoration: none; }
+  .icq0c3erLABWs8RllehUU:hover, .icq0c3erLABWs8RllehUU:active, .icq0c3erLABWs8RllehUU:focus {
+    color: #9f8f68; }
 
 @media (min-width: 54em) {
   .icq0c3erLABWs8RllehUU {
@@ -27064,6 +27074,43 @@ and also iPads specifically.
 
 ._1Ge_rKIAClle7FiO-Ra4LN {
   background-color: #fff; }
+
+._2bjEBOlSsHM0JmRLF2CTB7 {
+  display: inline-block; }
+  ._2bjEBOlSsHM0JmRLF2CTB7:hover i {
+    transition: 300ms all ease;
+    color: #3396ff; }
+
+.GciAtjw0L6wIR1xsCc4uI {
+  padding: 5px 15px;
+  margin: 0;
+  display: inline-flex;
+  visibility: hidden;
+  opacity: 0;
+  background: #ecd195;
+  border: 1px solid #00a700;
+  position: absolute;
+  top: -2.5rem;
+  right: 0;
+  transition: 400ms all ease;
+  border-radius: 0.2rem; }
+  .GciAtjw0L6wIR1xsCc4uI:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #00a700;
+    position: absolute;
+    right: 2rem;
+    bottom: -10px;
+    transition: 400ms all ease; }
+  .GciAtjw0L6wIR1xsCc4uI ._3vPtgGyuzYkX8732DbpfNK {
+    color: black;
+    text-align: center;
+    font-size: 1rem;
+    margin: 0;
+    transition: 400ms all ease; }
 
 /*!
  * Bootstrap Grid v4.2.1 (https://getbootstrap.com/)

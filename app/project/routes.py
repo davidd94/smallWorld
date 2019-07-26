@@ -92,7 +92,6 @@ def new_project():
 def project(username, title):
     user = User.single_user(username=username)
     project = Projects.single_project(user_id=user.id, title=title)
-    print(project.title)
     if user and project:
         # CHECKS IF THE PROJECT PROFILE IS PRIVATE AND REDIRECTS ACCORDINGLY
         if project.private == True and current_user != user:

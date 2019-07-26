@@ -73,7 +73,7 @@ const CarouselBox = (props) => {
                         </PerfectScrollbar>
                     </div>
                     <div className={styles.carouselFooter}>
-                        <a href="#" className={([styles.iconButton, styles.twitter]).join(' ')}><i className={([styles.iconTwitter, 'fab fa-twitter']).join(' ')} /><span></span></a>
+                        <a href="https://twitter.com/smallWo32181120" target="_blank" className={([styles.iconButton, styles.twitter]).join(' ')}><i className={([styles.iconTwitter, 'fab fa-twitter']).join(' ')} /><span></span></a>
                         <a href="#" className={([styles.iconButton, styles.facebook]).join(' ')}><i className={([styles.iconFacebook, 'fab fa-facebook-f']).join(' ')}/><span></span></a>
                         <a href="#" className={([styles.iconButton, styles.googlePlus]).join(' ')}><i className={([styles.iconGooglePlus, 'fab fa-google-plus-g']).join(' ')} /><span></span></a>
                         <a href="#" className={([styles.iconButton, styles.youtube]).join(' ')}><i className={([styles.iconYoutube, 'fab fa-youtube-square']).join(' ')} /><span></span></a>

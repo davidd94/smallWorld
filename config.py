@@ -50,5 +50,12 @@ class Config(object):
     STRIPE_PUB_KEY = os.environ.get('STRIPE_PUB_KEY') or None
     STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY') or None
 
+    TWITTER_KEY = os.environ.get('TWITTER_CONSUMER_KEY') or None
+    TWITTER_SECRET_KEY = os.environ.get('TWITTER_CONSUMER_SECRET_KEY') or None
+    TWITTER_ACCESS_TOKEN = os.environ.get('TWITTER_ACCESS_TOKEN') or None
+    TWITTER_ACCESS_SECRET_TOKEN = os.environ.get('TWITTER_ACCESS_SECRET_TOKEN') or None
+
+    REBRANDLY_KEY = os.environ.get('REBRANDLY_KEY') or None
+
     # ONLY USED FOR DEVELOPMENT/TESTING ONLY
     #WTF_CSRF_CHECK_DEFAULT = False

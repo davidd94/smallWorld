@@ -7,20 +7,11 @@
     font-size: 100%;
     line-height: 1.6;
     background-color: #f8f9f9;
-
-    p {
-      margin: 0 0 0.75em;
-      color: $black !important;
-    }
     
     a {
-      color: #0a0a0a !important;
-      text-decoration: none;
-      transition: color 0.4s ease-in-out;
+      color: $black !important;
     }
-    a:hover, a:active, a:focus {
-      color: #9f8f68;
-    }
+
     ul {
       list-style: none;
       padding: 0;
@@ -198,6 +189,25 @@
   
   .preview {
     transition: background-color 0.2s ease-in-out;
+    position: relative;
+
+    .blogShare {
+      position: absolute; 
+      bottom: 0;
+      right: 0.3rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      .tweetText {
+        display: inline-block;
+
+        &:hover i {
+          transition: 300ms all ease;
+          color: $blue;
+        }
+      }
+    }
   }
   .preview:nth-child(even) {
     background-color: #fff;
@@ -217,6 +227,12 @@
   .previewLink {
     display: block;
     padding: 2em 1em;
+    transition: color 0.4s ease-in-out;
+    text-decoration: none;
+
+    &:hover, &:active, &:focus {
+      color: #9f8f68;
+    }
   }
   @media (min-width: 54em) {
     .previewLink {
