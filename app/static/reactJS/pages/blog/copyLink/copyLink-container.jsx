@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import * as clipboard from 'clipboard-polyfill/build/clipboard-polyfill.promise';
 
 import CopyLinkPresent from './copyLink-present';
 
@@ -6,7 +7,7 @@ import CopyLinkPresent from './copyLink-present';
 const CopyLinkContainer = (props) => {
     const [copyLink, setCopyLink] = useState(false);
     const [timeoutID, setTimeoutID] = useState('');
-
+    
     useEffect(() => {
         return () => {
             clearTimeout(timeoutID);
@@ -14,10 +15,11 @@ const CopyLinkContainer = (props) => {
     }, [timeoutID]);
 
     const handleCopyLink = () => {
-        let urlData = {'title': props.urlTitle, 'destination': props.urlDestination};
+        console.log(props.urlDestination);
+        let urlData = {'linkid': props.linkID, 'title': props.urlTitle, 'destination': props.urlDestination};
         setCopyLink(true);
 
-        fetch('/api/urlshortener', {
+        fetch('/api/blogurlshortener', {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -28,6 +30,7 @@ const CopyLinkContainer = (props) => {
         })
         .then(res => {
             res.json().then(response => {
+                clipboard.writeText(response);
                 console.log(response);
             });
         });
@@ -43,6 +46,7 @@ const CopyLinkContainer = (props) => {
         <CopyLinkPresent linkText={props.linkText}
                         handleCopyLink={handleCopyLink}
                         copyLink={copyLink} />
+            
     );
 };
 

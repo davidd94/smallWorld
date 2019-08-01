@@ -7,6 +7,7 @@ import HomepageLanding from './pages/home/homepage-index';
 import AboutMe from './pages/aboutme/aboutme-index';
 import Explore from './pages/explore/explore-index';
 import BlogContainer from './pages/blog/blog-container';
+import BlogSingleContainer from './pages/blog_single/blogSingle-container';
 import NewBlogContainer from './pages/blog_new/new_blog-container';
 import Subscriptions from './pages/subscription-SPA/subscription-index';
 import UserLoginPage from './pages/login/login-index';
@@ -25,7 +26,8 @@ const Routes = () => {
                     <Route path='/reactdev-aboutme' component={() => <BaseTemplate><AboutMe /></BaseTemplate>} />
                     <Route path='/reactdev-explore' component={() => <BaseTemplate><Explore /></BaseTemplate>} />
                     <Route exact path='/reactdev-blog' component={() => <BaseTemplate><BlogContainer /></BaseTemplate>} />
-                    <Route exact path='/reactdev-blog/new' component={() => <BaseTemplate><NewBlogContainer /></BaseTemplate>} />
+                    <Route exact path='/reactdev-blog/:id' component={(props) => <BaseTemplate><BlogSingleContainer {...props} /></BaseTemplate>} />
+                    <Route exact path='/reactdev-newblog/' component={() => <BaseTemplate><NewBlogContainer /></BaseTemplate>} />
                     <Route path='/reactdev-subscriptions' component={() => <BaseTemplate><Subscriptions /></BaseTemplate>} />
                     <Route path='/reactdev-login' component={() => <BaseTemplate><UserLoginPage /></BaseTemplate>} />
                     <Route exact path={['/reactdev-search', '/reactdev-search/:searchinput']} component={(props) => <BaseTemplate disableSearch={true}><SearchResults {...props} /></BaseTemplate>} />

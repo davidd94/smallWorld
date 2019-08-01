@@ -12,6 +12,7 @@ from flask_moment import Moment
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_recaptcha import ReCaptcha
+from flask_caching import Cache
 from elasticsearch import Elasticsearch
 from redis import Redis
 from celery import Celery
@@ -34,6 +35,11 @@ socketio = SocketIO()
 session = Session()
 cors = CORS()
 recaptcha = ReCaptcha()
+cache = Cache(config={
+    'CACHE_TYPE': 'filesystem',
+    'CACHE_DIR': '/flask_cache',
+    'CACHE_DEFAULT_TIMEOUT': 300
+    })
 
 
 # NEEDS TO BE OUTSIDE THE BP FACTORY TO BE CREATED OUTSIDE THE CLIENT'S FLASK APP AS ITS OWN WORKER APP
@@ -58,6 +64,7 @@ def create_app(config_class=Config):
     session.init_app(app)
     cors.init_app(app)
     recaptcha.init_app(app)
+    cache.init_app(app)
 
     app.redis = Redis.from_url(app.config['REDIS_URL'])
     celery.conf.update(app.config)

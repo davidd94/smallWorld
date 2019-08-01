@@ -15,7 +15,7 @@ class Query(graphene.ObjectType):
     UserInfo = graphene.List(UserInfoModel, search=graphene.String(), first=graphene.Int(), skip=graphene.Int())
     UsersBlocked = graphene.List(UsersBlockedModel, search=graphene.String(), first=graphene.Int(), skip=graphene.Int())
     ProjectLimitedInfo = PopularProjects = TrendingProjects = NewProjects = graphene.List(ProjectLimitedInfoModel, search=graphene.String(), first=graphene.Int(), skip=graphene.Int())
-    BlogPosts = graphene.List(BlogInfoModel, search=graphene.String(), first=graphene.Int(), skip=graphene.Int())
+    BlogPosts = graphene.List(BlogInfoModel, search=graphene.String(), first=graphene.Int(), skip=graphene.Int(), blogID=graphene.Int())
 
     def resolve_UserTokenRefresh(self, info):
         if request.headers.get('Authorization'):
@@ -131,8 +131,11 @@ class Query(graphene.ObjectType):
                         .limit(10)
         raise GraphQLError('A server error occurred!')
     
-    def resolve_BlogPosts(self, info, search=None, first=None, skip=None, **kwargs):
+    def resolve_BlogPosts(self, info, search=None, first=None, skip=None, blogID=None, **kwargs):
         query = BlogInfoModel.get_query(info)
+        if blogID and first is None and skip is None:
+            query = query.filter(AdminBlogPosts.username == 'Davie').filter(AdminBlogPosts.id == blogID).all()
+            return query
         if skip and first:
             query = query.filter(AdminBlogPosts.username == 'Davie').order_by(AdminBlogPosts.timestamp.desc())[skip:][:first]
             return query
@@ -143,7 +146,8 @@ class Query(graphene.ObjectType):
             query = query.filter(AdminBlogPosts.username == 'Davie').order_by(AdminBlogPosts.timestamp.desc())[:first]
             return query
         if query:
-            return query.filter(AdminBlogPosts.username == 'Davie').order_by(AdminBlogPosts.timestamp.desc()).all()
+            query = query.filter(AdminBlogPosts.username == 'Davie').order_by(AdminBlogPosts.timestamp.desc()).all()
+            return query
         raise GraphQLError('A server error occurred!')
 
 schema = graphene.Schema(query=Query)

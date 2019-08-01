@@ -50,6 +50,7 @@
     "apollo-link-http": "^1.5.15",
     "babel-loader": "^8.0.6",
     "bootstrap": "^4.3.1",
+    "clipboard-polyfill": "^2.8.1",
     "graphql": "^14.3.1",
     "graphql-tag": "^2.10.1",
     "html-react-parser": "^0.9.1",

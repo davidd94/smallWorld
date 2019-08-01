@@ -785,6 +785,7 @@ class AdminBlogPosts(db.Model):
     body = db.Column(db.String(5000), index=True)
     url = db.Column(db.String(500))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    linkurl = db.Column(db.String(500))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):

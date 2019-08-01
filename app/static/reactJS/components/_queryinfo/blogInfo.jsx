@@ -7,6 +7,7 @@ import { AllBlogsContext } from '../_context/BlogContext';
 
 const QueryBlogInfo = (props) => {
     let GET_BLOG_INFO;
+    let currentBlog = props.blogID;
     let currentPage = (props.blogPage - 1) * 5;
     if (props.type == 'all') {
         GET_BLOG_INFO = gql`
@@ -25,8 +26,8 @@ const QueryBlogInfo = (props) => {
         `
     } else if (props.type == 'single') {
         GET_BLOG_INFO = gql`
-        {
-            BlogPosts {
+        query GetSingleBlog($currentBlog: Int) {
+            BlogPosts(blogID: $currentBlog) {
                 id 
                 username
                 title
@@ -53,7 +54,7 @@ const QueryBlogInfo = (props) => {
     with or without changes. Will be working on this in the future */
     return (
         <Query query={GET_BLOG_INFO} fetchPolicy="no-cache"
-                variables={{ currentPage }}>
+                variables={{ currentPage, currentBlog }}>
             {({ loading, error, data }) => {
                 if (loading) return <p>Loading...</p>;
                 if (data) {

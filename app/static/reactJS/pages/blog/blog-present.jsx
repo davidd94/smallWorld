@@ -39,8 +39,9 @@ const BlogPresent = (props) => {
                     </a>
                     <ul className={styles.blogShare}>
                         <li className={(["mx-2", styles.tweetText]).join(' ')}><a href="https://twitter.com/intent/tweet?text=Check out the latest updates at https://smallworld.live/reactdev-blog" target="_blank" className="twitter-share-button" data-show-count="false"><i className="fas fa-retweet mx-2"/>Tweet it</a></li>
-                        <CopyLinkContainer urlTitle='Blog Post'
-                                            urlDestination="https://smallworld.live/reactdev-blog" />
+                        <CopyLinkContainer linkID={blog.id}
+                                            urlTitle='Blog Post'
+                                            urlDestination={`https://smallworld.live/reactdev-blog/${blog.id}`} />
                     </ul>
                 </li>
             );
@@ -84,10 +85,10 @@ const BlogPresent = (props) => {
                                         handleImgIndex={props.handleImgIndex}
                                         handleBlogView={props.handleBlogView}
                                         handleCopyLink={props.handleCopyLink}
-                                        copyLink={props.copyLink} />
+                                        linkID={props.linkID} />
                         </ul>
                         <footer className={([styles.sectionPaddingSM, styles.footer]).join(' ')} style={props.blogPreview ? {display: 'none'} : {}}>
-                            <NavLink className={styles.footerArchive} to={props.admin ? "/reactdev-blog/new" : "/reactdev-home"} style={props.admin ? {visibility: 'visible'} : {visibility: 'hidden'}}>New Blog Post</NavLink>
+                            <NavLink className={styles.footerArchive} to={props.admin ? "/reactdev-newblog/" : "/reactdev-home"} style={props.admin ? {visibility: 'visible'} : {visibility: 'hidden'}}>New Blog Post</NavLink>
                             <div className={styles.paginationBox}>
                                 <i className="fas fa-chevron-left" onClick={() => props.handlePagination('prev')} style={props.blogPage >= 2 ? {} : {visibility: 'hidden', pointerEvents: 'none'}} />
                                 <div className={styles.paginationNum}>{props.blogPage}</div>
