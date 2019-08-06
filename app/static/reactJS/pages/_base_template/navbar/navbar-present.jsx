@@ -89,6 +89,9 @@ const NavBarSection = React.forwardRef((props, ref) => {
                             <RouterLink className={styles.navLink} to="/reactdev-twitterAPI"><span className={styles.navlinkSpan}>TwitterAPI</span></RouterLink>
                         </NavItem>
                         <NavItem>
+                            <a className={styles.navLink} href="/reactdev-profile"><span className={styles.navlinkSpan}>Profile</span></a>
+                        </NavItem>
+                        <NavItem>
                             <a className={styles.navLink} href="/"><span className={styles.navlinkSpan} style={{fontWeight: 600, color: 'red'}}>Flask(jinja2)</span></a>
                         </NavItem>
                     </Nav>

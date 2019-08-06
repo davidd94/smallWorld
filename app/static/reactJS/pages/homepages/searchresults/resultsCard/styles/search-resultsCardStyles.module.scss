@@ -1,0 +1,233 @@
+@import '../../../../__styles/commonstyles';
+
+
+.cardUL {
+    list-style: none;
+    text-align: left;
+    padding: 0 0;
+    height: 85%;
+    overflow: hidden;
+    position: relative;
+    margin-top: 4.5rem;
+
+    li {
+        border: 0.5px solid rgba(0, 0, 0, 0.466);
+        margin-bottom: 0.5em;
+        padding: 0.2rem 0;
+        min-height: 6rem;
+        height: auto;
+        max-height: 12rem;
+        position: relative;
+        overflow: hidden;
+
+        .projectTitleWrapper {
+            height: 4rem;
+            position: relative;
+
+            .projectTitle {
+                margin-bottom: 0;
+                padding: 0.5em 0.5em 0.2em 0.5em;
+                font-size: 1em;
+                width: 85%;
+                color: $primary;
+                cursor: pointer;
+
+                &:hover {
+                    color: $blue;
+                }
+    
+                .projectTitleLink {
+                    text-decoration: none;
+    
+                    /* POPOVER CONTAINER */
+                    .popoverContainer {
+                        height: 10em;
+                        width: 16em;
+                        max-height: 10em;
+                        max-width: 16em;
+                        display: grid;
+                        grid-template: 7em 1fr / 1fr 1fr;
+    
+                        .popoverAvatar {
+                            grid-row: 2 / span 1;
+                            grid-column: 2 / span 1;
+                            margin-left: 1em;
+                            width: 2.5em;
+                            height: auto;
+                        }
+                        .popoverUserlink {
+                            grid-row: 2 / span 1;
+                            grid-column: 2 / span 1;
+                            text-align: right;
+                            margin: 0.7em 0;
+                        }
+                        .popoverDescription {
+                            grid-row: 1 / span 1;
+                            grid-column: 1 / span 2;
+                            border-bottom: 1px solid rgba(97, 97, 97, 0.603);
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                    }
+                }
+            }
+        }
+
+        .projectLikes {
+            position: absolute;
+            bottom: 0.2em;
+            left: 0.3em;
+            font-size: 0.8em;
+            font-family: 'Comic Sans MS', Arial, Helvetica, sans-serif;
+        }
+
+        .projectTags {
+            position: relative;
+            width: 100%;
+            margin-bottom: 0;
+            padding: 0.5em;
+            font-size: 0.8em;
+            font-weight: 600;
+            border-top: 0.5px solid rgb(190, 190, 190);
+            overflow: hidden;
+            min-height: 2rem;
+            height: auto;
+            max-height: 8rem;
+
+            a {
+                color: rgb(209, 13, 209);
+                text-decoration: none;
+                transition: all 500ms ease;
+                font-weight: 400;
+
+                &:hover {
+                    color: rgb(98, 98, 240);
+                }
+            }
+        }
+    }
+}
+
+
+.inputContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 300px;
+    height: 100px;
+    padding: 0;
+    box-sizing: border-box;
+    transform: scale(0.8);
+
+    .searchInputIcon {
+        position: absolute;
+        margin: auto;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 80px;
+        background: crimson;
+        border-radius: 50%;
+        transition: all 1s;
+        z-index: 4;
+        box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.4);
+        // box-shadow: 0 0 25px 0 crimson;
+        &:hover {
+          cursor: pointer;
+        }
+        &::before {
+          content: "";
+          position: absolute;
+          margin: auto;
+          top: 22px;
+          right: 0;
+          bottom: 0;
+          left: 22px;
+          width: 12px;
+          height: 2px;
+          background: white;
+          transform: rotate(45deg);
+          transition: all .5s;
+        }
+        &::after {
+          content: "";
+          position: absolute;
+          margin: auto;
+          top: -5px;
+          right: 0;
+          bottom: 0;
+          left: -5px;
+          width: 25px;
+          height: 25px;
+          border-radius: 50%;
+          border: 2px solid white;
+          transition: all .5s;
+        }
+    }
+    .searchInputX {
+        font-family: 'Inconsolata', monospace;
+        position: absolute;
+        margin: auto;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 50px;
+        outline: none;
+        border: none;
+        // border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        background: crimson;
+        color: white;
+        text-shadow: 0 0 10px crimson;
+        padding: 0 80px 0 20px;
+        border-radius: 30px;
+        box-shadow: 0 0 25px 0 crimson,
+                    0 20px 25px 0 rgba(0, 0, 0, 0.2);
+        // box-shadow: inset 0 0 25px 0 rgba(0, 0, 0, 0.5);
+        transition: all 1s;
+        opacity: 0;
+        z-index: 5;
+        font-weight: bolder;
+        letter-spacing: 0.1em;
+        &:hover {
+          cursor: pointer;
+        }
+        &:focus {
+          width: 300px;
+          opacity: 1;
+          cursor: text;
+        }
+        &:focus ~ .searchInputIcon {
+          right: -250px;
+          background: #151515;
+          z-index: 6;
+          &::before {
+            top: 0;
+            left: 0;
+            width: 25px;
+          }
+          &::after {
+            top: 0;
+            left: 0;
+            width: 25px;
+            height: 2px;
+            border: none;
+            background: white;
+            border-radius: 0%;
+            transform: rotate(-45deg);
+          }
+        }
+        &::placeholder {
+          color: white;
+          opacity: 0.5;
+          font-weight: bolder;
+        }
+    }
+}

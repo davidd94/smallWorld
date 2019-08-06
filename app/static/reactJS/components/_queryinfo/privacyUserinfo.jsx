@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { PrivacyContext } from '../_context/UserContext';
+import LoadingDisplay from '../../pages/loadingAnimations';
 
 
 const QueryUserPrivacyInfo = (props) => {
@@ -32,7 +33,7 @@ const QueryUserPrivacyInfo = (props) => {
     return (
         <Query query={GET_USER_INFO} fetchPolicy="no-cache">
             {({ loading, error, data }) => {
-                if (loading) return <p>Loading...</p>;
+                if (loading) return LoadingDisplay('spin', '#408ee0');
                 // second security layer to redirect users if not logged in
                 if (error) return <Redirect to='/reactdev-login' />;
                 if (data) {

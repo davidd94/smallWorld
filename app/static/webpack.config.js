@@ -1,13 +1,18 @@
 const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 const config = {
-    entry: path.join(__dirname, 'reactJS/index.jsx'),
+    entry: {
+        reactHome: path.join(__dirname, 'reactJS/pages/homepages/index.jsx'),
+        reactProfile: path.join(__dirname, 'reactJS/pages/profilepages/index.jsx')
+    },
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: 'bundle.js',
+        filename: 'bundle-[name].js',
+        publicPath: '/static/dist/',
     },
     resolve: {
         modules: [path.join(__dirname, 'node_modules')],
@@ -26,13 +31,13 @@ const config = {
                 loader: 'babel-loader',
                 options: {
                     presets: ["@babel/preset-react"]
-                    }
+                    },
                 }
             ]
         },
         {
             test: /\.css$/,
-            loader: "style-loader!css-loader"
+            loader: "style-loader!css-loader",
         },
         {
           test: /\.(png|svg|jpg|gif)$/,
@@ -88,7 +93,11 @@ const config = {
             // both options are optional
             filename: 'styles/[name].css',
             chunkFilename: 'styles/[id].css'
-        })
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production'),
+        }),
+        //new BundleAnalyzerPlugin(),
     ],
 };
 

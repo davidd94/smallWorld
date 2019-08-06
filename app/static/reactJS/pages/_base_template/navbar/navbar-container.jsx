@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Redirect, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import NavBarSection from './navbar-present';
 

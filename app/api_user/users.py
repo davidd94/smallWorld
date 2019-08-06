@@ -14,6 +14,7 @@ import json, requests
 import stripe
 
 
+# GRAPHQL VIEW FUNCTION
 bp.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
 
 # CUSTOM GRAPHQL VIEW FUNCTION (NOT RECOMMENDED FOR PRODUCTION)

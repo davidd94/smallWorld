@@ -26,6 +26,20 @@ import celery
 import stripe
 
 
+
+# REDIRECTS ALL NON-FLASK ROUTES TO REACT HOME RELATED SPA
+@bp.route('/reactdev-home', defaults={'path': 'reactdev-home'})
+@bp.route('/<path:path>')
+def reactdevhome(path):
+    return render_template('reactindex.html')
+
+# REDIRECTS ALL NON-FLASK ROUTES TO REACT PROJECT RELATED SPA
+@bp.route('/reactdev-profile', defaults={'path': 'reactdev-profile'})
+@bp.route('/<path:path>')
+def reactdevprofile(path):
+    return render_template('reactprofileindex.html')
+
+
 @bp.before_app_request
 def before_request():
     if current_user.is_authenticated:
@@ -33,13 +47,6 @@ def before_request():
         db.session.commit()
     g.search_form = SearchForm()
     g.locale = str(get_locale())
-
-
-@bp.route('/reactdev-home', defaults={'path': 'reactdev-home'})
-@bp.route('/<path:path>')
-def reactdev(path):
-    return render_template('reactindex.html')
-
 
 
 @bp.route('/profile/<username>', methods=['GET', 'POST'])

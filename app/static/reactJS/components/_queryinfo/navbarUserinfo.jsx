@@ -3,6 +3,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { UserContext } from '../_context/UserContext';
+import LoadingDisplay from '../../pages/loadingAnimations';
 
 
 const QueryUserInfo = (props) => {
@@ -41,7 +42,7 @@ const QueryUserInfo = (props) => {
     return (
         <Query query={GET_USER_INFO}>
             {({ loading, error, data }) => {
-                if (loading) return <p>Loading...</p>;
+                if (loading) return LoadingDisplay('spin', '#408ee0');
                 if (data) {
                     return data.UserLimitedInfo.map((info) => {
                         // manually inserting props to each child components

@@ -3,6 +3,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { AllBlogsContext } from '../_context/BlogContext';
+import LoadingDisplay from '../../pages/loadingAnimations';
 
 
 const QueryBlogInfo = (props) => {
@@ -56,7 +57,7 @@ const QueryBlogInfo = (props) => {
         <Query query={GET_BLOG_INFO} fetchPolicy="no-cache"
                 variables={{ currentPage, currentBlog }}>
             {({ loading, error, data }) => {
-                if (loading) return <p>Loading...</p>;
+                if (loading) return LoadingDisplay('spin', '#408ee0');
                 if (data) {
                     // updating localstorage with new token if within grace period.
                     localStorage.setItem('token', (data.UserTokenRefresh ? data.UserTokenRefresh[0].token : ''));
