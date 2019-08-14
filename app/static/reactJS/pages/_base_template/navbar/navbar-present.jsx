@@ -17,7 +17,6 @@ const NavBarSection = React.forwardRef((props, ref) => {
     var navbarStyle = '';
     var navbarSleep = '';
     var navbarAwake = '';
-    var navbarSearchIconStyle;
     var navbarSearchBoxStyle;
     
     if (props.scrollState == true) {
@@ -36,10 +35,8 @@ const NavBarSection = React.forwardRef((props, ref) => {
     };
 
     if (props.search) {
-        navbarSearchIconStyle = (["fas fa-search", 'wow fadeOutRight', styles.navSearchIconHidden]).join(' ');
         navbarSearchBoxStyle = styles.navSearchBox;
     } else {
-        navbarSearchIconStyle = (["fas fa-search", styles.navSearchIcon]).join(' ');
         navbarSearchBoxStyle = styles.navSearchBoxHidden;
     };
 
@@ -61,7 +58,7 @@ const NavBarSection = React.forwardRef((props, ref) => {
             return <RouterLink className={styles.navLink} to="/reactdev-login"><span className={styles.navLinkLogin}>Login</span></RouterLink>
         };
     };
-    
+    console.log(props.search);
     return (
         <Navbar expand='lg' dark className={[styles.ftcoNavbarLight, navbarStyle, navbarSleep, navbarAwake].join(' ')}>
             <Container className={styles.container}>
@@ -89,7 +86,7 @@ const NavBarSection = React.forwardRef((props, ref) => {
                             <RouterLink className={styles.navLink} to="/reactdev-twitterAPI"><span className={styles.navlinkSpan}>TwitterAPI</span></RouterLink>
                         </NavItem>
                         <NavItem>
-                            <a className={styles.navLink} href="/reactdev-profile"><span className={styles.navlinkSpan}>Profile</span></a>
+                            <RouterLink className={styles.navLink} to="/reactdev-profile"><span className={styles.navlinkSpan}>Profile</span></RouterLink>
                         </NavItem>
                         <NavItem>
                             <a className={styles.navLink} href="/"><span className={styles.navlinkSpan} style={{fontWeight: 600, color: 'red'}}>Flask(jinja2)</span></a>
@@ -104,7 +101,7 @@ const NavBarSection = React.forwardRef((props, ref) => {
                         <InputGroup className={navbarSearchBoxStyle}>
                             <Input innerRef={ref} onBlur={() => {props.searchToggle(false)}} onKeyUp={props.handleSearch} onChange={props.handleSearchInput} />
                         </InputGroup>
-                        <i onClick={() => {props.searchToggle(true)}} className={navbarSearchIconStyle} />
+                        <i onClick={() => {props.searchToggle(true)}} className={(['fas fa-search', styles.navSearchIcon]).join(' ')} style={props.search ? {visibility: 'hidden'} : {}}/>
                     </Nav>
                 </Collapse>
             </Container>

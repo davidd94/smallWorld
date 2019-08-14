@@ -37,4 +37,10 @@ class UsersBlockedModel(SQLAlchemyObjectType):
     class Meta:
         model = User
         only_fields = ("username", "picture")
-        exclude_fields = ()
+        exclude_fields = ("password_hash", "last_seen")
+
+class UserChatlistModel(SQLAlchemyObjectType):
+    class Meta:
+        model = User
+        only_fields = ("username", "picture")
+        exclude_fields = ("password_hash", "last_seen")

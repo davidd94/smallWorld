@@ -48,7 +48,7 @@ const BaseTemplate = (props) => {
                         scrollAwake={awake}
                         disableSearch={props.disableSearch} />
             </header>
-            <div onScroll={ScrollView} style={{height: '100%', width: '100%', overflowX: 'hidden'}}>
+            <div onScroll={ScrollView} style={{height: '100%', width: '100%', overflow: 'hidden', position: 'relative'}}>
                 {NestedChildWithProps}
             </div>
         </Fragment>

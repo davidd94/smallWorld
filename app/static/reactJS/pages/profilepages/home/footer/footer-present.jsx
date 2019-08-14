@@ -12,9 +12,11 @@ const footerStyle = {
         width: '100%',
         backgroundColor: '#fff',
         marginTop: '12px',
-        fontSize: '0.8rem'
-    }
-}
+        paddingTop: '7px',
+        fontSize: '0.8rem',
+        height: '55px'
+    },
+};
 
 
 const ProfileFooterPresent = () => {

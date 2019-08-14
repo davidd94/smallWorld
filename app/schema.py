@@ -2,12 +2,12 @@ from flask import jsonify, request, current_app
 from sqlalchemy import and_
 import graphene
 from graphql import GraphQLError
-from app.schema_users import UserTokenModel, UserLimitedInfoModel, UserInfoModel, UsersBlockedModel
+from app.schema_users import UserTokenModel, UserLimitedInfoModel, UserInfoModel, UsersBlockedModel, UserChatlistModel
 from app.schema_projects import ProjectLimitedInfoModel
 from app.schema_blogs import BlogInfoModel
-from app.models import User, Projects, AdminBlogPosts, project_visitors
+from app.models import User, Projects, AdminBlogPosts, project_visitors, followers, chatlist_favorites
 from datetime import datetime, timedelta
-
+from app import db
 
 class Query(graphene.ObjectType):
     UserTokenRefresh = graphene.List(UserTokenModel)
@@ -16,6 +16,9 @@ class Query(graphene.ObjectType):
     UsersBlocked = graphene.List(UsersBlockedModel, search=graphene.String(), first=graphene.Int(), skip=graphene.Int())
     ProjectLimitedInfo = PopularProjects = TrendingProjects = NewProjects = graphene.List(ProjectLimitedInfoModel, search=graphene.String(), first=graphene.Int(), skip=graphene.Int())
     BlogPosts = graphene.List(BlogInfoModel, search=graphene.String(), first=graphene.Int(), skip=graphene.Int(), blogID=graphene.Int())
+    UserChatlist = graphene.List(UserChatlistModel)
+    UserChatlistFav = graphene.List(UserChatlistModel)
+    
 
     def resolve_UserTokenRefresh(self, info):
         if request.headers.get('Authorization'):
@@ -149,5 +152,44 @@ class Query(graphene.ObjectType):
             query = query.filter(AdminBlogPosts.username == 'Davie').order_by(AdminBlogPosts.timestamp.desc()).all()
             return query
         raise GraphQLError('A server error occurred!')
+
+    def resolve_UserChatlist(self, info):
+        if request.headers.get('Authorization'):
+            auth_token = request.headers.get('Authorization').split(' ')[1]
+            user = User.check_token(auth_token)
+            if user:
+                # userquery = UserChatlistModel.get_query(info)
+                # '.get_query(info)' IS IDENTICAL TO 'db.session.query()' BUT WITH ADDITIONAL FILTERS WITHIN 'info'
+                all_followers = db.session.query(User) \
+                                .join(followers, User.id == followers.c.follower_id) \
+                                .filter(followers.c.followed_id == user.id) \
+                                .all()
+                query = all_followers
+
+                return query
+            raise GraphQLError('User session expired! Please relog in.')
+        raise GraphQLError('Unauthorized!')
+
+    def resolve_UserChatlistFav(self, info):
+        if request.headers.get('Authorization'):
+            auth_token = request.headers.get('Authorization').split(' ')[1]
+            user = User.check_token(auth_token)
+            if user:
+                # userquery = UserChatlistModel.get_query(info)
+                # '.get_query(info)' IS IDENTICAL TO 'db.session.query()' BUT WITH ADDITIONAL FILTERS WITHIN 'info'
+                chatlist_fav = db.session.query(chatlist_favorites.c.user_id) \
+                                    .filter(chatlist_favorites.c.fav_id == user.id) \
+                                    .all()
+                filtered_favs = []
+                for eachtuple in chatlist_fav:
+                    for eachid in eachtuple:
+                        fav_user = User.query.get(eachid)
+                        filtered_favs.append(fav_user)
+                
+                query = filtered_favs
+                return query
+            raise GraphQLError('User session expired! Please relog in.')
+        raise GraphQLError('Unauthorized!')
+        
 
 schema = graphene.Schema(query=Query)

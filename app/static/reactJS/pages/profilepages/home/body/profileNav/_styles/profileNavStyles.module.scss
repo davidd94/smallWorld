@@ -13,6 +13,7 @@
         .navList {
             margin-top: 1px;
             background-color: #fff;
+            border: 1px solid lightgrey;
 
             li {
                 border-bottom: 1px solid #ebeae6;
@@ -20,6 +21,7 @@
                 margin-left: 0;
                 line-height: 50px;
                 text-align: left;
+                cursor: pointer;
 
                 a {
                     -webkit-border-radius: 0;

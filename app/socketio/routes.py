@@ -13,8 +13,18 @@ import json
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
+        token = request.args.get('token')
+        if token:
+            user = User.check_token(token) if User.check_token(token) else User.token_renewal(token)
+            if user:
+                g.current_user = user
+                return f(*args, **kwargs)
+            # removed disconnect() to allow session users to be verified as well
+            # disconnect()
+
         if not current_user.is_authenticated:
-            disconnect()
+            print('disconnecting user..........................')
+            disconnect() 
         else:
             return f(*args, **kwargs)
     return wrapped
@@ -24,15 +34,31 @@ def authenticated_only(f):
 @socketio.on('connect')
 @authenticated_only
 def connect():
-    status = session['chat_status']
+    session_chatlist_status = session.get('chat_status')
+    status = 'none'
+    print(session_chatlist_status)
+    if session_chatlist_status:
+        status = session['chat_status']
+    
+    try:
+        if g.current_user and not session_chatlist_status:
+            if g.current_user.online == True:
+                status = 'online'
+            elif g.current_user.online == False:
+                status = 'offline'
+            elif g.current_user.online == 'invisible':
+                status = 'invisible'
+            else:
+                status = None
+    except:
+        pass
+        
     print(status)
-    if status == 'offline':
+    if status == ['offline', 'invisible']:
         emit('connect', status)
     elif status == 'online':
         current_user.online = True
         db.session.commit()
-        emit('connect', status)
-    elif status == 'invisible':
         emit('connect', status)
 
 @socketio.on('chatlist')
