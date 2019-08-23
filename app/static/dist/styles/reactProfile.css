@@ -5509,7 +5509,7 @@ and also iPads specifically.
   bottom: 0;
   right: 0;
   padding-bottom: 10px;
-  height: 75%;
+  height: 85%;
   width: 320px;
   text-align: right;
   background-color: white;
@@ -5598,7 +5598,7 @@ and also iPads specifically.
       position: relative; }
       ._2GtUsF-UmY7cbkG6AtPGU5 ._3mc6Ip99BNZb7BAAMaNgHd ._2Chw9d0O8luFs3-1L0LLDN li {
         padding: 0;
-        margin: 0.5rem 0;
+        margin: 1rem 0;
         overflow: hidden;
         cursor: pointer;
         text-align: left;
@@ -5715,10 +5715,33 @@ and also iPads specifically.
       margin-top: 1.1px; }
   ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa {
     background: #fff; }
-    ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa ._2uaMgG-KJBQG8-A5_q15WF {
+    ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa ._2kRGtziLDF5qYBPd5ToVX5 {
       height: 315px;
-      padding: 8px 24px;
-      overflow-y: scroll; }
+      padding: 4px;
+      overflow-x: hidden;
+      position: relative; }
+      ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa ._2kRGtziLDF5qYBPd5ToVX5 img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%; }
+      ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa ._2kRGtziLDF5qYBPd5ToVX5 ._2uaMgG-KJBQG8-A5_q15WF {
+        color: grey;
+        font-style: italic;
+        opacity: 0.85;
+        list-style: none;
+        padding: 0 12px; }
+        ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa ._2kRGtziLDF5qYBPd5ToVX5 ._2uaMgG-KJBQG8-A5_q15WF ._39kWbnFXWUJYoyfodNGinA {
+          text-align: center; }
+        ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa ._2kRGtziLDF5qYBPd5ToVX5 ._2uaMgG-KJBQG8-A5_q15WF p {
+          line-height: 2; }
+      ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa ._2kRGtziLDF5qYBPd5ToVX5 .D5ApwFT306mY97G0GIO5I {
+        list-style: none;
+        color: black;
+        padding: 0 12px; }
+        ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa ._2kRGtziLDF5qYBPd5ToVX5 .D5ApwFT306mY97G0GIO5I ._3oYNBv4EZmowWStOlMNPUT {
+          text-align: center; }
+        ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa ._2kRGtziLDF5qYBPd5ToVX5 .D5ApwFT306mY97G0GIO5I p {
+          line-height: 2; }
     ._2nnms12FCX_BOPpGdz6Mom ._3Rtic1DKgYhCX2aJJYTRAa .KwRl9_oBnLJvr3gB54MmE {
       font-style: italic;
       margin: 0;

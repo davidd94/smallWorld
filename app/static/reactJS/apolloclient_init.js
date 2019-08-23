@@ -17,6 +17,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
                         const refreshToken = async () => {
                             let oldToken = localStorage.getItem('token');
                             // initialize async request to retrieve new token
+                            console.log('APOLLO ATTEMPTING TO RENEW TOKEN............');
                             await fetch('/api/reauth_token', {
                                 method: 'POST',
                                 credentials: 'include',
@@ -30,6 +31,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
                                 serverResponse.json()
                                 .then((refreshResponse) => {
                                     if (refreshResponse != 'Failed to reauth. Please log in again.') {
+                                        console.log('APOLLO REFRESHED TOKEN!!!!!!!!!' , refreshResponse);
                                         localStorage.setItem('token', refreshResponse);
                                         operation.setContext(({ headers = {} }) => ({
                                             headers: {

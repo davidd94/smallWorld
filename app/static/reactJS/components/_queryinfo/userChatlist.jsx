@@ -9,12 +9,16 @@ import { UserChatlistContext } from '../_context/UserContext';
 const QueryUserlist = (props) => {
     const GET_USER_LIST = gql`
     {
-        UserChatlist { 
+        UserLimitedInfo {
+            online
+        } UserChatlist { 
             username
             picture
+            online
         } UserChatlistFav {
             username
             picture
+            online
         } UserTokenRefresh {
             token
         }

@@ -13,10 +13,10 @@ from app.project.forms import ProjectForm, EditProjectForm, FAQForm
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 from bs4 import BeautifulSoup
-import os, shutil
+import os, shutil, time
 import pdfkit
+
 config = pdfkit.configuration(wkhtmltopdf="C:/Users/mous3/Desktop/Webapps/smallWorld/plugins/wkhtmltopdf")
-import time
 
 
 @bp.route('/refresh_project_timer')

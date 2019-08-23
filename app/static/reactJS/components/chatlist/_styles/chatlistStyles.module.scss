@@ -6,7 +6,7 @@
     bottom: 0;
     right: 0;
     padding-bottom: 10px;
-    height: 75%;
+    height: 85%;
     width: 320px;
     text-align: right;
     background-color: rgb(255, 255, 255);
@@ -122,7 +122,7 @@
 
             li {
                 padding: 0;
-                margin: 0.5rem 0;
+                margin: 1rem 0;
                 overflow: hidden;
                 cursor: pointer;
                 text-align: left;
@@ -270,10 +270,48 @@
     .chat {
         background: #fff;
 
-        .chatHistory {
+        .chatLogs {
             height: 315px;
-            padding: 8px 24px;
-            overflow-y: scroll;
+            padding: 4px;
+            overflow-x: hidden;
+            position: relative;
+
+            img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                
+            }
+
+            .chatHistory {
+                color: grey;
+                font-style: italic;
+                opacity: 0.85;
+                list-style: none;
+                padding: 0 12px;
+
+                .msgTime {
+                    text-align: center;
+                }
+
+                p {
+                    line-height: 2;
+                }
+            }
+
+            .chatNewMsg {
+                list-style: none;
+                color: black;
+                padding: 0 12px;
+
+                .newMsgTime {
+                    text-align: center;
+                }
+
+                p {
+                    line-height: 2;
+                }
+            }
         }
 
         .chatFeedback {

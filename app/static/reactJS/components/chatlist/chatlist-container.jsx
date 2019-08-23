@@ -1,64 +1,79 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { ChatlistSSE } from '../../sse';
 
 import ChatlistPresent from './chatlist-present';
-import ChatlistMinimized from './chatlistMini-present';
-import ChatlistMsgContainer from './chatlistMsg-container';
-
+import { UserChatlistContext } from '../_context/UserContext';
 import socket from '../../socketio';
 
 
-const ChatlistContainer = () => {
-    const [mode, setMode] = useState('online');
-    const [minimized, setMinimized] = useState(false);
-    const [chatbox, setChatbox] = useState(false);
+const ChatlistContainer = (props) => {
+    const [chatlist, setChatlist] = useState(false);
+    const [SSE, setSSE] = useState(false);
+    
+    const UserStatus = useContext(UserChatlistContext);
 
-    //const chatlistData = useContext(UserChatlistContext);
+    var events;
     
     useEffect(() => {
-        let chatStatus;
-        socket.on('connect', data => {console.log(data); chatStatus = data;});
+        let UserInitialStatus = (UserStatus === false ? false : UserStatus.UserLimitedInfo[0].online);
         
-        if (chatStatus === 'online') {
-            setMode('online');
-        } else if (chatStatus === 'offline') {
-            setMode('offline');
-            setMinimized(true);
-        } else if (chatStatus === 'invisible') {
-            setMode('invisible');
+        if (UserInitialStatus) {
+            props.handleModeInit(UserInitialStatus);
         } else {
-            setMode('anonymous');
-            setMinimized(true);
+            props.handleMinimize();
         };
     }, []);
 
-    const handleMode = (type) => {
-        setMode(type);
-    };
-    
-    const handleMinimize = () => {
-        setMinimized(!minimized);
+    useEffect(() => {
+        if (props.mode === 'online' || props.mode === 'invisible') {
+            events = (SSE ? SSE : ChatlistSSE);
+            if (events.readyState === 2) {
+                console.log('auto reconnecting SSE....');
+                const newToken = localStorage.getItem('token');
+                var newEvent = new EventSource('/api/chat/list_retrieval/' + (newToken), {max_retry_time: 8000});
+                setSSE(newEvent);
+            };
+
+            // DATA RECEIVED
+            events.onmessage = (response) => {
+                if (response.data) {
+                    setChatlist(JSON.parse(response.data));
+                };
+            };
+        } else {
+            console.log('failed to connect to websocket...');
+            // CLOSES SSE CONNECTION VIA USERS GOING OFFLINE MANUALLY
+            if (events) {
+                console.log('manually closing SSE....');
+                events.close();
+            };
+        };
+
+        return () => {
+            if (SSE && props.mode === 'offline') {
+                SSE.close();
+                setSSE(false);
+            };
+        };
+    });
+
+    const handleFav = (username) => {
+        socket.emit('favorite', username);
     };
 
-    const handleChatbox = (username) => {
-        setChatbox(username);
+    const handleUnfav = (user) => {
+        socket.emit('unfavorite', username);
     };
 
-    return (
-        <>
-            <ChatlistPresent handleMode={handleMode}
-                                mode={mode}
-                                minimized={minimized}
-                                handleMinimize={handleMinimize}
-                                handleChatbox={handleChatbox}
-                                chatbox={chatbox} />
-            <ChatlistMinimized handleMode={handleMode}
-                                mode={mode}
-                                minimized={minimized}
-                                handleMinimize={handleMinimize} />
-            <ChatlistMsgContainer handleChatbox={handleChatbox}
-                                chatbox={chatbox} />
-        </>
-    );
+    return <ChatlistPresent handleMode={props.handleMode}
+                            mode={props.mode}
+                            minimized={props.minimized}
+                            handleMinimize={props.handleMinimize}
+                            handleChatbox={props.handleChatbox}
+                            chatbox={props.chatbox}
+                            chatlist={chatlist}
+                            handleFav={handleFav}
+                            handleUnfav={handleUnfav} />
 };
 
 

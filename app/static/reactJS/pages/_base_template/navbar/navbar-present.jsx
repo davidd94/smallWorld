@@ -39,9 +39,9 @@ const NavBarSection = React.forwardRef((props, ref) => {
     } else {
         navbarSearchBoxStyle = styles.navSearchBoxHidden;
     };
-
-    const RenderLoginBtn = () => {
-        if (UserInfo && localStorage.getItem('token')) {
+    
+    const RenderLoginBtn = (props) => {
+        if (UserInfo && props.userStatus) {
             return (
                 <UncontrolledDropdown nav inNavbar>
                     <DropdownToggle nav caret className={styles.navLinkLoggedin}>{UserInfo.username}</DropdownToggle>
@@ -58,7 +58,7 @@ const NavBarSection = React.forwardRef((props, ref) => {
             return <RouterLink className={styles.navLink} to="/reactdev-login"><span className={styles.navLinkLogin}>Login</span></RouterLink>
         };
     };
-    console.log(props.search);
+    
     return (
         <Navbar expand='lg' dark className={[styles.ftcoNavbarLight, navbarStyle, navbarSleep, navbarAwake].join(' ')}>
             <Container className={styles.container}>
@@ -95,7 +95,7 @@ const NavBarSection = React.forwardRef((props, ref) => {
                 </Collapse>
                 <Collapse isOpen={props.open} navbar className={styles.navSearchWrapper}>
                     <Nav navbar className={styles.navbarNav}>
-                        <RenderLoginBtn />
+                        <RenderLoginBtn userStatus={props.userStatus} />
                     </Nav>
                     <Nav navbar className={styles.navbarNav} style={props.disableSearch ? {display: 'none'} : {}}>
                         <InputGroup className={navbarSearchBoxStyle}>

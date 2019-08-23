@@ -146,7 +146,8 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     token = db.Column(db.String(50), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     # FOR CHAT FEATURE
-    online = db.Column(db.Boolean, default=False)
+    online = db.Column(db.String(28), index=True, default='online')
+    prev_online = db.Column(db.String(28), default='online')
 
     # ASSOCIATION TABLES
     followed = db.relationship('User', secondary=followers,
@@ -248,11 +249,11 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
         current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
     
     # FOR API USAGE
-    def get_token(self, expires_in=300):
+    def get_token(self, expires_in=1800):
         now = datetime.utcnow()
         if self.token and self.token_expiration >= now:
             return self.token
-        self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
+        self.token = base64.urlsafe_b64encode(os.urandom(24)).decode('utf-8')
         self.token_expiration = now + timedelta(seconds=expires_in)
         db.session.add(self)
         print('TOKEN REFRESHED!!!!!!!!!!!')
@@ -272,6 +273,11 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     def unfollow(self, user):
         if self.is_following(user):
             self.followed.remove(user)
+
+    def is_mutually_following(self, user):
+        recipient_user = User.query.get(user.id)
+        return (self.followed.filter(followers.c.followed_id == recipient_user.id).count() > 0 and \
+                recipient_user.followed.filter(followers.c.followed_id == self.id).count() > 0)
 
     def is_blocking(self, user):
         return self.blocked.filter(blocked_users.c.blocked_id == user.id).count() > 0
@@ -433,8 +439,9 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
             print('attempting to renew token..')
             if (abs(token_expiration - now) <= grace_period):
                 print('renewed token!!')
-                user.get_token()
+                new_token = user.get_token()
                 db.session.commit()
+                user = User.query.get(user.id)
                 return user
         return None
 

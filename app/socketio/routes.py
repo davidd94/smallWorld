@@ -2,10 +2,11 @@ from flask import url_for, request, flash, g, current_app, jsonify, session
 from flask_login import current_user, login_required, logout_user
 from flask_socketio import send, emit, disconnect, join_room, leave_room
 from app import db, socketio
+from app.tasks import chatlist_updates
 from app.socketio import bp
 from app.models import User, Messages, ChatMessages, Projects, PhotoGallery, Notifications, project_visitors, followers, deleted_messages, chatlist_favorites
 from datetime import datetime as dt
-import os, time, random, functools
+import os, functools
 import json
 
 
@@ -19,49 +20,64 @@ def authenticated_only(f):
             if user:
                 g.current_user = user
                 return f(*args, **kwargs)
-            # removed disconnect() to allow session users to be verified as well
-            # disconnect()
 
         if not current_user.is_authenticated:
             print('disconnecting user..........................')
-            disconnect() 
+            disconnect()
         else:
             return f(*args, **kwargs)
     return wrapped
 
+# HELPER FUNCTION TO VERIFY USERS HANDSHAKE AND GENERATE ROOM
+def room_generator(recipient):
+    recipient_user = User.query.filter_by(username=recipient).first()
+    # SECURITY LAYER TO PREVENT UNWANTED USER TO JOIN ROOMS
+    if current_user.is_authenticated:
+        user = current_user
+    elif g.current_user:
+        user = g.current_user
+    else:
+        return False
+
+    # JOIN ROOM AFTER VERIFYING USERS FOLLOWING EACH OTHER
+    if user.is_mutually_following(recipient_user):
+        # RETURNS A ROOM NUMBER
+        return str(user.id) + '-' + str(recipient_user.id) if user.id < recipient_user.id else str(recipient_user.id) + '-' + str(user.id)
+    return False
 
 # WEB SOCKETIO FUNCTIONS
 @socketio.on('connect')
 @authenticated_only
 def connect():
-    session_chatlist_status = session.get('chat_status')
+    # USERS ON SESSIONS/COOKIES
     status = 'none'
-    print(session_chatlist_status)
-    if session_chatlist_status:
-        status = session['chat_status']
+    print('trying to connect...................')
+    if current_user.is_authenticated:
+        session_chatlist_status = session.get('chat_status')
+        status = current_user.online
+        if status != session_chatlist_status:
+            current_user.online = status
+            db.session.commit()
+            emit('connect', status)
+        else:
+            emit('connect', status)
     
+    # STATELESS USERS (API)
     try:
-        if g.current_user and not session_chatlist_status:
-            if g.current_user.online == True:
-                status = 'online'
-            elif g.current_user.online == False:
-                status = 'offline'
-            elif g.current_user.online == 'invisible':
-                status = 'invisible'
-            else:
-                status = None
-    except:
-        pass
-        
-    print(status)
-    if status == ['offline', 'invisible']:
-        emit('connect', status)
-    elif status == 'online':
-        current_user.online = True
-        db.session.commit()
-        emit('connect', status)
+        if g.current_user:
+            prev_status = g.current_user.prev_online
+            status = g.current_user.online
 
-@socketio.on('chatlist')
+            if prev_status != status:
+                g.current_user.online = prev_status
+                db.session.commit()
+            print('API SOCKET CONNECTION SUCCESSFUL............')
+            emit('connect', prev_status)
+    except:
+        emit('connect', 'websocket connection failed...')
+        
+
+"""@socketio.on('chatlist')
 @authenticated_only
 def chatlist(userlist):
     # ROOM NUMBER GENERATOR
@@ -191,113 +207,143 @@ def chatlist(userlist):
             emit('chatlist', current_list)
         
         session['chatlist'] = approved_usernames
+"""
 
 @socketio.on('favorite')
 @authenticated_only
-def favorite(userid):
-    user = User.query.get(int(userid))
-    current_user.favor(user)
-    db.session.commit()
-    emit('favorite', user.id)
+def favorite(userinfo):
+    if current_user.is_authenticated:
+        user = User.query.get(int(user))
+        current_user.favor(user)
+        db.session.commit()
+        emit('favorite', user.id)
+    try:
+        if g.current_user:
+            user = User.query.filter_by(username=user).first()
+            g.current_user.unfavor(user)
+            db.session.commit()
+    except:
+        emit('favorite', 'Failed to fav..')
 
 @socketio.on('unfavorite')
 @authenticated_only
-def unfavorite(userid):
-    user = User.query.get(int(userid))
-    current_user.unfavor(user)
-    db.session.commit()
-    emit('unfavorite', user.id)
+def unfavorite(userinfo):
+    if current_user.is_authenticated:
+        user = User.query.get(int(userinfo))
+        current_user.unfavor(user)
+        db.session.commit()
+        emit('unfavorite', user.id)
+    try:
+        if g.current_user:
+            user = User.query.filter_by(username=user).first()
+            g.current_user.unfavor(user)
+            db.session.commit()
+    except:
+        emit('unfavorite', 'Failed to unfav..')
 
 @socketio.on('join')
 @authenticated_only
 def on_join(data):
-    username = data['username']
-    room = data['room']
-
-    # CLEARS CHAT MSG NOTIFICATION UPON OPENING CHAT
-    chat_note = Notifications.query \
-                            .filter_by(username=username) \
-                            .filter_by(notification_type='chat message') \
-                            .all()
-    for eachnote in chat_note:
-        db.session.delete(eachnote)
-        # GOIN TO COMMIT FROM CHAT NOTIFICATIONS BELOW SINCE YOU NEED BOTH TO OCCUR
-
-    base_chatlogs = ChatMessages.query \
-                            .filter_by(room=room)
-    # MARKS THE OTHER USER'S MSG AS READ WHEN OPENING CHAT BOX
-    unread_chatlogs = base_chatlogs.filter_by(username=username) \
-                                .filter_by(message_read=False) \
+    recipient = data['username']
+    room = room_generator(recipient)
+    # JOIN ROOM AFTER VERIFYING USERS FOLLOWING EACH OTHER
+    if room:
+        print(room)
+        # CLEARS CHAT MSG NOTIFICATION UPON OPENING CHAT
+        chat_note = Notifications.query \
+                                .filter_by(username=recipient) \
+                                .filter_by(notification_type='chat message') \
                                 .all()
-    for unread_chat in unread_chatlogs:
-        unread_chat.message_read = True
-    db.session.commit()
+        for eachnote in chat_note:
+            db.session.delete(eachnote)
+            # GOIN TO COMMIT FROM CHAT NOTIFICATIONS BELOW SINCE YOU NEED BOTH TO OCCUR
 
-    # ORGANIZES ALL CHAT LOG HISTORY TO BE LOADED FOR BOTH USERS
-    chat_logs = base_chatlogs.order_by(ChatMessages.timestamp.desc()).all()
-    chat_data = []
-    for eachmsg in chat_logs:
-        eachlog = {}
-        eachlog['username'] = eachmsg.username
-        eachlog['avatar'] = eachmsg.avatar
-        eachlog['message'] = eachmsg.message
-        eachlog['timestamp'] = str(eachmsg.timestamp)
-        chat_data.append(eachlog)
-    
-    join_room(room)
-    emit('join', chat_data, room=room)
+        base_chatlogs = ChatMessages.query \
+                                .filter_by(room=room)
+        # MARKS THE OTHER USER'S MSG AS READ WHEN OPENING CHAT BOX
+        unread_chatlogs = base_chatlogs.filter_by(username=recipient) \
+                                    .filter_by(message_read=False) \
+                                    .all()
+        for unread_chat in unread_chatlogs:
+            unread_chat.message_read = True
+        db.session.commit()
+
+        # ORGANIZES ALL CHAT LOG HISTORY TO BE LOADED FOR BOTH USERS
+        chat_logs = base_chatlogs.order_by(ChatMessages.timestamp.asc()).all()
+        chat_data = []
+        for eachmsg in chat_logs:
+            eachlog = {}
+            eachlog['username'] = eachmsg.username
+            eachlog['avatar'] = eachmsg.avatar
+            eachlog['message'] = eachmsg.message
+            eachlog['timestamp'] = str(eachmsg.timestamp)
+            chat_data.append(eachlog)
+        
+        join_room(room)
+        emit('join', chat_data)
+    else:
+        emit('join', 'Not authorized to chat with ' + recipient)
     
 @socketio.on('leave')
 @authenticated_only
 def on_leave(data):
-    username = data['username']
-    room = data['room']
-    unread_msg_ct = ChatMessages.query \
-                                .filter_by(room=room) \
-                                .filter_by(message_read=False) \
-                                .filter_by(username=username) \
+    recipient = data['username']
+    room = room_generator(recipient)
+    # JOIN ROOM AFTER VERIFYING USERS FOLLOWING EACH OTHER
+    if room:
+        unread_msg_ct = ChatMessages.query \
+                                    .filter_by(room=room) \
+                                    .filter_by(message_read=False) \
+                                    .filter_by(username=recipient) \
+                                    .all()
+        
+        # CLEARS CHAT MSG NOTIFICATION UPON OPENING CHAT
+        chat_note = Notifications.query \
+                                .filter_by(username=recipient) \
+                                .filter_by(notification_type='chat message') \
                                 .all()
-    
-    # CLEARS CHAT MSG NOTIFICATION UPON OPENING CHAT
-    chat_note = Notifications.query \
-                            .filter_by(username=username) \
-                            .filter_by(notification_type='chat message') \
-                            .all()
-    for eachnote in chat_note:
-        db.session.delete(eachnote)
-    
-    # MARK ALL UNREAD MSGS AS READ UPON CLOSING CHATBOX
-    for eachmsg in unread_msg_ct:
-        eachmsg.message_read = True
-        db.session.commit()
-    leave_room(room)
+        for eachnote in chat_note:
+            db.session.delete(eachnote)
+        
+        # MARK ALL UNREAD MSGS AS READ UPON CLOSING CHATBOX
+        for eachmsg in unread_msg_ct:
+            eachmsg.message_read = True
+            db.session.commit()
+        leave_room(room)
+        emit('leave', 'You have left the chatroom with ' + recipient)
+    else:
+        emit('leave', 'Error leaving the room...')
 
 @socketio.on('message')
 @authenticated_only
 def message(message_data):
-    message = message_data['message']
-    room = message_data['room']
-    userid = message_data['userid']
-    user = User.query.get(int(userid))
-    new_msg = ChatMessages(username=current_user.username,
-                            avatar=current_user.avatar(70),
-                            message=message,
-                            room=room)
-    new_note = Notifications(notification_type='chat message',
-                            username=current_user.username,
-                            title='Chat Message from ' + current_user.username,
-                            data=message,
-                            user_id=user.id,
-                            user=user)
-    
-    db.session.add(new_msg)
-    db.session.commit()
-    timestamp = str(new_msg.timestamp)
-    return_msg_data = {'username': current_user.username,
-                        'avatar': current_user.avatar(70),
-                        'message': message,
-                        'timestamp': timestamp}
-    emit('message', return_msg_data, room=room)
+    recipient = message_data['username']
+    room = room_generator(recipient)
+    # JOIN ROOM AFTER VERIFYING USERS FOLLOWING EACH OTHER
+    if room:
+        message = message_data['message']
+        user = User.query.filter_by(username=recipient).first()
+        new_msg = ChatMessages(username=(current_user.username if current_user.is_authenticated else g.current_user.username),
+                                avatar=(current_user.avatar(70) if current_user.is_authenticated else g.current_user.avatar(70)),
+                                message=message,
+                                room=room)
+        new_note = Notifications(notification_type='chat message',
+                                username=(current_user.username if current_user.is_authenticated else g.current_user.username),
+                                title='Chat Message from ' + (current_user.username if current_user.is_authenticated else g.current_user.username),
+                                data=message,
+                                user_id=user.id,
+                                user=user)
+        
+        db.session.add(new_msg)
+        db.session.commit()
+        timestamp = str(new_msg.timestamp)
+        return_msg_data = {'username': (current_user.username if current_user.is_authenticated else g.current_user.username),
+                            'avatar': (current_user.avatar(70) if current_user.is_authenticated else g.current_user.avatar(70)),
+                            'message': message,
+                            'timestamp': timestamp}
+        emit('message', return_msg_data, room=room)
+    else:
+        emit('message', 'Failed to send message...')
 
 @socketio.on('chat_typing')
 @authenticated_only
@@ -311,28 +357,79 @@ def chat_typing(data):
 @socketio.on('online')
 @authenticated_only
 def online():
-    session['chat_status'] = 'online'
-    connect()
+    if current_user.is_authenticated:
+        session_chatlist_status = session.get('chat_status')
+        status = current_user.online
+
+        if status != session_chatlist_status: 
+            session['chat_status'] = 'online'
+            current_user.online = 'online'
+            db.session.commit()
+            emit('online', 'online')
+        else:
+            emit('online', 'online')
+    
+    try:
+        if g.current_user:
+            g.current_user.online = 'online'
+            db.session.commit()
+            emit('online', 'online')
+    except:
+        pass
+        disconnect()
 
 @socketio.on('offline')
 @authenticated_only
 def offline():
-    session['chat_status'] = 'offline'
-    current_user.online = False
-    db.session.commit()
+    emit('offline', 'offline')
     disconnect()
 
 @socketio.on('invisible')
 @authenticated_only
 def invisible():
-    session['chat_status'] = 'invisible'
-    current_user.online = False
-    db.session.commit()
+    if current_user.is_authenticated:
+        session_chatlist_status = session.get('chat_status')
+        status = current_user.online
+
+        if status != session_chatlist_status: 
+            session['chat_status'] = 'invisible'
+            current_user.online = 'invisible'
+            db.session.commit()
+            emit('invisible', 'invisible')
+        else:
+            emit('invisible', 'invisible')
+    
+    try:
+        if g.current_user:
+            g.current_user.online = 'invisible'
+            db.session.commit()
+            emit('invisible', 'invisible')
+    except:
+        pass
+        disconnect()
+
+@socketio.on('logout')
+@authenticated_only
+def logout():
+    disconnect()
 
 @socketio.on('disconnect')
 def disconnect():
-    # WEBSOCKET CONNECTION CLOSES WHEN CLOSING BROWSER
-    current_user.online = False
-    db.session.commit()
-    # ADD THIS IF YOU WANT USERS TO FULLY LOGOUT OF SESSION AND SOCKETIO UPON CLOSING BROWSER
-    #logout_user()
+    print('DISCONNECTING WEBSOCKET FROM SERVER.....')
+    # WEBSOCKET CONNECTION CLOSES AUTOMATICALLY WHEN CLOSING BROWSER
+    if current_user.is_authenticated:
+        current_user.prev_online = session['chat_status']
+        session['chat_status'] = 'offline'
+        current_user.online = 'offline'
+        db.session.commit()
+
+        # ADD THIS IF YOU WANT USERS TO FULLY LOGOUT OF SESSION AND SOCKETIO UPON CLOSING BROWSER
+        #logout_user()
+    
+    try:
+        if g.current_user:
+            g.current_user.prev_online = g.current_user.online
+            g.current_user.online = 'offline'
+            db.session.commit()
+    except:
+        emit('disconnect', 'Please log in.')

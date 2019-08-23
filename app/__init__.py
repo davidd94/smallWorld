@@ -60,7 +60,7 @@ def create_app(config_class=Config):
     mail.init_app(app)
     csrf.init_app(app)
     moment.init_app(app)
-    socketio.init_app(app, manage_session=False)
+    socketio.init_app(app, manage_session=False, async_mode="eventlet")
     session.init_app(app)
     cors.init_app(app)
     recaptcha.init_app(app)

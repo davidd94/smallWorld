@@ -20,7 +20,7 @@ const ChatlistMinimized = (props) => {
             </div>
             <div className={styles.anonymousWrapper} style={props.mode === 'anonymous' ? {display: 'block'} : {display: 'none'}}>
                 <i className='fas fa-user-slash' style={{display: 'block', color: 'rgb(75, 75, 75)', height: '1rem', width: '1rem', position: 'absolute', top: '50%', left: '8%', transform: 'translate(-50%, -50%)'}} />
-                <span className={styles.minimizedAnonymousText}>Not Logged In</span>
+                <span className={styles.minimizedAnonymousText}>Logged Out</span>
             </div>
         </div>
     );

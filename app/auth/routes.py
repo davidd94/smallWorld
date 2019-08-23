@@ -94,7 +94,7 @@ def login():
         login_user(user, remember=form.remember_me.data)
         user.max_failed_login = 0
         # NEED TO UPDATE LOGIN STATUS FOR CHAT FEATURE
-        user.online = True
+        user.online = 'online'
         session['chat_status'] = 'online'
         session['chatlist'] = []
         db.session.commit()
@@ -116,7 +116,7 @@ def login():
 @bp.route('/logout', methods=['GET', 'POST'])
 def logout():
     # NEED TO UPDATE LOGIN STATUS FOR CHAT FEATURE
-    current_user.online = False
+    current_user.online = 'offline'
     db.session.commit()
 
     session.clear()

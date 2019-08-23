@@ -49,3 +49,16 @@ def test_export(self):
             'total': 100,
             'status': 'Successfully exported!',
             'results': 'Insert pdf file here??'}
+
+@celery.task(bind=True)
+def chatlist_updates(self):
+        x = 0
+        while x < 10:  
+            x += 1
+            print('Making random numbers')
+            number = random.randint(1, 50)
+            print(number)
+            self.update_state(state='PROGRESS',
+                                meta={'results': number,
+                                        'status': x})
+            time.sleep(5)

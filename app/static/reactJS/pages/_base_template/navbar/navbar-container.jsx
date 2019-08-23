@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import NavBarSection from './navbar-present';
+import socket from '../../../socketio';
 
 
 const NavBar = (props) => {
@@ -9,6 +10,7 @@ const NavBar = (props) => {
     const [search, setSearch] = useState(false);
     const [searchVal, setSearchVal] = useState('');
     const [searchSubmit, setSearchSubmit] = useState(false);
+    const [userStatus, setUserStatus] = useState(true);
     const searchRef = useRef();
 
     useEffect(() => {
@@ -17,6 +19,10 @@ const NavBar = (props) => {
             setSearchVal('');
             props.history.push('/reactdev-search/' + searchVal);
             // return <Redirect to={'/reactdev-search/' + searchVal} />
+        };
+
+        if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
+            setUserStatus(false);
         };
     });
 
@@ -43,9 +49,11 @@ const NavBar = (props) => {
             setSearchSubmit(true);
         };
     };
-
+    
     const handleLogOut = () => {
         localStorage.clear();
+        socket.emit('logout');
+        
         window.location.href = '/reactdev-home';
     };
 
@@ -60,7 +68,8 @@ const NavBar = (props) => {
                                     scrollState={props.scrollState}
                                     scrollSleep={props.scrollSleep}
                                     scrollAwake={props.scrollAwake}
-                                        disableSearch={props.disableSearch} />
+                                        disableSearch={props.disableSearch}
+                                        userStatus={userStatus} />
 };
 
 

@@ -9,7 +9,7 @@ const BaseTemplate = (props) => {
     const [scroll, setScroll] = useState(false);
     const [sleep, setSleep] = useState(false);
     const [awake, setAwake] = useState(false);
-
+    
     // base template features
     useEffect(() => {
         window.addEventListener('scroll', ScrollView);

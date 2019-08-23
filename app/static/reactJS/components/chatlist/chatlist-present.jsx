@@ -11,12 +11,38 @@ import { UserChatlistContext } from '../_context/UserContext';
 
 
 const ChatlistPresent = (props) => {
-    /*const chatlistData = useContext(UserChatlistContext);
-    const unfavUsers = chatlistData.UserChatlist;
-    const favUsers = chatlistData.UserChatlistFav;
+    const chatlistDataInit = useContext(UserChatlistContext);
+
+    let chatlistData = props.chatlist;
+
+    let favUsers;
+    let unfavUsers;
+
+    if (chatlistDataInit) {
+        favUsers = chatlistDataInit.UserChatlistFav;
+        unfavUsers = chatlistDataInit.UserChatlist;
+    };
     
     const FavUserInfo = () => {
-        if (favUsers) {
+        if (chatlistData.length > 0) {
+            return chatlistData.map((user, index) => {
+                if (user.favorite === true) {
+                    return (
+                        <li key={`key: ${index}`}>
+                            <span style={{width: '2rem', margin: '0 1rem'}}><i className="fas fa-star" /></span>
+                            <div onClick={() => {props.handleChatbox(user.username)}} style={{display: 'inline-block'}}>
+                                <img className={styles.chatlistAvatar} src={user.picture} />
+                                <span style={{width: '2rem', margin: '0 0.75rem', fontSize: '0.85rem'}}>{user.username}</span>
+                                <i style={{width: '2rem'}} className={(["far fa-comment", styles.chatlistBubble]).join(' ')} />
+                                <span className={styles.chatlistIcon} style={user.status === 'offline' ? {background: 'lightgrey'} : {}} />
+                            </div>
+                        </li>
+                    );
+                } else {
+                    return <></>
+                };
+            });
+        } else if (favUsers) {
             return favUsers.map((user, index) => {
                 return (
                     <li key={`key: ${index}`}>
@@ -25,7 +51,7 @@ const ChatlistPresent = (props) => {
                             <img className={styles.chatlistAvatar} src={user.picture} />
                             <span style={{width: '2rem', margin: '0 0.75rem', fontSize: '0.85rem'}}>{user.username}</span>
                             <i style={{width: '2rem'}} className={(["far fa-comment", styles.chatlistBubble]).join(' ')} />
-                            <span className={styles.chatlistIcon} />
+                            <span className={styles.chatlistIcon} style={user.online === 'offline' ? {background: 'lightgrey'} : {}} />
                         </div>
                     </li>
                 );
@@ -36,32 +62,43 @@ const ChatlistPresent = (props) => {
     };
 
     const UnfavUserInfo = () => {
-        if (unfavUsers) {
-            return unfavUsers.map((unfavUser, index) => {
-                return favUsers.map((favUser) => {
-                    console.log(unfavUser.username);
-                    if (unfavUser.username !== favUser.username) {
-                        return (
-                            <li key={`key: ${index}`}>
-                                <span style={{width: '2rem', margin: '0 1rem'}}><i className="far fa-star" /></span>
-                                <div onClick={() => {props.handleChatbox(unfavUser.username)}} style={{display: 'inline-block'}}>
-                                    <img className={styles.chatlistAvatar} src={unfavUser.picture} />
-                                    <span style={{width: '2rem', margin: '0 0.75rem', fontSize: '0.85rem'}}>{unfavUser.username}</span>
-                                    <i style={{width: '2rem'}} className={(["far fa-comment", styles.chatlistBubble]).join(' ')} />
-                                    <span className={styles.chatlistIcon} />
-                                </div>
-                            </li>
-                        );
-                    } else {
-                        return <span key={`key: ${index}`}></span>
-                    };
-                });
+        if (chatlistData.length > 0) {
+            return chatlistData.map((user, index) => {
+                if (user.favorite === false) {
+                    return (
+                        <li key={`key: ${index}`}>
+                            <span style={{width: '2rem', margin: '0 1rem'}}><i className="far fa-star" onClick={() => props.handleUnfav(user.username)} /></span>
+                            <div onClick={() => {props.handleChatbox(user.username)}} style={{display: 'inline-block'}}>
+                                <img className={styles.chatlistAvatar} src={user.picture} />
+                                <span style={{width: '2rem', margin: '0 0.75rem', fontSize: '0.85rem'}}>{user.username}</span>
+                                <i style={{width: '2rem'}} className={(["far fa-comment", styles.chatlistBubble]).join(' ')} />
+                                <span className={styles.chatlistIcon} style={user.status === 'offline' ? {background: 'lightgrey'} : {}} />
+                            </div>
+                        </li>
+                    );
+                } else {
+                    return <></>
+                };
+            });
+        } else if (unfavUsers) {
+            return unfavUsers.map((user, index) => {
+                return (
+                    <li key={`key: ${index}`}>
+                        <span style={{width: '2rem', margin: '0 1rem'}}><i className="far fa-star" onClick={() => props.handleFav(user.username)} /></span>
+                        <div onClick={() => {props.handleChatbox(user.username)}} style={{display: 'inline-block'}}>
+                            <img className={styles.chatlistAvatar} src={user.picture} />
+                            <span style={{width: '2rem', margin: '0 0.75rem', fontSize: '0.85rem'}}>{user.username}</span>
+                            <i style={{width: '2rem'}} className={(["far fa-comment", styles.chatlistBubble]).join(' ')} />
+                            <span className={styles.chatlistIcon} style={user.online === 'offline' ? {background: 'lightgrey'} : {}} />
+                        </div>
+                    </li>
+                );
             });
         } else {
             return  <></>
         };
     };
-    */
+    
     return (
         <div className={styles.chatlistContainer} style={props.minimized ? {display: 'none'} : {}}>
             <div className={styles.userList}>
@@ -94,10 +131,12 @@ const ChatlistPresent = (props) => {
                 <div className={styles.chatlistDivider}></div>
                 <span style={props.mode === 'offline' || props.mode === 'anonymous' ? {display: 'none'} : {}}>
                     <ul className={styles.chatlist}>
-                        
+                        <li style={{width: '100%', textAlign: 'center', margin: 0, padding: 0, cursor: 'none'}}>Favorites</li>
+                        <FavUserInfo />
                     </ul>
                     <ul className={styles.chatlist}>
-                        
+                        <li style={{width: '100%', textAlign: 'center', margin: 0, padding: 0, cursor: 'none'}}>Other Followers</li>
+                        <UnfavUserInfo />
                     </ul>
                 </span>
                 <div className={styles.offlineText} style={props.mode === 'offline' ? {} : {display: 'none'}}>

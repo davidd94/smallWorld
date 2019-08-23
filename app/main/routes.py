@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, flash, g, current_app, jsonify, Response, send_from_directory, session
+from flask import render_template, redirect, url_for, request, flash, g, current_app, jsonify, send_from_directory, session
 from flask_login import current_user, login_required, logout_user
 from flask_babel import get_locale, _
 from flask_wtf.csrf import generate_csrf

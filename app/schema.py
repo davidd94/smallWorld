@@ -164,7 +164,13 @@ class Query(graphene.ObjectType):
                                 .join(followers, User.id == followers.c.follower_id) \
                                 .filter(followers.c.followed_id == user.id) \
                                 .all()
-                query = all_followers
+                all_followed = user.followed.all()
+                filter_followers = list(set.intersection(set(all_followers), set(all_followed)))
+                
+                chatlist_fav = user.favored.all()
+                filter_favs = list(set.symmetric_difference(set(filter_followers), set(chatlist_fav)))
+                
+                query = filter_favs
 
                 return query
             raise GraphQLError('User session expired! Please relog in.')
@@ -177,16 +183,17 @@ class Query(graphene.ObjectType):
             if user:
                 # userquery = UserChatlistModel.get_query(info)
                 # '.get_query(info)' IS IDENTICAL TO 'db.session.query()' BUT WITH ADDITIONAL FILTERS WITHIN 'info'
-                chatlist_fav = db.session.query(chatlist_favorites.c.user_id) \
+                chatlist_fav = user.favored.all()
+                """chatlist_fav = db.session.query(chatlist_favorites.c.user_id) \
                                     .filter(chatlist_favorites.c.fav_id == user.id) \
                                     .all()
                 filtered_favs = []
                 for eachtuple in chatlist_fav:
                     for eachid in eachtuple:
                         fav_user = User.query.get(eachid)
-                        filtered_favs.append(fav_user)
+                        filtered_favs.append(fav_user)"""
                 
-                query = filtered_favs
+                query = chatlist_fav
                 return query
             raise GraphQLError('User session expired! Please relog in.')
         raise GraphQLError('Unauthorized!')

@@ -25,13 +25,8 @@ const UserLoginPage = () => {
         setCustomError(error);
     };
 
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            return <Redirect to='/reactdev-home' />;
-        };
-    });
-
     return (
+        localStorage.getItem('token') ? <Redirect to='/reactdev-home' /> :
         <div style={LoginContainer} className={styles.loginContainerWrapper}>
             <Container>
                 <Row className='justify-content-center'>
