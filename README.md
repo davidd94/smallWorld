@@ -6,22 +6,22 @@ To refine/refactor existing features such as (not limited to) editing tutorial, 
 
 ## Screenshots
 Homepage with jQuery --> <b>REFACTORED</b> Homepage with React
-<img src="https://i.imgur.com/Oje78yq.gif">
+https://i.imgur.com/Oje78yq.gif
 
 Notifications using jQuery Long Polling
-<img src="https://i.imgur.com/R0FWPDp.gif">
+https://i.imgur.com/R0FWPDp.gif
 
 Chat System using SocketIO and jQuery
-<img src="https://i.imgur.com/icEcwNb.gif">
+https://i.imgur.com/icEcwNb.gif
 
 <b>REFACTORED</b> Chat System using SocketIO and <b>REACT</b>
-<img src="https://i.imgur.com/IQC5V2k.gif">
+https://i.imgur.com/IQC5V2k.gif
 
 Inbox - Private Messages with jQuery
 <img src="https://i.imgur.com/YGe9iHQ.gif">
 
 <b>NEW</b> Blog Page using React
-<img src="https://i.imgur.com/vLBRpEH.gif">
+https://i.imgur.com/vLBRpEH.gif
 
 Comment System with jQuery
 <img src="https://i.imgur.com/gGkXsVA.gif">
@@ -36,7 +36,7 @@ Twitter API with React
 <img src="https://i.imgur.com/JRltbHh.gif">
 
 Rebrandley URL Shortener API
-<img src="https://i.imgur.com/3SAIb4S.gif">
+https://i.imgur.com/3SAIb4S.gif
 
 
 ## Technologies/frameworks
