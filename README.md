@@ -5,22 +5,22 @@ This is a complete social network website for terrarium/reptile hobbyist. smallW
 To refine/refactor existing features such as (not limited to) editing tutorial, maintenance and item list section to be a smooth user experience. Private message center backend functionality needs to be revamped to improve security and usability. One of my major goal is to add an interactive photo section in each project. This interactive photo will contain MANY if not ALL of each enclosure/terrarium information (type of materials, brand, notes, plants, fishes, reptiles, etc) that will populate on hover. Lots of front end work is required to achieve smoothness and to have it aesthetically pleasing. To summarize, my goal is striving to provide users the best tools in terms of easiness and user experience. Users should enjoy uploading their work online as much as creating their terrariums/enclosures, frustration-free.
 
 ## Screenshots
-Homepage with jQuery --> <b>REFACTORED</b> Homepage with React
+Homepage with jQuery --> <b>REFACTORED</b> Homepage with React <br>
 https://i.imgur.com/Oje78yq.gif
 
-Notifications using jQuery Long Polling
+Notifications using jQuery Long Polling <br>
 https://i.imgur.com/R0FWPDp.gif
 
-Chat System using SocketIO and jQuery
+Chat System using SocketIO and jQuery <br>
 https://i.imgur.com/icEcwNb.gif
 
-<b>REFACTORED</b> Chat System using SocketIO and <b>REACT</b>
+<b>REFACTORED</b> Chat System using SocketIO and <b>REACT</b> <br>
 https://i.imgur.com/IQC5V2k.gif
 
 Inbox - Private Messages with jQuery
 <img src="https://i.imgur.com/YGe9iHQ.gif">
 
-<b>NEW</b> Blog Page using React
+<b>NEW</b> Blog Page using React <br>
 https://i.imgur.com/vLBRpEH.gif
 
 Comment System with jQuery
@@ -35,7 +35,7 @@ Stripe API with React
 Twitter API with React
 <img src="https://i.imgur.com/JRltbHh.gif">
 
-Rebrandley URL Shortener API
+Rebrandley URL Shortener API <br>
 https://i.imgur.com/3SAIb4S.gif
 
 
