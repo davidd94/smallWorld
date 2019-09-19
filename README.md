@@ -26,8 +26,8 @@ https://i.imgur.com/vLBRpEH.gif
 Comment System with jQuery
 <img src="https://i.imgur.com/gGkXsVA.gif">
 
-<b>REFACTORED</b> Profile Page with React
-<img src="https://i.imgur.com/J8SDurj.gif">
+<b>REFACTORED</b> Profile Page with React <br>
+https://i.imgur.com/J8SDurj.gif
 
 Stripe API with React
 <img src="https://i.imgur.com/uRYdjJQ.gif">
