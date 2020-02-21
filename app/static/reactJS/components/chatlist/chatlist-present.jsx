@@ -29,7 +29,7 @@ const ChatlistPresent = (props) => {
                 if (user.favorite === true) {
                     return (
                         <li key={`key: ${index}`}>
-                            <span style={{width: '2rem', margin: '0 1rem'}}><i className="fas fa-star" /></span>
+                            <span style={{width: '2rem', margin: '0 1rem'}}><i className="fas fa-star" onClick={() => props.handleFav(user.username)} /></span>
                             <div onClick={() => {props.handleChatbox(user.username)}} style={{display: 'inline-block'}}>
                                 <img className={styles.chatlistAvatar} src={user.picture} />
                                 <span style={{width: '2rem', margin: '0 0.75rem', fontSize: '0.85rem'}}>{user.username}</span>
@@ -46,7 +46,7 @@ const ChatlistPresent = (props) => {
             return favUsers.map((user, index) => {
                 return (
                     <li key={`key: ${index}`}>
-                        <span style={{width: '2rem', margin: '0 1rem'}}><i className="fas fa-star" /></span>
+                        <span style={{width: '2rem', margin: '0 1rem'}}><i className="fas fa-star" onClick={() => props.handleUnfav(user.username)} /></span>
                         <div onClick={() => {props.handleChatbox(user.username)}} style={{display: 'inline-block'}}>
                             <img className={styles.chatlistAvatar} src={user.picture} />
                             <span style={{width: '2rem', margin: '0 0.75rem', fontSize: '0.85rem'}}>{user.username}</span>

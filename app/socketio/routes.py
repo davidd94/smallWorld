@@ -38,7 +38,6 @@ def room_generator(recipient):
         user = g.current_user
     else:
         return False
-
     # JOIN ROOM AFTER VERIFYING USERS FOLLOWING EACH OTHER
     if user.is_mutually_following(recipient_user):
         # RETURNS A ROOM NUMBER
@@ -212,6 +211,7 @@ def chatlist(userlist):
 @socketio.on('favorite')
 @authenticated_only
 def favorite(userinfo):
+    print('trying to fav..')
     if current_user.is_authenticated:
         user = User.query.get(int(user))
         current_user.favor(user)
@@ -228,6 +228,7 @@ def favorite(userinfo):
 @socketio.on('unfavorite')
 @authenticated_only
 def unfavorite(userinfo):
+    print('trying to unfav..')
     if current_user.is_authenticated:
         user = User.query.get(int(userinfo))
         current_user.unfavor(user)
@@ -381,6 +382,23 @@ def online():
 @socketio.on('offline')
 @authenticated_only
 def offline():
+    if current_user.is_authenticated:
+        session_chatlist_status = session.get('chat_status')
+        status = current_user.online
+
+        if status != session_chatlist_status: 
+            session['chat_status'] = 'offline'
+            current_user.online = 'offline'
+            db.session.commit()
+    
+    try:
+        if g.current_user:
+            g.current_user.online = 'offline'
+            db.session.commit()
+            emit('offline', 'offline')
+    except:
+        pass
+    
     emit('offline', 'offline')
     disconnect()
 
@@ -414,7 +432,7 @@ def logout():
     disconnect()
 
 @socketio.on('disconnect')
-def disconnect():
+def disconnect_user():
     print('DISCONNECTING WEBSOCKET FROM SERVER.....')
     # WEBSOCKET CONNECTION CLOSES AUTOMATICALLY WHEN CLOSING BROWSER
     if current_user.is_authenticated:
@@ -432,4 +450,5 @@ def disconnect():
             g.current_user.online = 'offline'
             db.session.commit()
     except:
-        emit('disconnect', 'Please log in.')
+        pass
+        #emit('disconnect', 'Please log in.')

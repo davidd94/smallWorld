@@ -13,6 +13,7 @@ const ChatlistMsgPresent = React.forwardRef((props, ref) => {
     const [recentMsgs, setRecentmsgs] = useState([]);
     const UserInfo = useContext(UserContext);
     var Username;
+
     if (UserInfo) {
         Username = UserInfo.username;
     };
@@ -28,7 +29,7 @@ const ChatlistMsgPresent = React.forwardRef((props, ref) => {
         props.scrollToBottom();
     }, [props.messageIn, props.chatHistory]);
     
-    let ChatHistory = (props) => {
+    let ChatHistory = () => {
         if (props.chatHistory !== 'Loading...' && props.chatHistory !== false) {
             return (props.chatHistory).map((messageData, index) => {
                 return (
@@ -49,14 +50,13 @@ const ChatlistMsgPresent = React.forwardRef((props, ref) => {
         };
     };
     
-    let NewChatMsgs = (props) => {
-        let AllNewMsgs = props.recentMsgs;
-        if (AllNewMsgs.length > 0) {
-            return AllNewMsgs.map((messageData, index) => {
+    let NewChatMsgs = () => {
+        if (recentMsgs.length > 0) {
+            return recentMsgs.map((messageData, index) => {
                 return (
                     <li key={`${messageData.username}-${index}`} className={styles.chatNewMsg}>
                         <p className={styles.newMsgTime}><Moment local={true} interval={60000} calendar={true}>{messageData.timestamp}</Moment></p>
-                        <p style={messageData.username === props.Username ? {textAlign: 'left'} : {textAlign: 'right'}}>{messageData.message}</p>
+                        <p style={messageData.username === Username ? {textAlign: 'left'} : {textAlign: 'right'}}>{messageData.message}</p>
                     </li>
                 );
             });
@@ -76,8 +76,8 @@ const ChatlistMsgPresent = React.forwardRef((props, ref) => {
                     <div className={styles.chat}>
                         <div className={styles.chatLogs}>
                             <PerfectScrollbar ref={ref2}>
-                                {props.chatHistory === false || props.chatHistory === 'Loading...' ? <></> : <><ChatHistory Username={Username} chatHistory={props.chatHistory} />
-                                                                                                                <NewChatMsgs Username={Username} recentMsgs={recentMsgs} chatHistory={props.chatHistory} /></>}
+                                {props.chatHistory === false || props.chatHistory === 'Loading...' ? <></> : <><ChatHistory />
+                                                                                                                <NewChatMsgs /></>}
                             </PerfectScrollbar>
                         </div>
 

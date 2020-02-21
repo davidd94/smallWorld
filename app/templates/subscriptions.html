@@ -9,8 +9,8 @@
 {% block scripts %}
 {{ super() }}
 <!-- Webpack Bundle using Babel to compile ReactJS JSX Components -->
-<script type="text/javascript" src="{{ url_for('static', filename='dist/commons.entry.chunk.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='dist/subscription.entry.chunk.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dist/v1.0/commons.entry.chunk.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dist/v1.0/subscription.entry.chunk.js') }}"></script>
 
 <script>
     /* ADDS 'ACTIVE' CLASS TO NAV BAR ITEM */

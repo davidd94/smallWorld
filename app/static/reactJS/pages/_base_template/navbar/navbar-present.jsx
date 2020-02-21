@@ -40,7 +40,7 @@ const NavBarSection = React.forwardRef((props, ref) => {
         navbarSearchBoxStyle = styles.navSearchBoxHidden;
     };
     
-    const RenderLoginBtn = (props) => {
+    const RenderLoginBtn = () => {
         if (UserInfo && props.userStatus) {
             return (
                 <UncontrolledDropdown nav inNavbar>
@@ -50,7 +50,7 @@ const NavBarSection = React.forwardRef((props, ref) => {
                         <DropdownItem tag={RouterLink} to='/reactdev-acctsettings'>Account Settings</DropdownItem>
                         <DropdownItem tag={RouterLink} to='/reactdev-inbox'>Inbox</DropdownItem>
                         <DropdownItem divider />
-                        <DropdownItem onClick={props.handleLogOut}>Logout</DropdownItem>
+                        <DropdownItem onClick={() => props.handleLogOut()}>Logout</DropdownItem>
                     </DropdownMenu>
                 </UncontrolledDropdown>
             );
@@ -95,7 +95,7 @@ const NavBarSection = React.forwardRef((props, ref) => {
                 </Collapse>
                 <Collapse isOpen={props.open} navbar className={styles.navSearchWrapper}>
                     <Nav navbar className={styles.navbarNav}>
-                        <RenderLoginBtn userStatus={props.userStatus} />
+                        <RenderLoginBtn />
                     </Nav>
                     <Nav navbar className={styles.navbarNav} style={props.disableSearch ? {display: 'none'} : {}}>
                         <InputGroup className={navbarSearchBoxStyle}>

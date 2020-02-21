@@ -58,10 +58,12 @@ const ChatlistContainer = (props) => {
     });
 
     const handleFav = (username) => {
+        console.log('favoriting...');
         socket.emit('favorite', username);
     };
 
-    const handleUnfav = (user) => {
+    const handleUnfav = (username) => {
+        console.log('unfavoriting...');
         socket.emit('unfavorite', username);
     };
 

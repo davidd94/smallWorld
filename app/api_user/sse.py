@@ -31,7 +31,7 @@ def chatlist_retrieval(token):
     if user and user.online != 'offline':
         @stream_with_context
         def stream_chatlist():
-            print('streamign contents INSIDE LOOP...............')
+            print('streaming contents INSIDE GENERATOR FUNCTION...............')
             
             # ACQUIRE USER FRIEND LIST
             all_followers = db.session.query(User) \

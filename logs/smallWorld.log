@@ -5,3 +5,109 @@
 2019-08-22 17:03:49,742 INFO: smallWorld startup [in C:\Users\mous3\Desktop\Webapps\smallWorld\app\__init__.py:121]
 2019-08-22 21:57:43,980 INFO: smallWorld startup [in C:\Users\mous3\Desktop\Webapps\smallWorld\app\__init__.py:121]
 2019-08-22 22:54:10,691 INFO: smallWorld startup [in C:\Users\mous3\Desktop\Webapps\smallWorld\app\__init__.py:121]
+2020-02-09 02:53:34,750 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-09 02:53:36,530 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-09 02:54:41,478 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-09 02:55:24,213 ERROR: Exception on / [GET] [in C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py:1761]
+Traceback (most recent call last):
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask_cors\extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\_compat.py", line 35, in reraise
+    raise value
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\m0usi\webapps\smallWorld\app\auth\routes.py", line 42, in homepage
+    form = LoginForm()
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\wtforms\form.py", line 212, in __call__
+    return type.__call__(cls, *args, **kwargs)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask_wtf\form.py", line 88, in __init__
+    super(FlaskForm, self).__init__(formdata=formdata, **kwargs)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\wtforms\form.py", line 278, in __init__
+    self.process(formdata, obj, data=data, **kwargs)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\wtforms\form.py", line 132, in process
+    field.process(formdata)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\wtforms\csrf\core.py", line 43, in process
+    self.current_token = self.csrf_impl.generate_csrf_token(self)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask_wtf\csrf.py", line 134, in generate_csrf_token
+    token_key=self.meta.csrf_field_name
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask_wtf\csrf.py", line 35, in generate_csrf
+    message='A secret key is required to use CSRF.'
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask_wtf\csrf.py", line 121, in _get_config
+    raise KeyError(message)
+KeyError: 'A secret key is required to use CSRF.'
+2020-02-09 02:56:12,807 ERROR: Exception on / [GET] [in C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py:1761]
+Traceback (most recent call last):
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask_cors\extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\_compat.py", line 35, in reraise
+    raise value
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\m0usi\webapps\smallWorld\app\auth\routes.py", line 42, in homepage
+    form = LoginForm()
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\wtforms\form.py", line 212, in __call__
+    return type.__call__(cls, *args, **kwargs)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask_wtf\form.py", line 88, in __init__
+    super(FlaskForm, self).__init__(formdata=formdata, **kwargs)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\wtforms\form.py", line 278, in __init__
+    self.process(formdata, obj, data=data, **kwargs)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\wtforms\form.py", line 132, in process
+    field.process(formdata)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\wtforms\csrf\core.py", line 43, in process
+    self.current_token = self.csrf_impl.generate_csrf_token(self)
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask_wtf\csrf.py", line 134, in generate_csrf_token
+    token_key=self.meta.csrf_field_name
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask_wtf\csrf.py", line 35, in generate_csrf
+    message='A secret key is required to use CSRF.'
+  File "C:\Users\m0usi\venv\smallWorld\lib\site-packages\flask_wtf\csrf.py", line 121, in _get_config
+    raise KeyError(message)
+KeyError: 'A secret key is required to use CSRF.'
+2020-02-09 02:56:41,197 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-09 03:01:14,517 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-09 12:21:37,471 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-09 12:21:39,490 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-09 12:31:33,698 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-09 13:03:41,695 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-15 12:30:59,326 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-18 18:37:13,693 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-18 18:37:15,687 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-18 19:47:57,405 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-18 20:15:56,801 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-18 20:16:43,899 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-18 20:17:10,599 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-18 20:17:39,503 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-18 20:23:18,176 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-18 23:27:15,396 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:30:13,779 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:30:15,545 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:31:32,229 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:31:34,031 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:33:16,682 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:33:56,380 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:33:58,134 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:50:18,668 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:50:20,522 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:51:45,928 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 00:52:30,174 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 01:07:44,821 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 01:11:43,810 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 11:22:08,585 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 11:22:11,150 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 19:59:08,524 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]
+2020-02-19 19:59:10,398 INFO: smallWorld startup [in C:\Users\m0usi\webapps\smallWorld\app\__init__.py:121]

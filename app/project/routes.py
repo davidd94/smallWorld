@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 import os, shutil, time
 import pdfkit
 
-config = pdfkit.configuration(wkhtmltopdf="C:/Users/mous3/Desktop/Webapps/smallWorld/plugins/wkhtmltopdf")
+config = pdfkit.configuration(wkhtmltopdf="C:/Users/m0usi/webapps/smallWorld/app/static/plugins/wkhtmltopdf")
 
 
 @bp.route('/refresh_project_timer')

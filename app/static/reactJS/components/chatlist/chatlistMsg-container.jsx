@@ -51,8 +51,6 @@ const ChatlistMsgContainer = (props) => {
             });
         };
         
-        
-
         return () => {
             if (props.chatbox !== false) {
                 console.log('attempting to close chatroom for .....' + props.chatbox);
@@ -108,9 +106,9 @@ const ChatlistMsgContainer = (props) => {
                                 scrollToBottom={scrollToBottom}
                                     chatHistory={chatHistory}
                                     messageOut={messageOut}
+                                    messageIn={messageIn}
                                     handleMsg={handleMsg}
-                                    sendMsg={sendMsg}
-                                    messageIn={messageIn} />
+                                    sendMsg={sendMsg} />
 };
 
 
