@@ -59,7 +59,7 @@ pdfkit==0.6.1
 post==2018.11.20
 promise==2.2.1
 public==2018.11.20
-Pygments==2.3.1
+Pygments==2.7.4
 PyJWT==1.7.1
 pylint==2.2.2
 PySocks==1.7.0
