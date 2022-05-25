@@ -60,7 +60,7 @@ post==2018.11.20
 promise==2.2.1
 public==2018.11.20
 Pygments==2.3.1
-PyJWT==1.7.1
+PyJWT==2.4.0
 pylint==2.2.2
 PySocks==1.7.0
 python-dateutil==2.8.0
