@@ -57,7 +57,7 @@
     "graphql-tag": "^2.10.1",
     "html-react-parser": "^0.9.1",
     "moment": "^2.24.0",
-    "moment-timezone": "^0.5.26",
+    "moment-timezone": "^0.5.35",
     "react": "^16.8.6",
     "react-animated-css": "^1.2.1",
     "react-apollo": "^2.5.6",
